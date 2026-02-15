@@ -14,7 +14,7 @@ A unified infrastructure control plane for EVE Frontier. Three core modules shar
 | # | Module | What It Does | Risk | Weighted Score |
 |---|--------|-------------|------|----------------|
 | 1 | **GateControl** | Composable gate policies — tribe filter, time window, item toll — configured from web dashboard. Single extension, multiple rules via dynamic fields. | Green | 7.97 |
-| 2 | **TradePost** | SSU storefront — list items, browse/buy with atomic PTB escrow. Supports SUI and faction currencies. | Yellow | 8.09 |
+| 2 | **TradePost** | SSU storefront — list items, browse/buy with atomic PTB escrow. Extends commerce beyond station hubs to player-deployed infrastructure. Supports SUI and faction currencies. | Yellow | 7.91 |
 | 3 | **TribeMint** | Faction currency — `Coin<TribeToken>` flows through GateControl tolls and TradePost purchases. | Green | 6.31 |
 
 ### Stretch Module (If Time Permits)
@@ -26,7 +26,7 @@ A unified infrastructure control plane for EVE Frontier. Three core modules shar
 ### Why This Suite Wins
 
 - **ModDesign 10/10:** Three interconnected modules with shared auth, shared data model, and economic feedback loops.
-- **Frontier Vibe 9/10:** Gate control + marketplace + tribal economy = the pillars of EVE civilization.
+- **Frontier Vibe 9/10:** Gate control + field-deployable commerce + tribal economy = the pillars of EVE civilization.
 - **Demo moment:** Buyer pays 25 ALPHA_COIN (faction currency) at the TradePost for a trophy — same ALPHA_COIN that's accepted as a gate toll. Three modules, one economy.
 - **Player vote 7–8/10:** "Space shop" is instantly understood; faction currencies add identity/loyalty hooks.
 - **Technical depth:** Dynamic field composition, PTB buy flow, Coin standard — demonstrates 3+ Sui primitives.
@@ -36,7 +36,7 @@ A unified infrastructure control plane for EVE Frontier. Three core modules shar
 ## Top Picks by Bonus Prize Category
 
 ### Most Utility
-1. **SSU Storefront** — No marketplace exists. Universal demand.
+1. **SSU Storefront** — No field-deployable commerce exists. Every SSU owner is a potential shopkeeper.
 2. **Gate Policy Engine** — Every gate owner benefits immediately.
 3. **Corp Command Center** — Single pane of glass for all structures.
 

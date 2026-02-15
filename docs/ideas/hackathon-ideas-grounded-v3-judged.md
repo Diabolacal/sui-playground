@@ -86,8 +86,8 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 | Rank | ID | Title | Con | Mod | Imp | Ply | Vib | Cre | UX | Dem | Judge Avg | PVote | **Weighted** | Risk |
 |------|-----|-------|-----|-----|-----|-----|-----|-----|-----|-----|-----------|-------|-------------|------|
-| 1 | 3 | SSU Storefront | 9 | 8 | 7 | 9 | 9 | 7 | 8 | 8 | 8.13 | 8 | **8.09** | Yellow |
-| 2 | 1 | Gate Policy Engine | 9 | 10 | 8 | 9 | 9 | 7 | 8 | 9 | 8.63 | 6 | **7.97** | Green |
+| 1 | 1 | Gate Policy Engine | 9 | 10 | 8 | 9 | 9 | 7 | 8 | 9 | 8.63 | 6 | **7.97** | Green |
+| 2 | 3 | SSU Storefront | 8 | 8 | 7 | 8 | 9 | 7 | 8 | 8 | 7.88 | 8 | **7.91** | Yellow |
 | 3 | 8 | Corpse Toll Road | 8 | 7 | 9 | 7 | 9 | 6 | 7 | 8 | 7.63 | 8 | **7.72** | Green |
 | 4 | 21 | Loot Crate | 8 | 7 | 6 | 8 | 6 | 8 | 8 | 8 | 7.38 | 8 | **7.53** | Yellow |
 | 5 | 7 | Alliance Gate Network | 9 | 8 | 5 | 8 | 10 | 8 | 6 | 8 | 7.75 | 7 | **7.56** | Yellow |
@@ -117,19 +117,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 ### Top 10 Rationales
 
-#### #1 — SSU Storefront (ID 3) — Weighted: 8.09
-
-**Why it would be adopted:** There is no marketplace in EVE Frontier today. Every player who has items to sell or needs items to buy is a potential user. The atomic PTB buy flow (split coin → buy → transfer) is immediately understood by any gamer who has used an auction house.
-
-**Demo moment:** "Click 'Buy Laser Cannon' for 5 SUI — one transaction, item appears in your inventory. The first decentralized space shop, live."
-
-**Frontier vibe:** Player-run shops are the economic lifeblood of any EVE game — this is infrastructure that creates content organically.
-
-**Minimum viable build:** SSU extension module with `Listing` dynamic fields + web browse/buy UI. **Stretch:** Kiosk standard integration, faction currency support.
-
----
-
-#### #2 — Gate Policy Engine (ID 1) — Weighted: 7.97
+#### #1 — Gate Policy Engine (ID 1) — Weighted: 7.97
 
 **Why it would be adopted:** Every gate owner currently has binary open/closed control. This turns gates into programmable routers — tribe filters, time windows, item tolls — configured from a web dashboard without writing Move code.
 
@@ -138,6 +126,25 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 **Frontier vibe:** Gate control is territorial control. Policy composition mirrors how real-world infrastructure is managed — firewalls, access lists, traffic policies.
 
 **Minimum viable build:** Single extension module with dynamic field rule dispatch + 3 rule types (tribe, time, toll). **Stretch:** ZK privacy policy rule type.
+
+---
+
+#### #2 — SSU Storefront (ID 3) — Weighted: 7.91
+
+**Why it would be adopted:** EVE Frontier has station-based markets for centralized trading, but no commerce exists at player-deployed structures. SSU Storefront extends the economy into the field — remote outposts, forward operating bases, and toll-adjacent supply depots that station hubs can't reach. The atomic PTB buy flow (split coin → buy → transfer) is immediately understood by any gamer who has used an auction house.
+
+**Demo moment:** "Click 'Buy Laser Cannon' for 5 SUI — one transaction, item appears in your inventory. The first player-deployed storefront in EVE Frontier, live."
+
+**Frontier vibe:** Player-run shops at forward-deployed SSUs in hostile space evoke the legendary null-sec market hubs of EVE Online — the frontier outpost general store, not a replacement for station trade.
+
+#### Relationship to Station Markets
+
+- **Station markets already handle** centralized hub trading — players list and buy items at NPC stations, with remote purchase supported but physical pickup required.
+- **SSU Storefront adds** field-deployable, decentralized point-of-sale at player-owned infrastructure. Commerce can happen anywhere a player deploys an SSU — deep space, forward bases, gate-adjacent outposts.
+- **They coexist** because station markets serve hub trading while SSU Storefront serves the frontier. Different locations, different use cases, complementary economics.
+- **This strengthens Frontier gameplay** by extending the economic layer beyond station hubs, enabling emergent supply chains where outpost operators profit from proximity to dangerous or remote areas.
+
+**Minimum viable build:** SSU extension module with `Listing` dynamic fields + web browse/buy UI. **Stretch:** Kiosk standard integration, faction currency support.
 
 ---
 
@@ -243,7 +250,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 | Rank | Idea | Why |
 |------|------|-----|
-| 1 | SSU Storefront (#3) | Fills the single biggest gap in the game — no marketplace exists. Every player is a potential user. |
+| 1 | SSU Storefront (#3) | Extends commerce beyond station hubs — the first storefront at player-deployed infrastructure. Every SSU owner is a potential shopkeeper. |
 | 2 | Gate Policy Engine (#1) | Every gate owner immediately benefits. Configurable access without code — universal operational utility. |
 | 3 | Corp Command Center (#2) | Pure operational utility — single pane of glass for all structures. But no on-chain mod, just a read-only frontend. |
 
@@ -309,7 +316,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 ### Implementation Order
 
 1. **GateControl** (Priority 1) — Foundation. Deploy extension + tribe filter rule. This proves the pattern works and establishes the auth model all other modules share.
-2. **TradePost** (Priority 2, parallel-start after GateControl auth is proven) — Highest individual weighted score (8.09). De-risk cross-address PTB item transfer on day 1.
+2. **TradePost** (Priority 2, parallel-start after GateControl auth is proven) — Strong individual weighted score (7.91). De-risk cross-address PTB item transfer on day 1.
 3. **TribeMint** (Priority 3) — Individually modest (6.31), but it's the connective tissue. When GateControl accepts ALPHA_COIN as toll and TradePost accepts it as payment, the system becomes more than the sum of its parts.
 4. **LootDrop** (Priority 4, stretch) — Only if modules 1–3 are stable. Demonstrates `sui::random` mastery. Strong player vote pull (8/10).
 
