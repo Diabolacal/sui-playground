@@ -191,12 +191,20 @@ Subagents are the **primary mechanism** for complex work. Use them by default fo
 
 Append material decisions to `docs/decision-log.md` using the template in `.github/copilot-instructions.md`.
 
+## Documentation Rules
+
+1. All new markdown documents must be placed inside a categorized subfolder under `docs/`.
+2. Do NOT create markdown files directly under `docs/` root (only `docs/README.md` lives at root).
+3. Categories: `core`, `architecture`, `ideas`, `research`, `operations`, `sandbox`, `archive`.
+4. When creating a new doc, update `docs/README.md` index.
+5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
+
 ## Fast context to load on start
 
 - Read `.github/copilot-instructions.md` (source of truth)
 - Read `AGENTS.md` (this file)
 - Skim last ~40 lines of `docs/decision-log.md` for recent initiatives
-- Review `docs/README.md` for documentation map
-- **For Sui local devnet operations**, read `docs/sui-playground.md` first
+- Review `docs/README.md` for documentation map and taxonomy
+- **For Sui local devnet operations**, read `docs/architecture/sui-playground.md` first
 
 — Keep this file concise. Update when operating rules or architecture materially change.

@@ -71,7 +71,11 @@ npm run build            # Must succeed
 <!-- Customize per project -->
 - `{{FRONTEND_DIR}}/src/`: Application source
 - `{{API_DIR}}/`: API / serverless functions
-- `docs/decision-log.md`: Operational decisions (newest first)
+- `docs/`: Structured documentation (see `docs/README.md` for index)
+- `docs/core/`: Essential docs to carry into hackathon repo
+- `docs/architecture/`: Technical capability and system design
+- `docs/ideas/`: Hackathon project ideas
+- `docs/operations/`: Process guides, checklists, templates
 - `docs/working_memory/`: Ephemeral agent task tracking (gitignored)
 
 ## Assistant Interaction Protocol (Strict Sequence)
@@ -383,9 +387,17 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 - **API contracts** — persistence, auth, protocol definitions
 - **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
 
+## Documentation Rules
+
+1. All new markdown documents must be placed inside a categorized subfolder under `docs/`.
+2. Do NOT create markdown files directly under `docs/` root (only `docs/README.md` lives at root).
+3. Every new document must be categorized as one of: `core`, `architecture`, `ideas`, `research`, `operations`, `sandbox`, `archive`.
+4. When creating a new doc, update `docs/README.md` index.
+5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
+
 ## Sui Local Devnet
 
-For local Sui devnet operations (start, build, publish, troubleshoot), read `docs/sui-playground.md` first. Log outputs to `notes/sui-local-smoketest.md` (untracked, local-only).
+For local Sui devnet operations (start, build, publish, troubleshoot), read `docs/architecture/sui-playground.md` first. Log outputs to `notes/sui-local-smoketest.md` (untracked, local-only).
 
 ## When Unsure
 - Search existing patterns first (grep for similar feature names).
