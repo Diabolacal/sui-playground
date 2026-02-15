@@ -1,0 +1,294 @@
+# EVE Frontier Builder Documentation Reference Map
+
+> **Last updated:** 2026-02-15
+> **Source:** https://docs.evefrontier.com/
+> **Internal review by:** AI agent (initial mapping)
+
+## Purpose
+
+This document maps official EVE Frontier GitBook builder documentation to internal SUI Playground capabilities and defines when agents should consult it. It is a **structured reference index only** — no external content is mirrored or duplicated here.
+
+The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
+
+---
+
+## Site Structure Overview
+
+The official docs (`https://docs.evefrontier.com/`) are organized into these top-level sections. A machine-readable index is available at `https://docs.evefrontier.com/llms.txt`.
+
+| Section | Base URL Path | Pages | Status |
+|---------|--------------|-------|--------|
+| Welcome | `/welcome` | 5 pages | Mostly complete |
+| Tools | `/tools` | 2 pages | Partial (GAS Faucet is TODO) |
+| Smart Contracts | `/smart-contracts` | 3 pages | Substantive content |
+| Smart Assemblies | `/smart-assemblies` | 9 pages (3 types × 3) | Introductions done; Configure/Deploy mostly TODO |
+| dApps | `/dapps` | 4 pages | All TODO |
+| EVE Vault | `/eve-vault` | 3 pages | Introduction done; sub-pages TODO |
+| Troubleshooting | `/troubleshooting` | 3 pages | All TODO |
+| Contributing | `/contributing` | 2 pages | Complete |
+
+---
+
+## Relevant Sections (Structured List)
+
+### Why Build on EVE Frontier?
+
+- **URL:** https://docs.evefrontier.com/welcome
+- **Last updated:** ~3 days ago (as of 2026-02-15)
+- **Summary:** High-level overview of the builder value proposition. Explains Smart Assemblies as programmable structures, the open economic sandbox, World Contracts composability, and the Sui integration rationale.
+- **Why it matters for us:** Sets context for what "building" means in EVE Frontier — not cosmetic but strategic infrastructure with programmable logic.
+- **Overlaps with:**
+  - `docs/architecture/sui-playground-capabilities.md` §1 (mental model)
+- **Notable clarifications:** Confirms that World Contracts extend to characters, items, killmails — not just assemblies.
+
+### Smart Infrastructure
+
+- **URL:** https://docs.evefrontier.com/smart-assemblies
+- **Last updated:** ~3 days ago
+- **Summary:** Defines Smart Assemblies as programmable, player-built on-chain structures. Lists the three current types (Storage Unit, Gate, Turret). Explains that assemblies are built with Move on Sui and can be extended by builders with custom logic.
+- **Why it matters for us:** Confirms the assembly taxonomy and that builder extensions are the primary moddability mechanism.
+- **Overlaps with:**
+  - `vendor/world-contracts/contracts/world/sources/assemblies/` (all three assembly modules)
+  - `vendor/builder-scaffold/move-contracts/` (scaffold templates)
+  - `docs/architecture/sui-playground-capabilities.md` §4 (structure deep dive)
+- **Notable clarifications:** Lists future expansion potential beyond the three current types. Confirms assemblies use Sui shared objects for concurrent access.
+
+### Constraints
+
+- **URL:** https://docs.evefrontier.com/welcome/constraints (rendered at `/smart-assemblies` context)
+- **Last updated:** ~3 days ago
+- **Summary:** Documents technical and gameplay constraints: gas costs, Sui per-transaction limits (250KB object size, 32 struct fields, 1024 dynamic fields per tx), Move package immutability with upgrade via UpgradeCap, game physics location binding, and permission models.
+- **Why it matters for us:** Critical for avoiding runtime errors. Sui-specific limits (object size, dynamic field count) are not documented in our capabilities doc but directly affect contract design.
+- **Overlaps with:**
+  - Sui protocol documentation (external)
+  - `docs/architecture/sui-playground-capabilities.md` §3 (limitations)
+- **Notable clarifications:** Explicit mention of 250KB object max size and 1024 dynamic fields per transaction — these are hard limits that affect inventory design and large-state patterns. Also: Move structs max 32 fields.
+
+### Sui & Move Fundamentals
+
+- **URL:** https://docs.evefrontier.com/welcome/sui-and-move-fundamentals (rendered via navigation)
+- **Last updated:** ~3 days ago
+- **Summary:** Primer on Sui (object-centric model, low latency, parallel execution) and Move (resource-oriented, modules/scripts, strong typing, upgradeable). Explains how Frontier uses Sui for assets-as-objects, ownership, and on-chain game logic.
+- **Why it matters for us:** Good onboarding reference for operators unfamiliar with Sui/Move. Links to official Sui docs for deeper learning.
+- **Overlaps with:**
+  - Sui official docs (`docs.sui.io`)
+- **Notable clarifications:** None beyond what Sui docs provide. Useful as a curated entry point.
+
+### Wallets & Identity
+
+- **URL:** https://docs.evefrontier.com/welcome/wallets-and-identity
+- **Last updated:** ~3 days ago
+- **Summary:** Describes EVE Vault as the official wallet (web + Chrome extension) using zkLogin for seedless OAuth-based authentication. Explains the identity model: wallet = passport for both in-game and dApp interactions. Single sign-on via extension approval.
+- **Why it matters for us:** Explains the production authentication flow that `vendor/evevault` implements. Understanding zkLogin is essential for any dApp that needs player identity.
+- **Overlaps with:**
+  - `vendor/evevault/` (implementation)
+  - `docs/architecture/sui-playground-capabilities.md` §5 (evevault analysis)
+- **Notable clarifications:** Confirms zkLogin means no seed phrases — OAuth provider (Google, Apple) is the identity source. Also mentions FusionAuth as the EVE Frontier OAuth provider.
+
+### Environment Setup
+
+- **URL:** https://docs.evefrontier.com/tools/environment-setup
+- **Last updated:** ~3 days ago
+- **Summary:** Setup guide with two paths: Docker (recommended, any OS) using `builder-scaffold`, or manual installation (Windows/Linux/macOS) using `suiup` for Sui CLI. Includes Node.js/pnpm for TypeScript SDK interaction.
+- **Why it matters for us:** The Docker path references `builder-scaffold` — our `vendor/builder-scaffold/docker/` setup. The manual path documents `suiup` installation which is useful for native-only workflows.
+- **Overlaps with:**
+  - `vendor/builder-scaffold/docker/` (Docker setup)
+  - `docs/architecture/sui-playground.md` (our quickstart)
+- **Notable clarifications:** References a `build` branch of builder-scaffold and a `localnet-setup/docker` directory — this may differ from our pinned commit. The docs note "this link will be updated soon." Worth verifying branch alignment.
+
+### GAS Faucet
+
+- **URL:** https://docs.evefrontier.com/tools/gas-faucet
+- **Last updated:** ~4 days ago
+- **Summary:** Placeholder page (`//TODO`). No content yet.
+- **Why it matters for us:** Our local devnet auto-funds from faucet; testnet faucet details may be documented here when completed.
+- **Notable clarifications:** None — page is empty.
+
+### Introduction to Smart Contracts
+
+- **URL:** https://docs.evefrontier.com/smart-contracts/introduction-to-smart-contracts
+- **Last updated:** ~3 days ago
+- **Summary:** Explains what smart contracts are in the EVE Frontier context. Covers Move on Sui, deterministic execution, modular design. Details access control patterns: function visibility (`public`, `public(package)`, `public(entry)`), capability-based access (`OwnerCap`, `AdminCap`, `JumpPermit`), typed witness pattern, and `TxContext` usage.
+- **Why it matters for us:** The access control patterns section is essential reading before writing extensions. Explains the capability pattern, hot-potato pattern, and shared objects — all used extensively in world-contracts.
+- **Overlaps with:**
+  - `vendor/world-contracts/contracts/world/sources/access/access_control.move`
+  - `docs/architecture/sui-playground-capabilities.md` §4.9 (access control model)
+- **Notable clarifications:** Links to Move Book for capability and witness patterns. Explicitly documents that shared objects use Sui's built-in versioning for concurrent updates.
+
+### EVE Frontier World Explainer
+
+- **URL:** https://docs.evefrontier.com/smart-contracts/eve-frontier-world-explainer
+- **Last updated:** ~3 days ago
+- **Summary:** The most architecturally important page. Documents the three-layer architecture (Primitives → Assemblies → Extensions), explains each layer's role, details the typed witness extension pattern with code examples, covers location privacy (hashed coordinates + proximity proofs), and outlines the security model (Admin/Owner/Extension operations).
+- **Why it matters for us:** This is the authoritative architectural explanation of how world-contracts is designed. The three-layer diagram and extension registration flow are essential context for writing any builder extension.
+- **Overlaps with:**
+  - `vendor/world-contracts/docs/architechture.md` (source-level ADR)
+  - `vendor/world-contracts/contracts/world/` (all modules)
+  - `docs/architecture/sui-playground-capabilities.md` §4 (structure capabilities)
+- **Notable clarifications:**
+  - Primitives expose `public(package)` functions — players cannot call them directly; only assemblies use them internally.
+  - Extension registration is dynamic — no redeployment of assemblies needed.
+  - Privacy model: hashed locations on-chain, proximity verification via server proofs (with ZK as future alternative).
+
+### Interfacing with the EVE Frontier World
+
+- **URL:** https://docs.evefrontier.com/smart-contracts/interfacing-with-the-eve-frontier-world
+- **Last updated:** ~3 days ago
+- **Summary:** Documents write and read paths for chain interaction. Write path: Sui TypeScript SDK with transaction building, `borrow_owner_cap` pattern, and sponsored transactions (player signs intent, sponsor pays gas). Read path: GraphQL (preferred), JSON-RPC (deprecated), gRPC (for throughput), and event subscriptions.
+- **Why it matters for us:** The sponsored transaction pattern and `borrow_owner_cap` hot-potato flow are critical for any chain interaction. The code examples show the exact SDK calls needed. Also documents the deprecation of JSON-RPC in favor of GraphQL/gRPC.
+- **Overlaps with:**
+  - `vendor/world-contracts/ts-scripts/` (TypeScript examples)
+  - `docs/architecture/sui-playground-capabilities.md` §4.1, §4.2 (operation tables)
+- **Notable clarifications:**
+  - Sponsored transactions: `tx.setSender(playerAddress)` + `tx.setGasOwner(adminAddress)` — sponsor must be in `AdminACL`.
+  - `borrow_owner_cap` / `return_owner_cap` is a hot-potato pattern — cap must be returned in the same transaction.
+  - JSON-RPC is being deprecated by Sui; new integrations should use GraphQL or gRPC.
+
+### Smart Storage Unit
+
+- **URL:** https://docs.evefrontier.com/smart-assemblies/storage-unit
+- **Last updated:** ~3 days ago
+- **Summary:** Introduction to SSU as a Move smart contract object. Explains core design, developer/player interaction patterns, and references the world-contracts repo for practical examples. Prerequisites section is `//TODO`.
+- **Why it matters for us:** Directly maps to `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` and the scaffold template at `vendor/builder-scaffold/move-contracts/storage_unit/`.
+- **Overlaps with:**
+  - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
+  - `docs/architecture/sui-playground-capabilities.md` §4.2
+- **Notable clarifications:** Page is introductory only. Configure and Deploy sub-pages are `//TODO`.
+
+### Smart Storage Unit — Configure / Deploy
+
+- **URL:** https://docs.evefrontier.com/smart-assemblies/storage-unit/configure and `/deploy`
+- **Last updated:** ~4–9 days ago
+- **Summary:** Both pages are `//TODO` placeholders.
+- **Why it matters for us:** When completed, these will document the step-by-step workflow for configuring and deploying SSU extensions. Until then, our capabilities doc §4.2 and `world-contracts/ts-scripts/storage-unit/` are the only references.
+
+### Smart Gate
+
+- **URL:** https://docs.evefrontier.com/smart-assemblies/gate
+- **Last updated:** ~3 days ago
+- **Summary:** Introduction to the Smart Gate system. Covers gate modeling as Move objects, deployment, management, access configuration with programmable logic, and testing using world-contracts.
+- **Why it matters for us:** Directly maps to our most complex structure type. The extension pattern (authorize → issue permits → gate jumps) is the primary builder moddability surface.
+- **Overlaps with:**
+  - `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` (718 lines)
+  - `vendor/world-contracts/contracts/extension_examples/` (3 extension examples)
+  - `docs/architecture/sui-playground-capabilities.md` §4.1
+- **Notable clarifications:** Configure and Deploy sub-pages are `//TODO`.
+
+### Smart Turret
+
+- **URL:** https://docs.evefrontier.com/smart-assemblies/turret
+- **Last updated:** ~4 days ago
+- **Summary:** Placeholder page (`//TODO`). No content yet.
+- **Why it matters for us:** No turret module exists in world-contracts either (noted in our capabilities doc §4.4). This is a future capability.
+- **Notable clarifications:** Both the docs and code confirm turrets are not yet implemented. Only killmails reference structures via `LossType::STRUCTURE`.
+
+### dApps Quick Start / Connecting / Customizing
+
+- **URL:** https://docs.evefrontier.com/dapps/dapps-quick-start (+ 3 sub-pages)
+- **Last updated:** ~4+ days ago
+- **Summary:** All four pages are `//TODO` placeholders.
+- **Why it matters for us:** When completed, these will document how to build and connect dApps to EVE Frontier. Until then, `vendor/evevault/` is the reference implementation for Sui wallet standard integration.
+
+### Introduction to EVE Vault
+
+- **URL:** https://docs.evefrontier.com/eve-vault/introduction-to-eve-vault
+- **Last updated:** ~3 days ago
+- **Summary:** Documents EVE Vault as the wallet and inventory manager. Covers zkLogin authentication, Sui Wallet Standard compliance, FusionAuth OAuth, Chrome extension features, and the LUX/EVE Token economy.
+- **Why it matters for us:** Provides economic context (LUX for in-game, EVE Token for ecosystem). Confirms the production auth stack: FusionAuth → zkLogin → Sui address.
+- **Overlaps with:**
+  - `vendor/evevault/` (full implementation)
+  - `docs/architecture/sui-playground-capabilities.md` §5
+- **Notable clarifications:** Mentions LUX and EVE Token as the two primary currencies — not documented in our code. Wallet Game Setup, Browser Extension sub-pages are `//TODO`.
+
+### Contributing / Work in Progress
+
+- **URL:** https://docs.evefrontier.com/contributing/a-work-in-progress and `/contributing/contributing`
+- **Last updated:** ~5 days ago
+- **Summary:** Acknowledges the docs are being actively rewritten for Sui transition. Community contribution is planned but not yet available (repo not public). Provides PR workflow guidance and editorial guidelines.
+- **Why it matters for us:** Confirms docs are in flux — content may change significantly. Community docs repo is not yet public, so we cannot contribute fixes for `//TODO` pages.
+
+---
+
+## Gaps Between Code and Docs
+
+### GitBook Clarifies Behavior Not Obvious from Move Modules
+
+- **Three-layer architecture** (Primitives → Assemblies → Extensions): The layer separation and `public(package)` restriction on primitives is not self-documenting from code alone.
+- **Sponsored transaction pattern**: The `setSender(player)` + `setGasOwner(admin)` + `AdminACL` verification flow is documented with TypeScript examples in the Interfacing page but only implied by `verify_sponsor()` calls in Move code.
+- **Hot-potato pattern semantics**: The World Explainer explains *why* `OfflineAssemblies` and `ReturnOwnerCapReceipt` lack `drop` — to enforce atomic multi-step transactions. This design intent is not in code comments.
+- **Location privacy rationale**: The docs explain that hashed coordinates preserve information asymmetry (hidden bases) — the Move code stores hashes but doesn't explain the game-design motivation.
+- **Sui-specific constraints**: Object size limits (250KB), max struct fields (32), max dynamic fields per tx (1024) are documented in the Constraints page but not referenced in world-contracts code.
+- **JSON-RPC deprecation**: The Interfacing page notes Sui is deprecating JSON-RPC in favor of GraphQL/gRPC — important for any off-chain integration design.
+- **LUX / EVE Token economy**: The EVE Vault introduction mentions two currencies (LUX and EVE Token) not referenced in world-contracts code.
+
+### Code Is Canonical But Docs Lag
+
+- **Configure/Deploy pages**: All assembly Configure and Deploy sub-pages are `//TODO` — our capabilities doc (§4, §8) is more complete for step-by-step deployment flows.
+- **Turret module**: Neither docs nor code have turret implementation — docs page is `//TODO`, code has no turret module.
+- **GAS Faucet**: Docs page is `//TODO` — our local devnet auto-funds; testnet faucet details unknown.
+- **dApps integration**: All 4 dApps pages are `//TODO` — our evevault analysis (§5) is the only reference.
+- **Extension examples**: The Interfacing page mentions extension registration but doesn't show the full flow. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples not referenced by the docs.
+- **ZK proximity proofs**: The docs mention zero-knowledge proofs as a "future" alternative to server-signed proofs. Our `vendor/eve-frontier-proximity-zk-poc/` is a working Groth16 implementation — ahead of the docs.
+- **builder-scaffold branch**: The Environment Setup page references a `build` branch and `localnet-setup/docker` directory — this may not match our pinned commit. Verify before following doc instructions verbatim.
+
+---
+
+## Agent Usage Rules
+
+1. **Before generating chain interaction flows, sponsorship patterns, or deployment steps**, consult this reference map and the linked official docs pages — especially the "Interfacing with the EVE Frontier World" and "World Explainer" pages.
+2. **Code in `vendor/world-contracts` is canonical; GitBook is explanatory.** If behavior described in docs contradicts Move code, the code wins. Flag the discrepancy.
+3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-15), re-check the relevant pages before finalizing logic.
+4. **For access control patterns**, consult "Introduction to Smart Contracts" — the capability, witness, and hot-potato patterns are explained with rationale not present in code comments.
+5. **For Sui-specific limits** (object size, field counts, gas), consult the "Constraints" page and cross-reference with Sui protocol docs.
+6. **Do not copy GitBook content into internal docs.** Summarize insights and link to the official page. This avoids drift and respects content ownership.
+
+---
+
+## Freshness Policy
+
+### Review Cadence
+
+- **During active development:** Manual review once per week. Check the `llms.txt` index at `https://docs.evefrontier.com/llms.txt` for structural changes, then spot-check pages relevant to current work.
+- **Before hackathon submission freeze:** Full review of all "Relevant Sections" listed above. Update summaries and gap analysis.
+- **After major EVE Frontier announcements:** Re-check immediately — doc updates often follow announcements within days.
+
+### Drift Detection
+
+- Each page in the official docs shows a "Last updated" relative timestamp at the bottom.
+- Compare against this document's review date (top of file). If any relevant page shows a newer update, re-read it before relying on cached summaries here.
+- The `llms.txt` endpoint provides the full page index — a new entry indicates a new page that should be mapped here.
+
+### What NOT to Do
+
+- Do not automate scraping or mirroring of the GitBook site.
+- Do not embed large text excerpts from official docs — link and summarize only.
+- Do not treat this map as a substitute for reading the official docs when working on chain interaction logic.
+
+---
+
+## Quick URL Reference
+
+| Page | URL |
+|------|-----|
+| Home / Welcome | https://docs.evefrontier.com/welcome |
+| Smart Infrastructure | https://docs.evefrontier.com/smart-assemblies |
+| Constraints | https://docs.evefrontier.com/welcome/constraints |
+| Sui & Move Fundamentals | https://docs.evefrontier.com/welcome/sui-and-move-fundamentals |
+| Wallets & Identity | https://docs.evefrontier.com/welcome/wallets-and-identity |
+| Environment Setup | https://docs.evefrontier.com/tools/environment-setup |
+| GAS Faucet | https://docs.evefrontier.com/tools/gas-faucet |
+| Intro to Smart Contracts | https://docs.evefrontier.com/smart-contracts/introduction-to-smart-contracts |
+| World Explainer | https://docs.evefrontier.com/smart-contracts/eve-frontier-world-explainer |
+| Interfacing with the World | https://docs.evefrontier.com/smart-contracts/interfacing-with-the-eve-frontier-world |
+| Storage Unit | https://docs.evefrontier.com/smart-assemblies/storage-unit |
+| Storage Unit — Configure | https://docs.evefrontier.com/smart-assemblies/storage-unit/configure |
+| Storage Unit — Deploy | https://docs.evefrontier.com/smart-assemblies/storage-unit/deploy |
+| Gate | https://docs.evefrontier.com/smart-assemblies/gate |
+| Gate — Configure | https://docs.evefrontier.com/smart-assemblies/gate/configure |
+| Gate — Deploy | https://docs.evefrontier.com/smart-assemblies/gate/deploy |
+| Turret | https://docs.evefrontier.com/smart-assemblies/turret |
+| dApps Quick Start | https://docs.evefrontier.com/dapps/dapps-quick-start |
+| EVE Vault Introduction | https://docs.evefrontier.com/eve-vault/introduction-to-eve-vault |
+| LLMs Index | https://docs.evefrontier.com/llms.txt |
+| LLMs Full Content | https://docs.evefrontier.com/llms-full.txt |
+| Contributing | https://docs.evefrontier.com/contributing/a-work-in-progress |

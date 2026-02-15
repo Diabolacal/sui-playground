@@ -387,6 +387,18 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 - **API contracts** — persistence, auth, protocol definitions
 - **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
 
+## Official Documentation Reference Policy
+
+EVE Frontier maintains official builder documentation at https://docs.evefrontier.com/ (GitBook). These docs are actively being rewritten for the Sui blockchain transition — many pages contain `//TODO` placeholders.
+
+**Agent rules:**
+1. When generating chain interaction flows, sponsorship patterns, or deployment steps, consult `docs/research/evefrontier-builder-docs-map.md` and the linked official docs pages.
+2. Code in `vendor/world-contracts` is canonical; GitBook is explanatory. If behavior described in docs contradicts Move code, the code wins — flag the discrepancy.
+3. If official docs show a "Last updated" date newer than the reference map's last internal review date, re-check before finalizing logic.
+4. Do not copy GitBook content into internal docs — summarize insights and link to the official page.
+5. Key pages to always consult: "Interfacing with the EVE Frontier World" (sponsored transactions, read/write paths), "EVE Frontier World Explainer" (three-layer architecture), "Introduction to Smart Contracts" (capability, witness, hot-potato patterns).
+6. Freshness: Review `docs/research/evefrontier-builder-docs-map.md` weekly during active development; always re-check before hackathon submission freeze.
+
 ## Documentation Rules
 
 1. All new markdown documents must be placed inside a categorized subfolder under `docs/`.

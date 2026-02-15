@@ -41,6 +41,7 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 |------|---------|
 | [research/hackathon-inspiration-research.md](research/hackathon-inspiration-research.md) | Web research: blockchain hackathon patterns, Sui ecosystem examples |
 | [research/player-value-ux-analysis.md](research/player-value-ux-analysis.md) | Player pain points, UX interaction patterns, value analysis |
+| [research/evefrontier-builder-docs-map.md](research/evefrontier-builder-docs-map.md) | Official GitBook docs reference map — structured index with gap analysis and freshness policy |
 
 ## Operations
 
