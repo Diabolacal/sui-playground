@@ -39,6 +39,12 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 | [ideas/hackathon-ideas-grounded-v3-judged.md](ideas/hackathon-ideas-grounded-v3-judged.md) | **V3: 28 ideas scored against 8 judging criteria + player vote** — ranked list, CivilizationControl suite, bonus prize alignment |
 | [ideas/hackathon-shortlist-recommendations.md](ideas/hackathon-shortlist-recommendations.md) | Shortlist companion — top picks by category, recommended CivilizationControl module set, implementation order |
 
+## Strategy
+
+| File | Purpose |
+|------|---------|
+| [strategy/civilizationcontrol-strategy-memo.md](strategy/civilizationcontrol-strategy-memo.md) | Adversarial strategy review — thesis, critique, reconciled recommendation for CivilizationControl |
+
 ## Research (Prep Only — Not for Hackathon Repo)
 
 | File | Purpose |
