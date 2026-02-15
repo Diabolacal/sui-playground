@@ -33,7 +33,9 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 
 | File | Purpose |
 |------|---------|
-| [ideas/hackathon-ideas-grounded.md](ideas/hackathon-ideas-grounded.md) | 20 grounded hackathon project ideas with top-5 shortlist |
+| [ideas/hackathon-ideas-grounded.md](ideas/hackathon-ideas-grounded.md) | 20 grounded hackathon project ideas with top-5 shortlist (v1 — superseded) |
+| [ideas/hackathon-ideas-grounded-v2.md](ideas/hackathon-ideas-grounded-v2.md) | **25 ideas validated against official docs** — Green/Yellow/Red verdicts, top-5 shortlist, 5 new ideas |
+| [ideas/hackathon-ideas-v2-doc-enabled.md](ideas/hackathon-ideas-v2-doc-enabled.md) | 8 new ideas enabled by Sui/GitBook documentation knowledge (top-5 filtered) |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 
