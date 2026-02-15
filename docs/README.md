@@ -36,6 +36,8 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 | [ideas/hackathon-ideas-grounded.md](ideas/hackathon-ideas-grounded.md) | 20 grounded hackathon project ideas with top-5 shortlist (v1 — superseded) |
 | [ideas/hackathon-ideas-grounded-v2.md](ideas/hackathon-ideas-grounded-v2.md) | **25 ideas validated against official docs** — Green/Yellow/Red verdicts, top-5 shortlist, 5 new ideas |
 | [ideas/hackathon-ideas-v2-doc-enabled.md](ideas/hackathon-ideas-v2-doc-enabled.md) | 8 new ideas enabled by Sui/GitBook documentation knowledge (top-5 filtered) |
+| [ideas/hackathon-ideas-grounded-v3-judged.md](ideas/hackathon-ideas-grounded-v3-judged.md) | **V3: 28 ideas scored against 8 judging criteria + player vote** — ranked list, CivilizationControl suite, bonus prize alignment |
+| [ideas/hackathon-shortlist-recommendations.md](ideas/hackathon-shortlist-recommendations.md) | Shortlist companion — top picks by category, recommended CivilizationControl module set, implementation order |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 
