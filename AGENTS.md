@@ -200,6 +200,15 @@ EVE Frontier maintains official builder docs at https://docs.evefrontier.com/. T
 - **Key pages to consult:** "Interfacing with the EVE Frontier World" (write/read paths, sponsored tx pattern), "World Explainer" (three-layer architecture), "Introduction to Smart Contracts" (capability/witness/hot-potato patterns).
 - **Freshness:** If official docs show a "Last updated" date newer than the reference map's review date, re-check before finalizing logic. Review weekly during active development.
 
+## SUI Documentation Policy
+
+Sui chain-level documentation at https://docs.sui.io is canonical for all blockchain mechanics. Use `https://docs.sui.io/llms.txt` as the machine-readable index for locating pages.
+
+- **Before assuming chain behavior** (object model, gas, PTBs, coins, events, limits, abilities), consult `docs/research/sui-documentation-reference-map.md` for the relevant SUI docs page.
+- **Canonical hierarchy:** `vendor/world-contracts` code > SUI docs > EVE Frontier GitBook > internal docs. Flag discrepancies.
+- **Key areas requiring SUI docs:** object ownership types, dynamic field behavior, PTB composition rules, gas budget estimation, Coin<T> standard, Groth16 proof format, sponsored transaction protocol, on-chain randomness calling conventions.
+- **Freshness:** Check SUI `llms.txt` once per week during active development. Always re-check before hackathon submission freeze. Do not mirror content locally.
+
 ## Documentation Rules
 
 1. All new markdown documents must be placed inside a categorized subfolder under `docs/`.

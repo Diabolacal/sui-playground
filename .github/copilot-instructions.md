@@ -399,6 +399,18 @@ EVE Frontier maintains official builder documentation at https://docs.evefrontie
 5. Key pages to always consult: "Interfacing with the EVE Frontier World" (sponsored transactions, read/write paths), "EVE Frontier World Explainer" (three-layer architecture), "Introduction to Smart Contracts" (capability, witness, hot-potato patterns).
 6. Freshness: Review `docs/research/evefrontier-builder-docs-map.md` weekly during active development; always re-check before hackathon submission freeze.
 
+## SUI Documentation Policy
+
+Sui chain-level documentation at https://docs.sui.io is canonical for all blockchain-level mechanics (object model, gas, PTBs, abilities, events, storage, coins, cryptographic primitives).
+
+**Agent rules:**
+1. When reasoning about object model, gas mechanics, PTB composition, coin/token standards, dynamic field behavior, events, on-chain randomness, package upgrades, or storage — consult SUI docs via `docs/research/sui-documentation-reference-map.md`.
+2. Use `https://docs.sui.io/llms.txt` as the machine-readable entry point for locating canonical pages.
+3. **Canonical hierarchy:** `vendor/world-contracts` code > SUI docs (docs.sui.io) > EVE Frontier GitBook (docs.evefrontier.com) > internal docs. If ambiguity exists between GitBook and SUI docs, SUI docs override.
+4. Do not copy SUI documentation content into this repository — summarize insights and link to the canonical page.
+5. Key constraints to always verify against SUI docs: 250 KB object size limit, 1000 PTB command limit, 1024 dynamic fields per tx, 32 struct field limit, 8 Groth16 public inputs, shared object consensus latency, hot-potato consumption requirements.
+6. Freshness: Check SUI `llms.txt` once per week during active development; always re-check before hackathon submission freeze.
+
 ## Documentation Rules
 
 1. All new markdown documents must be placed inside a categorized subfolder under `docs/`.
