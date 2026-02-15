@@ -45,7 +45,7 @@ This playground provides a **local Sui devnet** (via Docker) with:
 - A persistent keystore volume
 - Network switching (local ↔ testnet)
 
-**You can:** publish, upgrade, call, inspect, and compose Move packages. You can model ownership, access control, structure lifecycle, and extension behavior — everything that lives on-chain. You can also generate and verify Groth16 ZK proofs for location/distance attestation entirely locally.
+**You can:** publish, upgrade, call, inspect, and compose Move packages. You can model ownership, access control, structure lifecycle, and extension behavior — everything that lives on-chain. You can also generate and verify Groth16 ZK proofs for location/distance attestation entirely locally (after installing the ZK toolchain — see §7.2 Prerequisites).
 
 **You cannot:** spawn real in-game entities, simulate the Carbon client, bridge items from the game server, or authenticate via FusionAuth/Enoki without internet access and credentials.
 
@@ -412,7 +412,7 @@ A complete working example of the EVE Frontier zkLogin flow:
 
 **Dependencies:** `@mysten/sui`, `axios`, `jwt-decode`
 
-### 6.4 Stubs (Not Yet Implemented)
+### 6.4 Placeholders (Not Present)
 
 | Directory | Status |
 |-----------|--------|
@@ -449,7 +449,7 @@ A complete working example of the EVE Frontier zkLogin flow:
 **Repo:** [vendor/eve-frontier-proximity-zk-poc/](../vendor/eve-frontier-proximity-zk-poc/) — by CCP Games (EVE Frontier)
 **Pinned commit:** `4078e70`
 
-This is a **working proof-of-concept** for replacing server-signed proximity proofs with client-generated Groth16 zero-knowledge proofs verified on-chain via `sui::groth16`. It is a standalone package — it does **not** import world-contracts — but uses the same spatial model (solar system, x/y/z coordinates, Ed25519 signing).
+This is a **working proof-of-concept** demonstrating a trustless alternative to server-signed proximity proofs — using client-generated Groth16 zero-knowledge proofs verified on-chain via `sui::groth16`. It is a standalone package — it does **not** import world-contracts — but uses the same spatial model (solar system, x/y/z coordinates, Ed25519 signing).
 
 #### Architecture: Three Layers
 
@@ -476,9 +476,9 @@ This is a **working proof-of-concept** for replacing server-signed proximity pro
 
 **Distance Attestation** ([distance-attestation.circom](../vendor/eve-frontier-proximity-zk-poc/src/on-chain/circuits/distance-attestation/distance-attestation.circom)):
 - ~1,010 constraints; ~250ms proof generation
-- Public inputs (5 + 1 output): two location Merkle roots, two coordinates hashes, distance² in meters; outputs `maxTimestamp`
+- Public inputs (5 + 1 output): two location Merkle roots, two coordinates hashes, distance² (squared Manhattan distance); outputs `maxTimestamp`
 - Private witness: both sets of raw coordinates + salts, timestamps
-- Proves: "The Manhattan distance between these two committed locations is exactly D" — without revealing either location
+- Proves: "The squared Manhattan distance between these two committed locations equals D" — without revealing either location
 
 #### Move Modules (11 files)
 
@@ -527,7 +527,7 @@ Verification results (Merkle roots, coordinates hashes, distance², timestamps) 
 | Location storage | Hashed coordinates in `Location` struct | `LocationData` with Merkle root + coordinates hash |
 | Proximity verification | `verify_proximity()` — Ed25519 server-signed proof | `verify_location_attestation()` — client-generated Groth16 proof |
 | Distance verification | `verify_distance()` — server-signed proof | `verify_distance_attestation()` — client-generated Groth16 proof |
-| Trust model | Trusted server signs all proofs | Trustless: anyone can generate a valid proof from private coordinates |
+| Trust model | Trusted server signs all proofs | Reduced trust: client generates proof locally, but initial data attestation (POD) still requires an authorized signer |
 | Privacy model | Coords hidden from chain (only hashes stored) | Same — plus the prover never reveals coords to a server either |
 | Integration | Used by `link_gates()`, `deposit_by_owner()`, etc. | Standalone — no bridge to world-contracts yet |
 | Shared patterns | `derived_object` for deterministic IDs, Ed25519 sig verify | Same Sui framework primitives |
@@ -559,6 +559,19 @@ pnpm test                              # Full JS/TS integration tests (starts lo
 
 **Trusted setup note:** The PoC uses a single-contribution Phase 2 ceremony (random entropy from `crypto.randomBytes(32)`). This is fine for testing but a production deployment would need a proper multi-party ceremony.
 
+#### Devnet Topology
+
+The ZK PoC's integration tests start their own native `sui start --with-faucet --force-regenesis` process on `http://127.0.0.1:9000` (hardcoded in [testSetup.ts](../vendor/eve-frontier-proximity-zk-poc/test/on-chain/integration/shared/testSetup.ts)). Builder-scaffold's Docker devnet also uses port 9000 internally, but since the compose file doesn't publish port 9000 to the host, **the two don't conflict by default**.
+
+| Approach | Port | How it starts | Coexistence |
+|----------|------|---------------|-------------|
+| ZK PoC (`pnpm test`) | `127.0.0.1:9000` (native) | Auto-starts via `pnpm sui:localnet:start` if not running | Conflicts with Docker if Docker publishes port 9000 |
+| builder-scaffold Docker | `127.0.0.1:9000` (inside container) | `docker compose run --rm sui-local` | Container-isolated; no host port binding by default |
+
+**Recommended default:** Run the ZK PoC's native localnet for its own integration tests, and use builder-scaffold's Docker devnet separately for world-contracts work. Don't run both simultaneously if you've modified Docker to publish port 9000.
+
+The ZK PoC has no `.env.example` — the RPC URL is hardcoded with no env-var override. Network selection for `pnpm move:publish` is via a `--network=` CLI flag (`localnet|devnet|testnet|mainnet`), but the test infrastructure only targets localnet.
+
 #### Performance
 
 | Metric | Location Circuit | Distance Circuit |
@@ -567,12 +580,14 @@ pnpm test                              # Full JS/TS integration tests (starts lo
 | Proof generation | ~320ms | ~250ms |
 | Public inputs | 3 (within Sui's 8-input limit) | 5 + 1 output (at Sui's limit) |
 
+> Constraint counts and proof generation times are from the upstream README (commit `4078e70`). Actual proof times vary by hardware — these are indicative, not benchmarked.
+
 ### 7.3 What ZK Capabilities Are Now Available
 
 | Capability | Status | What It Would Test |
 |------------|--------|-----------------------|
 | **Private location attestation** | **Available** (ZK PoC) | Prove location membership without revealing coordinates; Groth16 verified on-chain |
-| **Private distance attestation** | **Available** (ZK PoC) | Prove exact distance between two committed locations; Groth16 verified on-chain |
+| **Private distance attestation** | **Available** (ZK PoC) | Prove squared Manhattan distance between two committed locations; Groth16 verified on-chain |
 | **Poseidon Merkle commitments** | **Available** (ZK PoC) | Structured data commitment using on-chain `sui::poseidon` |
 | **Server-signed proximity proofs** | **Available** (world-contracts) | Exercise the production code path by assuming a local signing authority |
 | **Range proofs** | Not present | Prove "quantity ≥ N" without revealing exact amount — would need a new circuit |
@@ -582,7 +597,7 @@ pnpm test                              # Full JS/TS integration tests (starts lo
 
 **Realistic (can exercise on local devnet today):**
 - **Mock server-signed proofs** (world-contracts path) — generate an Ed25519 keypair, register it as "server address", sign `LocationProofMessage` structs, feed them to `link_gates()` / `deposit_by_owner()`. This exercises the exact production code path. It is not "simulation" — you are assuming the server's signing authority locally.
-- **Generate and verify Groth16 location proofs** (ZK PoC path) — compile circuits, generate coordinates + salt, produce a proof in ~320ms, verify it on local devnet via `sui::groth16`. Fully local, no external services.
+- **Generate and verify Groth16 location proofs** (ZK PoC path) — compile circuits, generate coordinates + salt, produce a proof in ~320ms, verify it on local devnet via `sui::groth16`. Fully local at runtime — no external services during proof generation or verification (one-time setup requires downloading ~70MB ptau file and installing circom + Rust).
 - **Generate and verify Groth16 distance proofs** (ZK PoC path) — same, with two locations. Store verified distance in `ObjectRegistry`.
 - **Poseidon Merkle tree operations** — build Merkle trees from POD entries, verify multiproofs on-chain.
 
@@ -604,14 +619,14 @@ pnpm test                              # Full JS/TS integration tests (starts lo
 
 This exercises the production code path. You are not simulating a server — you are assuming its signing authority. The privacy model is the same as production: coordinates are hashed before going on-chain; the "server" (you) vouches for proximity.
 
-**Path B — ZK PoC (requires circom + Rust + setup, but fully local):**
+**Path B — ZK PoC (requires circom + Rust + setup; fully local once set up):**
 1. Install circom, compile circuits, download ptau, build vkey serializer
 2. Generate location attestation data (POD + Merkle tree + Ed25519 signature)
 3. Produce Groth16 proofs (~320ms per location, ~250ms per distance)
 4. Publish the ZK PoC's Move package to local devnet
 5. Verify proofs on-chain — the chain validates the math without seeing coordinates
 
-This is the **trustless** path: the prover never reveals coordinates to anyone, and the chain verifies the proof cryptographically. It's more setup than Path A but demonstrates a genuinely different privacy model.
+This is the **reduced-trust** path: the prover never reveals coordinates to anyone, and the chain verifies the proof cryptographically. An authorized signer is still needed to attest the initial data (POD), but verification itself is trustless. It's more setup than Path A but demonstrates a genuinely different privacy model.
 
 **Recommended starting point:** Path A (mocking server proofs) for immediate world-contracts integration testing. Then Path B (ZK PoC) as a standalone experiment to understand the Groth16 verification flow — it doesn't yet bridge into world-contracts but exercises the same spatial concepts.
 
@@ -758,7 +773,7 @@ This is the **trustless** path: the prover never reveals coordinates to anyone, 
    - Generates distance attestation proof between two locations (~250ms)
    - Verifies distance on-chain and stores `DistanceData` in `ObjectRegistry`
    - Exercises the `inventory::transfer` flow gated by distance verification
-**Success:** Integration tests pass. `LocationData` and `DistanceData` stored on-chain. Events emitted (`FixedObjectCreatedEvent`, `LocationUpdatedEvent`). Demonstrates fully trustless, privacy-preserving proximity verification on local devnet — no server authority required.
+**Success:** Integration tests pass. `LocationData` and `DistanceData` stored on-chain. Events emitted (`FixedObjectCreatedEvent`, `LocationUpdatedEvent`). Demonstrates privacy-preserving proximity verification on local devnet — proof verification is trustless, though initial data attestation still requires an authorized signer (managed via `ApprovedSigners`).
 
 ---
 
