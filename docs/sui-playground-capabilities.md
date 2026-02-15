@@ -45,7 +45,7 @@ This playground provides a **local Sui devnet** (via Docker) with:
 - A persistent keystore volume
 - Network switching (local ↔ testnet)
 
-**You can:** publish, upgrade, call, inspect, and compose Move packages. You can model ownership, access control, structure lifecycle, and extension behavior — everything that lives on-chain. You can also generate and verify Groth16 ZK proofs for location/distance attestation entirely locally (after installing the ZK toolchain — see §7.2 Prerequisites).
+**You can:** publish, upgrade, call, inspect, and compose Move packages. You can model ownership, access control, structure lifecycle, and extension behavior — everything that lives on-chain. You can also generate and verify Groth16 ZK proofs for location/distance attestation — fully local at runtime (after one-time toolchain setup and parameter download — see §7.2 Prerequisites).
 
 **You cannot:** spawn real in-game entities, simulate the Carbon client, bridge items from the game server, or authenticate via FusionAuth/Enoki without internet access and credentials.
 
