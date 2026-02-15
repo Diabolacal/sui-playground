@@ -149,13 +149,37 @@ Subagents are the **primary mechanism** for complex work. Use them by default fo
 
 **Fallback:** Break into smallest safe chunks; ask permission before proceeding with reduced scope.
 
+## Submodule & Vendor Policy
+
+`vendor/*` directories contain **third-party upstream repos** added as git submodules. These rules are non-negotiable:
+
+🚫 **Never do:**
+- Create commits inside any `vendor/` submodule (`git -C vendor/* commit` — forbidden)
+- Modify, delete, or add tracked files within `vendor/*`
+- Stage submodule-internal changes from the parent repo
+- Commit local Docker state, caches, or generated files from submodules (e.g., `docker/workspace-data/`, `.env.testnet`)
+
+✅ **Correct patterns:**
+- **Update submodule pin:** Change the pinned commit in the *parent* repo only — `git submodule update --remote vendor/<name>`, then commit the new gitlink from the parent
+- **Local-only ignores:** Use `vendor/<name>/.git/info/exclude` for transient files (Docker volumes, build artifacts, local env files). This is local-only and never committed to the submodule
+- **Read freely:** Reading submodule source for context/reference is always allowed
+- **Document, don't commit:** Prefer `notes/` markdown logs over committing incidental changes
+
+### Workspace-Specific Rules (sui-playground sandbox)
+- This is a **private training sandbox**, NOT the hackathon submission repo
+- **Never push** from this repo without explicit operator approval
+- **Sui keys & wallet config:** Treat `~/.sui/` and any `.env` containing mnemonics/private keys as secrets — never log, commit, or echo them
+- **Docker state:** `vendor/builder-scaffold/docker/workspace-data/` is ephemeral local state — always excluded, never committed
+- **Environment switching:** When switching between local/testnet/mainnet, always verify `sui client active-env` before running transactions
+
 ## High-risk surfaces (coordinate before changing)
 
-<!-- Replace with your project's actual high-risk areas -->
+- **Submodule boundaries** — never commit inside `vendor/*`; see Submodule & Vendor Policy above
+- **Sui key material** — private keys, mnemonics, wallet configs
+- **Docker compose state** — workspace-data volumes, network configs
 - **Core application logic** — main entry points, rendering loops, global state
 - **API / Worker entrypoints** — persistence, auth, API contracts
 - **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
-- **Telemetry** — guard against double counting; keep schemas backward compatible
 - **Shared schemas** — coordinate with consumers before format changes
 
 ## Safety & boundaries
@@ -173,5 +197,6 @@ Append material decisions to `docs/decision-log.md` using the template in `.gith
 - Read `AGENTS.md` (this file)
 - Skim last ~40 lines of `docs/decision-log.md` for recent initiatives
 - Review `docs/README.md` for documentation map
+- **For Sui local devnet operations**, read `docs/sui-playground.md` first
 
 — Keep this file concise. Update when operating rules or architecture materially change.

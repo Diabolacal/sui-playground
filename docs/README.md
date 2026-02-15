@@ -13,6 +13,7 @@ Central map for all scaffold documentation. Consult this when looking for specif
 ## Guides
 | File | Purpose |
 |---|---|
+| [sui-playground.md](sui-playground.md) | **Sui local devnet quickstart** — how to start, build, publish, troubleshoot |
 | [WORKSPACE_ABSTRACT.md](WORKSPACE_ABSTRACT.md) | What this scaffold is and how to use it |
 | [SCAFFOLD_NOTES.md](SCAFFOLD_NOTES.md) | Step-by-step customization guide |
 | [COPILOT_MEMORY_GUIDELINES.md](COPILOT_MEMORY_GUIDELINES.md) | What to store in Copilot persistent memory |

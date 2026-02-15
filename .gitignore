@@ -46,6 +46,9 @@ docs/working_memory/
 npm-debug.log*
 yarn-debug.log*
 
+# Local notes (may contain addresses, keys, sensitive local context)
+notes/
+
 # Temporary files
 tmp_*
 temp_*

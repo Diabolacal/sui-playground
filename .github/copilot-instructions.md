@@ -356,9 +356,36 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
   - Place under `src/utils/` or `workers/`. Maintain message API: input request object, progress emits, final response. Throttle progress to ≤5 Hz.
   - Keep pure, no DOM. Use caches keyed off request parameters to avoid recomputation.
 
+## Submodule & Vendor Policy
+
+`vendor/*` directories contain **third-party upstream repos** added as git submodules. The following rules have the same precedence as Operational Guardrails:
+
+1. **Never commit inside submodules.** Do not run `git add`, `git commit`, or `git push` from within any `vendor/` directory. The agent must verify its `cwd` is the parent repo root before any git write operation.
+2. **Submodule updates via parent only.** To update a submodule's pinned commit, run `git submodule update --remote vendor/<name>` from the parent repo root, then commit the updated gitlink in the parent.
+3. **No tracked modifications.** Never modify, delete, or create tracked files inside `vendor/*`. Reading for context is always allowed.
+4. **Local-only ignores.** Transient/generated files (Docker volumes, build artifacts, `.env.*`, `workspace-data/`) must be excluded via `vendor/<name>/.git/info/exclude` — a local-only mechanism that is never committed to the submodule.
+5. **No secrets in vendor.** Never commit `.env` files, private keys, mnemonics, or wallet configs inside submodules or anywhere in the repo.
+
+### Sandbox-Workspace Rules
+- This repo (`sui-playground`) is a **private training sandbox** — not the hackathon submission repo.
+- **Do not push** without explicit operator approval.
+- **Sui keys & wallet config:** Treat `~/.sui/`, `sui.keystore`, and any env var containing mnemonics as secrets — never log, commit, or echo.
+- **Docker state:** `vendor/builder-scaffold/docker/workspace-data/` is ephemeral — always ignored, never committed.
+- **Environment switching:** Always verify `sui client active-env` before running transactions to avoid accidental mainnet/testnet operations.
+- **Prefer notes over commits:** Use `notes/` directory for logs, outputs, and incidental observations rather than committing generated content.
+
 ## High-Risk Surfaces
-<!-- Customize per project -->
-{{HIGH_RISK_SURFACES}}
+
+- **Submodule boundaries** — never commit inside `vendor/*`; see Submodule & Vendor Policy above
+- **Sui key material** — private keys, mnemonics, wallet configs
+- **Docker compose state** — workspace-data volumes, network configs
+- **Core application logic** — main entry points, global state
+- **API contracts** — persistence, auth, protocol definitions
+- **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
+
+## Sui Local Devnet
+
+For local Sui devnet operations (start, build, publish, troubleshoot), read `docs/sui-playground.md` first. Log outputs to `notes/sui-local-smoketest.md` (untracked, local-only).
 
 ## When Unsure
 - Search existing patterns first (grep for similar feature names).
