@@ -7,3 +7,6 @@
 [submodule "vendor/evevault"]
 	path = vendor/evevault
 	url = https://github.com/evefrontier/evevault
+[submodule "vendor/eve-frontier-proximity-zk-poc"]
+	path = vendor/eve-frontier-proximity-zk-poc
+	url = https://github.com/evefrontier/eve-frontier-proximity-zk-poc
