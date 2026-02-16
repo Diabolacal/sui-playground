@@ -109,7 +109,7 @@ The thesis claims TribeMint is "connective tissue" that elevates the system scor
 - GateControl alone scores 7.97 weighted — already highest individual idea.
 - With full polish (5+ rule types, beautiful policy builder UI, live Stillness testnet deployment, ZK privacy rule as differentiator), it could credibly reach 8.5+ weighted.
 - A single module means deeper implementation: more rule types, better error handling, edge case coverage, comprehensive events.
-- Demo is simpler: 90 seconds of focused "before/after" gate behavior, leaving 90 seconds for live audience interaction or Q&A.
+- Demo is simpler: 90 seconds of focused "before/after" gate behavior, leaving 90 seconds for system depth and narrative in the recorded video.
 - UX can be excellent because all design time goes into one workflow.
 
 **The cost:** ModDesign drops from 10/10 to ~7-8/10 because a single module is a module, not a system. That's a 2-3 point loss on one criterion (12.5% weight), or roughly 0.25-0.38 points of weighted composite. Is that loss offset by gains in Implementation, UX, and Demo from deeper focus? Possibly.
@@ -141,7 +141,7 @@ None of these are blockers, but each adds 4-8 hours of unanticipated work. Colle
 
 **Somewhat.** The V3 analysis is explicitly a judge-prediction model. It optimizes for rubric scores, not for "what will judges actually remember 30 minutes after the demo." Research on hackathon judging suggests:
 
-- Judges remember **one thing** from each entry — the "moment."
+- Judges remember **one thing** from each entry — the "moment." In a recorded video, this moment can be precisely timed and highlighted.
 - Systems with clear "before/after" transformations score higher than systems requiring explanation of interconnections.
 - Complexity perceived as over-scope is penalized more than simplicity perceived as focus.
 
@@ -172,7 +172,7 @@ A three-module system with economic feedback loops requires the demo to **teach*
 **Advantages:**
 - Maximum certainty of delivery. One package, one UI, one test suite.
 - Deeper implementation quality — could include the ZK privacy rule as a differentiator nobody else will have.
-- Simpler demo. More time for live interaction.
+- Simpler demo. More time for depth and narrative polish in the recorded video.
 - Could still target "Best Technical Implementation" if ZK rule is included.
 
 **Disadvantages:**
@@ -203,7 +203,7 @@ A three-module system with economic feedback loops requires the demo to **teach*
 - Two modules still reads as "system design" — two interconnected structures (gate + SSU) sharing auth and economy.
 - TradePost's 7.91 weighted score is substantial. GateControl + TradePost average 7.94 — higher baseline than adding TribeMint (which drags the average to 7.40).
 - SUI-denominated trades remove the entire Coin<T> integration challenge.
-- Demo is cleaner: "Control who jumps. Sell what they need. Three clicks." Under 2 minutes with room for live interaction.
+- Demo is cleaner: "Control who jumps. Sell what they need. Three clicks." Under 2 minutes with room for system narrative and visual polish.
 - 40% less code surface means more time for edge cases, error states, and UI polish.
 
 **Advantages over Strategy A:**
@@ -239,7 +239,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (SSU extension) spans two distinct smart assembly types with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
 
-3. **Delivery confidence matters more than peak theoretical score.** A polished two-module system with robust error handling, comprehensive events, and a clean demo will outscore a shaky three-module system with integration bugs. Hackathon judges penalize visible fragility more than missing ambition.
+3. **Delivery confidence matters more than peak theoretical score.** A polished two-module system with robust error handling, comprehensive events, and a clean recorded demo will outscore a shaky three-module system with integration bugs. Hackathon judges penalize visible incompleteness more than missing ambition.
 
 4. **TribeMint is a better stretch goal than a core module.** If Days 1-4 go smoothly and GateControl + TradePost are stable, TribeMint can be added in Day 5 as a Coin<T> layer. If not, the core submission is already strong. Either way, TribeMint's existence on the roadmap can be mentioned in the demo's closing 15 seconds as "what's next."
 
@@ -253,7 +253,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 | TribeMint status | Priority 3 (core) | Stretch 1 (build if time permits) |
 | LootDrop status | Stretch 1 | Stretch 2 |
 | Trade denominated in | SUI + ALPHA_COIN | SUI only (ALPHA_COIN if TribeMint ships) |
-| Demo length | 3 minutes (5 acts) | 2 minutes (3 acts) + 1 minute live interaction |
+| Demo length | 3 minutes (5 acts) | 2 minutes (3 acts) + 1 minute system narrative / visual polish |
 | Integration complexity | High (3-way Coin<T> plumbing) | Medium (shared auth + event feed) |
 | Delivery confidence | Medium | High |
 
@@ -299,7 +299,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 |-----------|--------|
 | TradePost cross-address PTB transfer fails de-risking by end of Day 1 | Pivot to Strategy A (Solo GateControl). TradePost becomes stretch. |
 | More than 2 modules have unresolved Move compiler errors by end of Day 3 | Freeze scope to what compiles. No new module starts. |
-| Demo rehearsal at Day 5 exceeds 4 minutes | Cut the weakest-demoing module entirely. |
+| Demo rehearsal at Day 5 exceeds 4 minutes | Cut the weakest-demoing module entirely. Trim for recorded video. |
 | Any module requires >50 lines of mock data to demo | Replace with live on-chain data or cut the module. |
 
 ---
@@ -308,12 +308,14 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 ### Aligned to Modified Recommendation (2+1 Minutes)
 
+> **Format:** Recorded demo video for Deepsurge submission. Script the flow, pre-deploy state, record with screen capture, and edit for clarity. Multiple takes expected.
+
 **Pre-deployed state:** 2 linked gates, 1 SSU (near Gate Alpha), 1 NWN (fueled), 3 characters (2× Tribe Alpha, 1× Tribe Beta), 5 test items of varying types, 50 SUI distributed.
 
 **Act 1 — "The Problem" (0:00–0:20)**
 > "You've deployed gates and a storage unit in the frontier. But you have no control and no economy. CivilizationControl changes that."
 
-Open dashboard → structure cards show live status → click Gate Alpha → currently open to everyone.
+Open dashboard → structure cards show status → click Gate Alpha → currently open to everyone.
 
 **Act 2 — "Control" (0:20–1:00)**
 > "Let's make Gate Alpha smart."
@@ -339,7 +341,7 @@ Dashboard wide shot — structures, events scrolling, both modules active.
 
 **The Moment:** When the buyer pays SUI for the Fuel Cell — an item the gate toll is also demanding — judges see two modules creating emergent economic interaction without explicit coupling.
 
-**Remaining 1:00:** Live Q&A or guided audience walkthrough ("pick a rule type, I'll enable it live").
+**Remaining 1:00:** System narrative wrap-up, visual dashboard showcase, and "what's next" roadmap slide. (If a live Q&A format is offered, this segment can be adapted for audience interaction.)
 
 ### If TribeMint Ships (Stretch Demo Insert)
 
@@ -353,7 +355,7 @@ Insert 30 seconds between Act 3 and Act 4:
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
 | 1 | **TradePost cross-address PTB transfer fails** — `deposit_item<Auth>()` may not support buyer-to-SSU item transfer in the way the storefront model assumes | Medium | Critical — TradePost is unusable | Day-1 de-risk on local devnet. If it fails, pivot to Strategy A (solo GateControl). The `deposit_item` function is extension-mediated and doesn't require proximity proof — but the item transfer path needs validation. |
-| 2 | **Integration fragility in demo** — any cross-module call failing during live demo kills the system narrative | Medium | High — judges see a broken system, not a polished one | Rehearse full flow 5+ times. Pre-deploy all state. Have a recorded backup video. If live demo stutters on module 2, skip it and show module 1 depth. |
+| 2 | **Demo recording discipline** — a poorly structured or unclear recorded demo undermines the system narrative just as much as a live failure would | Medium | High — judges see a confusing video, not a polished system | Storyboard the full flow before recording. Script each segment. Pre-deploy all state on devnet. Record multiple takes and select the best. Add captions and annotations in post-production. |
 | 3 | **Scope creep into TribeMint** — "just one more day" pulls effort from core polish | Medium | Medium — degrades GateControl/TradePost quality | Hard rule: TribeMint starts only after both core modules pass a complete demo rehearsal. No exceptions. |
 | 4 | **`sui::random` calling convention blocks LootDrop** — `entry` function constraint prevents PTB composition with storefront flow | Low | Low — LootDrop is S2 stretch | Test calling convention early. If blocked, LootDrop uses hash-based pseudo-random fallback or is cut entirely. |
 | 5 | **AdminACL/sponsored tx misconfiguration on testnet** — live demo on Stillness requires admin access and correct sponsor setup | High (if attempting testnet) | Medium — demo falls back to local devnet | Default to local devnet demo. Stillness testnet is bonus only. Prepare both environments. |

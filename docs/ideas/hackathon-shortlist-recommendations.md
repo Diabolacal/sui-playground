@@ -100,8 +100,45 @@ Day 4:  TradePost web UI (browse/buy flow)
         GateControl web UI (policy builder)
 Day 5:  Integration: TribeMint currency in TradePost prices
         Event feed + revenue tracking
-Day 6:  Polish, demo rehearsal, stretch (LootDrop if stable)
-Day 7:  Demo recording backup + live demo dry runs
+Day 6:  Polish, demo preparation, stretch (LootDrop if stable)
+Day 7:  Demo video recording (primary) + final testing
 ```
 
 > **Note:** Timeline assumes LLM-accelerated iteration. No human-time estimates — this is a capability-ordered priority list.
+
+---
+
+## Demo Strategy (Recorded Video)
+
+> **Context:** The Deepsurge submission form requests a demo video link (e.g., YouTube). This confirms judges evaluate a pre-recorded video, not a live streamed demo. See [hackathon-event-rules-digest.md](../research/hackathon-event-rules-digest.md#submission-artifacts-observed-via-deepsurge-ui) for details.
+
+### Recommended Video Length
+
+- **Primary submission:** 2–4 minutes (target 3 minutes)
+- **Player-vote cutdown:** 30–60 seconds (shareable highlight reel for social/voting)
+
+### Video Structure (Primary)
+
+| Segment | Duration | Content |
+|---------|----------|---------|
+| **Hook** | 0:00–0:15 | One-sentence problem statement + visual of the problem in-game |
+| **Problem** | 0:15–0:40 | Show the current player pain point (no gate control, no field commerce) |
+| **Capability Demo** | 0:40–2:20 | Screen-captured walkthrough of real on-chain functionality. Show actual transactions executing, not mockups |
+| **Result** | 2:20–2:45 | Dashboard/event-feed view showing the system working end-to-end |
+| **Why It Matters** | 2:45–3:00 | One-sentence value proposition + "CivilizationControl" branding |
+
+### Player Vote Cutdown (30–60s)
+
+- Open with the most dramatic moment (gate denial or atomic trade)
+- Show 2–3 quick capability clips with text overlays
+- End with the system dashboard view + project name
+- Optimize for shareability: captions (many viewers watch muted), fast pacing, clear visuals
+
+### Recording Discipline
+
+- **Script the full flow** before recording — storyboard each segment
+- **Pre-deploy all state** on devnet before hitting record (characters, items, balances)
+- **Multiple takes are expected** — re-record any segment that stutters
+- **Real transactions only** — do not fake or mock chain interactions
+- **Post-production:** Add captions, subtle annotations for technical moments, trim dead time
+- **B-roll:** Capture extra footage of dashboard, event feeds, and wallet confirmations for editing flexibility

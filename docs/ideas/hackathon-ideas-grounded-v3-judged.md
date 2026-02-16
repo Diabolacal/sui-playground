@@ -45,7 +45,7 @@ This suite maximizes "Mod Design" (system, not one-off), demonstrates 3 distinct
 | 5 | Frontier Relevance & Vibe | 12.5% | Born from playing EVE Frontier; extensions of alliances, betrayal, economics |
 | 6 | Creativity & Originality | 12.5% | Unique intersection of Sui object model + EVE gameplay nobody else attempted |
 | 7 | UX & Usability | 12.5% | Blockchain hidden; game-relevant UI; sponsored tx; mobile-aware |
-| 8 | Visual Presentation & Demo | 12.5% | Story-driven: problem → player encounter → live solve; memorable moment |
+| 8 | Visual Presentation & Demo | 12.5% | Story-driven: problem → player encounter → demonstrated solve; memorable moment. Demo is submitted as a recorded video (re-recordable), so narrative clarity and visual polish matter more than live execution stability |
 
 ### Player Vote (25% of total)
 
@@ -75,7 +75,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 - **Frontier Vibe:** Could be deployed on any chain for any game
 - **Creativity:** Tutorial with minor modifications; "Uniswap but for EVE"
 - **UX:** CLI-only with raw JSON; requires knowing object IDs
-- **Demo:** Slide-heavy, no live interaction, runs over time
+- **Demo:** Slide-heavy, no working demonstration, unclear narrative, or excessively long
 - **Player Vote:** Spreadsheet UI; developer tool; requires whitepaper to understand
 
 ---
@@ -121,7 +121,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Why it would be adopted:** Every gate owner currently has binary open/closed control. This turns gates into programmable routers — tribe filters, time windows, item tolls — configured from a web dashboard without writing Move code.
 
-**Demo moment:** "Character from the wrong tribe tries to jump — denied. Flip one toggle, now they can. Live, in 10 seconds."
+**Demo moment:** "Character from the wrong tribe tries to jump — denied. Flip one toggle, now they can. Ten seconds, one transaction."
 
 **Frontier vibe:** Gate control is territorial control. Policy composition mirrors how real-world infrastructure is managed — firewalls, access lists, traffic policies.
 
@@ -133,7 +133,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Why it would be adopted:** EVE Frontier has station-based markets for centralized trading, but no commerce exists at player-deployed structures. SSU Storefront extends the economy into the field — remote outposts, forward operating bases, and toll-adjacent supply depots that station hubs can't reach. The atomic PTB buy flow (split coin → buy → transfer) is immediately understood by any gamer who has used an auction house.
 
-**Demo moment:** "Click 'Buy Laser Cannon' for 5 SUI — one transaction, item appears in your inventory. The first player-deployed storefront in EVE Frontier, live."
+**Demo moment:** "Click 'Buy Laser Cannon' for 5 SUI — one transaction, item appears in your inventory. The first player-deployed storefront in EVE Frontier."
 
 **Frontier vibe:** Player-run shops at forward-deployed SSUs in hostile space evoke the legendary null-sec market hubs of EVE Online — the frontier outpost general store, not a replacement for station trade.
 
@@ -320,19 +320,19 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 3. **TribeMint** (Priority 3) — Individually modest (6.31), but it's the connective tissue. When GateControl accepts ALPHA_COIN as toll and TradePost accepts it as payment, the system becomes more than the sum of its parts.
 4. **LootDrop** (Priority 4, stretch) — Only if modules 1–3 are stable. Demonstrates `sui::random` mastery. Strong player vote pull (8/10).
 
-### Demo Storyline (3 Minutes)
+### Demo Storyline (3-Minute Video)
 
 **Pre-deployed:** 2 linked gates, 1 SSU, 1 NWN, 3 characters (2× Tribe Alpha, 1× Tribe Beta), 5 test items, 100 ALPHA_COIN minted.
 
 **Act 1 — "The Dashboard" (0:00–0:30)**
 > "Every EVE Frontier builder has the same problem: you deploy structures, but you're blind. CivilizationControl changes that."
 
-Open dashboard → three structure cards (Gate Alpha, Gate Beta, SSU Outpost) show live status → NWN fuel at 80% → click Gate Alpha → no policy yet (open to all).
+Open dashboard → three structure cards (Gate Alpha, Gate Beta, SSU Outpost) show status → NWN fuel at 80% → click Gate Alpha → no policy yet (open to all).
 
 **Act 2 — "The Policy" (0:30–1:15)**
 > "Let's make Gate Alpha smart."
 
-Open GateControl panel → enable Tribe Filter (Tribe Alpha only) → enable Toll (Item Type 42) → click "Deploy Policy" → PTB executes live.
+Open GateControl panel → enable Tribe Filter (Tribe Alpha only) → enable Toll (Item Type 42) → click "Deploy Policy" → PTB executes on-chain.
 
 - **Tribe Alpha member with item:** Jumps ✅ → Item-42 consumed → JumpEvent appears in feed
 - **Tribe Beta member:** Denied ❌ → "Access Denied: tribe not authorized"
@@ -394,16 +394,16 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 2. **Real-world utility bridge** — SSU Storefront scored highest on Player Utility because it connects chain activity to immediate in-game value (buying/selling items players need).
 3. **Composability as superpower** — GateControl's dynamic field rule dispatch and Faction Mint's `Coin<T>` composability boosted ModDesign scores. These are systems others can build on.
 4. **Scope ruthlessly — expect 25% completion** — The CivilizationControl suite is scoped to 3 core modules with pre-validated building blocks (existing template code for tolls, standard Coin pattern). Stretch features are explicitly optional.
-5. **Demo-ready in under 2 minutes** — Each CivilizationControl module has a 30-second demo segment; the full suite demo is 3 minutes with progressive complexity.
+5. **Demo-ready in under 2 minutes** — Each CivilizationControl module has a 30-second video segment; the full suite demo video is 3 minutes with progressive complexity.
 6. **Gamify the unglamorous** — GateControl turns boring access-list management into a visual policy builder. TradePost turns SSU config into a shop-owner experience.
 7. **"On-chain native" = couldn't exist without the chain** — Every top-10 idea exercises Sui-specific capabilities (object ownership, PTB composition, sponsored tx, VRF, ZK verification). Dashboard-only ideas scored down.
 8. **Target sponsor prizes explicitly** — CivilizationControl demonstrates 3+ Sui primitives (dynamic fields, Coin standard, PTB composition, optionally VRF and ZK), positioning for Best Technical Implementation.
 9. **Simple + fun beats complex + impressive** — Corpse Toll Road ranked #3 despite being the simplest implementation, because "pay corpse → jump gate" is immediately understood.
 10. **Clear problem statement first** — Demo storyline opens with "you're blind" (the problem), not "we built" (the solution).
 11. **Mobile-first consideration** — Dashboard UI concept is responsive; key actions (check status, approve trade) work on mobile.
-12. **Live data > mock data** — Demo plan deploys to local devnet with real transactions, not hardcoded JSON.
+12. **Real data > mock data** — Demo plan deploys to local devnet with real transactions, not hardcoded JSON. Recorded demo must show genuine on-chain execution.
 13. **Easy onboarding = more testers = more votes** — CivilizationControl with sponsored tx lets judges try it without gas or wallet setup.
-14. **Show the "control panel" moment** — The unified dashboard with live-updating structure cards, fuel gauges, and event feed is the signature visual. One striking real-time view > multiple static pages.
+14. **Show the "control panel" moment** — The unified dashboard with updating structure cards, fuel gauges, and event feed is the signature visual. One striking dashboard view > multiple static pages. In a recorded video, this can be captured cleanly with annotations.
 15. **State channels for real-time feel** — Off-chain optimistic UI with on-chain settlement for TradePost listing updates keeps the dashboard feeling responsive despite chain latency.
 
 ---

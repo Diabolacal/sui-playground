@@ -162,3 +162,30 @@ Judged by a panel of 3 qualified judges + 25% player vote weighting:
 6. **Player vote = 25%** of Best Entry score
 7. **Stillness deployment bonus** window: 14 days after hackathon close
 8. **Original work only** — no copied/reused hackathon code
+
+---
+
+## Submission Artifacts (Observed via Deepsurge UI)
+
+> **Source:** Manually observed in the Deepsurge submission form (2026-02-16). Not programmatically verified — the Deepsurge submission flow is behind authentication and rendered client-side.
+
+The Deepsurge submission form requests:
+
+- **GitHub repository link** — the primary deliverable; must contain all Entry code
+- **Website link** — optional; if the Entry has a hosted frontend or dashboard
+- **Demo video link** — e.g., YouTube; a recorded demonstration of the Entry in action
+
+### Implication for Demo Strategy
+
+The demo video field strongly implies that **judges will evaluate a pre-recorded video**, not a live streamed demonstration. This changes several strategic assumptions:
+
+| Assumption | Old (live demo) | Updated (recorded video) |
+|------------|-----------------|-------------------------|
+| Runtime fragility | High penalty — crash during live demo is catastrophic | Low penalty — re-recordable; only final take matters |
+| Narrative control | Limited — live Q&A and audience reactions shape flow | Full control — scripted, edited, captioned |
+| Presentation polish | Constrained by live execution speed and nerves | Can use B-roll, overlays, captions, post-editing |
+| Time management | Strict (3-5 min slot assumption) | Flexible within video length norms (2-5 min recommended) |
+| "Wow moment" delivery | Must land in real-time | Can be timed, replayed, and highlighted with annotations |
+| Core functionality requirement | **Unchanged** — must demonstrate real, working implementation | **Unchanged** — real on-chain transactions, not mockups |
+
+**Key takeaway:** The shift to recorded demo increases the importance of **storytelling, visual clarity, and narrative arc** while reducing the penalty for **runtime instability or complex flows that might stumble in live execution**. Core functionality must still be real and demonstrable — a recorded demo is not permission to fake capabilities.
