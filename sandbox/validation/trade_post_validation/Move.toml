@@ -1,0 +1,8 @@
+[package]
+name = "trade_post_validation"
+edition = "2024"
+
+[dependencies]
+
+[environments]
+local = "0x0"
