@@ -100,7 +100,7 @@ Per the strategy memo's adversarial critique, TribeMint is **demoted to stretch*
 |----------|--------|--------|----------------|------|
 | 1 | **GateControl** — Composable gate policy engine (tribe filter, coin toll, time window) | Core | 7.97 | Green |
 | 2 | **TradePost** — SSU storefront with atomic PTB escrow | Core | 7.91 | Green (validated) |
-| ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Medium |
+| ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Green (composition validated 2026-03-11; membership circuit pending) |
 | S1 | TribeMint — Faction `Coin<TribeToken>` | Stretch | 6.31 | Green |
 | S2 | LootDrop — VRF loot crate via `sui::random` | Stretch | 7.53 | Yellow |
 
@@ -116,7 +116,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | Cannibalization | Severe — 29-57% of total dev capacity | Zero — built on same gate extension pattern |
 | Working demo probability | 45-55% full | 50-60% (shared infrastructure reduces setup risk) |
 
-**Decision: ZK is a GateControl rule type, not Track B.** The existing `eve-frontier-proximity-zk-poc` provides 60-70% of the work. The integration seam (circuit → Move verifier → gate extension) is buildable. If it fails Day 3 kill criteria, GateControl still has tribe filter + coin toll — two validated rule types. ZK is upside, not dependency.
+**Decision: ZK is a GateControl rule type, not Track B.** The existing `eve-frontier-proximity-zk-poc` provides 60-70% of the work. The integration seam (circuit → Move verifier → gate extension) is buildable and the core composition (Groth16 verify + gate witness) has been validated on devnet (addendum 2026-03-11). ZK is upside, not dependency.
 
 ### Differentiator
 
@@ -124,12 +124,14 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 ### Remaining Validation (March 11 De-Risking)
 
+> **ZK Note:** Groth16 on-chain verification and ZK+gate composition are now validated on local devnet (addendum 2026-03-11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.1. Membership circuit design and package extraction remain as implementation tasks.
+
 | Item | Risk | Action | Time |
 |------|------|--------|------|
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
 | GateControl → `issue_jump_permit` → `jump_with_permit` integration | Medium | Full gate lifecycle on devnet (requires forged location proofs) | 4-8 hours |
 | Sponsored transaction setup (AdminACL) | Medium | Self-register as sponsor on local devnet | 1-2 hours |
-| ZK circuit → Move Groth16 verification | Medium | Compile membership circuit, verify on devnet | 4-8 hours |
+| ZK circuit → Move Groth16 verification | Low (composition validated) | Design membership circuit; on-chain verify already proven | 4-8 hours |
 | Lux-to-SUI display conversion | Low (UX only) | Inspect game server behavior if accessible | 1 hour |
 
 ### Risk Register
@@ -137,7 +139,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
 | 1 | **Full gate lifecycle setup too complex** | Medium | High — GateControl demo needs working gates | Script setup chain (governor → admin → characters → NWN → gates → link → online). Test file `gate_tests.move` provides complete pattern. |
-| 2 | **ZK integration fails** | Medium | Low — GateControl still works without ZK | Kill at Day 3 midpoint. Tribe filter + coin toll still produce a strong demo. |
+| 2 | **ZK integration fails** | Low | Low — GateControl still works without ZK | Composition validated on devnet (2026-03-11). Remaining risk is membership circuit design. Kill at Day 3 midpoint if circuit fails. |
 | 3 | **Scope creep into TribeMint** | Medium | Medium | Hard rule: TribeMint starts only after full CC demo rehearsal passes. |
 | 4 | **Demo video quality insufficient** | Low | High | Script, storyboard, and pre-deploy all state before recording. Multiple takes. Post-production captions. Budget 1 full day for demo. |
 | 5 | **Multiple submissions disallowed** | Low | Critical | FAQ indicates yes. Verify with organizer before March 11. If NO: Fortune Gate becomes GateControl's weird-rule-type, pivoting to single-entry strategy. |
@@ -170,11 +172,13 @@ The "Technical Spike" concept is preserved as the ZK Privacy Rule within Track A
 
 ### Kill Criteria (ZK within Track A)
 
-| Checkpoint | Deadline | Signal |
-|-----------|----------|--------|
-| Circuit compiles + generates valid proofs | End of Day 1 | If no, ZK is cut |
-| Move Groth16 verifier accepts proof on devnet | End of Day 2 | If no after >4 hours debugging, cut |
-| Full gate extension integration works | Mid-Day 3 | If no, fall back to CLI demo or cut entirely |
+> **Status update (2026-03-11):** On-chain Groth16 verification and ZK+gate composition are validated (see [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10). The checkpoints below for on-chain verify and gate integration are satisfied. Membership circuit design remains the primary kill gate.
+
+| Checkpoint | Deadline | Signal | Status |
+|-----------|----------|--------|--------|
+| Circuit compiles + generates valid proofs | End of Day 1 | If no, ZK is cut | Pending (implementation task) |
+| Move Groth16 verifier accepts proof on devnet | End of Day 2 | If no after >4 hours debugging, cut | **PASSED** (2026-03-11) |
+| Full gate extension integration works | Mid-Day 3 | If no, fall back to CLI demo or cut entirely | **PASSED** (2026-03-11) |
 
 ---
 

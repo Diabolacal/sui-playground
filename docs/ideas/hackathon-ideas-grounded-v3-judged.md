@@ -93,7 +93,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 | 3 | 8 | Corpse Toll Road | 8 | 7 | 9 | 7 | 9 | 6 | 7 | 8 | 7.63 | 8 | **7.72** | Green |
 | 4 | 21 | Loot Crate | 8 | 7 | 6 | 8 | 6 | 8 | 8 | 8 | 7.38 | 8 | **7.53** | Yellow |
 | 5 | 7 | Alliance Gate Network | 9 | 8 | 5 | 8 | 10 | 8 | 6 | 8 | 7.75 | 7 | **7.56** | Yellow |
-| 6 | 5 | ZK Gate Pass | 9 | 8 | 5 | 5 | 7 | 10 | 5 | 9 | 7.25 | 7 | **7.19** | Yellow |
+| 6 | 5 | ZK Gate Pass | 9 | 8 | 5 | 5 | 7 | 10 | 5 | 9 | 7.25 | 7 | **7.19** | Green¹ |
 | 7 | 14 | Tribal Diplomacy | 8 | 7 | 6 | 7 | 9 | 7 | 6 | 7 | 7.13 | 6 | **6.84** | Yellow |
 | 8 | 12 | Bounty Board | 8 | 6 | 4 | 8 | 9 | 6 | 6 | 6 | 6.63 | 8 | **6.97** | Yellow |
 | 9 | 23 | Salvage Protocol | 7 | 6 | 7 | 5 | 9 | 9 | 6 | 6 | 6.88 | 5 | **6.41** | Green |
@@ -410,6 +410,8 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 
 ---
 
+> ¹ ZK Gate Pass upgraded from Yellow to **Green** following devnet validation (addendum 2026-03-11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md).
+
 ## Appendix: Full Idea Registry (28 Ideas)
 
 | ID | Title | Source | Category | Feasibility |
@@ -418,7 +420,7 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 | 2 | Corp Command Center | V2-grounded | Dashboard | Green |
 | 3 | SSU Storefront | V2-grounded | Economy | Yellow |
 | 4 | Killmail Intelligence | V2-grounded | Analytics | Green |
-| 5 | ZK Gate Pass | V2-grounded | ZK/Privacy | Yellow |
+| 5 | ZK Gate Pass | V2-grounded | ZK/Privacy | Green¹ |
 | 6 | Fuel Watch | V2-grounded | Monitoring | Green |
 | 7 | Alliance Gate Network | V2-grounded | Governance | Yellow |
 | 8 | Corpse Toll Road | V2-grounded | Economy | Green |

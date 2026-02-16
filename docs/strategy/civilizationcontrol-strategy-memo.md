@@ -29,7 +29,7 @@
 
 ### Standalone Side Projects (Considered Separately)
 
-- ZK Gate Pass (technical flex)
+- ZK Gate Pass (technical flex — validated on devnet, addendum 2026-03-11; integrated into CC as GateControl rule type)
 - Salvage Protocol (creative flex)
 - Fortune Gate (weird flex)
 - Flappy Frontier (meme)
@@ -52,7 +52,7 @@
 The 8 judging criteria each carry 12.5% weight (combined 75%), with player vote at 25%. CivilizationControl targets the multiplier effect:
 
 - **ModDesign (12.5%):** A composable system with shared auth, shared data model, and cross-module economic flow is the textbook definition of a 10/10. Single-module entries cap at ~7-8 on this criterion.
-- **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green/Yellow risks — no Red-rated components.
+- **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green risks across all validated components — including ZK GatePass (validated on local devnet, addendum 2026-03-11).
 - **Concept Implementation (12.5%):** Three deployed Move packages with event emission, dynamic field state, and PTB composition demonstrate tangible depth. Template code exists for GateControl's toll pattern.
 - **Frontier Vibe (12.5%):** Gate policy is access governance. Field-deployed commerce extends the economic frontier. Faction currencies create tribal identity. All three map to EVE Online's meta-game culture.
 
@@ -291,7 +291,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 ### Second Cut (Drop Before Cutting First Cut)
 
 - LootDrop VRF module
-- ZK privacy rule in GateControl
+- ZK privacy rule in GateControl *(composition validated on devnet 2026-03-11; membership circuit design is remaining gate)*
 - Cross-faction exchange
 - Stillness testnet deployment
 
@@ -376,7 +376,7 @@ Insert 30 seconds between Act 3 and Act 4:
 
 3. **Prize targeting.** ZK Gate Pass is ranked #1 for "Best Technical Implementation" and #2 for "Most Creative" in the bonus prize analysis. These are distinct prizes from "Best Entry" — a standalone ZK submission does not cannibalize CivilizationControl's primary prize target.
 
-4. **Risk containment.** The ZK PoC's package-naming conflict (`world` name collides with world-contracts) requires a wrapper module — estimated 4-8 hours of work. This is isolated from CivilizationControl development. A single developer or a time-boxed sprint can handle it.
+4. **Risk containment.** The ZK PoC's package-naming conflict (`world` name collides with world-contracts) has been confirmed low-risk — a standalone `zk_gatepass_validation` package works alongside standard frameworks (validated on devnet, addendum 2026-03-11). Composition gap is resolved. Remaining risk is membership circuit design — estimated 4-6 hours. See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.1.
 
 5. **Demo impact.** "'Generating zero-knowledge proof...' → proof verified on-chain → gate opens → and the blockchain never learned who you were." This is a 30-second moment that lands with any audience. High variance, high reward.
 

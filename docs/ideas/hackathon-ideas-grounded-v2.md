@@ -37,7 +37,7 @@ Ranked by: feasibility (Green weight ×2) + demo power + uniqueness + minimal ex
 | **2** | **Corpse Toll Road** (Idea 8) | Green | Working example code exists (`corpse_gate_bounty.move` already has configurable `bounty_type_id`); lowest implementation risk; strong economy narrative |
 | **3** | **Corp Command Center** (Idea 2) | Green | Universal utility (every builder needs it); pure read-side (no risk of breaking anything); pairs as "dashboard layer" for any primary project |
 | **4** | **SSU Storefront** (Idea 3) | Yellow | Fills the biggest gap (no marketplace); `withdraw_item<Auth>` returns Item with `key+store` (transferable); atomic PTB buy flow confirmed feasible |
-| **5** | **ZK Gate Pass** (Idea 5) | Yellow | Highest novelty score; no other entry will have ZK-gated game infrastructure; bridge challenge is real but scoped; ~320ms browser proof generation |
+| **5** | **ZK Gate Pass** (Idea 5) | Yellow → Green | Highest novelty score; no other entry will have ZK-gated game infrastructure; composition gap resolved on devnet (addendum 2026-03-11); ~320ms browser proof generation. See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 |
 
 **Dropped from v1 top 5:** Bounty Board (downgraded: killmail field access blocked cross-package).
 **Promoted:** Corpse Toll Road (Green, working template, lowest risk).
@@ -52,7 +52,7 @@ Ranked by: feasibility (Green weight ×2) + demo power + uniqueness + minimal ex
 | 2 | Corp Command Center | Green | **Green** | Use GraphQL (not JSON-RPC). Fuel burn formula fields identified |
 | 3 | SSU Storefront | Green | **Yellow** | `withdraw_item<Auth>` returns transferable Item — confirmed. Cross-address PTB needs validation. Consider Kiosk as stretch |
 | 4 | Killmail Intelligence | Green | **Green** | No `structure_id` in killmail — limits structure-level tracking to character-level. Use `solar_system_id` for heat maps |
-| 5 | ZK Gate Pass | Yellow | **Yellow** | Package-naming conflict (`world`) between ZK PoC and world-contracts. Wrapper module feasible but adds deployment complexity |
+| 5 | ZK Gate Pass | Yellow | **Green** | Package-naming conflict (`world`) between ZK PoC and world-contracts. Wrapper module feasible but adds deployment complexity. *(Composition gap resolved; devnet-validated 2026-03-11.)* |
 | 6 | Fuel Watch | Green | **Green** | Fuel struct fields fully identified: `burn_rate_in_ms`, `is_burning`, `quantity`, `burn_start_time`, `previous_cycle_elapsed_time` |
 | 7 | Alliance Gate Network | Yellow | **Yellow** | Cross-owner linking confirmed: `link_gates()` requires both OwnerCaps in same PTB → multi-party signing needed. Start with single-owner |
 | 8 | Corpse Toll Road | Green | **Green** | `BountyConfig` already has configurable `bounty_type_id` with `set_bounty_type_id()`. No fork needed — existing code is sufficient |
@@ -620,7 +620,7 @@ When claims conflict between sources:
 | 2 | Corp Command Center | **Green** | Dashboard |
 | 3 | SSU Storefront | **Yellow** | Economy |
 | 4 | Killmail Intelligence | **Green** | Analytics |
-| 5 | ZK Gate Pass | **Yellow** | ZK/Privacy |
+| 5 | ZK Gate Pass | **Green** | ZK/Privacy |
 | 6 | Fuel Watch | **Green** | Monitoring |
 | 7 | Alliance Gate Network | **Yellow** | Governance |
 | 8 | Corpse Toll Road | **Green** | Economy |

@@ -99,8 +99,8 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [operations/SCAFFOLD_NOTES.md](operations/SCAFFOLD_NOTES.md) | Step-by-step workspace customization guide |
 | [operations/DECISIONS_TEMPLATE.md](operations/DECISIONS_TEMPLATE.md) | Decision log entry format template |
 | [operations/shortlist-viability-validation-plan.md](operations/shortlist-viability-validation-plan.md) | Test matrix for validating GateControl + TradePost on local devnet |
-| [operations/shortlist-viability-validation-report.md](operations/shortlist-viability-validation-report.md) | **Devnet test evidence** — 7/7 GREEN, both modules confirmed viable |
-| [operations/zk-gatepass-feasibility-report.md](operations/zk-gatepass-feasibility-report.md) | **ZK GatePass feasibility** — YELLOW-GREEN, architecture validated, integration gap pending March 11 |
+| [operations/shortlist-viability-validation-report.md](operations/shortlist-viability-validation-report.md) | **Devnet test evidence** — 10/10 GREEN (GateControl, TradePost, and ZK GatePass all confirmed viable) |
+| [operations/zk-gatepass-feasibility-report.md](operations/zk-gatepass-feasibility-report.md) | **ZK GatePass feasibility** — GREEN, fully validated on local devnet (addendum 2026-03-11); see [validation report](operations/shortlist-viability-validation-report.md) tests 8–10 |
 
 ## Sandbox
 

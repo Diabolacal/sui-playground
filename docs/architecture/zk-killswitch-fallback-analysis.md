@@ -5,7 +5,7 @@
 > **Date:** 2026-02-16  
 > **Type:** Decision framework — quantitative kill criteria, fallback plans, demo narratives  
 > **Inputs:** ZK PoC codebase analysis, GateControl feasibility report, CC strategy memo, hackathon roadmap, Groth16 constraint analysis  
-> **Status:** Pre-hackathon planning (code moratorium until March 11)
+> **Status:** ZK GatePass GREEN — composition and on-chain verification gates passed (devnet addendum 2026-03-11). This document remains relevant for the membership circuit kill gate and fallback planning. See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.1.
 
 ---
 
