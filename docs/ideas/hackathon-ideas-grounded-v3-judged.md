@@ -19,7 +19,7 @@ V2 established technical feasibility (Green/Yellow/Red verdicts) and identified 
 
 ### Recommended Primary Entry: CivilizationControl
 
-A cohesive 3-module system (+ 1 stretch) that functions as an **infrastructure control plane** for EVE Frontier builders:
+A cohesive 3-module system (+ 1 stretch) that functions as an **infrastructure management dashboard** for EVE Frontier builders:
 
 | Priority | Module | Draws From | Feasibility |
 |----------|--------|-----------|-------------|
@@ -123,7 +123,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Demo moment:** "Character from the wrong tribe tries to jump — denied. Flip one toggle, now they can. Ten seconds, one transaction."
 
-**Frontier vibe:** Gate control is territorial control. Policy composition mirrors how real-world infrastructure is managed — firewalls, access lists, traffic policies.
+**Frontier vibe:** Gate policy is access governance. Policy composition mirrors how real-world infrastructure is managed — firewalls, access lists, traffic policies.
 
 **Minimum viable build:** Single extension module with dynamic field rule dispatch + 3 rule types (tribe, time, toll). **Stretch:** ZK privacy policy rule type.
 
@@ -292,7 +292,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 ### The Suite
 
-**CivilizationControl** is an infrastructure control plane for EVE Frontier — a unified system where builders manage gate access, run storefronts, and mint faction currencies from a single dashboard.
+**CivilizationControl** is an infrastructure management dashboard for EVE Frontier — a unified system where builders configure gate access policies, run storefronts, and mint faction currencies from a single dashboard.
 
 | Module | Description | Draws From | Priority | Risk |
 |--------|-------------|-----------|----------|------|

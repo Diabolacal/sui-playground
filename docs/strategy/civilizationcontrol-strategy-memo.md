@@ -9,7 +9,7 @@
 
 ## 1. Thesis Statement
 
-**Proposal:** CivilizationControl should be the primary hackathon entry — a unified infrastructure control plane for EVE Frontier consisting of three tightly integrated Move modules and one stretch module, submitted as a single cohesive system.
+**Proposal:** CivilizationControl should be the primary hackathon entry — a unified infrastructure management dashboard for EVE Frontier consisting of three tightly integrated Move modules and one stretch module, submitted as a single cohesive system.
 
 ### Core Modules (Non-Negotiable in Thesis)
 
@@ -52,11 +52,11 @@ The 8 judging criteria each carry 12.5% weight (combined 75%), with player vote 
 - **ModDesign (12.5%):** A composable system with shared auth, shared data model, and cross-module economic flow is the textbook definition of a 10/10. Single-module entries cap at ~7-8 on this criterion.
 - **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green/Yellow risks — no Red-rated components.
 - **Concept Implementation (12.5%):** Three deployed Move packages with event emission, dynamic field state, and PTB composition demonstrate tangible depth. Template code exists for GateControl's toll pattern.
-- **Frontier Vibe (12.5%):** Gate control is territorial control. Field-deployed commerce extends the economic frontier. Faction currencies create tribal identity. All three map to EVE Online's meta-game culture.
+- **Frontier Vibe (12.5%):** Gate policy is access governance. Field-deployed commerce extends the economic frontier. Faction currencies create tribal identity. All three map to EVE Online's meta-game culture.
 
 ### System vs Feature Advantage
 
-Web3 gaming hackathon analysis identifies a consistent pattern: **winners build platforms, not features.** A gate policy engine is a feature. A gate policy engine that feeds tolls into a storefront economy denominated in faction currency is a platform. The ModDesign criterion explicitly rewards this — "composable system other builders can extend."
+Web3 gaming hackathon analysis identifies a consistent pattern: **winners build integrated systems, not isolated features.** A gate policy engine is a feature. A gate policy engine that feeds tolls into a storefront economy denominated in faction currency is an integrated system. The ModDesign criterion explicitly rewards this — "composable system other builders can extend."
 
 ### Technical Grounding
 

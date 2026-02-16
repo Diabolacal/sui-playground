@@ -38,7 +38,7 @@ Before any idea, acknowledge hard boundaries:
 ### Idea 1: Gate Policy Engine — Composable Access Rules
 
 - **One-liner:** A web dashboard where gate owners define conditional jump access rules (tribe, time-of-day, toll, reputation) without writing Move code.
-- **Why it's cool:** Transforms gates from binary open/closed into programmable infrastructure. Corp leaders manage an entire jump network from a browser. Judges see "programmable physical infrastructure" — a concept that doesn't exist in EVE Online.
+- **Why it's cool:** Makes gate access policies configurable through a dashboard — tribe filters, time windows, tolls — without writing Move code. Uses the existing extension model to layer composable rules on top of Frontier's gate system. Corp leaders manage gate policies from a browser. Judges see "accessible gate policy configuration" — a capability layer that doesn't exist in EVE Online.
 - **World-contract primitives used:** Gate (`authorize_extension`, `issue_jump_permit`, `jump_with_permit`), Character (`tribe()`), ExtensionConfig (dynamic fields for composable rules)
 - **Proofs/auth model:** OwnerCap for gate management; sponsor ACL for jump execution; no server proofs needed for gate access (only for linking). Extension witness pattern: a single deployed "policy engine" extension module with configurable rules stored as dynamic fields.
 - **Front-end concept:** Web dApp with: (1) "My Gates" list with status indicators, (2) Rule builder (drag-and-drop: tribe filter, time window, toll amount, cooldown), (3) Live jump log (subscribe to `JumpEvent`), (4) One-click "deploy policy" button that calls `authorize_extension` + sets dynamic field config.
@@ -46,7 +46,7 @@ Before any idea, acknowledge hard boundaries:
 - **Stretch goals:** Multi-rule composition (tribe AND time-of-day AND toll), rule templates ("Alliance gate", "Toll bridge", "VIP-only"), jump analytics dashboard, batch policy updates across gate networks.
 - **Hard blockers / unknowns:** Dynamic field schema for composable rules needs careful design. Unknown: can we stack multiple `Auth` witnesses on one gate, or must it be one module with internal composition? (Test in playground first.)
 - **De-risk plan:** Test `authorize_extension` + `issue_jump_permit` end-to-end on local devnet (Experiment 6 from capabilities doc). Validate dynamic field composition patterns with 2+ rule types.
-- **Judge story:** "We made EVE Frontier gates programmable — any gate owner can set access policies from a browser without writing code. This is like having Cloudflare Access for space." Demonstrates deep world-contracts integration + real Move extension code + clean UX.
+- **Judge story:** "We made EVE Frontier gate policies accessible — any gate owner can configure composable access rules from a browser without writing code. This is like having Cloudflare Access for space." Demonstrates deep world-contracts integration + real Move extension code + clean UX.
 
 ---
 

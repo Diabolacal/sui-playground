@@ -40,7 +40,7 @@ In the center, a live activity feed. Gate jumps. Purchases. Toll revenue. Who's 
 
 **CivilizationControl doesn't add new primitives to EVE Frontier. It takes the primitives that already exist — the extension system, the shared objects, the PTB composition layer — and makes them usable by the people who actually run civilizations.**
 
-This is a territory dashboard. An infrastructure control plane. A way to finally *see your frontier*.
+This is a territory dashboard. A management layer for the infrastructure you already own. A way to finally *see your frontier*.
 
 ---
 
@@ -60,19 +60,19 @@ You stock five more fuel rods and list them at 3.5 SUI each.
 
 The activity feed scrolls quietly in the sidebar. A jump notification from Gate North-1: pilot from Tribe 12, toll paid 0.5 SUI. A purchase notification from SSU Echo-2: pilot bought repair paste, 2 SUI. A fuel warning from NWN-South: estimated 8 hours remaining.
 
-For the first time, you can see the economy of your territory in real time. Not in a spreadsheet. Not in Discord messages. On a dashboard that shows you what's happening, right now, across every structure you own.
+For the first time, you can see your toll and trade revenue in real time. Not in a spreadsheet. Not in Discord messages. On a dashboard that shows you what's happening, right now, across every structure you own.
 
 ---
 
 ## Core Modules
 
-### GateControl — Territorial Sovereignty
+### GateControl — Gate Access Governance
 
-Gates are the arteries of the frontier. Whoever controls gates controls movement — and movement is everything in a universe where distance is vast and resources are scarce.
+Gates are the arteries of the frontier. Whoever sets the rules on gates shapes who moves through their space — and in a universe where distance is vast and resources are scarce, access policy is power.
 
-GateControl turns gate management from a technical chore into a governance tool. A tribe leader doesn't need to understand Move's type system to say: *my gates are open to allies and closed to hostiles.* They don't need to deploy contracts to charge a toll. They don't need to reconfigure twenty gates one at a time.
+GateControl turns gate policy configuration from a technical chore into a governance tool. A tribe leader doesn't need to understand Move's type system to say: *my gates are open to allies and closed to hostiles.* They don't need to deploy contracts to charge a toll. They don't need to reconfigure twenty gates one at a time.
 
-GateControl is not about access lists. It's about **sovereignty** — the ability to define, in clear terms, who enters your territory and under what conditions. And then to enforce it on-chain, trustlessly, without relying on honor systems or Discord agreements.
+GateControl is not about access lists. It's about **governance** — the ability to define, in clear terms, who passes through your gates and under what conditions. It plugs into the existing gate extension model and layers composable rules on top of Frontier's jump system, enforced on-chain, trustlessly, without relying on honor systems or Discord agreements.
 
 What's validated and real:
 - Tribe-based filtering: matching tribe passes, non-matching tribe is blocked atomically.
@@ -96,11 +96,11 @@ What's validated and real:
 
 GateControl and TradePost aren't two separate features that happen to ship together. They create a feedback loop:
 
-A gate toll charges SUI for passage through your territory. Where do those pilots spend that SUI? At the storefront on the other side. What does the storefront sell? Fuel, ammo, supplies — the things you need to keep jumping, keep fighting, keep surviving. The toll feeds the economy. The economy justifies the toll. The infrastructure sustains itself.
+A gate toll charges SUI for passage through your territory. Where do those pilots spend that SUI? At the storefront on the other side. What does the storefront sell? Fuel, ammo, supplies — the things you need to keep jumping, keep fighting, keep surviving. The toll feeds the commerce. The commerce justifies the toll. The operator profits from both sides of the loop.
 
 When a buyer at your TradePost pays 3 SUI for a fuel cell — an item that the gate on the other side of the system is also demanding as a toll condition — two modules create emergent economic interaction without explicit coupling. The gate drives demand. The storefront fills it. The tribe leader profits from both.
 
-That's not two tools. That's a civilization engine.
+That's not two tools. That's an integrated management suite — gate policy and frontier commerce reinforcing each other.
 
 ---
 
@@ -119,7 +119,7 @@ What doesn't exist yet:
 - **No monitoring.** No way to see toll revenue, gate traffic, fuel levels, or trade history.
 - **No integration.** No way to see how gates, SSUs, and economy interact as a connected system.
 
-CivilizationControl is not another Move contract demo. It's the missing layer between on-chain infrastructure and the people who operate it. It's the reason smart assemblies become smart — because someone can finally use them without being a developer.
+CivilizationControl is not another Move contract demo. It's the missing layer between on-chain infrastructure and the people who operate it. Smart assemblies are already powerful — CivilizationControl makes that power accessible to tribe leaders who shouldn't need to be developers.
 
 **The differentiator is not what it does on-chain. It's what it makes possible for players who never look at a chain.**
 
@@ -151,7 +151,7 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 *[Click into a gate. Policy panel opens. Tribe filter toggle set to Tribe 7. Toll slider set to 0.5 SUI.]*
 
-**Voiceover:** *"GateControl lets you define who enters your territory — and what they pay. Tribe filter. SUI toll. Both active on the same gate, composing as layers."*
+**Voiceover:** *"GateControl lets you set the rules on your gates — who passes through, and what they pay. Tribe filter. SUI toll. Both active on the same gate, composing as layers within the existing extension model."*
 
 *[A jump event appears in the activity feed: Pilot from Tribe 7, toll paid: 0.5 SUI. Green checkmark.]*
 
@@ -179,11 +179,11 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 *[Pull back to full dashboard view. Multiple gates, multiple SSUs, activity feed scrolling with jumps and purchases. Revenue totals accumulating.]*
 
-**Voiceover:** *"CivilizationControl isn't a gate extension or a marketplace plugin. It's the control room for your frontier civilization. Gates. Commerce. Policy. Economy. One system. Your territory, your rules, your revenue."*
+**Voiceover:** *"CivilizationControl is more than a single-purpose gate extension or a standalone marketplace. It's a unified management layer — composable gate policies and frontier commerce, integrated in one control room. Your gates, your rules, your revenue."*
 
 *[Title card: CivilizationControl — The Frontier Control Room]*
 
-**Voiceover:** *"Built for EVE Frontier. Built for tribe leaders. Built to make the frontier worth controlling."*
+**Voiceover:** *"Built on EVE Frontier's extension model. Built for tribe leaders. Built to make your infrastructure worth managing."*
 
 ---
 
@@ -199,7 +199,7 @@ CivilizationControl doesn't import a concept from another ecosystem. It emerges 
 
 ### Mod Design — "Not a one-off feature"
 
-Two interconnected modules sharing auth patterns and economic flow. GateControl and TradePost compose as a system — toll revenue drives commercial demand, commerce justifies infrastructure investment. This is platform-level design, not a single trick. Judges who've read the docs will recognize the composable dynamic field rule pattern and the cross-address PTB composition as thoughtful architectural choices.
+Two interconnected modules sharing auth patterns and economic flow. GateControl and TradePost compose as a system — toll revenue drives commercial demand, commerce justifies infrastructure investment. This is system-level design, not a single trick. Judges who've read the docs will recognize the composable dynamic field rule pattern and the cross-address PTB composition as thoughtful architectural choices.
 
 ### Concept Implementation — "How well concept translated to working mod"
 
@@ -207,7 +207,7 @@ Everything shown in the demo is real. Seven validation tests passed on devnet. T
 
 ### Creativity & Originality — "Bold, novel, uniquely Frontier"
 
-No one has built a control plane for EVE Frontier infrastructure. Tribe leaders have gates and SSUs but no way to see, manage, or monetize them as a unified system. The composable rule engine — stackable tribe filters and tolls on the same gate via dynamic field dispatch — is a novel pattern that the current builder docs don't demonstrate.
+No one has built a management dashboard for EVE Frontier gate and SSU operations. Tribe leaders have structures but no way to see, configure, or monetize them as a unified system. The composable rule engine — stackable tribe filters and tolls on the same gate via dynamic field dispatch — is a novel pattern that the current builder docs don't demonstrate.
 
 ### UX & Usability — "Intuitive and usable in real play"
 

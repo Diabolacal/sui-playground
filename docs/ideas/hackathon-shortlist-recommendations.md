@@ -7,7 +7,7 @@
 
 ## Primary Recommendation: CivilizationControl
 
-A unified infrastructure control plane for EVE Frontier. Three core modules sharing auth, UI, and data model — demonstrating "system design, not a one-off."
+A unified infrastructure management dashboard for EVE Frontier. Three core modules sharing auth, UI, and data model — demonstrating "system design, not a one-off."
 
 ### Core Modules (Build These)
 
