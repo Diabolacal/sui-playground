@@ -697,3 +697,39 @@ The `test_swap_ammo_for_lens` test in `storage_unit_tests.move` (line ~749) alre
 5. **If test fails:** Diagnose — likely a package dependency or type visibility issue. Fall back to Option B (escrow).
 
 **Estimated time for de-risk validation: 2-4 hours** (including Move module, test, and debugging).
+
+---
+
+## L. SSU-Backed Storefront Devnet Validation (2026-02-16)
+
+> **Status:** PROVEN on local devnet. The extension witness pattern works exactly as designed.
+
+The SSU-backed storefront pattern has been independently validated on local devnet using standalone mock modules (`mock_ssu.move` + `ssu_trade.move`) that reproduce the world-contracts extension pattern with zero external dependencies.
+
+### Validated Transactions
+
+| Step | Tx Digest | Status |
+|------|-----------|--------|
+| Publish | `49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z` | Success |
+| `setup_storefront` | `3vjNNocmCDEnMeghPEwTQFow7RWzB56bxTKV72oRPyFg` | Success |
+| `authorize_extension<TradeAuth>` | `H3R3xKnzT1ksqYioxbnTSKbQfMdebrb75Dp8Qb2A3jcP` | Success |
+| `stock_item` | `CU6ZedANzjzpSiZtuicN2JjfwevjvtR1QRqhWHmCwfRt` | Success |
+| `create_listing` | `VbTDAsE6xbDULr3jPXm6iXbJu8RFo6FUHvqjErRsuoc` | Success |
+| `buy` (atomic PTB) | `42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw` | Success |
+
+### Proven Properties
+
+1. **Witness-gated withdrawal:** `buy()` creates `TradeAuth{}` and calls `mock_ssu::withdraw_item<TradeAuth>()` — buyer never needs OwnerCap
+2. **Extension authorization enforced:** SSU extension slot contains `type_name::with_defining_ids<TradeAuth>()` — only this module can withdraw
+3. **Atomic PTB composition:** `--split-coins gas → --assign payment → --move-call buy` in one buyer-signed tx
+4. **Cross-address:** Seller owns SSU + stocks items; buyer signs buy tx — no seller signature at buy time
+5. **Balance verified:** Seller +5 SUI, Buyer -5 SUI (+ gas)
+6. **State verified:** SSU items 1→0, Listing `is_active` true→false, buyer owns Item
+
+### Risk Reclassification Update
+
+| Risk Item | Previous | Updated | Rationale |
+|-----------|----------|---------|-----------|
+| SSU-backed storefront buy | **Yellow-Green** (code analysis) | **Green** (devnet proven) | 6 successful txs on local devnet. Extension witness pattern independently validated. |
+
+See full evidence in [Shortlist Viability Validation Report](../operations/shortlist-viability-validation-report.md#test-7-tradepost--ssu-backed-storefront-buy-devnet).

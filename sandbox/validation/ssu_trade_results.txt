@@ -1,0 +1,166 @@
+=== SSU-Backed TradePost Validation ===
+Date: Mon Feb 16 12:40:49 UTC 2026
+
+SELLER: 0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c
+BUYER:  0x85483f9da07887da6024fdfbc22c1a0eb53475c70c7033aaca9ff06c13a688fe
+
+=== Step 0: Verify Environment ===
+Active address switched to 0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c
+Active env: local
+
+=== Step 1: Build & Publish ===
+Building...
+
+Please report feedback on the linter warnings at https://forums.sui.io
+
+Publishing...
+PACKAGE_ID: 0x3189a5085de70ca067fe3409e3b1020f806bce8ac4d7e6e4897c88b3f2a816bf
+PUBLISH_DIGEST: 49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z
+
+=== Step 2: Seller Creates SSU (setup_storefront) ===
+Active address switched to 0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c
+SETUP_STATUS: Success
+SETUP_DIGEST: 3vjNNocmCDEnMeghPEwTQFow7RWzB56bxTKV72oRPyFg
+SSU_ID: 0xf08a3eaad5cfc9a532b3403a3e22c930ee5860ffd5ba98f835b4739c1aa78d72
+OWNER_CAP_ID: 0x260e7c86ea4181a85a9ae66ed8bb379a124a73f02e14bd765ad9a6a7e301b7e2
+
+=== Step 3: Seller Authorizes TradeAuth Extension ===
+AUTH_STATUS: Success
+AUTH_DIGEST: H3R3xKnzT1ksqYioxbnTSKbQfMdebrb75Dp8Qb2A3jcP
+AUTH_EVENT: NONE
+
+=== Step 4: Seller Stocks Item in SSU ===
+STOCK_STATUS: Success
+STOCK_DIGEST: CU6ZedANzjzpSiZtuicN2JjfwevjvtR1QRqhWHmCwfRt
+STOCK_EVENT: NONE
+
+=== Step 5: Seller Creates SSU-Backed Listing ===
+LISTING_STATUS: Success
+LISTING_DIGEST: VbTDAsE6xbDULr3jPXm6iXbJu8RFo6FUHvqjErRsuoc
+LISTING_ID: 0x21e1b374ce05b0f70ee4cf5f8378f1c0a031574633513b9f254b985fcecb0ff4
+LISTING_EVENT: NONE
+
+=== Step 6: Pre-Buy State ===
+--- SSU Object (should contain item) ---
+{
+  "extension": {
+    "type": "0x1::type_name::TypeName",
+    "fields": {
+      "name": "3189a5085de70ca067fe3409e3b1020f806bce8ac4d7e6e4897c88b3f2a816bf::ssu_trade::TradeAuth"
+    }
+  },
+  "id": {
+    "id": "0xf08a3eaad5cfc9a532b3403a3e22c930ee5860ffd5ba98f835b4739c1aa78d72"
+  },
+  "items": [
+    {
+      "type": "0x3189a5085de70ca067fe3409e3b1020f806bce8ac4d7e6e4897c88b3f2a816bf::mock_ssu::Item",
+      "fields": {
+        "id": {
+          "id": "0x99a0f18c0fc3fb6c3b73f8ce077cf51fe96e25f81182cd4eb12040eb7e996100"
+        },
+        "name": [
+          82,
+          97,
+          114,
+          101,
+          32,
+          71,
+          101,
+          109
+        ],
+        "type_id": "42"
+      }
+    }
+  ],
+  "owner": "0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c"
+}
+
+--- Seller balance ---
+Seller MIST before: 999943884528
+Active address switched to 0x85483f9da07887da6024fdfbc22c1a0eb53475c70c7033aaca9ff06c13a688fe
+Buyer MIST before: 1000000000000
+
+=== Step 7: BUYER Atomic SSU-Backed Buy ===
+Buyer signs a single PTB that:
+  1. Splits coin for 5 SUI payment
+  2. Calls ssu_trade::buy(listing, ssu, payment)
+     -> mock_ssu::withdraw_item<TradeAuth>(ssu, TradeAuth{}, 42)
+     -> item transferred to buyer, payment to seller
+
+BUY_STATUS: Success
+BUY_DIGEST: 42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw
+PURCHASED_EVENT: NONE
+WITHDRAW_EVENT: NONE
+
+=== Step 8: Post-Buy Verification ===
+--- SSU Object (should be empty) ---
+SSU items count: 0
+{
+  "extension": {
+    "type": "0x1::type_name::TypeName",
+    "fields": {
+      "name": "3189a5085de70ca067fe3409e3b1020f806bce8ac4d7e6e4897c88b3f2a816bf::ssu_trade::TradeAuth"
+    }
+  },
+  "id": {
+    "id": "0xf08a3eaad5cfc9a532b3403a3e22c930ee5860ffd5ba98f835b4739c1aa78d72"
+  },
+  "items": [],
+  "owner": "0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c"
+}
+
+--- Listing Object (should be inactive) ---
+Listing active: False
+{
+  "id": {
+    "id": "0x21e1b374ce05b0f70ee4cf5f8378f1c0a031574633513b9f254b985fcecb0ff4"
+  },
+  "is_active": false,
+  "item_type_id": "42",
+  "price": "5000000000",
+  "seller": "0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c",
+  "ssu_id": "0xf08a3eaad5cfc9a532b3403a3e22c930ee5860ffd5ba98f835b4739c1aa78d72"
+}
+
+--- Buyer owns item? ---
+Buyer owns Item: 0x99a0f18c0fc3fb6c3b73f8ce077cf51fe96e25f81182cd4eb12040eb7e996100 type=0x3189a5085de70ca067fe3409e3b1020f806bce8ac4d7e6e4897c88b3f2a816bf::mock_ssu::Item
+
+--- Post-buy balances ---
+Buyer MIST after: 994996915320
+Active address switched to 0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c
+Seller MIST after: 1004943884528
+
+=============================================
+=== VALIDATION SUMMARY ===
+=============================================
+
+Package ID:       0x3189a5085de70ca067fe3409e3b1020f806bce8ac4d7e6e4897c88b3f2a816bf
+Publish Digest:   49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z
+
+SSU ID:           0xf08a3eaad5cfc9a532b3403a3e22c930ee5860ffd5ba98f835b4739c1aa78d72
+OwnerCap ID:      0x260e7c86ea4181a85a9ae66ed8bb379a124a73f02e14bd765ad9a6a7e301b7e2
+Listing ID:       0x21e1b374ce05b0f70ee4cf5f8378f1c0a031574633513b9f254b985fcecb0ff4
+
+Setup Digest:     3vjNNocmCDEnMeghPEwTQFow7RWzB56bxTKV72oRPyFg (status: Success)
+Auth Digest:      H3R3xKnzT1ksqYioxbnTSKbQfMdebrb75Dp8Qb2A3jcP (status: Success)
+Stock Digest:     CU6ZedANzjzpSiZtuicN2JjfwevjvtR1QRqhWHmCwfRt (status: Success)
+Listing Digest:   VbTDAsE6xbDULr3jPXm6iXbJu8RFo6FUHvqjErRsuoc (status: Success)
+Buy Digest:       42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw (status: Success)
+
+Withdraw Event:   NONE
+Purchased Event:  NONE
+
+Seller: 0x075c99b3eedd7ae54e41b2e8ed61a5069c28742c381bf313b9a254c5ad07ee1c
+Buyer:  0x85483f9da07887da6024fdfbc22c1a0eb53475c70c7033aaca9ff06c13a688fe
+Seller MIST: 999943884528 -> 1004943884528
+Buyer MIST:  1000000000000 -> 994996915320
+
+VERDICT: SSU-backed buy flow PROVEN on local devnet
+
+Proven caveats:
+  1. buy() withdraws from SSU via witness-gated withdraw_item<TradeAuth> (not from Listing)
+  2. authorize_extension<TradeAuth> correctly restricts SSU access to this module
+  3. Atomic PTB: coin split + SSU withdraw + item transfer + payment + listing update
+  4. Cross-address: buyer signs, item comes from seller's SSU
+

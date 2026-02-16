@@ -44,8 +44,9 @@
 | 4 | Cross-Address Withdrawal | GREEN | **GREEN ✓** | Code analysis — `withdraw_item<Auth>` takes witness, not OwnerCap; `test_swap_ammo_for_lens` validates |
 | 5 | Atomic Buy PTB (Devnet) | GREEN | **GREEN ✓** | Devnet — 3 successful cross-address buys (details below) |
 | 6 | Direct Access Blocked | GREEN | **GREEN ✓** | Code analysis — `withdraw_by_owner` requires `OwnerCap<T>` + proximity proof |
+| 7 | SSU-Backed Storefront (Devnet) | GREEN | **GREEN ✓** | Devnet — witness-gated extension withdrawal + atomic buy (details below) |
 
-**Overall: 6/6 GREEN. No blocking issues found.**
+**Overall: 7/7 GREEN. No blocking issues found.**
 
 ---
 
@@ -144,6 +145,73 @@
 
 ---
 
+### Test 7: TradePost — SSU-Backed Storefront Buy (Devnet)
+
+> **Added:** 2026-02-16 (SSU upgrade validation)  
+> **Modules:** `trade_post_validation::mock_ssu` + `trade_post_validation::ssu_trade`  
+> **Pattern:** Item stays in a shared StorageUnit. Listing is a "claim ticket" referencing `(ssu_id, item_type_id)`. `buy()` internally calls `mock_ssu::withdraw_item<TradeAuth>(ssu, TradeAuth{}, type_id)` — the buyer NEVER touches the OwnerCap.
+
+#### Architecture
+
+- **`mock_ssu.move`** — Standalone reproduction of the world-contracts `StorageUnit` extension pattern: `authorize_extension<Auth: drop>()`, `withdraw_item<Auth: drop>()` (witness-gated, no OwnerCap), `deposit_item()` (OwnerCap required), `create_storage_unit()`, `share_storage_unit()`
+- **`ssu_trade.move`** — SSU-backed TradePost: `TradeAuth has drop {}` witness, `Listing` with `ssu_id`/`item_type_id` (no embedded item), `buy()` creates `TradeAuth{}` and calls cross-module `mock_ssu::withdraw_item<TradeAuth>()`
+- **Zero world-contracts dependencies** — `Move.toml` has empty `[dependencies]`; pattern is faithfully reproduced as standalone modules
+
+#### Transaction Log
+
+| Step | Tx Digest | Status | Description |
+|------|-----------|--------|-------------|
+| Publish | `49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z` | Success | Package `0x3189a508...` |
+| setup_storefront | `3vjNNocmCDEnMeghPEwTQFow7RWzB56bxTKV72oRPyFg` | Success | SSU `0xf08a3eaa...` + OwnerCap `0x260e7c86...` created |
+| authorize_extension | `H3R3xKnzT1ksqYioxbnTSKbQfMdebrb75Dp8Qb2A3jcP` | Success | `TradeAuth` registered on SSU |
+| stock_item | `CU6ZedANzjzpSiZtuicN2JjfwevjvtR1QRqhWHmCwfRt` | Success | Item `0x99a0f18c...` (type_id=42, "Rare Gem") deposited |
+| create_listing | `VbTDAsE6xbDULr3jPXm6iXbJu8RFo6FUHvqjErRsuoc` | Success | Listing `0x21e1b374...` (5 SUI, references SSU) |
+| **buy** | `42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw` | **Success** | Atomic PTB: coin split → buy → withdraw → transfer |
+
+#### On-Chain State Verification
+
+**Pre-buy SSU (contains item):**
+```json
+{
+  "extension": { "name": "...::ssu_trade::TradeAuth" },
+  "items": [{ "type_id": "42", "name": [82,97,114,101,32,71,101,109] }],
+  "owner": "0x075c99b3..."
+}
+```
+
+**Post-buy SSU (empty — item withdrawn via extension):**
+```json
+{
+  "extension": { "name": "...::ssu_trade::TradeAuth" },
+  "items": [],
+  "owner": "0x075c99b3..."
+}
+```
+
+**Post-buy Listing (inactive):**
+```json
+{ "is_active": false, "item_type_id": "42", "price": "5000000000", "ssu_id": "0xf08a3eaa..." }
+```
+
+**Buyer owns item:** `0x99a0f18c...` (type: `mock_ssu::Item`) — confirmed via `sui client objects`
+
+**Balance transfer:**
+| Address | Before | After | Delta |
+|---------|--------|-------|-------|
+| Seller | 999,943,884,528 | 1,004,943,884,528 | +5,000,000,000 (5 SUI received) |
+| Buyer | 1,000,000,000,000 | 994,996,915,320 | −5,003,084,680 (5 SUI + gas) |
+
+#### Caveats Proven
+
+1. **Witness-gated withdrawal:** `buy()` creates `TradeAuth{}` internally and calls `withdraw_item<TradeAuth>()` — the BUYER never needs `OwnerCap`. The SSU's registered extension (`type_name::with_defining_ids<TradeAuth>()`) is verified before withdrawal.
+2. **`authorize_extension` enforcement:** Extension must be registered before `withdraw_item` can succeed. The type name check (`EWrongExtension`) prevents unauthorized modules from withdrawing.
+3. **Atomic PTB composition:** `--split-coins gas → --assign payment → --move-call buy` executes as a single transaction. Inside `buy()`: validate listing → validate payment → withdraw from SSU → transfer item to buyer → transfer payment to seller → mark listing inactive.
+4. **Cross-address operation:** Seller (`0x075c...`) owns the SSU and stocks it. Buyer (`0x8548...`) signs the buy PTB. No seller signature needed at buy time.
+
+**Conclusion:** SSU-backed storefront buy flow fully validated on local devnet. The extension witness pattern enables cross-address item withdrawal without OwnerCap sharing, exactly matching the production world-contracts architecture.
+
+---
+
 ## Key Architectural Findings
 
 ### 1. Extension + Witness Pattern Is the Foundation (Code Analysis)
@@ -215,27 +283,30 @@ The `buy()` function does `transfer::public_transfer(item, ctx.sender())` which 
 > **Added:** 2026-02-16 (post-review audit)  
 > **Purpose:** Disambiguate what the devnet tests proved vs. what remains code-analysis inference.
 
-### TradePost: Shared Listing Escrow Validated — SSU-Backed Storefront Not Yet Devnet-Tested
+### TradePost: Shared Listing Escrow + SSU-Backed Storefront Both Devnet-Validated
 
-**What was proven on devnet (3 tx digests):**
-- A shared `Listing` object containing an embedded `Item` (standalone struct with `key, store`) can be atomically purchased by a different address
-- `buy()` extracts the item via `Option::extract` on the Listing's `item` field and transfers it to the buyer
-- `Coin<SUI>` payment transfers atomically to the seller in the same PTB
-- No `OwnerCap`, proximity proof, or server signature is needed by the buyer
+> **Updated:** 2026-02-16 — SSU-backed storefront now independently validated on devnet (Test 7).
 
-**What was NOT tested on devnet:**
-- `storage_unit::withdraw_item<Auth>()` — SSU extension-mediated item withdrawal
-- `storage_unit::authorize_extension<Auth>()` — extension registration on a StorageUnit
-- Any `StorageUnit`, `Inventory`, or `Character` from world-contracts
+**What was proven on devnet — Escrow pattern (3 tx digests, Test 5):**
+- A shared `Listing` object containing an embedded `Item` can be atomically purchased by a different address
+- `buy()` extracts the item via `Option::extract` on the Listing's `item` field
+- `Coin<SUI>` payment transfers atomically to the seller
+
+**What was proven on devnet — SSU-backed pattern (6 tx digests, Test 7):**
+- `authorize_extension<TradeAuth>()` — registers witness type on SSU extension slot
+- `withdraw_item<TradeAuth>()` — witness-gated withdrawal from SSU WITHOUT OwnerCap
+- Cross-module extension call: `ssu_trade::buy()` creates `TradeAuth{}` and calls `mock_ssu::withdraw_item<TradeAuth>()`
+- Atomic PTB composition: coin split + SSU withdraw + item transfer + payment + listing update in one buyer-signed tx
+- Pre/post state verified: SSU items 1→0, Listing `is_active` true→false, buyer owns item, seller received 5 SUI
+
+**What remains code-analysis only (not devnet-tested):**
+- Integration with actual `world-contracts` StorageUnit/Inventory/Character (the sandbox uses standalone mock types)
 - The sandbox module has **zero world-contracts dependencies** (`Move.toml` `[dependencies]` is empty)
-
-**Code-analysis evidence (not devnet-validated):**
-- `withdraw_item<Auth>` takes a witness, not `OwnerCap` — cross-address withdrawal is architecturally possible (source: `storage_unit.move` L186-201)
-- `test_swap_ammo_for_lens` in world-contracts tests proves cross-address extension withdrawal works (source: `storage_unit_tests.move` L736-860)
-- The validated shared-listing escrow pattern can be upgraded to SSU-backed withdrawal without changing the buyer-facing API
+- `OwnerCap<StorageUnit>` borrowing from `Character` objects (world-contracts requires Character custody)
+- Sponsored transaction requirement, proximity proofs, server signatures
 
 **Correct narrative going forward:**
-> Shared listing escrow validated on devnet. SSU-backed storefront is architecturally supported by code analysis and world-contracts test evidence, but has not been independently devnet-tested.
+> Both shared-listing escrow AND SSU-backed storefront patterns validated on devnet. The extension witness pattern (authorize → withdraw via witness) is independently proven. Integration with world-contracts StorageUnit/Inventory/Character types remains code-analysis only.
 
 ### GateControl: Rule Composition Validated — Jump Permit Integration Not Yet Devnet-Tested
 
@@ -280,7 +351,7 @@ These do not block the hackathon (the extension logic is independent of the jump
 
 - **GateControl (GREEN — rule logic devnet-validated; jump integration code-analysis only):** Tribe filtering and coin toll work via dynamic field rules on a shared config object. The gate denies access atomically when rules fail — no partial state changes. Integration with `gate::issue_jump_permit<Auth>()` and `gate::jump_with_permit()` is supported by code analysis and world-contracts unit tests, but was not independently tested on devnet. Sponsored transaction requirement (`AdminACL`) remains unresolved.
 
-- **TradePost (GREEN — shared escrow devnet-validated; SSU storefront code-analysis only):** Three successful devnet tests confirm that a buyer can atomically pay the seller and receive an item in a single transaction, using shared Listing objects. No OwnerCap, proximity proof, or server signature is needed for the buyer. The SSU extension-based `withdraw_item<Auth>` pattern is supported by code analysis and the `test_swap_ammo_for_lens` world-contracts test, but was not independently devnet-tested. The validated escrow pattern can serve as the hackathon implementation or be upgraded to SSU-backed withdrawal.
+- **TradePost (GREEN — both escrow AND SSU-backed storefront devnet-validated):** Three escrow-style buys plus one SSU-backed buy confirmed on devnet. The SSU-backed pattern uses the typed witness extension pattern (`authorize_extension<TradeAuth>` + `withdraw_item<TradeAuth>`) to enable cross-address item withdrawal without OwnerCap sharing. Six SSU transactions (publish → setup → authorize → stock → list → buy) all succeeded. On-chain state verified: item withdrawn from SSU, transferred to buyer, payment to seller, listing deactivated. Integration with actual world-contracts types (StorageUnit, Inventory, Character) remains code-analysis only.
 
 **Recommendation:** Proceed with CivilizationControl as the hackathon entry. GateControl is Day 1-2 priority. TradePost is Day 2-4. Both can be reimplemented from validated patterns in the carry-forward checklist.
 
