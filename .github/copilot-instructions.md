@@ -387,6 +387,18 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 - **API contracts** — persistence, auth, protocol definitions
 - **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
 
+## Hackathon Rules Compliance Policy
+
+Official hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.
+
+**Agent rules:**
+1. **Before generating Entry code**, verify the hackathon has started — entries must be developed on or after the start date (Section 5).
+2. **Before creating token/financial mechanics**, verify no security/equity characteristics — entries must not be securities, commodities, or confer ownership/revenue-share rights (Section 5).
+3. **Before submission**, cross-check repo hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
+4. **Consult the digest** when evaluating idea feasibility, judging criteria alignment, or bonus prize strategy.
+5. An eligible Entry may win **max 1 prize**. Player vote = 25% of Best Entry score. Stillness deployment bonus window = 14 days post-close.
+6. **No vote manipulation** — do not automate vote solicitation, trading, or purchasing.
+
 ## Official Documentation Reference Policy
 
 EVE Frontier maintains official builder documentation at https://docs.evefrontier.com/ (GitBook). These docs are actively being rewritten for the Sui blockchain transition — many pages contain `//TODO` placeholders.

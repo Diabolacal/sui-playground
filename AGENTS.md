@@ -191,6 +191,16 @@ Subagents are the **primary mechanism** for complex work. Use them by default fo
 
 Append material decisions to `docs/decision-log.md` using the template in `.github/copilot-instructions.md`.
 
+## Hackathon Rules Compliance Policy
+
+Official hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.
+
+- **Before generating Entry code**, verify the hackathon has started (entries must be developed on or after the start date).
+- **Before creating token/financial mechanics**, verify no security/equity characteristics (Section 5 of rules).
+- **Before submission**, cross-check repo hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
+- **Consult the digest** whenever evaluating idea feasibility, judging criteria alignment, or bonus prize strategy.
+- An eligible Entry may win **max 1 prize**. Player vote = 25% of Best Entry score.
+
 ## Official Documentation Reference Policy
 
 EVE Frontier maintains official builder docs at https://docs.evefrontier.com/. These docs are actively being rewritten for the Sui transition and contain significant `//TODO` sections.
