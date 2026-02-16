@@ -59,6 +59,10 @@ Authoritative language for every mandate lives in `.github/copilot-instructions.
 
 Treat this list as a pointer; if wording differs, the `.github/copilot-instructions.md` version wins.
 
+### External Spec Handling
+
+When the operator pastes an externally generated plan or spec (e.g., from ChatGPT or Gemini), treat it as **intent**. Reconcile it with `.github/copilot-instructions.md` guardrails before execution. Full policy lives in `.github/copilot-instructions.md` § "External Spec Intake Policy".
+
 ## Agent operating rules (must follow)
 
 1. Prefer smallest safe change; don't refactor broadly without explicit approval.

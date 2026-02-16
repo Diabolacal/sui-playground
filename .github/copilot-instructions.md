@@ -373,6 +373,7 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 ### Sandbox-Workspace Rules
 - This repo (`sui-playground`) is a **private training sandbox** — not the hackathon submission repo.
 - **Do not push** without explicit operator approval.
+- **Docs-only changes:** Pushing to origin is allowed when the operator explicitly includes "commit + push" in the prompt.
 - **Sui keys & wallet config:** Treat `~/.sui/`, `sui.keystore`, and any env var containing mnemonics as secrets — never log, commit, or echo.
 - **Docker state:** `vendor/builder-scaffold/docker/workspace-data/` is ephemeral — always ignored, never committed.
 - **Environment switching:** Always verify `sui client active-env` before running transactions to avoid accidental mainnet/testnet operations.
@@ -442,6 +443,17 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 ## Sui Local Devnet
 
 For local Sui devnet operations (start, build, publish, troubleshoot), read `docs/architecture/sui-playground.md` first. Log outputs to `notes/sui-local-smoketest.md` (untracked, local-only).
+
+## External Spec Intake Policy (ChatGPT / Gemini Prompts)
+
+The operator may paste a "spec" produced by an external LLM. Treat it as **INTENT**, not strict instructions.
+
+**Required behavior:**
+1. Extract the intended outcome.
+2. Validate against repository guardrails (hackathon compliance, vendor/submodule policy, no secrets, push rules).
+3. Check workspace reality and prefer existing patterns over assumptions in the spec.
+4. If the spec is inefficient, outdated, or architecturally unsound, propose a safer or cleaner approach and proceed.
+5. If the spec implies unsafe actions (e.g., copying sandbox code into hackathon submission, editing `vendor/`, pushing without authorization), **STOP** and propose a compliant alternative.
 
 ## When Unsure
 - Search existing patterns first (grep for similar feature names).
