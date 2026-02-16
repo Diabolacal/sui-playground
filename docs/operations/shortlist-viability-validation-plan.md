@@ -283,6 +283,77 @@ The following tests were not part of the original matrix but would be needed for
 
 ---
 
+## ZK Gate Pass Rule Validation (Added 2026-02-16)
+
+> **Context:** ZK integration feasibility for CivilizationControl's GateControl module. These tests validate whether Groth16 ZK proof verification can be composed with the gate extension witness pattern. See [ZK GatePass Feasibility Report](zk-gatepass-feasibility-report.md) for full analysis.
+>
+> **Status:** Pre-hackathon research phase. Tests 11–13 are designed for March 11 execution.
+
+### Test 11: ZK Groth16 Verification — Standalone On-Chain (Critical)
+
+**Objective:** Prove that a Groth16 proof (generated off-chain via snarkjs) can be verified on local devnet using `sui::groth16::verify_groth16_proof()`.
+
+**Approach:** Reuse PoC proof artifacts. Deploy standalone Move module that calls `groth16::verify_groth16_proof()` with pre-generated proof data.
+
+**Pass criteria:**
+- [ ] Transaction succeeds with `status: success`
+- [ ] Invalid proof is rejected (abort with `E_INVALID_PROOF`)
+- [ ] Gas consumption recorded and within 1 SUI budget
+
+**Fail criteria:** Transaction aborts on valid proof data, OR gas exceeds 1 SUI, OR proof serialization format mismatch.
+
+**Expected: GREEN** (PoC integration tests already validate this, but independent confirmation required).
+
+---
+
+### Test 12: ZK + Gate Extension Composition (Critical)
+
+**Objective:** Prove that `groth16::verify_groth16_proof()` and `gate::issue_jump_permit<ZkPassAuth>()` can be called in the same `entry` function (or determine if two-step is required).
+
+**Approach:** Deploy Move module with `entry fun request_zk_access()` that:
+1. Reads VK from dynamic field on `ExtensionConfig`
+2. Calls `groth16::verify_groth16_proof()`
+3. Calls `gate::issue_jump_permit<ZkPassAuth>()`
+
+**Pass criteria:**
+- [ ] Single-tx composition succeeds → GREEN
+- [ ] Two-step required (verify → approve → permit) → YELLOW
+- [ ] Neither approach works → RED
+
+**Fail criteria:** Both single-tx and two-step approaches fail.
+
+**Expected: YELLOW-GREEN** (depth-0 constraint is the key unknown).
+
+---
+
+### Test 13: Membership Circuit — Off-Chain Proof Generation
+
+**Objective:** Design, compile, and generate a valid proof for a Merkle membership circuit.
+
+**Approach:** Create a Circom membership circuit (~500 constraints), compile with snarkjs, generate proof for a test Merkle tree.
+
+**Pass criteria:**
+- [ ] Circuit compiles (`circom --wasm --r1cs` exits 0)
+- [ ] Trusted setup completes (`.zkey` file < 10 MB)
+- [ ] Proof generation ≤ 2 seconds
+- [ ] Proof format matches Sui's expected input (128 bytes proof, N×32 bytes public inputs)
+
+**Fail criteria:** Circuit design is fundamentally incompatible with Poseidon-over-BN254 on Sui, OR constraint count exceeds 10K (proving time > 5s).
+
+**Expected: GREEN** (PoC infrastructure is directly reusable).
+
+---
+
+### Decision Outcomes (ZK Gate Pass)
+
+| Test | Expected | Status |
+|------|----------|--------|
+| 11. ZK Groth16 Standalone Verify | GREEN | Pending (March 11) |
+| 12. ZK + Gate Extension Composition | YELLOW-GREEN | Pending (March 11) |
+| 13. Membership Circuit Off-Chain | GREEN | Pending (March 11) |
+
+---
+
 ## Timeline
 
 | Phase | Duration | Activity |
@@ -291,6 +362,7 @@ The following tests were not part of the original matrix but would be needed for
 | 2 | 30 min | Start devnet, publish world-contracts subset |
 | 3 | 60 min | Deploy + run TradePost devnet test (Test 5) |
 | 4 | 30 min | Document results + carry-forward plan |
+| 5 | 2-4 hrs | ZK Tests 11-13 (March 11 — subject to kill criteria) |
 
 ---
 

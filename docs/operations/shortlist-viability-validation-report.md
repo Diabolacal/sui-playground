@@ -381,6 +381,54 @@ Players should see **Lux values** as the primary denomination. On-chain settleme
 
 ---
 
+## ZK Gate Pass Rule Validation (Added 2026-02-16)
+
+> **Status:** Pre-hackathon research phase. No devnet tests executed — pending March 11.
+
+### Current Evidence
+
+| # | Test | Expected | Status | Evidence |
+|---|------|----------|--------|----------|
+| 11 | ZK Groth16 Standalone Verify | GREEN | **Pending** | PoC integration tests confirm pattern; independent devnet validation needed |
+| 12 | ZK + Gate Extension Composition | YELLOW-GREEN | **Pending** | Architecture analysis supports feasibility; depth-0 constraint is key unknown |
+| 13 | Membership Circuit Off-Chain | GREEN | **Pending** | PoC Poseidon/Merkle infrastructure is reusable; new circuit design required |
+
+### What Is Known (Code Analysis — Not Devnet-Tested)
+
+1. **Groth16 verification works on Sui:** The `eve-frontier-proximity-zk-poc` contains working integration tests for `sui::groth16::verify_groth16_proof()` on BN254 curve. Two circuits (location, distance) verified end-to-end on local Sui network. Transaction digests available in PoC test output. Source: [location_attestation.move](../../vendor/eve-frontier-proximity-zk-poc/move/world/sources/attestations/location_attestation.move) L237-244.
+
+2. **Gate extension witness pattern is composable:** Three existing extension examples (`tribe_permit`, `corpse_gate_bounty`, standalone `gate`) all follow the same pattern: define witness type → register via `authorize_extension<Auth>()` → call `issue_jump_permit<Auth>()`. Dynamic fields on `ExtensionConfig` enable composable rule storage. Source: [tribe_permit.move](../../vendor/world-contracts/contracts/extension_examples/sources/tribe_permit.move), [config.move](../../vendor/world-contracts/contracts/extension_examples/sources/config.move).
+
+3. **Proof size fits within all Sui constraints:** Groth16 proof is 128 bytes. Public inputs 64-192 bytes. VK 320-448 bytes. Total ZK overhead < 1% of 128 KB transaction limit. 2-6 public inputs within 8-input Sui limit.
+
+4. **Gas is acceptable:** Estimated 3-5M MIST (~0.003-0.005 SUI) for ZK-gated jump (6-10× a tribe permit check). Covered by sponsored transaction model.
+
+5. **Security model is clear:** Client-side proof generation preserves privacy. Gate binding + timestamp binding prevent replay without new shared-mutable state. See [ZK GatePass Feasibility Report](zk-gatepass-feasibility-report.md) §5.
+
+### What Is Unknown (Requires March 11 Devnet Testing)
+
+1. **Groth16 + gate extension composition in single tx:** Does `groth16::verify_groth16_proof()` work from inside a function that also calls `gate::issue_jump_permit()`? The depth-0 `entry` constraint may require a two-step flow. This is the single highest-risk unknown.
+
+2. **Package naming conflict resolution:** ZK PoC's Move package named `world` conflicts with world-contracts. Extraction/rename effort estimated at 4-6 hours.
+
+3. **Membership circuit design:** New Circom circuit needed (~500 constraints). Reuses PoC's Poseidon Merkle infrastructure. Estimated 4-6 hours for design + compile + setup.
+
+### Kill Criteria
+
+See [ZK Kill-Switch & Fallback Analysis](../architecture/zk-killswitch-fallback-analysis.md) for detailed GREEN/YELLOW/RED criteria. Summary:
+- **Day 1:** Circuit must compile. If not → RED.
+- **Day 2:** Move Groth16 must verify on devnet. If not after 4 hours → RED.
+- **Day 3 AM:** Gate integration must work (single-tx or two-step). If neither → RED.
+- **Maximum budget:** 28 hours (25% of sprint).
+
+### Conclusion
+
+ZK GatePass is **architecturally feasible** based on code analysis. Both underlying primitives (Groth16 verification, gate extension witness pattern) are independently proven. The critical gap — composing them in a single transaction — requires March 11 devnet testing. Fallback to non-ZK rules (tribe filter + coin toll) is validated and ready.
+
+Full analysis: [ZK GatePass Feasibility Report](zk-gatepass-feasibility-report.md)
+
+---
+
 ## References
 
 - [Validation Plan](shortlist-viability-validation-plan.md)
@@ -388,3 +436,5 @@ Players should see **Lux values** as the primary denomination. On-chain settleme
 - [TradePost PTB Validation](../architecture/tradepost-cross-address-ptb-validation.md)
 - [March 11 Carry-Forward Checklist](../core/march-11-reimplementation-checklist.md)
 - [Hackathon Shortlist Recommendations](../ideas/hackathon-shortlist-recommendations.md)
+- [ZK GatePass Feasibility Report](zk-gatepass-feasibility-report.md)
+- [ZK Kill-Switch & Fallback Analysis](../architecture/zk-killswitch-fallback-analysis.md)
