@@ -1,6 +1,8 @@
 # EVE Frontier Hackathon — Grounded Project Ideas v2
 
-**Retention:** Carry-forward
+**Retention:** Archive
+
+> **Archived:** Superseded by [hackathon-ideas-grounded-v3-judged.md](../../ideas/hackathon-ideas-grounded-v3-judged.md). All 25 ideas are incorporated in the v3 scored list with updated weighted scores.
 
 > **Validated against official documentation.** Every idea in this document has been cross-referenced against:
 > 1. `vendor/world-contracts` Move code (canonical — project-specific truth)

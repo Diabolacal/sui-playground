@@ -57,6 +57,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 |------|---------|
 | [architecture/sui-playground.md](architecture/sui-playground.md) | Sui local devnet quickstart — start, build, publish, troubleshoot |
 | [architecture/sui-playground-capabilities.md](architecture/sui-playground-capabilities.md) | Capabilities deep dive — smart structures, ZK proximity (Groth16 PoC), experiments |
+| [architecture/gate-lifecycle-function-reference.md](architecture/gate-lifecycle-function-reference.md) | Gate lifecycle complete function call reference — all signatures, types, dependency chain, OwnerCap borrow/return pattern |
 | [architecture/gatecontrol-feasibility-report.md](architecture/gatecontrol-feasibility-report.md) | GateControl feasibility validation — gate architecture, extension pattern, toll options, validation plan |
 | [architecture/tradepost-cross-address-ptb-validation.md](architecture/tradepost-cross-address-ptb-validation.md) | TradePost cross-address PTB risk validation — SSU ownership model, extension pattern analysis, atomic trade design, test plan |
 | [architecture/zk-killswitch-fallback-analysis.md](architecture/zk-killswitch-fallback-analysis.md) | ZK Gate Pass kill-switch & fallback analysis — GREEN/YELLOW/RED criteria, day-by-day checkpoints, partial ZK options, demo narratives |
@@ -65,9 +66,6 @@ All documents under `docs/` must begin with a header block declaring their reten
 
 | File | Purpose |
 |------|---------|
-| [ideas/hackathon-ideas-grounded.md](ideas/hackathon-ideas-grounded.md) | 20 grounded hackathon project ideas with top-5 shortlist (v1 — superseded) |
-| [ideas/hackathon-ideas-grounded-v2.md](ideas/hackathon-ideas-grounded-v2.md) | **25 ideas validated against official docs** — Green/Yellow/Red verdicts, top-5 shortlist, 5 new ideas |
-| [ideas/hackathon-ideas-v2-doc-enabled.md](ideas/hackathon-ideas-v2-doc-enabled.md) | 8 new ideas enabled by Sui/GitBook documentation knowledge (top-5 filtered) |
 | [ideas/hackathon-ideas-grounded-v3-judged.md](ideas/hackathon-ideas-grounded-v3-judged.md) | **V3: 28 ideas scored against 8 judging criteria + player vote** — ranked list, CivilizationControl suite, bonus prize alignment |
 | [ideas/hackathon-shortlist-recommendations.md](ideas/hackathon-shortlist-recommendations.md) | Shortlist companion — top picks by category, recommended CivilizationControl module set, implementation order |
 
@@ -101,6 +99,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [operations/shortlist-viability-validation-plan.md](operations/shortlist-viability-validation-plan.md) | Test matrix for validating GateControl + TradePost on local devnet |
 | [operations/shortlist-viability-validation-report.md](operations/shortlist-viability-validation-report.md) | **Devnet test evidence** — 10/10 GREEN (GateControl, TradePost, and ZK GatePass all confirmed viable) |
 | [operations/zk-gatepass-feasibility-report.md](operations/zk-gatepass-feasibility-report.md) | **ZK GatePass feasibility** — GREEN, fully validated on local devnet (addendum 2026-03-11); see [validation report](operations/shortlist-viability-validation-report.md) tests 8–10 |
+| [operations/gate-lifecycle-runbook.md](operations/gate-lifecycle-runbook.md) | **Full gate lifecycle runbook** — 13-step procedure from publish to jump_with_permit, with evidence (object IDs, tx digests). Carry-forward. |
 
 ## Sandbox
 
@@ -108,7 +107,11 @@ _Empty — use for temporary or experimental documents._
 
 ## Archive
 
-_Empty — move deprecated documents here instead of deleting._
+| File | Purpose |
+|------|---------|
+| [archive/ideas/hackathon-ideas-grounded.md](archive/ideas/hackathon-ideas-grounded.md) | _(Superseded by v3)_ Original 20 grounded hackathon ideas (v1) |
+| [archive/ideas/hackathon-ideas-grounded-v2.md](archive/ideas/hackathon-ideas-grounded-v2.md) | _(Superseded by v3)_ 25 ideas validated against official docs (v2) |
+| [archive/ideas/hackathon-ideas-v2-doc-enabled.md](archive/ideas/hackathon-ideas-v2-doc-enabled.md) | _(Superseded by v3)_ 8 doc-enabled ideas supplementing v2 |
 
 ---
 

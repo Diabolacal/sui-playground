@@ -1,6 +1,8 @@
 # EVE Frontier Hackathon — Grounded Project Ideas
 
-**Retention:** Carry-forward
+**Retention:** Archive
+
+> **Archived:** Superseded by [hackathon-ideas-grounded-v3-judged.md](../../ideas/hackathon-ideas-grounded-v3-judged.md). All 20 ideas are incorporated in the v3 scored list.
 
 > **Grounded in world-contracts.** Every idea in this document maps to real on-chain operations in the EVE Frontier `world-contracts` package (gates, storage units, network nodes, characters, killmails) and the builder extension pattern. No magical game-server powers assumed beyond the hackathon sandbox that will be provided.
 >

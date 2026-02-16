@@ -1,6 +1,8 @@
 # EVE Frontier Hackathon — V2 Ideas: Documentation-Enabled
 
-**Retention:** Carry-forward
+**Retention:** Archive
+
+> **Archived:** Superseded by [hackathon-ideas-grounded-v3-judged.md](../../ideas/hackathon-ideas-grounded-v3-judged.md). All 8 doc-enabled ideas (IDs 21–28) are incorporated in the v3 scored list.
 
 > **Purpose:** New hackathon ideas specifically enabled by Sui-level or EVE Frontier GitBook knowledge that wasn't incorporated in the [v1 ideas document](hackathon-ideas-grounded.md). Every idea here maps to a specific Sui feature or GitBook insight absent from the original 20 ideas.
 >
