@@ -16,7 +16,7 @@
 | Priority | Module | Function | Weighted Score | Risk |
 |----------|--------|----------|----------------|------|
 | 1 | **GateControl** | Composable gate policy engine — tribe filters, time windows, item tolls via dynamic field rule dispatch within a single extension | 7.97 | Green |
-| 2 | **TradePost** | SSU storefront — list items, browse/buy with atomic PTB escrow, supports SUI or faction tokens | 7.91 | Yellow |
+| 2 | **TradePost** | Shared-listing storefront — list items, browse/buy with atomic PTB escrow, supports SUI or faction tokens (SSU-backed option architecturally supported, not yet devnet-validated) | 7.91 | Yellow |
 | 3 | **TribeMint** | Faction currency — `Coin<TribeToken>` flows through GateControl tolls and TradePost purchases as economic glue | 6.31 | Green |
 
 ### Stretch Module
@@ -237,7 +237,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 1. **TribeMint does not survive critique.** Its weighted score (6.31) is the weakest of the three core modules. Its player vote (5/10) is below average. Its "connective tissue" value is real but modest — a 40-second demo payoff for a module that adds significant integration complexity (Coin<T> type parameterization across packages). The claim that it elevates the system above the sum of its parts is plausible but unproven, and the integration cost is tangible.
 
-2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (SSU extension) spans two distinct smart assembly types with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
+2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (shared-listing escrow; SSU extension pattern supported by code analysis but not yet devnet-validated) spans two distinct smart assembly types with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
 
 3. **Delivery confidence matters more than peak theoretical score.** A polished two-module system with robust error handling, comprehensive events, and a clean recorded demo will outscore a shaky three-module system with integration bugs. Hackathon judges penalize visible incompleteness more than missing ambition.
 
@@ -322,8 +322,8 @@ Open dashboard → structure cards show status → click Gate Alpha → currentl
 
 Open GateControl panel → enable Tribe Filter (Alpha only) → enable Toll (Item Type 42) → click "Deploy Policy" → single PTB executes.
 
-- **Tribe Alpha member with Item-42:** Jumps ✅ → item consumed → JumpEvent in feed
-- **Tribe Beta member:** Denied ❌ → "Access Denied"
+- **Tribe Alpha member with Item-42:** Access granted ✓ → item consumed → access event in feed *(Note: devnet validated `request_access()` → `AccessGrant`; integration with `issue_jump_permit` → `JumpPermit` → `jump_with_permit` is code-analysis supported but not yet devnet-tested)*
+- **Tribe Beta member:** Denied ✘ → "Access Denied"
 
 > "One extension. Composable rules. Configured from a browser."
 

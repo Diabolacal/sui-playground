@@ -146,12 +146,14 @@
 
 ## Key Architectural Findings
 
-### 1. Extension + Witness Pattern Is the Foundation
-Both GateControl and TradePost rely on the same core pattern from world-contracts:
+### 1. Extension + Witness Pattern Is the Foundation (Code Analysis)
+Both GateControl and TradePost are designed to use the same core pattern from world-contracts:
 - Custom `Auth` struct with `has drop` ability
 - Register extension via `authorize_extension<Auth>()` (one-time owner setup)
 - Operations take `_: Auth` witness instance — NOT `OwnerCap`
 - Enables cross-address operations without sharing private keys
+
+> **Fidelity note:** This pattern was validated via code analysis and existing world-contracts unit tests, not by the sandbox devnet tests. The sandbox modules use standalone types (`GateConfig`, `Listing`, `MockCharacter`) with zero world-contracts dependencies. See [Validation Fidelity Notes](#validation-fidelity-notes) below.
 
 ### 2. Shared Objects Enable Cross-Address Coordination
 - `GateConfig` (shared) — any player can call `request_access()` to check rules
@@ -208,13 +210,77 @@ The `buy()` function does `transfer::public_transfer(item, ctx.sender())` which 
 
 ---
 
+## Validation Fidelity Notes
+
+> **Added:** 2026-02-16 (post-review audit)  
+> **Purpose:** Disambiguate what the devnet tests proved vs. what remains code-analysis inference.
+
+### TradePost: Shared Listing Escrow Validated — SSU-Backed Storefront Not Yet Devnet-Tested
+
+**What was proven on devnet (3 tx digests):**
+- A shared `Listing` object containing an embedded `Item` (standalone struct with `key, store`) can be atomically purchased by a different address
+- `buy()` extracts the item via `Option::extract` on the Listing's `item` field and transfers it to the buyer
+- `Coin<SUI>` payment transfers atomically to the seller in the same PTB
+- No `OwnerCap`, proximity proof, or server signature is needed by the buyer
+
+**What was NOT tested on devnet:**
+- `storage_unit::withdraw_item<Auth>()` — SSU extension-mediated item withdrawal
+- `storage_unit::authorize_extension<Auth>()` — extension registration on a StorageUnit
+- Any `StorageUnit`, `Inventory`, or `Character` from world-contracts
+- The sandbox module has **zero world-contracts dependencies** (`Move.toml` `[dependencies]` is empty)
+
+**Code-analysis evidence (not devnet-validated):**
+- `withdraw_item<Auth>` takes a witness, not `OwnerCap` — cross-address withdrawal is architecturally possible (source: `storage_unit.move` L186-201)
+- `test_swap_ammo_for_lens` in world-contracts tests proves cross-address extension withdrawal works (source: `storage_unit_tests.move` L736-860)
+- The validated shared-listing escrow pattern can be upgraded to SSU-backed withdrawal without changing the buyer-facing API
+
+**Correct narrative going forward:**
+> Shared listing escrow validated on devnet. SSU-backed storefront is architecturally supported by code analysis and world-contracts test evidence, but has not been independently devnet-tested.
+
+### GateControl: Rule Composition Validated — Jump Permit Integration Not Yet Devnet-Tested
+
+**What was proven on devnet (2 scenarios):**
+- A shared `GateConfig` with dynamic field rules (`TribeRule`, `TollRule`) correctly filters access
+- Tribe mismatch aborts the transaction atomically (error code 0 / `ETribeMismatch`)
+- `Coin<SUI>` toll payment transfers to the collector address on success
+- `AccessGrant` object is created and transferred to the caller on success
+
+**What was NOT tested on devnet:**
+- `gate::issue_jump_permit<Auth>()` — world-contracts permit issuance
+- `gate::jump_with_permit()` — actual jump execution consuming `JumpPermit`
+- `gate::authorize_extension<Auth>()` — extension registration on a `Gate` object
+- `AdminACL.verify_sponsor()` — sponsored transaction requirement (both `jump()` and `jump_with_permit()` require this)
+- `link_gates()` + server-signed distance/location proofs
+- `NetworkNode` → fuel → online dependency chain
+- The sandbox module has **zero world-contracts dependencies** (`Move.toml` `[dependencies]` is empty)
+
+**Code-analysis evidence (not devnet-validated):**
+- `gate::issue_jump_permit<Auth>()` uses the same typed witness pattern — custom extension modules create `Auth{}` and call it (source: `gate.move` L218-246)
+- `gate_tests.move` validates: permit jump succeeds (L311-365), default jump blocked with extension (L388-419), wrong witness rejected (L445-472), permit consumed/single-use (L475-520), expired permit rejected (L523-563)
+- The sandbox's rule logic (tribe filter + coin toll + abort semantics) is directly portable to an `issue_jump_permit`-based extension
+
+**Correct narrative going forward:**
+> Rule composition (tribe filter + coin toll) validated on devnet. Integration with world-contracts gate jump path (`issue_jump_permit` → `JumpPermit` → `jump_with_permit`) is architecturally supported by code analysis and world-contracts test evidence, but has not been independently devnet-tested. Sponsored transaction requirement (`AdminACL`) remains unresolved.
+
+### Unresolved Risks Not Covered by This Validation
+
+Three risks identified in the [GateControl Feasibility Report](../architecture/gatecontrol-feasibility-report.md) were not addressed:
+
+1. **Sponsored transaction requirement** — `jump()` and `jump_with_permit()` both require `admin_acl.verify_sponsor(ctx)`. Not tested on devnet.
+2. **Server-signed location/distance proofs** — `link_gates()` requires signed proofs from `ServerAddressRegistry`. No game server exists on local devnet.
+3. **NetworkNode dependency chain** — ~6 sequential admin operations before a gate can accept jumps.
+
+These do not block the hackathon (the extension logic is independent of the jump infrastructure), but they constrain live testnet deployment.
+
+---
+
 ## Viability Conclusion
 
 **Both CivilizationControl core modules are technically viable for the hackathon:**
 
-- **GateControl (GREEN):** The extension + witness pattern fully supports composable gate policies. Tribe filtering works via dynamic field rules on a shared config. Coin toll integrates cleanly alongside tribe rules. The gate denies access atomically when rules fail — no partial state changes.
+- **GateControl (GREEN — rule logic devnet-validated; jump integration code-analysis only):** Tribe filtering and coin toll work via dynamic field rules on a shared config object. The gate denies access atomically when rules fail — no partial state changes. Integration with `gate::issue_jump_permit<Auth>()` and `gate::jump_with_permit()` is supported by code analysis and world-contracts unit tests, but was not independently tested on devnet. Sponsored transaction requirement (`AdminACL`) remains unresolved.
 
-- **TradePost (GREEN — risk MITIGATED):** The cross-address PTB buy concern from the shortlist is fully resolved. Three successful devnet tests confirm that a buyer can atomically pay the seller and receive an item in a single transaction, using shared Listing objects. No OwnerCap, proximity proof, or server signature is needed for the buyer. The extension pattern from world-contracts is the enabling mechanism.
+- **TradePost (GREEN — shared escrow devnet-validated; SSU storefront code-analysis only):** Three successful devnet tests confirm that a buyer can atomically pay the seller and receive an item in a single transaction, using shared Listing objects. No OwnerCap, proximity proof, or server signature is needed for the buyer. The SSU extension-based `withdraw_item<Auth>` pattern is supported by code analysis and the `test_swap_ammo_for_lens` world-contracts test, but was not independently devnet-tested. The validated escrow pattern can serve as the hackathon implementation or be upgraded to SSU-backed withdrawal.
 
 **Recommendation:** Proceed with CivilizationControl as the hackathon entry. GateControl is Day 1-2 priority. TradePost is Day 2-4. Both can be reimplemented from validated patterns in the carry-forward checklist.
 

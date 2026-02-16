@@ -178,6 +178,8 @@ module gate_toll::gate_toll {
 
 **Approach:** Sandbox Move module + CLI test.
 
+> **Post-validation fidelity note:** The actual devnet test used a simplified shared-listing escrow pattern (standalone `Item` embedded in a shared `Listing` object) rather than the SSU-backed flow described below. The sandbox module has zero world-contracts dependencies. The SSU extension flow (steps 2-3 involving `StorageUnit`, `authorize_extension`, `withdraw_item<Auth>`) was NOT executed. See the [validation report fidelity notes](shortlist-viability-validation-report.md#validation-fidelity-notes) for details.
+
 **Steps:**
 1. Deploy a minimal `trade_post` sandbox Move module with:
    - `TradeAuth` witness type
@@ -261,6 +263,21 @@ If Test 5 (atomic buy PTB) fails:
 4. No SSU extension needed — pure escrow
 
 This is simpler but loses the "SSU as storefront" narrative. Use only if extension-based approach fails.
+
+> **Post-validation note:** The devnet validation (Test 5) used this escrow pattern as the implementation. The primary SSU-backed flow was not attempted. See [validation report fidelity notes](shortlist-viability-validation-report.md#validation-fidelity-notes).
+
+---
+
+## Missing Integration Tests (Identified Post-Validation)
+
+The following tests were not part of the original matrix but would be needed for full world-contracts integration confidence:
+
+| # | Test | Type | Description |
+|---|------|------|-------------|
+| 7 | SSU Extension Withdrawal | Devnet | Deploy `withdraw_item<TradeAuth>` with actual `StorageUnit` + `Inventory` from world-contracts |
+| 8 | Gate JumpPermit Integration | Devnet | Deploy custom extension calling `gate::issue_jump_permit<Auth>()` on actual `Gate` objects |
+| 9 | Sponsored Transaction | Devnet | Validate `AdminACL.verify_sponsor()` pattern for `jump_with_permit()` |
+| 10 | Gate Setup Chain | Devnet | Full `ObjectRegistry` → `NetworkNode` → fuel → online → `link_gates` → `authorize_extension` flow |
 
 ---
 
