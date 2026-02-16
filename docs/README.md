@@ -47,6 +47,7 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 | File | Purpose |
 |------|---------|
 | [strategy/civilizationcontrol-strategy-memo.md](strategy/civilizationcontrol-strategy-memo.md) | Adversarial strategy review — thesis, critique, reconciled recommendation for CivilizationControl |
+| [strategy/civilizationcontrol-product-vision.md](strategy/civilizationcontrol-product-vision.md) | Human-centered product vision pitch — problem, vision, demo narrative, judging alignment |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 
