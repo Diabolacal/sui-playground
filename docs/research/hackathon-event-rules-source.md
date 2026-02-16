@@ -5,6 +5,8 @@ captured_on: "2026-02-16"
 notes: "Verbatim copy from browser. Do not modify wording except markdown formatting."
 ---
 
+**Retention:** Prep-only
+
 === PASTE FULL RULES TEXT BELOW THIS LINE ===
 
 EVE FRONTIER HACKATHON EVENT RULES

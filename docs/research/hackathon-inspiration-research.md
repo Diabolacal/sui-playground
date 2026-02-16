@@ -1,5 +1,7 @@
 # Hackathon Inspiration Research — EVE Frontier Builder Extensions
 
+**Retention:** Prep-only
+
 > **Date:** 2026-02-15
 > **Agent Role:** Hackathon Inspiration Research
 > **Grounded in:** world-contracts source, eve-frontier-proximity-zk-poc, builder-scaffold, player-value-ux-analysis, and cross-ecosystem research

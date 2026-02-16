@@ -1,5 +1,7 @@
 # Hackathon Ideas V3 — Judging-Aligned Rankings
 
+**Retention:** Carry-forward
+
 > **Version:** V3 (judging-optimized)
 > **Date:** 2026-02-15
 > **Inputs:** V2-grounded (25 ideas), V2-doc-enabled (8 ideas), world-contracts source, Sui docs, web research
@@ -453,16 +455,16 @@ EVE Frontier has a layered currency architecture that affects how CivilizationCo
 |-------|----------|----------------|-------------------|
 | **In-game economy** | **Lux** | Game server | Primary — what players earn, see, and think in |
 | **On-chain settlement** | **`Coin<SUI>`** | Sui blockchain | Secondary — shown as implementation detail or in parentheses |
-| **Planned ecosystem token** | **EVE Token** | Not yet implemented | Future — referenced in official docs but no on-chain type exists |
+| **Planned ecosystem token** | **EVE Token** | Sui: not yet implemented; Ethereum live cycle: exists in-game | Sui world-contracts has TODO only; live Ethereum cycle surfaces EVE token with Lux conversion (10,000 Lux = 1 EVE) |
 | **Builder faction token** | **`Coin<TribeToken>`** | Builder-deployed (TribeMint) | Optional — tribe-specific economic layer alongside Lux |
 | **Gas** | **SUI** (gas fees) | Sui blockchain | Hidden — abstracted via sponsored transactions |
 
 ### Key Facts
 
 - **Lux is never mentioned** in world-contracts Move code — it's a game-server concept with no on-chain representation.
-- **EVE Token does not exist on-chain.** There is no `Coin<EVE>`, no `TreasuryCap<EVE>`, and no minting mechanism. The `tokens.move` template in builder-scaffold is an empty stub.
+- **EVE Token is not yet implemented in Sui world-contracts** (only a `// TODO` in `world.move`). However, in the live Ethereum-based Frontier cycle, an EVE token is surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). There is no `Coin<EVE>` or `TreasuryCap<EVE>` in the Sui codebase. The `tokens.move` template in builder-scaffold is an empty stub.
 - **All validated on-chain payments use `Coin<SUI>`.** Gate tolls and TradePost purchases settle in SUI.
-- **Lux-to-SUI exchange rate is undefined.** No documented ratio exists. If the UI displays Lux values, the conversion rate must be defined (builder-configured, game-server-provided, or fixed).
+- **Lux-to-EVE exchange rate observed: 10,000 Lux = 1 EVE token** (observed in live Ethereum cycle UI; requires sandbox confirmation). Lux-to-SUI rate depends on EVE-to-SUI exchange, which is undefined. If the UI displays Lux values, the conversion rate must be confirmed during March 11 sandbox testing.
 - **Sponsored transactions are implemented** (`AdminACL.verify_sponsor()`) but require authorization. Gas abstraction is architecturally supported.
 
 ### UX Principle for Demo and Product
@@ -473,3 +475,5 @@ Player-facing language should use **Lux** as the primary denomination. On-chain 
 > *"Fuel Rod: 50 Lux"*
 
 **Assumption:** Lux-to-on-chain-token conversion rate and mechanism require validation during March 11 sandbox testing. This is a UX design requirement, not a blocker for Move contract development.
+
+CivilizationControl displays prices in Lux (player-native), settles on-chain in the game's economic token, and abstracts gas from the player experience.

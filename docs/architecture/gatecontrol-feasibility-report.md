@@ -1,5 +1,7 @@
 # GateControl Feasibility Validation Report
 
+**Retention:** Carry-forward
+
 > **Date:** 2026-02-16  
 > **Source:** Sub-agent B — world-contracts gate system analysis  
 > **Inputs:** `vendor/world-contracts/contracts/world/sources/assemblies/gate.move`, extension examples, access control, gate tests, hackathon shortlist  

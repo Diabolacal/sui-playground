@@ -1,5 +1,7 @@
 # Shortlist Viability Validation Report
 
+**Retention:** Carry-forward
+
 > **Date:** 2026-02-16  
 > **Status:** Complete  
 > **Verdict:** Both GateControl and TradePost are **GREEN — technically viable** on Sui local devnet.  

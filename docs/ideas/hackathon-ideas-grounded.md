@@ -1,5 +1,7 @@
 # EVE Frontier Hackathon — Grounded Project Ideas
 
+**Retention:** Carry-forward
+
 > **Grounded in world-contracts.** Every idea in this document maps to real on-chain operations in the EVE Frontier `world-contracts` package (gates, storage units, network nodes, characters, killmails) and the builder extension pattern. No magical game-server powers assumed beyond the hackathon sandbox that will be provided.
 >
 > **Generated:** 2026-02-15 | **Hackathon starts:** 2026-03-11 (~20 days of LLM-accelerated build time)

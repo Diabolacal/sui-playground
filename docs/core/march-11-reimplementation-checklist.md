@@ -1,5 +1,7 @@
 # March 11 Reimplementation Checklist
 
+**Retention:** Carry-forward
+
 > **Date:** 2026-02-16 (updated with devnet evidence)  
 > **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET**  
 > **Source:** Validated patterns from `sui-playground` sandbox  

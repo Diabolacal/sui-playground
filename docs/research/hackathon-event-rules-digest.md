@@ -1,5 +1,7 @@
 # Hackathon Rules Digest
 
+**Retention:** Prep-only
+
 > Practical extract from the [full rules source](hackathon-event-rules-source.md).
 > Source: <https://evefrontier.com/en/eve-froniter-hackathon-event-rules>
 > Published: 12 February 2026 | Captured: 2026-02-16

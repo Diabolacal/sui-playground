@@ -430,6 +430,14 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 3. Every new document must be categorized as one of: `core`, `architecture`, `ideas`, `research`, `operations`, `sandbox`, `archive`.
 4. When creating a new doc, update `docs/README.md` index.
 5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
+6. **Retention classification is mandatory.** All docs must begin with a header block:
+   ```
+   # Document Title
+
+   **Retention:** [Carry-forward | Prep-only | Sandbox-only | Archive]
+   ```
+   Classifications: **Carry-forward** (copy to hackathon repo), **Prep-only** (research/planning, do not copy), **Sandbox-only** (devnet artifacts, temporary), **Archive** (superseded, kept for traceability).
+7. Agents must classify retention before committing any new document. If uncertain, default to **Prep-only** and flag for review.
 
 ## Sui Local Devnet
 

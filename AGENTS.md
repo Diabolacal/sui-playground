@@ -226,6 +226,7 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 3. Categories: `core`, `architecture`, `ideas`, `research`, `operations`, `sandbox`, `archive`.
 4. When creating a new doc, update `docs/README.md` index.
 5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
+6. **Retention classification is mandatory.** All docs must begin with: `**Retention:** [Carry-forward | Prep-only | Sandbox-only | Archive]`. Agents must classify before commit. Default to **Prep-only** if uncertain.
 
 ## Fast context to load on start
 

@@ -1,5 +1,7 @@
 # Hackathon Bootstrap Checklist (March 11)
 
+**Retention:** Carry-forward
+
 This checklist ensures the hackathon submission repo starts with zero prior Git history and contains only the intended template files from SUI Playground. Follow each section in order on hackathon day.
 
 ---

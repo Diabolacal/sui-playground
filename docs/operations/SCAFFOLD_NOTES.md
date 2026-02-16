@@ -1,5 +1,7 @@
 # Scaffold Notes — Customization Guide
 
+**Retention:** Carry-forward
+
 How to adapt this workflow scaffold for your project.
 
 ## Step 1: Run the Vibe Bootstrap (Recommended)

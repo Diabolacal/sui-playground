@@ -1,5 +1,7 @@
 # TradePost Cross-Address PTB Risk Validation — Design Report
 
+**Retention:** Carry-forward
+
 > **Sub-agent:** C — Cross-Address PTB Risk Validation Design
 > **Date:** 2026-02-16
 > **Status:** Complete — Risk MITIGATED

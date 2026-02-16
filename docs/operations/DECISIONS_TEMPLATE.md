@@ -1,5 +1,7 @@
 # Decision Log Template
 
+**Retention:** Carry-forward
+
 Use this template for recording non-trivial technical decisions. Append entries to a `docs/decision-log.md` file in your project (newest first).
 
 ---

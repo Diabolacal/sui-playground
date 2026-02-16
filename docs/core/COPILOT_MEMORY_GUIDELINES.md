@@ -1,5 +1,7 @@
 # Copilot Memory Usage Guidelines
 
+**Retention:** Carry-forward
+
 > **VS Code 1.109+** introduced [Copilot Memory](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/copilot-memory) — a feature that persists learnings across chat sessions.
 
 This workspace enables Copilot Memory at the workspace level via `.vscode/settings.json`. This document defines what **should** and **should not** be stored in memory.

@@ -13,6 +13,28 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 
 > **New docs rule:** All markdown files must go inside a categorized subfolder. Do not create files directly under `docs/`. Update this index when adding a new document.
 
+### Retention Classification (Mandatory)
+
+All documents under `docs/` must begin with a header block declaring their retention classification:
+
+```
+# Document Title
+
+**Retention:** [Carry-forward | Prep-only | Sandbox-only | Archive]
+```
+
+| Classification | Meaning |
+|---|---|
+| **Carry-forward** | Intended to be copied into the March 11 hackathon submission repo |
+| **Prep-only** | Research or planning that should NOT be copied into the submission repo |
+| **Sandbox-only** | Devnet validation artifacts, scripts, or temporary findings |
+| **Archive** | Superseded documents kept for traceability |
+
+**Rules:**
+- New documents must explicitly declare retention before commit.
+- Agents must classify retention before writing any new doc.
+- If uncertain, default to **Prep-only** and flag for review.
+
 ---
 
 ## Core (Carry to Hackathon)

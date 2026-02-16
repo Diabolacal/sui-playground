@@ -1,5 +1,7 @@
 # EVE Frontier Hackathon — V2 Ideas: Documentation-Enabled
 
+**Retention:** Carry-forward
+
 > **Purpose:** New hackathon ideas specifically enabled by Sui-level or EVE Frontier GitBook knowledge that wasn't incorporated in the [v1 ideas document](hackathon-ideas-grounded.md). Every idea here maps to a specific Sui feature or GitBook insight absent from the original 20 ideas.
 >
 > **Generated:** 2026-02-15 | **Methodology:** Cross-referenced `docs/research/sui-documentation-reference-map.md` and `docs/research/evefrontier-builder-docs-map.md` against all 20 v1 ideas to identify unused Sui primitives and GitBook patterns.

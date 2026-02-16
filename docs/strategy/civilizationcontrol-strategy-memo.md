@@ -1,5 +1,7 @@
 # CivilizationControl Strategy Memo
 
+**Retention:** Carry-forward
+
 > **Date:** 2026-02-15
 > **Type:** Adversarial strategy review — thesis, critique, reconciliation
 > **Inputs:** V3 judging-aligned rankings, shortlist recommendations, capability analysis, Sui + EVE Frontier docs

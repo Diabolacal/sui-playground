@@ -1,5 +1,7 @@
 # EVE Frontier Builder Documentation Reference Map
 
+**Retention:** Prep-only
+
 > **Last updated:** 2026-02-15
 > **Source:** https://docs.evefrontier.com/
 > **Internal review by:** AI agent (initial mapping)

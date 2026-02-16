@@ -1,5 +1,7 @@
 # Hackathon Shortlist — Recommendations
 
+**Retention:** Carry-forward
+
 > **Companion to:** [hackathon-ideas-grounded-v3-judged.md](hackathon-ideas-grounded-v3-judged.md)
 > **Date:** 2026-02-15
 

@@ -1,5 +1,7 @@
 # Workspace Abstract
 
+**Retention:** Carry-forward
+
 > A one-page overview of what this scaffold provides and how to start using it.
 
 ## What Is This?

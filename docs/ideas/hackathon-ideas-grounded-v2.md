@@ -1,5 +1,7 @@
 # EVE Frontier Hackathon — Grounded Project Ideas v2
 
+**Retention:** Carry-forward
+
 > **Validated against official documentation.** Every idea in this document has been cross-referenced against:
 > 1. `vendor/world-contracts` Move code (canonical — project-specific truth)
 > 2. Sui docs at docs.sui.io (chain-level truth, via `docs/research/sui-documentation-reference-map.md`)

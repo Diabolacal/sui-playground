@@ -1,5 +1,7 @@
 # Sui Playground — Local Devnet Quickstart
 
+**Retention:** Carry-forward
+
 Agent-friendly reference for running a local Sui devnet in this sandbox repo.
 
 ## Prerequisites

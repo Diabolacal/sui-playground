@@ -1,5 +1,7 @@
 # Sui Playground Capabilities — EVE Frontier Chain-Side Testing
 
+**Retention:** Carry-forward
+
 > **Last updated:** 2026-02-15
 > **Audience:** LLM-driven "vibe coders" who need to understand what agents can realistically build and test in this playground.
 > **Repo:** `sui-playground` (private sandbox — do not push without operator approval)

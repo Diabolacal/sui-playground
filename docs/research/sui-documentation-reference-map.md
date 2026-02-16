@@ -1,5 +1,7 @@
 # SUI Documentation Reference Map
 
+**Retention:** Prep-only
+
 ## Purpose
 
 This document maps chain-level canonical documentation from [docs.sui.io](https://docs.sui.io) to the SUI Playground workspace. It defines consultation rules, identifies architectural constraints, and establishes a canonical source hierarchy for agents and builders.

@@ -1,5 +1,7 @@
 # Currency Truth Table — EVE Frontier Ecosystem
 
+**Retention:** Prep-only
+
 > **Date:** 2026-02-16
 > **Sources:** world-contracts Move code, EVE Frontier GitBook (via reference map), Sui docs reference map, internal strategy/ideas docs, validation reports
 > **Purpose:** Single source of truth for the currency/token model as understood from this workspace
@@ -11,10 +13,10 @@
 | Question | Answer | Confidence |
 |----------|--------|------------|
 | What players earn in-game | **LUX** (in-game currency) | Medium — mentioned in GitBook EVE Vault page only; no on-chain implementation found |
-| What on-chain token exists | **EVE Token** (ecosystem token) | Low — mentioned conceptually in GitBook; **no `Coin<T>` module exists in world-contracts** |
+| What on-chain token exists | **EVE Token** (ecosystem token) | Medium — exists in live Ethereum cycle; **no `Coin<T>` module exists in Sui world-contracts** (TODO noted) |
 | Tolls/prices use which token | **`Coin<SUI>`** in all builder code and validated examples | High — devnet-validated; all existing toll/trade code uses `Coin<SUI>` |
 | Sponsored transactions supported | **Yes** — documented and implemented in Move code | High — `verify_sponsor()` in `access_control.move`, `AdminACL` with `authorized_sponsors` |
-| Exchange rate (LUX ↔ EVE Token) | **Not documented anywhere in this workspace** | N/A — no rate found |
+| Exchange rate (LUX ↔ EVE Token) | **10,000 Lux = 1 EVE token** | Medium — observed in live Ethereum cycle UI; not in builder docs; requires sandbox confirmation |
 | Fixed or variable rate | **Not documented** | N/A |
 | Move module/struct for EVE Token | **Does not exist** in world-contracts; only a TODO comment | High — confirmed by code search |
 
@@ -45,7 +47,16 @@
 | Builder scaffold has an empty tokens template | `tokens.move` | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() { // TODO: Implement }` |
 | Internal analysis confirms no coin/token module exists | Multiple internal docs | [hackathon-ideas-v2-doc-enabled.md](../ideas/hackathon-ideas-v2-doc-enabled.md#L61): "world-contracts has no coin/token module" |
 
-**Assessment:** The EVE Token is a planned but **unimplemented** on-chain token. The `world.move` module's `init()` function has a comment indicating intent to mint EVE tokens, but the code only creates a `GovernorCap`. No `Coin<EVE>`, `TreasuryCap<EVE>`, or related structs exist anywhere in the codebase.
+**Assessment:** In the current Sui world-contracts repository, an EVE token implementation is not yet present (TODO noted in `world.move`). However, in the live Ethereum-based Frontier cycle, an EVE token is surfaced in-game with Lux conversion. This discrepancy reflects differing implementation states between chains and cycles. No `Coin<EVE>`, `TreasuryCap<EVE>`, or related structs exist in the Sui codebase.
+
+### Implementation State Clarification
+
+| Environment | EVE Token Status | Notes |
+|---|---|---|
+| **Ethereum live cycle** | EVE token exists in current deployment | Surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE) |
+| **Sui world-contracts repo** | EVE token not yet implemented | Only a `// TODO` comment in `world.move`; no `Coin<T>` module |
+| **Devnet validation** | Uses `Coin<SUI>` for settlement | All builder examples and validated flows use SUI |
+| **March 11 sandbox** | Must verify official economic token type | May differ from both live Ethereum cycle and current Sui contracts |
 
 ---
 
@@ -93,11 +104,11 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 
 | Fact | Source | Citation |
 |------|--------|----------|
-| **No exchange rate is documented** in any file in this workspace | Full-text search across all `docs/**` | Grep for `10 Lux\|exchange rate\|Lux.*EVE\|EVE.*Lux\|fixed rate\|conversion rate` — zero relevant results about LUX↔EVE rate |
-| The question "10 Lux = 1 EVE token" has **no basis** in any documentation found | Comprehensive search | No source in this workspace mentions any specific LUX-to-EVE conversion ratio |
+| **Observed exchange rate: 10,000 Lux = 1 EVE token** | Live Ethereum-based Frontier cycle UI | Observed in current live cycle UI; requires sandbox confirmation. Not documented in official builder docs or world-contracts code. |
+| No exchange rate is documented in builder-facing sources | Full-text search across all `docs/**` and world-contracts code | No builder documentation, GitBook page, or Move code specifies a Lux-to-EVE conversion ratio |
 | Exchange rates between faction tokens and SUI are described as "market-determined" for custom currencies | Ideas doc | [hackathon-ideas-v2-doc-enabled.md](../ideas/hackathon-ideas-v2-doc-enabled.md#L65): "Exchange rate between faction tokens and SUI is market-determined (manual OTC or Kiosk-based swap)" |
 
-**Assessment:** No exchange rate between LUX and EVE Token is documented anywhere in this workspace. The "10 Lux = 1 EVE token" ratio cannot be confirmed or denied from available sources. The LUX/EVE Token relationship is only mentioned at a high level in the GitBook EVE Vault introduction page, with no specific conversion mechanics described.
+**Assessment:** The exchange rate of **10,000 Lux = 1 EVE token** has been observed in the current live Ethereum-based Frontier cycle UI, but this rate is not documented in any official builder documentation or world-contracts code. The rate may differ between cycles, chains, or game states. Builders should treat this as an observed data point requiring sandbox confirmation, not an architectural constant.
 
 ---
 

@@ -1,5 +1,7 @@
 # Player Value / UX Analysis — EVE Frontier Hackathon Ideation
 
+**Retention:** Prep-only
+
 > **Date:** 2026-02-15
 > **Agent Role:** Player Value / UX
 > **Grounded in:** world-contracts source (gate.move, storage_unit.move, network_node.move, access_control.move, killmail.move, character.move, inventory.move, fuel.move) + extension_examples (gate, tribe_permit, corpse_gate_bounty, config)
