@@ -1,10 +1,12 @@
 # Sui Playground — Hackathon Planning Workspace (EVE Frontier)
 
+A de-risking and acceleration lab: validate Sui tooling, world-contract interactions, and concept feasibility before the official hackathon build window opens.
+
 > **Note:** If you see "SWE" in voice notes or transcripts, it refers to **Sui** (the blockchain). Transcription tools frequently mishear it.
 
 ## What this repo is
 
-- **Private sandbox** for learning Sui blockchain development, running a local devnet, and experimenting with Move smart contracts against EVE Frontier's world-contract stack.
+- **Private sandbox** for learning Sui blockchain development, running a local devnet, and experimenting with Move smart contracts against EVE Frontier's world-contract stack. All experiments are local-devnet-only and are not hackathon submission code.
 - **Hackathon planning workspace** — research, idea ranking, strategy memos, judging-criteria analysis, and documentation reference maps for the EVE Frontier hackathon (Deepsurge / CCP Games, closes 31 March 2026).
 - **Vendor submodule collection** — read-only references to upstream EVE Frontier contracts, builder scaffold, ZK proof-of-concept, and the EveVault wallet.
 - **AI-agent-aware** — ships with [llms.txt](llms.txt), [AGENTS.md](AGENTS.md), and [.github/copilot-instructions.md](.github/copilot-instructions.md) so coding agents can orient quickly and stay within guardrails.
@@ -68,7 +70,7 @@ Smoke-test outputs go in `notes/sui-local-smoketest.md` (untracked, local-only).
 
 | Event | Date |
 |-------|------|
-| Hackathon start | **March 11, 2026** (expected announcement) — Entry development may begin |
+| Hackathon start | **When announced** (expected ~March 11, 2026) — Entry development may begin only after the official announcement |
 | Submission deadline | **March 31, 2026, 23:59 UTC** — late entries auto-disqualified |
 | Player voting deadline | April 15, 2026 |
 | Stillness deployment bonus window | 14 days after hackathon close |
