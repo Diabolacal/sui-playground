@@ -291,7 +291,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 ### Second Cut (Drop Before Cutting First Cut)
 
 - LootDrop VRF module
-- ZK privacy rule in GateControl *(composition validated on devnet 2026-03-11; membership circuit design is remaining gate)*
+- ZK privacy rule in GateControl *(fully validated on devnet 2026-03-11; membership circuit implemented, standalone module published)*
 - Cross-faction exchange
 - Stillness testnet deployment
 
@@ -376,7 +376,7 @@ Insert 30 seconds between Act 3 and Act 4:
 
 3. **Prize targeting.** ZK Gate Pass is ranked #1 for "Best Technical Implementation" and #2 for "Most Creative" in the bonus prize analysis. These are distinct prizes from "Best Entry" — a standalone ZK submission does not cannibalize CivilizationControl's primary prize target.
 
-4. **Risk containment.** The ZK PoC's package-naming conflict (`world` name collides with world-contracts) has been confirmed low-risk — a standalone `zk_gatepass_validation` package works alongside standard frameworks (validated on devnet, addendum 2026-03-11). Composition gap is resolved. Remaining risk is membership circuit design — estimated 4-6 hours. See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.1.
+4. **Risk containment.** All ZK primitives validated on devnet (2026-03-11). Standalone `zk_gate` module published with zero world-contracts dependencies. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain. No remaining feasibility risks — only world-contracts integration remains. See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2.
 
 5. **Demo impact.** "'Generating zero-knowledge proof...' → proof verified on-chain → gate opens → and the blockchain never learned who you were." This is a 30-second moment that lands with any audience. High variance, high reward.
 

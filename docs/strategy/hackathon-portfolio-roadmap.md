@@ -100,7 +100,7 @@ Per the strategy memo's adversarial critique, TribeMint is **demoted to stretch*
 |----------|--------|--------|----------------|------|
 | 1 | **GateControl** — Composable gate policy engine (tribe filter, coin toll, time window) | Core | 7.97 | Green |
 | 2 | **TradePost** — SSU storefront with atomic PTB escrow | Core | 7.91 | Green (validated) |
-| ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Green (composition validated 2026-03-11; membership circuit pending) |
+| ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Green (all validated 2026-03-11; membership circuit implemented, standalone module published) |
 | S1 | TribeMint — Faction `Coin<TribeToken>` | Stretch | 6.31 | Green |
 | S2 | LootDrop — VRF loot crate via `sui::random` | Stretch | 7.53 | Yellow |
 
@@ -124,14 +124,14 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 ### Remaining Validation (March 11 De-Risking)
 
-> **ZK Note:** Groth16 on-chain verification and ZK+gate composition are now validated on local devnet (addendum 2026-03-11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.1. Membership circuit design and package extraction remain as implementation tasks.
+> **ZK Note:** All ZK GatePass primitives validated on local devnet (2026-03-11). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and on-chain verified. Standalone `zk_gate` module published. See [validation report](../operations/shortlist-viability-validation-report.md) and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2. Remaining: world-contracts integration (Character, AdminACL, sponsored tx).
 
 | Item | Risk | Action | Time |
 |------|------|--------|------|
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
 | GateControl → `issue_jump_permit` → `jump_with_permit` integration | Medium | Full gate lifecycle on devnet (requires forged location proofs) | 4-8 hours |
 | Sponsored transaction setup (AdminACL) | Medium | Self-register as sponsor on local devnet | 1-2 hours |
-| ZK circuit → Move Groth16 verification | Low (composition validated) | Design membership circuit; on-chain verify already proven | 4-8 hours |
+| ZK circuit → Move Groth16 verification | Low (fully validated) | ✅ Membership circuit implemented & devnet-validated | DONE |
 | Lux-to-SUI display conversion | Low (UX only) | Inspect game server behavior if accessible | 1 hour |
 
 ### Risk Register
@@ -139,7 +139,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
 | 1 | **Full gate lifecycle setup too complex** | Medium | High — GateControl demo needs working gates | Script setup chain (governor → admin → characters → NWN → gates → link → online). Test file `gate_tests.move` provides complete pattern. |
-| 2 | **ZK integration fails** | Low | Low — GateControl still works without ZK | Composition validated on devnet (2026-03-11). Remaining risk is membership circuit design. Kill at Day 3 midpoint if circuit fails. |
+| 2 | **ZK integration fails** | Very Low | Low — GateControl still works without ZK | All primitives validated on devnet (2026-03-11). Membership circuit implemented. Remaining risk is world-contracts integration only. |
 | 3 | **Scope creep into TribeMint** | Medium | Medium | Hard rule: TribeMint starts only after full CC demo rehearsal passes. |
 | 4 | **Demo video quality insufficient** | Low | High | Script, storyboard, and pre-deploy all state before recording. Multiple takes. Post-production captions. Budget 1 full day for demo. |
 | 5 | **Multiple submissions disallowed** | Low | Critical | FAQ indicates yes. Verify with organizer before March 11. If NO: Fortune Gate becomes GateControl's weird-rule-type, pivoting to single-entry strategy. |
@@ -172,7 +172,7 @@ The "Technical Spike" concept is preserved as the ZK Privacy Rule within Track A
 
 ### Kill Criteria (ZK within Track A)
 
-> **Status update (2026-03-11):** On-chain Groth16 verification and ZK+gate composition are validated (see [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10). The checkpoints below for on-chain verify and gate integration are satisfied. Membership circuit design remains the primary kill gate.
+> **Status update (2026-03-11):** All ZK kill gates passed. On-chain Groth16 verification, ZK+gate composition, AND membership circuit (depth 10, Poseidon(2), 2,430 constraints) all validated. Standalone `zk_gate` module published on devnet. No remaining kill gates — ZK integration is implementation-ready.
 
 | Checkpoint | Deadline | Signal | Status |
 |-----------|----------|--------|--------|

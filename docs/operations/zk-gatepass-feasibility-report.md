@@ -19,15 +19,16 @@
 | ZK proof verification on Sui | **GREEN** | High — devnet-validated (tx `AkEBgfdpGxH...`) |
 | Gate extension witness pattern | **GREEN** | High — proven in world-contracts tests + devnet validation |
 | Combined ZK + gate extension | **GREEN** | High — devnet-validated composition (tx `EXM4RgMvYBb...`) |
-| Circuit availability (membership) | **YELLOW** | Medium — new circuit needed but PoC infrastructure is reusable |
+| Circuit availability (membership) | **GREEN** | High — Merkle membership circuit implemented & devnet-validated (depth 10, Poseidon(2), 2,430 constraints) |
 | Gas / performance | **GREEN** | High — measured ~1,009,880 MIST (~0.001 SUI) per verify |
 | Security model | **GREEN** | High — clear design with gate binding + timestamp |
 | Demo viability | **GREEN** | High — clear narrative, strong visual, 30-second segment |
 | Fallback plan | **GREEN** | High — tribe filter + toll validated, non-ZK CC is competitive |
 
 > **Update 2026-02-17:** Upgraded from YELLOW-GREEN to GREEN following devnet validation. See §2.1 for test evidence.
+> **Update 2026-03-11:** Membership circuit IMPLEMENTED — Merkle proof (depth 10, Poseidon(2), 2,430 constraints). Standalone `zk_gate` module extracted and validated on devnet. All kill gates passed. See §2.2.
 
-**Recommendation:** Pursue ZK integration on March 11 with disciplined kill checkpoints (Day 1: circuit, Day 2: on-chain verify, Day 3 AM: gate integration). Maximum 28 hours budget (25% of sprint). Composition and on-chain verification gates are now passed; membership circuit design is the remaining primary implementation gate. If any RED trigger fires, kill immediately — core CC remains strong without ZK.
+**Recommendation:** ZK integration is implementation-ready. All feasibility kill gates passed: circuit compiles (2,430 constraints), valid proof verifies on-chain, invalid proof rejected, ZK + gate composition works in single entry function, standalone module published. Remaining work is hackathon integration with world-contracts (sponsored tx, Character objects). If any RED trigger fires, kill immediately — core CC remains strong without ZK.
 
 ---
 
@@ -106,14 +107,45 @@ The world-contracts gate system uses a typed witness pattern for custom gate log
 
 **Artifacts:** `sandbox/validation/zk_gatepass_validation/` — Move package with 2 modules (groth16_test, zk_gate_compose). `sandbox/validation/serialize_for_sui.js` — proof/VK serializer.
 
-### 2.2 Membership Circuit (Not Yet Designed)
+### 2.2 Membership Circuit — IMPLEMENTED & DEVNET-VALIDATED
 
-The PoC has location and distance circuits. A gate membership circuit must be designed:
+**Previously:** Not yet designed. Estimated 4-6 hours.
 
-- **Purpose:** Prove "my character ID is in the allowed Merkle tree" without revealing which leaf
-- **Design sketch:** 2 public inputs (`merkle_root`, `nullifier_hash`), ~500–1,000 constraints
-- **Reuse:** PoC's Poseidon Merkle infrastructure (`MerkleVerifierLevel`, `poseidon-lite`, trusted setup) is directly reusable
-- **Estimated effort:** 4–6 hours (circuit design + compile + trusted setup)
+**Now:** Merkle membership proof circuit designed, compiled, and validated on devnet.
+
+| Property | Value |
+|----------|-------|
+| **Circuit** | `membership.circom` — Merkle inclusion proof |
+| **Hash** | Poseidon(2) per level (circomlib) |
+| **Depth** | 10 (supports 1,024 leaves) |
+| **Constraints** | 2,430 non-linear |
+| **Public inputs** | 1 (Merkle root, 32 bytes) |
+| **Private inputs** | 21 (leaf + 10 pathElements + 10 pathIndices) |
+| **Proof size** | 128 bytes (Groth16 BN254 compressed) |
+| **VK size** | 296 bytes (2 IC points, arkworks compressed) |
+| **Setup** | Powers of Tau (ppot_0080_12.ptau) + circuit-specific Groth16 setup |
+
+**Standalone Move module:** `zk_gate::zk_gate` extracted from PoC into `sandbox/validation/zk_gate/`:
+- `ZKAuth has drop {}` — gate-compatible witness
+- `ZKGateConfig has key, store` — shared VK storage
+- `verify_membership()` — core verification, returns ZKAuth
+- `verify_and_pass_to_gate()` — full composition entry point
+- Published on devnet: `0xc0af245bb364485749ccc8dae4cfd86b3af4fea6b2aa54b9a7970dbae322ea00`
+
+**Devnet test evidence:**
+
+| Test | Result | What it proves |
+|------|--------|----------------|
+| `test_membership_hardcoded` | SUCCESS | Valid Merkle proof (leaf=42, 5-member tree) verified on-chain, ZKAuth issued + consumed |
+| `test_membership_invalid` | SUCCESS | Wrong Merkle root correctly rejected |
+| `verify_and_pass_to_gate` (dynamic config) | SUCCESS | Shared ZKGateConfig → verify_membership → ZKAuth → gate mock composition |
+| `create_config` | SUCCESS | ZKGateConfig shared object created with VK bytes |
+
+**Artifacts:**
+- Circuit: `sandbox/validation/zk_membership/circuits/membership.circom`
+- Test input generator: `sandbox/validation/zk_membership/generate_test_input.js`
+- Sui serializer: `sandbox/validation/zk_membership/serialize_membership_for_sui.js`
+- Move module: `sandbox/validation/zk_gate/sources/zk_gate.move`
 
 ### 2.3 Sponsored Transaction Integration
 

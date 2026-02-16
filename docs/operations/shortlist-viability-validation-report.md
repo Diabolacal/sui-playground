@@ -459,16 +459,35 @@ The VK must use arkworks `CanonicalSerialize` compressed format, which includes 
 
 1. ~~**Groth16 + gate extension composition in single tx:**~~ **RESOLVED — Test 10 confirms this works.** ZK verification and `Auth: drop` witness consumption compose in a single `entry` function with no depth-0 constraint issues.
 
-2. **Package naming conflict resolution:** ZK PoC's Move package named `world` conflicts with world-contracts. Extraction/rename effort estimated at 4-6 hours. *(Implementation task, not a feasibility risk.)*
+2. ~~**Package naming conflict resolution:**~~ **RESOLVED — Standalone `zk_gate` module extracted.** Clean module at `sandbox/validation/zk_gate/` published on devnet as independent package (`0xc0af245b...322ea00`). Zero world-contracts dependencies.
 
-3. **Membership circuit design:** New Circom circuit needed (~500 constraints). Reuses PoC's Poseidon Merkle infrastructure. Estimated 4-6 hours for design + compile + setup. *(Day 1 hackathon task.)*
+3. ~~**Membership circuit design:**~~ **RESOLVED — Implemented and devnet-validated.** Merkle membership proof circuit (depth 10, Poseidon(2), 2,430 constraints, 1 public input). Valid proof verified, invalid proof rejected, dynamic config + gate composition all working on devnet. See §2.2 addendum below.
+
+### Membership Circuit Addendum (2026-03-11)
+
+The membership circuit implementation resolves the final practical implementation gap:
+
+| Property | Value |
+|----------|-------|
+| **Circuit** | `membership.circom` — Merkle inclusion proof (depth 10, Poseidon(2)) |
+| **Constraints** | 2,430 non-linear |
+| **Public inputs** | 1 (Merkle root, 32 bytes) |
+| **Proof size** | 128 bytes |
+| **VK size** | 296 bytes (2 IC points) |
+| **Move module** | `zk_gate::zk_gate` — standalone, zero world-contracts dependencies |
+| **Package ID** | `0xc0af245bb364485749ccc8dae4cfd86b3af4fea6b2aa54b9a7970dbae322ea00` |
+
+**On-chain test results:**
+- `test_membership_hardcoded`: SUCCESS — valid Merkle proof (leaf=42, 5-member tree) verified, ZKAuth issued + consumed
+- `test_membership_invalid`: SUCCESS — wrong Merkle root correctly rejected
+- `create_config` + `verify_and_pass_to_gate`: SUCCESS — shared ZKGateConfig creation + dynamic proof verification + gate mock composition
 
 ### Kill Criteria — Post-Validation Status
 
 See [ZK Kill-Switch & Fallback Analysis](../architecture/zk-killswitch-fallback-analysis.md) for detailed GREEN/YELLOW/RED criteria. Updated status:
-- **Day 1:** Circuit must compile. → *Not yet started (hackathon task)*
-- **Day 2:** Move Groth16 must verify on devnet. → **GREEN ✓ (Tests 8-9)**
-- **Day 3 AM:** Gate integration must work (single-tx or two-step). → **GREEN ✓ (Test 10 — single-tx confirmed)**
+- **Day 1:** Circuit must compile. → **GREEN ✓ (membership.circom, 2,430 constraints)**
+- **Day 2:** Move Groth16 must verify on devnet. → **GREEN ✓ (Tests 8-9 + membership tests)**
+- **Day 3 AM:** Gate integration must work (single-tx or two-step). → **GREEN ✓ (Test 10 + verify_and_pass_to_gate)**
 - **Maximum budget:** 28 hours (25% of sprint).
 
 ### Conclusion
@@ -477,8 +496,10 @@ ZK GatePass is **GREEN — validated on devnet.** All critical primitives confir
 - Groth16 verification works independently (Test 8)
 - Invalid proofs are correctly rejected (Test 9)
 - ZK verification + gate witness consumption compose in a single `entry` function (Test 10)
+- Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain
+- Standalone `zk_gate` module extracted, published, and tested with dynamic config flow
 
-Remaining work (membership circuit design, package extraction) is implementation effort, not feasibility risk. Fallback to non-ZK rules (tribe filter + coin toll) remains validated and ready.
+Remaining work is hackathon integration with world-contracts (Character objects, sponsored tx, AdminACL). Fallback to non-ZK rules (tribe filter + coin toll) remains validated and ready.
 
 Full analysis: [ZK GatePass Feasibility Report](zk-gatepass-feasibility-report.md)
 

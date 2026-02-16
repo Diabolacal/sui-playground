@@ -1,0 +1,9 @@
+[package]
+name = "zk_gatepass_validation"
+edition = "2024"
+
+[addresses]
+zk_gatepass_validation = "0x0"
+
+[environments]
+local = "3e6041f5"

@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — ZK GatePass: Membership Circuit Implemented & Module Extracted
+
+- **Goal:** Complete remaining ZK implementation: design Merkle membership circuit, extract standalone `zk_gate` module, validate on devnet
+- **Decision:** All ZK kill gates passed. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented in Circom, compiled, trusted setup complete, proof generated and verified off-chain. Standalone `zk_gate` Move module extracted and published on local devnet. On-chain tests: valid proof verified, invalid proof rejected, dynamic config + gate composition working.
+- **Files:** sandbox/validation/zk_membership/ (circuit, serializer, input generator), sandbox/validation/zk_gate/ (Move module), docs/operations/zk-gatepass-feasibility-report.md (§2.2 updated), docs/operations/shortlist-viability-validation-report.md (membership addendum), docs/strategy/hackathon-portfolio-roadmap.md (status updated), docs/strategy/civilizationcontrol-strategy-memo.md (status updated)
+- **Diff:** +350 / -30 (circuit + Move module + doc updates)
+- **Risk:** Low — sandbox validation; no production code
+- **Gates:** typecheck N/A  build ✅ (Move build -e local)  smoke: 4 devnet tx all SUCCESS
+- **Follow-ups:** World-contracts integration (Character, AdminACL, sponsored tx) during hackathon
+
 ## 2026-03-11 — ZK GatePass Upgraded to GREEN (Devnet Validated)
 
 - **Goal:** Validate ZK Groth16 verification and ZK+gate composition on local devnet (tests 8–10)
@@ -15,7 +25,7 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 - **Diff:** +120 / -5
 - **Risk:** Low — validation only; no production code
 - **Gates:** typecheck N/A  build N/A  smoke: devnet tx digests verified
-- **Follow-ups:** Design membership circuit, extract `zk_gate` package from PoC wrapper, sponsored transaction integration
+- **Follow-ups:** ~~Design membership circuit, extract `zk_gate` package from PoC wrapper, sponsored transaction integration~~ DONE (see entry above)
 
 ## 2026-02-16 — ZK GatePass Feasibility Validation Complete
 

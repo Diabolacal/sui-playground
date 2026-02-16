@@ -1,0 +1,8 @@
+[package]
+name = "zk_gate"
+edition = "2024"
+
+[dependencies]
+
+[environments]
+local = "0x0"
