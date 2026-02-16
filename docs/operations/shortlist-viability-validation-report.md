@@ -357,6 +357,28 @@ These do not block the hackathon (the extension logic is independent of the jump
 
 ---
 
+## Currency Model: Lux, On-Chain Tokens, and Gas
+
+> **Context note added 2026-02-16.** All devnet validation in this report uses `Coin<SUI>` for toll and trade payments. This section documents the currency layering to bridge between technical validation and player-facing UX design.
+
+### What This Validation Proved (On-Chain Layer)
+- **Toll payment:** `Coin<SUI>` transfer to collector address — atomic, verified.
+- **Trade payment:** `Coin<SUI>` split + transfer in PTB — atomic, verified at 3 price points.
+- **`Coin<T>` generality:** The toll and trade mechanisms accept any `Coin<T>` type. Using `Coin<SUI>` was a validation convenience, not an architectural constraint. TribeMint (`Coin<TribeToken>`) would work with the same pattern.
+
+### What Remains Unvalidated (Game Economy Layer)
+| Item | Status | Impact |
+|------|--------|--------|
+| **Lux** (in-game currency) | Not referenced in any Move code | Lux is a game-server concept. CivilizationControl's UI must bridge Lux display values to on-chain `Coin<T>` amounts. |
+| **EVE Token** | Unimplemented on-chain | No `Coin<EVE>` exists. If/when it launches, the same `Coin<T>` patterns apply. |
+| **Lux-to-SUI exchange rate** | Undefined | The UI needs a conversion rate to display Lux values. This is a UX design decision, not a contract constraint. |
+| **Sponsored transactions** | Implemented but access-controlled | `AdminACL.verify_sponsor()` exists. Builders need authorization. Affects gas abstraction UX. |
+
+### Design Principle
+Players should see **Lux values** as the primary denomination. On-chain settlement details (`Coin<SUI>`, gas, transaction digests) are abstracted by the UI layer. The Move contracts are token-agnostic via `Coin<T>` — the display currency is a frontend concern.
+
+---
+
 ## References
 
 - [Validation Plan](shortlist-viability-validation-plan.md)

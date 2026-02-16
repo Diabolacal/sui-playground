@@ -133,7 +133,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Why it would be adopted:** EVE Frontier has station-based markets for centralized trading, but no commerce exists at player-deployed structures. SSU Storefront extends the economy into the field — remote outposts, forward operating bases, and toll-adjacent supply depots that station hubs can't reach. The atomic PTB buy flow (split coin → buy → transfer) is immediately understood by any gamer who has used an auction house.
 
-**Demo moment:** "Click 'Buy Laser Cannon' for 5 SUI — one transaction, item appears in your inventory. The first player-deployed storefront in EVE Frontier."
+**Demo moment:** "Click 'Buy Laser Cannon' — one transaction, item appears in your inventory. The first player-deployed storefront in EVE Frontier."
 
 **Frontier vibe:** Player-run shops at forward-deployed SSUs in hostile space evoke the legendary null-sec market hubs of EVE Online — the frontier outpost general store, not a replacement for station trade.
 
@@ -164,7 +164,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Why it would be adopted:** Gamers universally understand loot crates. `sui::random` VRF proves fairness verifiably — "no one could have rigged it" is a narrative that writes itself.
 
-**Demo moment:** "Pay 1 SUI, crack open the crate — Legendary Plasma Cannon or Common Space Dust. Check the VRF proof on-chain."
+**Demo moment:** "Pay the entry fee, crack open the crate — Legendary Plasma Cannon or Common Space Dust. Check the VRF proof on-chain."
 
 **Frontier vibe:** Loot drops are slightly generic (not uniquely EVE), but the execution using Sui's VRF is a marquee feature showcase.
 
@@ -212,7 +212,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Why it would be adopted:** "Bounty hunting on-chain" is the highest player-vote-appeal concept. PvP players will smash the vote button.
 
-**Demo moment:** "Post a 100 SUI bounty. Target dies. Killmail appears. Bounty pays out."
+**Demo moment:** "Post a bounty. Target dies. Killmail appears. Bounty pays out."
 
 **Frontier vibe:** Perfect for EVE's adversarial culture. Bounties create content — players hunt each other for economic reward.
 
@@ -238,7 +238,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Demo moment:** "Alpha Tribe member pays gate toll in ALPHA tokens — Beta Tribe member walks up with SUI and gets denied. Your money's no good here."
 
-**Frontier vibe:** Custom currencies are deeply EVE — ISK is EVE Online's cultural identity. This creates that layer on Frontier.
+**Frontier vibe:** Custom currencies are deeply EVE — ISK defined EVE Online's economy; Lux serves that role in EVE Frontier. Faction minting adds a builder-controlled on-chain complement, letting tribes denominate tolls and trade in their own tokens.
 
 **Minimum viable build:** One-time witness `Coin<T>` pattern + `TreasuryCap` governance + gate/SSU integration. **Stretch:** Cross-faction exchange, treasury management.
 
@@ -297,7 +297,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 | Module | Description | Draws From | Priority | Risk |
 |--------|-------------|-----------|----------|------|
 | **GateControl** | Composable gate policy engine — tribe filters, time windows, item tolls via dynamic field rule dispatch within a single extension module | ID 1 + ID 8 + ID 14 | 1 | Green |
-| **TradePost** | SSU storefront — list items, browse/buy with atomic PTB escrow, supports SUI or faction tokens | ID 3 | 2 | Yellow |
+| **TradePost** | SSU storefront — list items, browse/buy with atomic PTB escrow, prices displayed in Lux, settled on-chain via `Coin<SUI>` or faction tokens | ID 3 | 2 | Yellow |
 | **TribeMint** | Faction currency — `Coin<TribeToken>` for gate tolls, storefront prices, cross-module economic integration | ID 24 | 3 | Green |
 | **LootDrop** *(stretch)* | VRF loot crate — `sui::random` randomized item drops integrated into TradePost SSUs | ID 21 | 4 | Yellow |
 
@@ -342,9 +342,9 @@ Open GateControl panel → enable Tribe Filter (Tribe Alpha only) → enable Tol
 **Act 3 — "The Market" (1:15–2:00)**
 > "Now let's monetize the SSU."
 
-Switch to TradePost → create 3 listings (Rare Component: 10 SUI, Fuel Cell: 5 SUI, Trophy: 25 ALPHA_COIN) → buyer browses → clicks "Buy Trophy" → PTB: split ALPHA_COIN → buy → item transfers → trade appears in feed.
+Switch to TradePost → create 3 listings (Rare Component: 100 Lux, Fuel Cell: 50 Lux, Trophy: 25 ALPHA_COIN) → buyer browses → clicks "Buy Trophy" → PTB: split ALPHA_COIN → buy → item transfers → trade appears in feed.
 
-> "Atomic, trustless commerce. SUI or faction tokens."
+> "Atomic, trustless commerce. On-chain settlement in SUI or faction tokens — displayed to players in Lux."
 
 **Act 4 — "The Economy" (2:00–2:40)**
 > "Where did ALPHA_COIN come from?"
@@ -440,3 +440,36 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 | 26 | Fortune Gate | V2-doc-enabled | Economy | Yellow |
 | 27 | Trophy Case | V2-doc-enabled | Infrastructure | Green |
 | 28 | Extension Forge | V2-doc-enabled | Dev Tooling | Green |
+
+---
+
+## Currency Model: Lux, On-Chain Tokens, and Gas
+
+> **Applicable to all economy-tagged ideas (IDs 3, 8, 10, 12, 21, 22, 23, 24, 26).**
+
+EVE Frontier has a layered currency architecture that affects how CivilizationControl and all economy ideas should present values to players:
+
+| Layer | Currency | Where It Lives | Player Visibility |
+|-------|----------|----------------|-------------------|
+| **In-game economy** | **Lux** | Game server | Primary — what players earn, see, and think in |
+| **On-chain settlement** | **`Coin<SUI>`** | Sui blockchain | Secondary — shown as implementation detail or in parentheses |
+| **Planned ecosystem token** | **EVE Token** | Not yet implemented | Future — referenced in official docs but no on-chain type exists |
+| **Builder faction token** | **`Coin<TribeToken>`** | Builder-deployed (TribeMint) | Optional — tribe-specific economic layer alongside Lux |
+| **Gas** | **SUI** (gas fees) | Sui blockchain | Hidden — abstracted via sponsored transactions |
+
+### Key Facts
+
+- **Lux is never mentioned** in world-contracts Move code — it's a game-server concept with no on-chain representation.
+- **EVE Token does not exist on-chain.** There is no `Coin<EVE>`, no `TreasuryCap<EVE>`, and no minting mechanism. The `tokens.move` template in builder-scaffold is an empty stub.
+- **All validated on-chain payments use `Coin<SUI>`.** Gate tolls and TradePost purchases settle in SUI.
+- **Lux-to-SUI exchange rate is undefined.** No documented ratio exists. If the UI displays Lux values, the conversion rate must be defined (builder-configured, game-server-provided, or fixed).
+- **Sponsored transactions are implemented** (`AdminACL.verify_sponsor()`) but require authorization. Gas abstraction is architecturally supported.
+
+### UX Principle for Demo and Product
+
+Player-facing language should use **Lux** as the primary denomination. On-chain settlement details appear in parentheses or in technical views:
+
+> *"Toll: 5 Lux (settled on-chain)"*
+> *"Fuel Rod: 50 Lux"*
+
+**Assumption:** Lux-to-on-chain-token conversion rate and mechanism require validation during March 11 sandbox testing. This is a UX design requirement, not a blocker for Move contract development.

@@ -59,6 +59,7 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 | [research/sui-documentation-reference-map.md](research/sui-documentation-reference-map.md) | SUI chain-level docs reference map — canonical source hierarchy, architectural constraints, consultation rules |
 | [research/hackathon-event-rules-source.md](research/hackathon-event-rules-source.md) | Verbatim snapshot of official EVE Frontier Hackathon Event Rules (captured 2026-02-16) |
 | [research/hackathon-event-rules-digest.md](research/hackathon-event-rules-digest.md) | **Practical digest** — dates, eligibility, judging criteria, agent compliance checklist |
+| [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
 
 ## Operations
 
