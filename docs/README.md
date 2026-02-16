@@ -37,6 +37,12 @@ All documents under `docs/` must begin with a header block declaring their reten
 
 ---
 
+## Decision Log
+
+| File | Purpose |
+|------|---------|
+| [decision-log.md](decision-log.md) | Non-trivial technical and strategic decisions (newest first) |
+
 ## Core (Carry to Hackathon)
 
 | File | Purpose |
@@ -70,6 +76,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 |------|---------|
 | [strategy/civilizationcontrol-strategy-memo.md](strategy/civilizationcontrol-strategy-memo.md) | Adversarial strategy review — thesis, critique, reconciled recommendation for CivilizationControl |
 | [strategy/civilizationcontrol-product-vision.md](strategy/civilizationcontrol-product-vision.md) | Human-centered product vision pitch — problem, vision, demo narrative, judging alignment |
+| [strategy/hackathon-portfolio-roadmap.md](strategy/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 4 tracks, prize mapping, development cadence, kill criteria |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 
