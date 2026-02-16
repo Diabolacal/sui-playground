@@ -2,11 +2,11 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16 (updated with devnet evidence)  
-> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET**  
+> **Date:** 2026-02-16 (updated with full gate lifecycle rehearsal evidence)  
+> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
-> **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for full devnet test results
+> **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for module tests; [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) for complete 13-step gate lifecycle with transaction digests
 
 ---
 
@@ -38,6 +38,7 @@ The Smart Gate typed witness extension pattern fully supports composable gate po
 4. **Coin toll is straightforward**: standard `Coin<T>` transfer inside the extension function before issuing the permit. Dramatically simpler than the item-based corpse bounty pattern.
 5. **Dynamic field rule composition**: the `extension_examples::config` module proves storing multiple rule types as dynamic fields under a shared config object.
 6. **Tribe filtering**: simple `u32` comparison against `character.tribe_id`. Well-tested in existing examples.
+7. **Single extension per gate/SSU** (verified in source): The `extension` field is `Option<TypeName>` — only one extension type can be active at a time. `authorize_extension` with a new type replaces the previous via `swap_or_fill`. Extension identity uses `type_name::with_defining_ids<Auth>()`, which includes the defining package ID (stable across upgrades). **Design consequence:** GateControl rules AND any ZK privacy rule MUST live in the SAME extension package and share a single `Auth` witness type. Multiple rule types are composed via dynamic fields under one extension, NOT via multiple extensions on the same gate.
 
 ### TradePost — Risk: GREEN (downgraded from Yellow)
 
@@ -97,7 +98,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 |---|-----------|---------------|
 | E1 | `world-contracts` repo has not been restructured or renamed | Check GitHub repo, pull latest |
 | E2 | `builder-scaffold` Docker devnet still works with same entrypoint | `docker compose run --rm sui-local` |
-| E3 | Sui CLI supports `--sponsor` flag or equivalent sponsored tx flow | `sui client call --help` |
+| E3 | Sui CLI supports `--gas-sponsor` flag on `sui client ptb` (NOT `--sponsor`, NOT on `sui client call`) | `sui client ptb --help` |
 | E4 | Local devnet genesis creates faucet for funding test accounts | Check container startup logs |
 
 ---
@@ -122,6 +123,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 - Expose a public function (e.g., `gate_auth()`) that creates the witness value — only your module can instantiate it
 - Store all rule configuration in a shared config object using dynamic fields (following `extension_examples::config` pattern)
 - Permit expiry should be generous (hours/days) to account for transaction delays
+- **Single extension constraint:** Each gate supports exactly one `Auth` type (`Option<TypeName>`). All rule types (tribe filter, coin toll, ZK proof) must be dispatched from the same extension module using one shared witness type. This is verified in `gate.move` — the `extension` field stores a single `TypeName` via `swap_or_fill`, not a collection.
 
 **Source files to study:**
 - `vendor/world-contracts/contracts/extension_examples/sources/config.move` — shared config + DF helpers
@@ -199,12 +201,12 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 **Sequence (each step depends on the previous):**
 1. **Publish world package** → receive `GovernorCap`
-2. **Create AdminCap** → `access::create_admin_cap(&governor, admin_addr, ctx)`
-3. **Register server address** → `access::register_server_address(&mut registry, &governor, server_addr)`
-4. **Add sponsor to ACL** → `access::add_sponsor_to_acl(&mut acl, &governor, sponsor_addr)`
-5. **Configure fuel** → `fuel::configure_fuel(...)` (set efficiency, burn rate)
-6. **Configure energy** → `energy::configure_assembly_energy(...)` (set reservation requirements)
-7. **Set gate max distance** → `gate::set_max_distance(&mut config, &admin, type_id, max_distance)`
+2. **Create AdminCap** → `access::create_admin_cap(governor_cap)` (module is `world::access`, NOT `world::access_control`)
+3. **Register server address** → `server::register(server_registry, admin_cap, server_addr)`
+4. **Add sponsor to ACL** → `access::add_access(admin_acl, admin_cap, sponsor_addr)` — **must be a different address than the sender for sponsored txs**
+5. **Configure fuel** → `fuel::set_fuel_efficiency(fuel_config, admin_cap, type_id, efficiency)`
+6. **Configure energy** → `energy::set_energy_config(energy_config, admin_cap, gate_type_id, energy_amount)`
+7. **Set gate max distance** → `gate::set_max_distance(gate_config, admin_cap, type_id, max_distance)`
 8. **Create Characters** → `character::create_character(...)` + `share_character()`
 9. **Anchor NetworkNode** → `network_node::anchor(...)` + `share_network_node()`
 10. **Fuel NWN + online** → `deposit_fuel()` + `online()`
@@ -215,7 +217,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 15. **Online SSUs** → `storage_unit::online(...)`
 16. **Authorize extensions** → on both gates and trade SSUs
 
-**Self-signed proofs (devnet only):** Generate an Ed25519 keypair, register its derived address as "server address" in step 3, then sign `LocationProofMessage` structs with it for `link_gates()` and any proximity-gated operations. Reference: `vendor/world-contracts/ts-scripts/location/generate-test-signature.ts`.
+**Self-signed proofs (devnet only):** Generate an Ed25519 keypair, register its derived address as "server address" in step 3, then sign distance proofs with it for `link_gates()`. **Signature format:** `digest = blake2b256(0x030000 || bcs_message_bytes)`, Ed25519-sign the digest. **Proof format:** `[0x00 flag] + [64-byte sig] + [32-byte pubkey]` = 97 bytes. `verify_distance` does NOT check deadline (unlike `verify_proximity`). `vector<u8>` args in PTB must use `"vector[0xHH,0xHH,...]"` format. Full working proof generator at `sandbox/validation/generate_distance_proof.mjs` (ESM, requires `@noble/hashes@2`). See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Step 9.
 
 ### Pattern 6: OwnerCap Borrow/Return Hot-Potato
 
@@ -232,7 +234,9 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 **What:** `jump()` and `jump_with_permit()` require the transaction to be sponsored by an address in `AdminACL`.
 
-**On devnet:** Register your admin address as both sender and sponsor. Use `sui client call` with the `--sponsor` flag, or construct sponsored transactions programmatically via the Sui SDK.
+**On devnet:** Register a second address as sponsor in `AdminACL`. Use `--gas-sponsor "@0xADDR"` flag on PTB. **Critical:** Self-sponsorship does NOT work — `ctx.sponsor()` returns `None` when sender == gas payer. Must use a *different* address as sponsor. The `sui client ptb` command is required (not `sui client call`) for sponsored transactions.
+
+**Rehearsal evidence:** Validated with PLAYER_A as sponsor, ADMIN as sender. See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13.
 
 **On production:** The game server sponsors player transactions. Extensions add rules on top of this — they don't bypass sponsorship.
 
@@ -342,7 +346,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | **SSU offline** | `withdraw_item` / `deposit_item` abort with status check | Ensure SSU is online (connected to fueled NetworkNode) |
 | **Wrong `Character` reference in events** | Misleading event data | Pass the actual buyer's character to `withdraw_item` for meaningful events |
 | **Single extension per object** | Can't have GateControl AND a different extension on the same gate | This is by design. Each gate/SSU gets one extension type. |
-| **Distance proof for `link_gates`** | No game server to sign proofs on devnet | Self-sign: register local keypair as server address, sign your own `LocationProofMessage` |
+| **Distance proof for `link_gates`** | No game server to sign proofs on devnet | Self-sign: register local keypair as server address, sign your own proof (BCS format, blake2b+ed25519). Use `generate_distance_proof.mjs` as reference. |
 | **NetworkNode dependency chain** | ~6 sequential admin operations before gates can go online | Script the full setup chain. Consider a single PTB with all setup calls. |
 | **Coin splitting in PTB** | Buyer must split exact payment from gas coin | Use `--split-coins gas [amount]` in CLI, or `txb.splitCoins()` in SDK |
 | **Item leaves SSU as standalone object** | `withdraw_item` creates a freestanding `Item` — not inside any inventory | This is expected for TradePost. Buyer can later deposit into their own SSU. |
@@ -351,7 +355,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 | Pitfall | How to Avoid |
 |---------|--------------|
-| **Chain ID mismatch after fresh genesis** | Always use `-e local` flag for build/publish on local devnet |
+| **Chain ID mismatch after fresh genesis** | Always use `--build-env local` flag for build/publish on local devnet. Extension packages need `[environments]` section in Move.toml (`local = "<chain-id>"`) AND a `Pub.local.toml` referencing already-published World dependency. |
 | **Port 9000 conflict** | Don't run ZK PoC native devnet and Docker devnet simultaneously |
 | **Docker volume stale state** | If devnet behaves oddly, delete `workspace-data/` and `docker volume rm docker_sui-keystore` |
 | **world-contracts API changed** | Pull latest on hackathon day, verify assumptions A1–A4 before writing code |
@@ -391,7 +395,7 @@ Reasons:
 | Gate | `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` | `authorize_extension`, `issue_jump_permit`, `jump_with_permit`, `jump`, `link_gates`, `online` |
 | Storage Unit | `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` | `authorize_extension`, `withdraw_item`, `deposit_item`, `game_item_to_chain_inventory` |
 | Network Node | `vendor/world-contracts/contracts/world/sources/network_node/network_node.move` | `anchor`, `online`, `deposit_fuel`, `connect_assemblies` |
-| Access Control | `vendor/world-contracts/contracts/world/sources/access/access_control.move` | `create_admin_cap`, `create_owner_cap`, `add_sponsor_to_acl`, `register_server_address` |
+| Access Control | `vendor/world-contracts/contracts/world/sources/access/access_control.move` | Module name is `world::access` (NOT `world::access_control`). Functions: `create_admin_cap`, `add_access` (sponsors), `verify_sponsor` |
 | Character | `vendor/world-contracts/contracts/world/sources/character/character.move` | `create_character`, `borrow_owner_cap`, `return_owner_cap` |
 | Inventory | `vendor/world-contracts/contracts/world/sources/primitives/inventory.move` | `withdraw_item`, `deposit_item`, `Item` struct |
 | Sig Verify | `vendor/world-contracts/contracts/world/sources/crypto/sig_verify.move` | `verify_signature`, `derive_address_from_public_key` |

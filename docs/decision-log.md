@@ -6,6 +6,33 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-16 — Gate Lifecycle Documentation Reconciliation
+
+- **Goal:** Post-rehearsal documentation reconciliation — fix known issues, propagate rehearsal status, verify and document single-extension constraint.
+- **Decision:** Corrected runbook validation year (2025→2026). Added sponsored tx smoke test section to runbook. Verified single-extension constraint in `gate.move` and `storage_unit.move` source (`extension: Option<TypeName>`, `swap_or_fill`). Documented design consequence (all rule types must share one `Auth` witness type per gate/SSU). Updated roadmap risk register and remaining validation items to reflect rehearsal completion. Added rehearsal reference to strategy memo.
+- **Files:** docs/operations/gate-lifecycle-runbook.md, docs/core/march-11-reimplementation-checklist.md, docs/strategy/hackathon-portfolio-roadmap.md, docs/strategy/civilizationcontrol-strategy-memo.md, docs/decision-log.md
+- **Diff:** +45 / -8
+- **Risk:** Low — documentation only
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Verified from source:** Single extension constraint (`Option<TypeName>` on Gate L73, StorageUnit L67), `swap_or_fill` behavior (gate.move L117), `with_defining_ids` usage (gate.move L117, L227), `verify_sponsor` public function signature (access_control.move L158)
+- **Follow-ups:** None
+
+## 2026-02-16 — Full Gate Lifecycle Rehearsal Completed
+
+- **Goal:** Execute the complete 13-step gate lifecycle on local Sui devnet using world-contracts. Produce reproducible runbook and update Day-1 checklist with corrections.
+- **Decision:** All 13 steps executed successfully: publish → AdminCap → governance → fuel/energy/gate config → Character → NetworkNode → fuel deposit → NWN online → anchor 2 gates → link gates (distance proof) → gates online → publish test extension → authorize extension → issue jump permit → jump with permit. 20 successful transactions total.
+- **Files:** docs/operations/gate-lifecycle-runbook.md (NEW), docs/core/march-11-reimplementation-checklist.md (UPDATED with corrections), sandbox/validation/step2.sh–step13.sh, sandbox/validation/generate_distance_proof.mjs, sandbox/validation/derive_server_address.mjs
+- **Diff:** +600 / -20 (runbook + scripts + checklist corrections)
+- **Risk:** Low — sandbox validation; no production code
+- **Gates:** typecheck N/A  build ✅ (Move packages published)  smoke: 20 devnet txs all SUCCESS
+- **Key corrections discovered:**
+  - Module `world::access` (NOT `world::access_control`)
+  - PTB type args use inline `<Type>` syntax, NOT `--type-args`
+  - `vector<u8>` uses `vector[0xHH,...]` format
+  - Self-sponsorship does NOT work — must use different address
+  - Extension packages need `[environments]` section + `Pub.local.toml`
+- **Follow-ups:** None — runbook is carry-forward ready
+
 ## 2026-03-11 — ZK GatePass: Membership Circuit Implemented & Module Extracted
 
 - **Goal:** Complete remaining ZK implementation: design Merkle membership circuit, extract standalone `zk_gate` module, validate on devnet

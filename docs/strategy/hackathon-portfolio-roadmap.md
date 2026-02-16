@@ -129,8 +129,8 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | Item | Risk | Action | Time |
 |------|------|--------|------|
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
-| GateControl → `issue_jump_permit` → `jump_with_permit` integration | Medium | Full gate lifecycle on devnet (requires forged location proofs) | 4-8 hours |
-| Sponsored transaction setup (AdminACL) | Medium | Self-register as sponsor on local devnet | 1-2 hours |
+| GateControl → `issue_jump_permit` → `jump_with_permit` integration | Low (validated) | ✅ Full 13-step gate lifecycle rehearsed on local devnet (2026-02-16). See [runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md). | DONE |
+| Sponsored transaction setup (AdminACL) | Low (validated) | ✅ Sponsor setup + sponsored `deposit_fuel` and `jump_with_permit` validated. Self-sponsorship does NOT work (must use different address). See [runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13. | DONE |
 | ZK circuit → Move Groth16 verification | Low (fully validated) | ✅ Membership circuit implemented & devnet-validated | DONE |
 | Lux-to-SUI display conversion | Low (UX only) | Inspect game server behavior if accessible | 1 hour |
 
@@ -138,7 +138,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
-| 1 | **Full gate lifecycle setup too complex** | Medium | High — GateControl demo needs working gates | Script setup chain (governor → admin → characters → NWN → gates → link → online). Test file `gate_tests.move` provides complete pattern. |
+| 1 | **Full gate lifecycle setup too complex** | Low (mitigated) | Medium (mitigated) | ✅ Full 13-step lifecycle rehearsed end-to-end on local devnet (2026-02-16). Reproducible [runbook](../operations/gate-lifecycle-runbook.md) with 20 successful transactions. Setup is verbose but mechanical — no remaining unknowns. |
 | 2 | **ZK integration fails** | Very Low | Low — GateControl still works without ZK | All primitives validated on devnet (2026-03-11). Membership circuit implemented. Remaining risk is world-contracts integration only. |
 | 3 | **Scope creep into TribeMint** | Medium | Medium | Hard rule: TribeMint starts only after full CC demo rehearsal passes. |
 | 4 | **Demo video quality insufficient** | Low | High | Script, storyboard, and pre-deploy all state before recording. Multiple takes. Post-production captions. Budget 1 full day for demo. |
