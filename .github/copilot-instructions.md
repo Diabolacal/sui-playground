@@ -388,6 +388,24 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 - **API contracts** — persistence, auth, protocol definitions
 - **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
 
+## Hackathon Narrative & Emotional Signal Priority (UI + Demo Only)
+
+CivilizationControl must communicate **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. This guardrail applies exclusively to UI-facing elements and demo framing materials.
+
+**Canonical reference:** `docs/strategy/civilizationcontrol-voice-and-narrative.md`
+
+**Agent rules:**
+1. **Evaluate UI labels** against the label mapping table (§3 of the canonical doc). Do not default to generic SaaS terms (e.g., Dashboard, Admin, Objects, Settings, Notifications) unless explicitly justified with documented rationale.
+2. **Run the Narrative Impact Check** (§8 of the canonical doc) when generating or reviewing:
+   - Navigation labels
+   - Page titles
+   - Headings and subheadings
+   - Empty states and system messages
+   - Demo scripts and demo framing documents
+3. **Prioritize clarity + authority** over feature density in demo surfaces. Demo narration should describe governance decisions, not button clicks.
+4. **Emotional signal:** Calm power, governance, authority — in that priority order. No celebration ("Congratulations!"), no hedging ("Something may have gone wrong"), no theatrics.
+5. **Excluded from this rule:** README files (internal/technical), marketing copy (handled externally), vendor code, non-UI technical documentation (architecture docs, runbooks, feasibility reports, decision logs), and code comments.
+
 ## Hackathon Rules Compliance Policy
 
 Official hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.

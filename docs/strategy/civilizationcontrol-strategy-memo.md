@@ -401,3 +401,13 @@ Insert 30 seconds between Act 3 and Act 4:
 | **Final recommended core modules** | GateControl + TradePost (two-module tight integration) |
 | **Does TribeMint survive critique?** | No, as a core module. Demoted to Stretch 1. Its weighted score (6.31) is below average, its player vote (5/10) is weak, and Coin<T> cross-module integration complexity makes it a poor risk/reward trade for core status. It becomes valuable stretch if time permits. |
 | **Is standalone ZK/Salvage still advised?** | Yes — ZK Gate Pass, conditional on core stability. Targets "Best Technical Implementation" without competing with CivilizationControl's "Best Entry" positioning. Salvage Protocol is less viable due to AdminCap dependency. |
+
+---
+
+## UI Naming & Demo Alignment
+
+All UI-facing labels, navigation, page titles, headings, empty states, and demo narration must follow the canonical voice and narrative guide:
+
+> **[CivilizationControl — Voice & Narrative Guide](civilizationcontrol-voice-and-narrative.md)**
+
+Key mandate: CivilizationControl communicates **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. Evaluate every player-facing label against the mapping table and apply the Narrative Impact Check before finalizing UI or demo surfaces. This rule does not apply to internal technical documentation, README files, or vendor code.

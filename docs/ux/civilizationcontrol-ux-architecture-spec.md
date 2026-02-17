@@ -992,4 +992,16 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 ---
 
+## UI Language & Narrative Voice
+
+All UI labels, navigation items, page titles, headings, empty states, confirmations, and fault messages in CivilizationControl must follow the canonical voice and narrative guide:
+
+> **[CivilizationControl — Voice & Narrative Guide](../strategy/civilizationcontrol-voice-and-narrative.md)**
+
+When implementing screens defined in this specification, apply the label mapping table (§3 of the narrative guide) and run the Narrative Impact Check (§8) before finalizing copy. Preferred navigation labels are defined in the guide's §4 (Option C — Frontier Authority).
+
+This requirement applies to player-facing surfaces only. Internal component naming, code comments, and technical documentation are excluded.
+
+---
+
 *End of specification.*

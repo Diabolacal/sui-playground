@@ -195,6 +195,18 @@ Subagents are the **primary mechanism** for complex work. Use them by default fo
 
 Append material decisions to `docs/decision-log.md` using the template in `.github/copilot-instructions.md`.
 
+## Hackathon Narrative & Emotional Signal Priority (UI + Demo Only)
+
+CivilizationControl must communicate **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. This guardrail applies to all player-facing surfaces and demo materials.
+
+**Canonical reference:** `docs/strategy/civilizationcontrol-voice-and-narrative.md`
+
+**Agent rules:**
+1. **Evaluate UI labels** against the label mapping table in the canonical narrative doc. Do not default to generic terms (Dashboard, Admin, Objects, Settings, Notifications) unless explicitly justified with a documented rationale.
+2. **Run the Narrative Impact Check** (§8 of the narrative doc) when generating or reviewing: navigation labels, page titles, headings, empty states, confirmations, fault messages, or demo scripts.
+3. **Prioritize clarity + authority** over feature density in demo surfaces. Show governance, not feature tourism.
+4. **Excluded from this rule:** README files, internal technical documentation, code comments, architecture docs, decision logs, vendor code, and marketing copy.
+
 ## Hackathon Rules Compliance Policy
 
 Official hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.

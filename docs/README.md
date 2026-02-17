@@ -8,6 +8,7 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 - `ideas/` — Hackathon project ideas and concept exploration
 - `research/` — External inspiration and UX research (prep only)
 - `operations/` — Bootstrap checklists, process guides, workspace rules
+- `ux/` — UX architecture specs and interaction design
 - `sandbox/` — Temporary or experimental documents
 - `archive/` — Deprecated but retained documents
 
@@ -77,6 +78,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 |------|---------|
 | [strategy/civilizationcontrol-strategy-memo.md](strategy/civilizationcontrol-strategy-memo.md) | Adversarial strategy review — thesis, critique, reconciled recommendation for CivilizationControl |
 | [strategy/civilizationcontrol-product-vision.md](strategy/civilizationcontrol-product-vision.md) | Human-centered product vision pitch — problem, vision, demo narrative, judging alignment |
+| [strategy/civilizationcontrol-voice-and-narrative.md](strategy/civilizationcontrol-voice-and-narrative.md) | **Canonical UI voice & narrative guide** — positioning, label mapping, microcopy, demo framing, Narrative Impact Check |
 | [strategy/hackathon-portfolio-roadmap.md](strategy/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 4 tracks, prize mapping, development cadence, kill criteria |
 
 ## Research (Prep Only — Not for Hackathon Repo)
@@ -102,6 +104,12 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [operations/shortlist-viability-validation-report.md](operations/shortlist-viability-validation-report.md) | **Devnet test evidence** — 10/10 GREEN (GateControl, TradePost, and ZK GatePass all confirmed viable) |
 | [operations/zk-gatepass-feasibility-report.md](operations/zk-gatepass-feasibility-report.md) | **ZK GatePass feasibility** — GREEN, fully validated on local devnet (addendum 2026-03-11); see [validation report](operations/shortlist-viability-validation-report.md) tests 8–10 |
 | [operations/gate-lifecycle-runbook.md](operations/gate-lifecycle-runbook.md) | **Full gate lifecycle runbook** — 13-step procedure from publish to jump_with_permit, with evidence (object IDs, tx digests). Carry-forward. |
+
+## UX
+
+| File | Purpose |
+|------|---------|
+| [ux/civilizationcontrol-ux-architecture-spec.md](ux/civilizationcontrol-ux-architecture-spec.md) | **UX Architecture Specification** — screen hierarchy, gate list/detail, rule composer, linking flow, manual pinning, spatial layer, MVP vs stretch, design principles & upgrade path |
 
 ## Sandbox
 
