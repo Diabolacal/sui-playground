@@ -95,6 +95,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
 | [research/location-proof-leakage-investigation.md](research/location-proof-leakage-investigation.md) | **Location proof leakage investigation** — distance field observability, trilateration feasibility, risk classification (YELLOW) |
 | [research/location-proof-actionability-analysis.md](research/location-proof-actionability-analysis.md) | **Location proof actionability analysis** — ownership constraints, cross-player feasibility, graph reconstruction, CivilizationControl impact (revised to GREEN) |
+| [research/distance-constraint-system-mapping-analysis.md](research/distance-constraint-system-mapping-analysis.md) | **Distance-constraint system mapping** — star database matching feasibility, candidate enumeration, proximity oracle, solar system identification risk (ORANGE) |
 
 ## Operations
 
