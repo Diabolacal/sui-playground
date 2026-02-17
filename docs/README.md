@@ -94,6 +94,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [research/hackathon-event-rules-digest.md](research/hackathon-event-rules-digest.md) | **Practical digest** — dates, eligibility, judging criteria, agent compliance checklist |
 | [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
 | [research/location-proof-leakage-investigation.md](research/location-proof-leakage-investigation.md) | **Location proof leakage investigation** — distance field observability, trilateration feasibility, risk classification (YELLOW) |
+| [research/location-proof-actionability-analysis.md](research/location-proof-actionability-analysis.md) | **Location proof actionability analysis** — ownership constraints, cross-player feasibility, graph reconstruction, CivilizationControl impact (revised to GREEN) |
 
 ## Operations
 
