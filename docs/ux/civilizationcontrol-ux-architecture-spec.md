@@ -129,9 +129,11 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 ## 3. Screen Hierarchy
 
+> **Display label convention:** Player-facing navigation labels follow [Voice & Narrative Guide §4, Option C](../strategy/civilizationcontrol-voice-and-narrative.md). The structural names below map to display labels as follows: Dashboard → **Command Overview**, Activity → **Signal Feed**, Settings → **Configuration**. Gates and Trade Posts retain their names. Apply the [Narrative Impact Check](../strategy/civilizationcontrol-voice-and-narrative.md) (§8) when implementing any UI surface defined here.
+
 ```
-CivilizationControl
-├── Dashboard
+CivilizationControl (Command Nexus)
+├── Command Overview (Dashboard)
 │   ├── Aggregated Metrics (structure counts, online/offline, revenue, fuel)
 │   ├── Alert / Warning Cards (fuel critical, offline, unlinked, unconfigured)
 │   ├── Quick Action Shortcuts (deploy policy, create listing, bring online)
@@ -145,17 +147,17 @@ CivilizationControl
 │       ├── Linking (partner display + link/unlink flow)
 │       ├── Activity (gate-scoped event stream)
 │       └── Spatial Assignment (manual system pin)
-├── TradePosts
+├── Trade Posts
 │   ├── SSU List View (name, ID, status, listings, revenue, inventory)
 │   └── SSU Detail View
 │       ├── Inventory (item browser)
 │       ├── Listings (create, edit, cancel; active + completed)
 │       ├── Trade History (completed transactions)
 │       └── Revenue (economic summary)
-├── Activity (Global Event Feed)
+├── Signal Feed (Global Event Feed)
 │   ├── Event Stream (chronological, filterable)
 │   └── Event Detail (timestamp, structure, type, amount, counterparty, tx)
-└── Settings
+└── Configuration
     ├── Account (wallet, Character ID, tribe)
     ├── Structure Labels Manager
     ├── Spatial Mappings Manager
@@ -167,11 +169,11 @@ CivilizationControl
 
 | Nav Item     | Purpose                                                    | Primary Content         | Key Metrics                                           |
 | ------------ | ---------------------------------------------------------- | ----------------------- | ----------------------------------------------------- |
-| **Dashboard**   | At-a-glance health and economic summary                    | Aggregated cards + alerts | Total structures, online/offline, revenue, fuel alerts |
+| **Command Overview** | At-a-glance health and economic summary               | Aggregated cards + alerts | Total structures, online/offline, revenue, fuel alerts |
 | **Gates**       | Primary control plane for policy, linking, status          | Sortable/filterable list | Per-gate: status, link, extension, rules, fuel, revenue |
-| **TradePosts**  | Storefront management — listings, inventory, revenue       | SSU list → detail        | Per-SSU: status, listings, revenue, extension status   |
-| **Activity**    | Real-time event feed aggregating all operations            | Chronological stream     | Event count by type (24h), revenue total               |
-| **Settings**    | Account, labels, spatial mappings, tags                    | Form-based panels        | Connected wallet, Character ID, label/pin counts       |
+| **Trade Posts** | Storefront management — listings, inventory, revenue       | SSU list → detail        | Per-SSU: status, listings, revenue, extension status   |
+| **Signal Feed** | Real-time event feed aggregating all operations            | Chronological stream     | Event count by type (24h), revenue total               |
+| **Configuration** | Account, labels, spatial mappings, tags                  | Form-based panels        | Connected wallet, Character ID, label/pin counts       |
 
 ### Sidebar Structure Inventory (Below Primary Nav)
 

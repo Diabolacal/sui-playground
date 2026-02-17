@@ -2,9 +2,9 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16  
+> **Date:** 2026-02-17 (reconciled)  
 > **Status:** Pre-hackathon planning (code moratorium until March 11)  
-> **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report  
+> **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report, narrative voice guide, emotional objective, UX architecture spec, Figma structural wireframe  
 > **Mode:** Competitive strategy — bold, decisive, kill-switch-aware
 
 ---
@@ -154,7 +154,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | Player Utility | 9 | Gate control + commerce = immediate value |
 | Frontier Vibe | 9 | Gate governance + field commerce = peak EVE |
 | Creativity | 8.5 | ZK privacy rule elevates from 7 → 8.5 |
-| UX & Usability | 8.5 | Dashboard with policy builder, one-click buy |
+| UX & Usability | 8.5 | Command Overview + policy composer + one-click buy. Figma wireframe and narrative framework complete — high execution confidence |
 | Demo | 9 | Story arc: problem → control → commerce → ZK reveal |
 | **Judge Average** | **8.81** | |
 | Player Vote | 7.5 | TradePost (8) carries; ZK wow adds 0.5 |
@@ -176,7 +176,7 @@ The "Technical Spike" concept is preserved as the ZK Privacy Rule within Track A
 
 | Checkpoint | Deadline | Signal | Status |
 |-----------|----------|--------|--------|
-| Circuit compiles + generates valid proofs | End of Day 1 | If no, ZK is cut | Pending (implementation task) |
+| Circuit compiles + generates valid proofs | End of Day 1 | If no, ZK is cut | **PASSED** (2026-03-11) |
 | Move Groth16 verifier accepts proof on devnet | End of Day 2 | If no after >4 hours debugging, cut | **PASSED** (2026-03-11) |
 | Full gate extension integration works | Mid-Day 3 | If no, fall back to CLI demo or cut entirely | **PASSED** (2026-03-11) |
 
@@ -362,14 +362,18 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 
 **Focus: De-risk everything that isn't code.**
 
-| Action | Timeline | Purpose |
-|--------|----------|---------|
-| Verify multi-submission rules | Before March 1 | If disallowed, restructure portfolio |
-| ZK circuit design (on paper) | Feb 20-25 | Merkle membership proof circuit architecture |
-| Demo storyboards (all entries) | Feb 25-March 5 | Pre-plan every demo shot so execution is fast |
-| Devnet environment validation | March 1-5 | Ensure Docker + local devnet + build pipeline work |
-| Gate lifecycle setup script (conceptual) | March 5-10 | Document exact PTB sequence for full gate setup |
-| UI wireframes (all entries) | March 5-10 | Know exactly what to build when code starts |
+| Action | Timeline | Status | Purpose |
+|--------|----------|--------|---------|  
+| ZK circuit design | Feb 20-25 | ✅ DONE (2026-03-11) | Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and devnet-validated |
+| Gate lifecycle rehearsal | Feb 15-16 | ✅ DONE (2026-02-16) | Full 13-step lifecycle, 20 txs, reproducible [runbook](../operations/gate-lifecycle-runbook.md) |
+| Narrative layer formalization | Feb 17 | ✅ DONE (2026-02-17) | [Voice & narrative guide](civilizationcontrol-voice-and-narrative.md) + [emotional objective](civilizationcontrol-hackathon-emotional-objective.md) + Narrative Impact Check |
+| UX architecture specification | Feb 16-17 | ✅ DONE (2026-02-17) | Screen hierarchy, interaction flows, data models, [Figma-ready brief](../ux/civilizationcontrol-ux-architecture-spec.md) |
+| UX wireframes (CC flagship) | Feb 17 | ✅ DONE (2026-02-17) | Figma multi-screen structural wireframe (Command Nexus layout — structural only, no implementation) |
+| Verify multi-submission rules | Before March 1 | Pending | If disallowed, restructure portfolio |
+| Pre-hackathon unknowns de-risking | Feb 17-March 5 | In Progress | Character resolution, wallet adapter, RPC discovery — see §10 |
+| Demo storyboards (all entries) | Feb 25-March 5 | Pending | Pre-plan every demo shot so execution is fast |
+| Devnet environment validation | March 1-5 | Partial | Docker + local devnet confirmed; Stillness testnet untested |
+| UI wireframes (Track C entries) | March 1-10 | Pending | Simple layouts for Fortune Gate, Salvage Protocol, Corpse Toll Road |
 
 ### Phase 1: Core Sprint (March 11-17, Days 1-7)
 
@@ -378,8 +382,8 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 | 1 | GateControl Move module: tribe filter + coin toll. Full gate lifecycle on devnet. | Gate online + extension authorized by EOD |
 | 2 | GateControl: `issue_jump_permit` → `jump_with_permit` integration. ZK circuit compilation begins (parallel). | Working pass/fail scenarios on devnet |
 | 3 | TradePost Move module: listing CRUD + atomic buy. ZK: Move Groth16 verification on devnet. | Cross-address atomic buy working |
-| 4 | Dashboard shell: structure sidebar + GateControl policy panel + TradePost browse/buy. ZK: gate extension integration. | UI connected to on-chain state |
-| 5 | Integration: shared event feed, GateControl + TradePost in same dashboard. ZK kill check. | Full CC demo rehearsal |
+| 4 | Command Overview shell: structure sidebar + GateControl policy panel + TradePost browse/buy. ZK: gate extension integration. | UI connected to on-chain state |
+| 5 | Integration: shared Signal Feed, GateControl + TradePost in same control surface. ZK kill check. | Full CC demo rehearsal |
 | 6 | Demo rehearsal #1. Record test takes. Fix visual issues. | Watchable 3-min draft video |
 | 7 | Buffer / TribeMint stretch if demo is solid. | CC demo-stable = proceed to Phase 2 |
 
@@ -432,7 +436,126 @@ Consolidation mode activates when:
 
 ---
 
-## 10. March 11 Execution Strategy
+## 10. Pre-Hackathon Unknowns (As of 2026-02-17)
+
+Targeted scan of remaining uncertainties that could affect Day 1 execution. Each unknown was researched against vendor source code and existing validation evidence. Only legitimate unknowns are listed — resolved items are omitted.
+
+### 10.1 Character Resolution Flow — CRITICAL
+
+**Problem:** Character is a shared object. There is no on-chain wallet→Character mapping. `suix_getOwnedObjects` on the wallet address does NOT return the Character. The entire structure discovery chain depends on knowing the Character ID first.
+
+**Resolution options:**
+1. **Event indexing** — query `CharacterCreatedEvent` (emits `character_address`) to build wallet→Character mapping. Requires historical event access on the target RPC.
+2. **Deterministic ID computation** — `derived_object::claim(registry_id, character_key)`. Requires knowing ObjectRegistry UID + game_character_id + tenant string — may not be publicly documented.
+3. **Game server API** — rely on CCP's server to provide the mapping. Availability uncertain.
+4. **Manual fallback** — user pastes their Character ID. Functional but poor UX.
+
+**MVP mitigation:** Manual Character ID input is already designed into the [UX architecture spec](../ux/civilizationcontrol-ux-architecture-spec.md) §10b as the Day 1 path. Automatic resolution is an upgrade trigger (§12, Trigger 1).
+
+**Pre-hackathon action:** On Stillness testnet, attempt to query `CharacterCreatedEvent` events to verify event indexing viability. Investigate ObjectRegistry discoverability.
+
+### 10.2 EVE Vault Wallet Adapter Integration — LOW
+
+**Finding:** EVE Vault implements the standard `@mysten/wallet-standard` interface (`sui:signTransaction`, `sui:signAndExecuteTransaction`, `sui:signPersonalMessage`). It registers via `registerWallet()` and is discoverable through `@mysten/dapp-kit`'s `WalletProvider`. Standard PTB signing from a browser is supported.
+
+**Known constraints:**
+- EVE Vault uses **zkLogin** addresses (Enoki-derived), not traditional keypairs. MaxEpoch expiry requires manual re-login during session — potential mid-demo interruption.
+- Sponsored transaction signing through the zkLogin adapter is untested (standard Sui sponsorship involves `GasData` modification — unclear if this composes cleanly with zkLogin flow).
+
+**Pre-hackathon action:** Build a minimal dApp that connects EVE Vault and signs a simple PTB. Test sponsored tx signing through EVE Vault specifically. Budget: 2-4 hours.
+
+### 10.3 Sponsored Transaction — AdminACL Dependency — MEDIUM
+
+**Finding:** `add_sponsor_to_acl()` requires `GovernorCap` — only the package deployer (CCP) can add sponsor addresses. A builder extension **cannot** register its own sponsor. There is no `remove_sponsor_from_acl` function.
+
+**Impact on MVP:** Most CivilizationControl operations (online/offline, authorize extension, deploy policy, unlink gates, create listings) do NOT require sponsorship. Only jump and fuel deposit/withdraw require `verify_sponsor()`.
+
+**Mitigation:** Design the MVP around OwnerCap-only operations. Defer sponsored operations (jump demo, fuel deposit) to stretch or use local devnet where GovernorCap is available. The demo can show gate policy enforcement without requiring a live sponsored jump.
+
+**Pre-hackathon action:** Clarify with CCP/hackathon organizers whether builder sponsor addresses can be registered in AdminACL during the hackathon.
+
+### 10.4 RPC Object Discovery on Live Network — MEDIUM
+
+**Finding:** The 4-step discovery chain (Character → OwnerCaps → authorized_object_id → structure data) is validated on local devnet. Steps 2-4 use standard `suix_getOwnedObjects` and `sui_getObject` — architecturally sound. Step 1 depends on Character resolution (§10.1).
+
+**Unknowns:**
+- `suix_getOwnedObjects` on a Character *object address* (transfer-to-object children) may behave differently on Stillness than on local devnet.
+- EVE Frontier may operate custom RPC middleware that filters non-game-client queries.
+- Pagination behavior for Characters with many OwnerCaps is untested.
+
+**Pre-hackathon action:** Once a Character ID is known on Stillness, run `suix_getOwnedObjects` on the Character's address to verify OwnerCap retrieval works.
+
+### 10.5 Active Network Visualization — LOW (SCOPED)
+
+**Finding:** Raw structure coordinates are NOT on-chain — only a 32-byte Poseidon2 hash (irreversible). A coordinate-based map is impossible from chain data alone.
+
+**What IS available on-chain:** Gate link partners (`linked_gate_id`), NWN connected assemblies (`connected_assembly_ids`), online/offline status, fuel levels. These are sufficient for an abstract topology graph.
+
+**Decision:** List-first control plane is confirmed as the correct approach. The "Active Network" visualization in CivilizationControl shows network topology (which structures are linked and their status), not spatial coordinates. This is already reflected in the UX architecture spec.
+
+### Risk Summary
+
+| Unknown | Risk | Blocks MVP? | Pre-Hackathon Action Required? |
+|---------|------|-------------|-------------------------------|
+| Character resolution | Critical | Yes (degraded with manual fallback) | Yes — event indexing test on Stillness |
+| EVE Vault adapter | Low | Yes if broken | Yes — minimal PTB signing test |
+| AdminACL sponsorship | Medium | No (MVP is OwnerCap-only) | Nice-to-have — clarify with organizers |
+| RPC on live network | Medium | Partially (Step 1 dependent) | Yes — test with known Character on Stillness |
+| Network visualization | Low | No | No — scoped to list-first + topology |
+
+---
+
+## 11. Pre-Hackathon Focus Plan (Next 20 Days: Feb 17 → March 9)
+
+**Principle:** No hackathon code. No premature polish. Architecture stabilization, integration de-risking, demo narrative planning, and secondary project triage.
+
+### Week 1 (Feb 17-23): Architecture Stabilization
+
+| Day | Focus | Deliverable |
+|-----|-------|-------------|
+| 1-2 | **Character resolution research** — attempt event indexing on Stillness; investigate ObjectRegistry discoverability; document findings | Decision: which resolution path to implement on March 11 |
+| 3 | **EVE Vault adapter test** — minimal @mysten/dapp-kit app, connect EVE Vault, sign a simple PTB | Pass/fail confirmation; document any friction |
+| 4-5 | **RPC discovery validation** — with a known Character ID on Stillness, test full OwnerCap → structure discovery chain | Confirmed working or documented workaround |
+
+### Week 2 (Feb 24-March 2): Integration De-Risking
+
+| Day | Focus | Deliverable |
+|-----|-------|-------------|
+| 1-2 | **Sponsored tx through EVE Vault** — test GasData modification with zkLogin adapter; document MaxEpoch handling | Risk assessment: sponsored tx in demo feasible or not |
+| 3 | **Multi-submission rule verification** — confirm with organizers that multiple entries from one team are allowed | Go/no-go for Track C portfolio strategy |
+| 4-5 | **Demo storyboard drafting** — script all 4 entry demos per [voice guide](civilizationcontrol-voice-and-narrative.md); apply Narrative Impact Check to each segment | Draft storyboards for CC, Fortune Gate, Salvage Protocol, Corpse Toll Road |
+
+### Week 3 (March 3-9): Demo Narrative & Track C Triage
+
+| Day | Focus | Deliverable |
+|-----|-------|-------------|
+| 1-2 | **CC demo storyboard finalization** — frame each segment through Active Network consequence lens; identify exact pre-deploy state needed; list every PTB in demo order | Production-ready demo script |
+| 3 | **Track C viability triage** — re-evaluate Fortune Gate (`sui::random` calling convention), Salvage Protocol (`unanchor` access control), Corpse Toll Road (template freshness) against current world-contracts | Go/no-go per Track C candidate |
+| 4-5 | **March 11 Day-1 prep** — Docker + devnet environment validation; pre-stage world-contracts publish scripts; character/gate/SSU setup sequence documented; dependency install list finalized | March 11 ready: environment boots, world publishes, first PTB succeeds within 30 minutes |
+
+### Guardrails
+
+- **No code that ships.** Research scripts, validation tests, and documentation only. All sandbox artifacts go in `sandbox/validation/` or `notes/`.
+- **No scope creep.** TribeMint, LootDrop, and ZK world-contracts integration are March 11+ tasks. Do not start them.
+- **No premature UI implementation.** Figma wireframes are structural — do not convert to React components until the hackathon starts.
+- **Decision checkpoints.** If Character resolution or EVE Vault adapter tests fail, update the risk register and adjust the March 11 execution strategy before proceeding. Do not paper over blocking unknowns.
+- **Track C decisions by March 5.** If multi-submission is disallowed, restructure immediately — do not defer.
+
+### Exit Criteria (March 9)
+
+By the end of pre-hackathon prep, the following must be true:
+
+- [ ] Character resolution path decided (event indexing, deterministic ID, manual, or hybrid)
+- [ ] EVE Vault PTB signing confirmed working (or fallback identified)
+- [ ] RPC object discovery tested on Stillness (or scoped to local devnet demo)
+- [ ] Multi-submission rules confirmed (or portfolio restructured)
+- [ ] All demo storyboards drafted with narrative voice applied
+- [ ] Docker + devnet environment boots cleanly in <5 minutes
+- [ ] March 11 Day-1 checklist updated with corrections from pre-hackathon validation
+
+---
+
+## 12. March 11 Execution Strategy
 
 ### Hour 0: Environment Verification (30 min)
 
@@ -516,19 +639,23 @@ Each entry exercises different Sui capabilities, preventing pattern overlap and 
 
 ### CivilizationControl (3 min)
 
-**Tone:** Confident, understated, authoritative. "We built the missing control plane."
+**Tone:** Confident, understated, authoritative. "We built the missing command layer." Narrative voice per [Voice & Narrative Guide](civilizationcontrol-voice-and-narrative.md). The operator governs — every structure, policy, and revenue stream is a consequence of their decisions.
+
+**Framing: Active Network as Consequence Layer.** The demo shows the operator's network of structures producing real outcomes: jumps governed, tolls collected, trades settled, revenue earned. Every screen moment reinforces: this infrastructure is under the operator's authority and generating value. See [emotional objective](civilizationcontrol-hackathon-emotional-objective.md) §3.
 
 | Segment | Duration | Visual | Audio |
 |---------|----------|--------|-------|
 | Hook | 0:00-0:10 | Terminal with raw CLI commands | "This is infrastructure management today." |
 | Problem | 0:10-0:30 | Discord screenshots, error messages | "Tribe leaders are flying blind." |
-| GateControl | 0:30-1:15 | Dashboard → policy panel → tribe filter + toll | "One extension. Composable rules. Configured from a browser." |
-| TradePost | 1:15-1:50 | Listings → atomic buy → item transfer | "Trustless commerce at the frontier." |
+| GateControl | 0:30-1:15 | Command Overview → gate detail → policy composer → tribe filter + toll deployed | "One extension. Composable rules. Configured from a browser." |
+| TradePost | 1:15-1:50 | Storefront listings → atomic buy → revenue counter updates | "Trustless commerce at the frontier. Revenue flows back to you." |
 | ZK moment | 1:50-2:20 | Proof generation → verification → gate opens | "The blockchain never learned who you were." |
-| System reveal | 2:20-2:45 | Full dashboard, event feed scrolling | "One system. One dashboard. One control plane." |
-| Close | 2:45-3:00 | Logo + "CivilizationControl" + roadmap hint | "This is what the frontier needs." |
+| System reveal | 2:20-2:45 | Full Command Overview — structures online, Signal Feed scrolling, toll + trade revenue accumulating | "Your infrastructure. Your policies. Your revenue. One command layer." |
+| Close | 2:45-3:00 | Logo + "CivilizationControl" | "The command layer the frontier needs." |
 
 **The Moment:** The ZK proof verification → gate opens transition. 5 seconds of "Generating proof..." → "Verified" → access granted. Judges have never seen this in a game context.
+
+**Revenue/Yield emphasis:** Revenue counters should be visible in at least two segments (TradePost buy and System reveal). The operator sees their infrastructure producing economic value in real time — this is the emotional anchor that separates CivilizationControl from a configuration tool.
 
 ### Fortune Gate (60-90 sec)
 
