@@ -199,7 +199,9 @@ Append material decisions to `docs/decision-log.md` using the template in `.gith
 
 CivilizationControl must communicate **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. This guardrail applies to all player-facing surfaces and demo materials.
 
-**Canonical reference:** `docs/strategy/civilizationcontrol-voice-and-narrative.md`
+**Canonical references:**
+- `docs/strategy/civilizationcontrol-voice-and-narrative.md` — voice, labels, microcopy, Narrative Impact Check
+- `docs/strategy/civilizationcontrol-hackathon-emotional-objective.md` — emotional target, Five-Pillar Lens, 3-Second Check, consequence layer
 
 **Agent rules:**
 1. **Evaluate UI labels** against the label mapping table in the canonical narrative doc. Do not default to generic terms (Dashboard, Admin, Objects, Settings, Notifications) unless explicitly justified with a documented rationale.

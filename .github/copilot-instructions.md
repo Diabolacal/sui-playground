@@ -392,7 +392,9 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 
 CivilizationControl must communicate **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. This guardrail applies exclusively to UI-facing elements and demo framing materials.
 
-**Canonical reference:** `docs/strategy/civilizationcontrol-voice-and-narrative.md`
+**Canonical references:**
+- `docs/strategy/civilizationcontrol-voice-and-narrative.md` — voice, labels, microcopy, Narrative Impact Check
+- `docs/strategy/civilizationcontrol-hackathon-emotional-objective.md` — emotional target, Five-Pillar Lens, 3-Second Check, consequence layer
 
 **Agent rules:**
 1. **Evaluate UI labels** against the label mapping table (§3 of the canonical doc). Do not default to generic SaaS terms (e.g., Dashboard, Admin, Objects, Settings, Notifications) unless explicitly justified with documented rationale.
