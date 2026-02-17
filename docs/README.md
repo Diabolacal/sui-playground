@@ -61,6 +61,8 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [architecture/gatecontrol-feasibility-report.md](architecture/gatecontrol-feasibility-report.md) | GateControl feasibility validation — gate architecture, extension pattern, toll options, validation plan |
 | [architecture/tradepost-cross-address-ptb-validation.md](architecture/tradepost-cross-address-ptb-validation.md) | TradePost cross-address PTB risk validation — SSU ownership model, extension pattern analysis, atomic trade design, test plan |
 | [architecture/zk-killswitch-fallback-analysis.md](architecture/zk-killswitch-fallback-analysis.md) | ZK Gate Pass kill-switch & fallback analysis — GREEN/YELLOW/RED criteria, day-by-day checkpoints, partial ZK options, demo narratives |
+| [architecture/world-contracts-auth-model.md](architecture/world-contracts-auth-model.md) | **Deep auth model analysis** — all structs, 40+ functions categorized by auth tier, extension pattern, hidden permission gates |
+| [architecture/authenticated-user-surface-analysis.md](architecture/authenticated-user-surface-analysis.md) | **Authenticated user surface analysis** — structure discovery, location visibility, permission model, off-chain indexing requirements, dashboard feasibility |
 
 ## Ideas
 

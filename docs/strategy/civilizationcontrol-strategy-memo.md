@@ -268,6 +268,12 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 | S1 | **TribeMint** | Stretch | Adds Coin<T> depth if time allows, but not essential for system narrative |
 | S2 | **LootDrop** | Stretch | VRF showcase, strong player appeal, only if S1 is stable |
 
+### UX Constraint: List-First Control Plane
+
+> **Confirmed (2026-02-16 auth surface analysis):** Structure coordinates are NOT on-chain — only a Poseidon2 hash is stored. Wallet auth does not grant raw coordinates. Map display is not feasible from chain data alone.
+
+CivilizationControl's dashboard is a **list-first control plane** — structures enumerated by ID/name/status/links, not positioned on a map. Any future map layer requires a server/API coordinate feed, manual user pinning, or third-party mapping tools. The demo and UX framing should reflect this: the gate selector is a structured list with status indicators, not a spatial view. See [authenticated-user-surface-analysis.md §2.5](../architecture/authenticated-user-surface-analysis.md).
+
 ---
 
 ## 6. Scope Discipline Rules

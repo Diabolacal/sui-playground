@@ -32,9 +32,9 @@ The gap between "what the blockchain can do" and "what a tribe leader can actual
 
 **CivilizationControl is the control room that the frontier doesn't have yet.**
 
-Imagine a single screen where you see your entire infrastructure at a glance. Every gate you own, every storage unit, every network node — alive and reporting. Green indicators for gates passing traffic. Amber for fuel running low. Red for offline.
+Imagine a single screen where you see your entire infrastructure at a glance. Every gate you own, every storage unit, every network node — listed by name, status, and link state. Green indicators for gates passing traffic. Amber for fuel running low. Red for offline.
 
-On one side, your gate policies: who gets in, what they pay, and when. Not as raw contract calls — as toggles, dropdowns, and clear language. *Tribe 7: free passage. Tribe 12: toll required. Everyone else: blocked.* Apply to one gate, or all gates in the northern cluster.
+On one side, your gate policies: who gets in, what they pay, and when. Not as raw contract calls — as toggles, dropdowns, and clear language. *Tribe 7: free passage. Tribe 12: toll required. Everyone else: blocked.* Apply to one gate, or select a group and apply to all.
 
 On the other side, your storefronts. Items stocked in your SSUs, listed with prices, browsable by anyone in range. A buyer clicks. Payment flows. The item transfers. One atomic transaction, no trust required, no coordination in Discord.
 
@@ -42,7 +42,20 @@ In the center, a live activity feed. Gate jumps. Purchases. Toll revenue. Who's 
 
 **CivilizationControl doesn't add new primitives to EVE Frontier. It takes the primitives that already exist — the extension system, the shared objects, the PTB composition layer — and makes them usable by the people who actually run civilizations.**
 
-This is a territory dashboard. A management layer for the infrastructure you already own. A way to finally *see your frontier*.
+This is a control plane for the infrastructure you already own. A way to finally *manage your frontier* — structure by structure, policy by policy.
+
+### Location Constraint — Why List-First, Not Map-First
+
+> **Confirmed constraint (2026-02-16 deep dive):** Structure coordinates are intentionally off-chain. The world-contracts Location struct stores only a 32-byte Poseidon2 hash — **not** raw (x, y, z) coordinates. The hash is irreversible. Wallet authentication does not grant access to raw coordinates. See [authenticated-user-surface-analysis.md §2](../architecture/authenticated-user-surface-analysis.md).
+
+CivilizationControl is a **control plane over owned structure IDs and on-chain state** — not a map. The gate selector is **list-first** (name/ID/status/links/extension), not map-first. All structure data visible in the dashboard (status, fuel, extensions, link partners, inventory) is readable on-chain. Location data is not.
+
+Any future map view would require one of:
+1. **Server/API coordinate feed** — game server provides hash→coordinate mapping
+2. **Manual user pinning** — operator labels structures with positions stored off-chain in app DB
+3. **Third-party mapping tools** — community tools that maintain coordinate datasets
+
+These are optional enhancements, not MVP requirements.
 
 ---
 
@@ -93,7 +106,7 @@ CivilizationControl displays prices in Lux (player-native), settles on-chain in 
 
 You open CivilizationControl and log in through EVE Vault.
 
-The dashboard loads and you see your structures laid out: six gates, four SSUs, three network nodes. The northern gate cluster is green — all online, all passing traffic. The southern pair shows amber — fuel below 30% on the connected NWN.
+The dashboard loads and you see your structures listed in the sidebar: six gates, four SSUs, three network nodes. The first four gates show green status — all online, all passing traffic. Gates five and six show amber — fuel below 30% on the connected NWN.
 
 You click into Gate North-3. The policy panel shows your current rules: **Tribe Filter** (Tribe 7 allowed) and **Toll** (2 Lux per jump). Both rules are active, composed as layers — not either/or, but both-and. A small counter shows 47 jumps in the last 24 hours and 94 Lux collected in tolls.
 
