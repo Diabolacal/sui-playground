@@ -6,15 +6,17 @@
 
 **ORANGE — Strong solar system identification is feasible from gate link distances combined with a publicly available star coordinate database.**
 
-A single cross-system `link_gates` transaction exposes an exact `distance: u64` value (in meters). With access to a high-precision 3D coordinate database of all solar systems (e.g., EF-Map data), an observer can match that scalar distance against the ~32 million pairwise inter-system distances. Due to the astronomical precision (integer meters across a ~100 light-year universe), **each distance value is statistically unique**, typically narrowing to exactly one candidate system pair.
+A single cross-system `link_gates` transaction exposes an exact `distance: u64` value (in meters). With access to a high-precision 3D coordinate database of all ~24,000 solar systems (e.g., EF-Map data), an observer can match that scalar distance against the ~288 million pairwise inter-system distances. Due to the astronomical precision (integer meters across inter-stellar scales), **each distance value is statistically unique**, typically narrowing to a small candidate set. Filtering by gate-type max range (55 ly for standard, 110 ly for large gates) further reduces the search space.
 
-With two or more links sharing a gate, the intersection collapses candidates to near-certainty.
+With two or more links sharing a gate — the normal topology for chain-linked player networks — intersection collapses candidates to near-certainty.
 
 This finding upgrades the prior actionability assessment for a specific sub-threat: **system-level identification of a player's gate locations**. The prior reports correctly noted that:
 - Cross-player graph reconstruction is infeasible (same-owner constraint — unchanged)
 - Network-wide topology mapping is structurally impossible (unchanged)
 
 This analysis adds a NEW finding: **per-player solar system identification is feasible** from the player's own gate link transactions, using only publicly available data. The same-owner constraint does NOT protect against this vector because the attacker doesn't need cross-player edges — they need only match scalar distances to a known coordinate database.
+
+Additionally, this data is **historically queryable** — an observer does not need to monitor transactions in real time. All `link_gates` transaction inputs (including the plaintext distance) are permanently recorded on-chain and retrievable via standard Sui RPC or GraphQL queries after the fact.
 
 | Threat | Prior Assessment | This Analysis | Reason |
 |--------|-----------------|---------------|--------|
@@ -23,7 +25,7 @@ This analysis adds a NEW finding: **per-player solar system identification is fe
 | **Solar system pair identification** | GREEN (implicit) | **ORANGE** | Distance matching against star database yields near-unique results |
 | Proximity proof oracle | GREEN | GREEN (confirmed) | Server-gated, self-scoped, likely distance=0 |
 
-**Practical impact:** An observer can determine which specific solar systems a player has gates in by monitoring their `link_gates` transactions. This is competitive intelligence — knowing where a player operates. The player already knows their own locations, but **their opponents do not**, and this vector exposes that information.
+**Practical impact:** An observer can determine which specific solar systems a player has gates in by querying their `link_gates` transactions (live or historical). This is competitive intelligence — knowing where a player operates. The player already knows their own locations, but **their opponents do not**, and this vector exposes that information.
 
 ---
 
@@ -123,89 +125,289 @@ would match the on-chain `distance: u64` to within the gate's intra-system offse
 
 | Parameter | Estimated Value | Source |
 |-----------|----------------|--------|
-| Number of solar systems ($N$) | ~8,000 | EVE Online SDE (~7,800); EVE Frontier expected similar |
-| Number of system pairs | $\binom{N}{2} \approx 32{,}000{,}000$ | Combinatorial |
-| Universe diameter | ~100 ly ($\approx 9.46 \times 10^{17}$ m) | From gate max_distance tiers |
-| Distance range | $[0, \sim 10^{18}]$ meters | |
+| Number of solar systems ($N$) | ~24,000 | EVE Frontier universe size (updated estimate) |
+| Number of system pairs | $\binom{N}{2} \approx 288{,}000{,}000$ | Combinatorial |
+| Standard gate max range | 55 ly ($5.20 \times 10^{17}$ m) | [env.example](../../vendor/world-contracts/env.example#L51-L52) `max_distance` |
+| Large gate max range | 110 ly ($1.04 \times 10^{18}$ m) | Same source |
 | Distance precision | 1 meter (integer u64) | From data type |
-| Possible distance values | $\sim 10^{18}$ | Continuous range, integer samples |
+| Possible distance values (within 55 ly) | $\sim 5.2 \times 10^{17}$ | Continuous range, integer samples |
 
-### 3.2 Distance Uniqueness Analysis
+### 3.2 Max-Range Bounding
 
-The key question: **Given ~32 million pairwise distances drawn from ~$10^{18}$ possible integer values, how many collisions (duplicate distances) exist?**
+A critical constraint: each gate type has a maximum link range. Observed distances from `link_gates` transactions are bounded:
 
-This is a birthday paradox calculation. For $k$ items drawn from a space of size $n$:
+- **Standard gates (type 88086):** $D \leq 55$ ly
+- **Large gates (type 84955):** $D \leq 110$ ly
 
-$$P(\text{at least one collision}) \approx 1 - e^{-k^2 / 2n}$$
+This means the observer need only search system pairs whose inter-system distance is within the relevant gate type's max range (plus an intra-system offset tolerance). Pairs beyond this range are immediately excluded.
 
-With $k = 3.2 \times 10^7$ and $n = 10^{18}$:
+**Search space reduction:** The exact reduction depends on the spatial extent and geometry of the EVE Frontier universe. In a universe where the diameter significantly exceeds the max gate range — expected for a universe with ~24,000 systems — the reduction is substantial. If the universe spans ~200–300 ly, a 55 ly max range excludes the vast majority of the ~288M total system pairs, potentially reducing the candidate pool by 5–20×.
 
-$$\frac{k^2}{2n} = \frac{(3.2 \times 10^7)^2}{2 \times 10^{18}} = \frac{1.024 \times 10^{15}}{2 \times 10^{18}} = 5.12 \times 10^{-4}$$
+Let $k_R$ denote the number of system pairs within range $R$:
 
-$$P(\text{collision}) \approx 5.12 \times 10^{-4} \approx 0.05\%$$
+| Gate Type | Max Range $R$ | Estimated $k_R$ (fraction of 288M) | Notes |
+|-----------|--------------|-------------------------------------|-------|
+| Standard (55 ly) | 55 ly | ~15–40% of 288M → ~43–115M pairs | Depends on universe extent |
+| Large (110 ly) | 110 ly | ~40–80% of 288M → ~115–230M pairs | Larger fraction but still bounded |
 
-**Expected number of collisions across the entire dataset: ~0.5.** In other words, **virtually every pairwise distance in the universe is unique at integer-meter precision.**
+Even without precise universe geometry, **filtering by max range meaningfully reduces the search space** and should always be applied.
 
-### 3.3 Single Link Observation
+### 3.3 Distance Uniqueness Analysis (Birthday Paradox)
 
-Given one observed distance $D$ from a `link_gates` transaction:
+The key question: **Given ~288 million pairwise distances drawn from ~$5 \times 10^{17}$ possible integer values (at 55 ly scale), how many collisions (duplicate distances) exist?**
 
-| Tolerance | Expected matching pairs | Assessment |
-|-----------|----------------------|------------|
-| ±0 m (exact) | **1** (near-certain) | Unique identification |
-| ±1 km | ~1 | Still unique |
-| ±1 AU (~$1.5 \times 10^{11}$ m) | ~0.01 | Effectively unique |
-| ±10 AU | ~0.1 | Likely unique |
-| ±100 AU (~$1.5 \times 10^{13}$ m) | ~1 | Borderline; 1-2 candidates |
-| ±1 ly (~$9.5 \times 10^{15}$ m) | ~60 | Moderate candidate set |
+For $k$ items drawn uniformly from a space of size $n$:
 
-**Formula:** Expected matches $\approx \binom{N}{2} \times \frac{2\Delta}{D_{\max}} \approx 3.2 \times 10^7 \times \frac{2\Delta}{10^{18}}$
+$$E[\text{collisions}] = \frac{k(k-1)}{2n}$$
 
-### 3.4 Intra-System Position Offset
+**Unbounded (all pairs):** With $k = 2.88 \times 10^8$ and $n = 10^{18}$:
 
-Gates are NOT at solar system centers. A gate's position within its system introduces an offset:
+$$E = \frac{(2.88 \times 10^8)^2}{2 \times 10^{18}} = \frac{8.29 \times 10^{16}}{2 \times 10^{18}} \approx 0.041$$
 
-- Solar system radius: ~1-50 AU ($1.5 \times 10^{11}$ to $7.5 \times 10^{12}$ m)
-- Maximum cumulative offset from two gates: ~100 AU ($\sim 1.5 \times 10^{13}$ m)
+**Bounded (standard gate, 55 ly):** With $k_R \approx 7 \times 10^7$ (mid-estimate) and $n = 5.2 \times 10^{17}$:
 
-This means:
+$$E = \frac{(7 \times 10^7)^2}{2 \times 5.2 \times 10^{17}} \approx 0.0047$$
 
-$$|D_{\text{gate-to-gate}} - D_{\text{system-to-system}}| \leq \sim 100 \text{ AU}$$
+Expected collisions: **< 0.05 in either case.** Even with 3× more systems than previously assumed, virtually every pairwise distance remains unique at integer-meter precision.
 
-From the table above, ±100 AU yields ~1 expected match. **A single cross-system gate link distance identifies the system pair with high probability (~50-70%)**, and if 2-3 candidate pairs match, a second observation sharing a gate eliminates the ambiguity.
+### 3.4 Single Link Observation
 
-### 3.5 Same-System Links
+Given one observed distance $D$ from a `link_gates` transaction, the expected number of matching system pairs within tolerance $\pm\Delta$:
+
+$$E[\text{matches}] = k_R \times \frac{2\Delta}{D_{\max}}$$
+
+Where $k_R$ is the number of in-range candidate pairs and $D_{\max}$ is the max range for the gate type.
+
+**Conservative baseline (all 288M pairs, full range):**
+
+| Tolerance ($\Delta$) | Physical meaning | $E[\text{matches}]$ (all pairs) |
+|-----------|-----------------|---------------------|
+| 1 m | Integer truncation | $5.8 \times 10^{-10}$ |
+| 1 km | | $5.8 \times 10^{-7}$ |
+| 1 AU ($1.5 \times 10^{11}$ m) | | $0.086$ |
+| 10 AU | Typical intra-system offset | $0.86$ |
+| 50 AU ($7.5 \times 10^{12}$ m) | System radius | $4.3$ |
+| 100 AU ($1.5 \times 10^{13}$ m) | Worst-case gate offset | $8.6$ |
+| 1 ly ($9.46 \times 10^{15}$ m) | | $5{,}450$ |
+
+**With max-range filtering (standard gate, ~70M in-range pairs):**
+
+| Tolerance ($\Delta$) | $E[\text{matches}]$ (bounded) |
+|-----------|-------------------------------|
+| 10 AU | $0.40$ |
+| 50 AU | $2.0$ |
+| 100 AU | $4.0$ |
+
+**Key takeaway:** At ±10 AU tolerance (typical gate placement offset), a single link yields a unique or near-unique system pair even with 24,000 systems. At ±100 AU (worst-case), the candidate set grows to ~4–9 pairs, requiring a second observation to disambiguate.
+
+### 3.5 Intra-System Position Offset
+
+Gates are NOT at solar system centers. A gate's position within its system introduces an offset between the gate-to-gate distance and the system-center-to-system-center distance:
+
+$$|D_{\text{gate-to-gate}} - D_{\text{system-to-system}}| \leq \delta_{\text{source}} + \delta_{\text{dest}}$$
+
+Where $\delta$ is each gate's displacement from its system center.
+
+- **Typical offset:** ~10 AU per gate, so ~20 AU combined. Based on gameplay patterns where gates are placed near stations or stargates within the inner system.
+- **Worst-case offset:** ~50 AU per gate, so ~100 AU combined. Represents gates placed at extreme positions within a large solar system.
+
+| Tolerance assumption | Combined offset | $E[\text{matches}]$ (bounded, std gate) | Assessment |
+|---------------------|----------------|----------------------------------------|------------|
+| Typical (±20 AU) | 20 AU | ~0.8 | Near-unique; 1 candidate |
+| Conservative (±50 AU) | 50 AU | ~2.0 | 1–3 candidates |
+| Worst-case (±100 AU) | 100 AU | ~4.0 | 2–6 candidates |
+
+The tolerance band is the dominant factor in match quality. Tighter tolerances (justified by typical gate placement) yield dramatically better candidate reduction.
+
+### 3.6 Same-System Links
 
 If both gates are in the same solar system, the distance is:
 - Magnitude: $\sim 10^{10}$ to $\sim 10^{13}$ m (sub-AU to a few AU)
-- No inter-system pair has a distance this small
+- No inter-system pair at inter-stellar distances matches this range
 
-Same-system links **do not leak inter-system information** but DO confirm the gates are co-located (same system).
+Same-system links **do not leak inter-system information** but DO confirm the gates are co-located (same system). However, in practice players do not link gates within the same system (see §3A — Network Shape in Practice).
 
-### 3.6 Multi-Link Narrowing
+### 3.7 Multi-Link Narrowing
 
-**Scenario: Player links A↔B and B↔C (two links sharing gate B)**
+**Scenario: Player links A↔B and B↔C (two links sharing system B)**
 
-1. **Link A↔B** with distance $D_1$: Enumerate candidate system pairs → typically 1-2 candidates
-2. **Link B↔C** with distance $D_2$: Enumerate candidate system pairs → typically 1-2 candidates
-3. **Intersection on B**: Gate B must be in a system that appears in BOTH candidate sets → typically **1 candidate**
+1. **Link A↔B** with distance $D_1$: Enumerate candidate system pairs → typically 1–4 candidates
+2. **Link B↔C** with distance $D_2$: Enumerate candidate system pairs → typically 1–4 candidates
+3. **Intersection on B**: System B must appear in BOTH candidate sets → typically **1 candidate**
 
-With $n_1$ candidates for A-B and $n_2$ candidates for B-C, the intersection probability:
+With $n_1$ candidates for A-B and $n_2$ candidates for B-C, the probability of a false intersection (random overlap from different systems):
 
-$$P(\text{unique intersection}) = 1 - \left(\frac{N - 1}{N}\right)^{n_1 \cdot n_2} \approx \frac{n_1 \cdot n_2}{N}$$
+$$P(\text{false match}) \approx \frac{n_1 \cdot n_2}{N}$$
 
-For $n_1 = n_2 = 2$ and $N = 8000$: random overlap probability is $\frac{4}{8000} = 0.05\%$. **The intersection almost always resolves to a unique system for B**, confirming all three systems.
+For $n_1 = n_2 = 4$ (worst-case tolerance) and $N = 24{,}000$: $P = \frac{16}{24{,}000} = 0.067\%$.
+
+**Unique identification via intersection: >99.9% probability** even at worst-case tolerances and with the corrected 24,000-system universe.
 
 **Three or more links converge to certainty.**
 
-### 3.7 Candidate Count Estimates
+### 3.8 Candidate Count Estimates (Revised)
 
-| Observations | Typical candidate systems | Confidence |
-|--------------|--------------------------|------------|
-| 1 cross-system link | 1-2 system pairs | 50-70% unique identification |
-| 2 links sharing a gate | 1 system for shared gate | >99% unique |
-| 3+ links (connected) | All systems identified | ~100% |
-| Same-system link only | 0 inter-system candidates | N/A (confirms co-location) |
+| Observations | Typical candidates | Confidence | Notes |
+|--------------|-------------------|------------|-------|
+| 1 cross-system link (±20 AU) | 1 system pair | ~70% unique | Typical placement tolerance |
+| 1 cross-system link (±100 AU) | 2–6 system pairs | ~20% unique alone | Worst-case tolerance |
+| 2 links sharing a gate | 1 system for shared gate | >99.9% unique | Intersection resolves B |
+| 3+ links (connected chain) | All systems identified | ~100% | Over-determined |
+| Same-system link only | 0 inter-system candidates | N/A | Confirms co-location only |
+
+---
+
+## 3A. Network Shape in Practice
+
+### 3A.1 Single-Link-per-Gate Constraint
+
+Each gate object has a single `linked_gate_id: Option<ID>` field — not a vector — meaning a gate can be linked to **at most one** other gate at any time. The `link_gates` function enforces that both the source and destination gates must be unlinked before a new link can be created:
+
+```move
+assert!(
+    option::is_none(&source_gate.linked_gate_id) &&
+    option::is_none(&destination_gate.linked_gate_id),
+    EGatesAlreadyLinked,
+);
+```
+
+Source: [gate.move](../../vendor/world-contracts/contracts/world/sources/assemblies/gate.move) — `Gate` struct (L71–82), `link_gates` assertion (L181–185).
+
+Links are **bidirectional**: `link_gates` sets `linked_gate_id` on both the source and destination gate objects symmetrically. Unlinking clears both sides.
+
+### 3A.2 Pair-Link Chains
+
+Because each gate links to exactly one other, player gate networks form **linear chains**, not arbitrary topologies:
+
+```
+System A          System B          System C          System D
+[Gate A1] ←————→ [Gate B1]  [Gate B2] ←————→ [Gate C1]  [Gate C2] ←————→ [Gate D1]
+```
+
+- **Intermediate systems** (B, C) typically have **two gates**: one linked "backward" to the previous system, one linked "forward" to the next.
+- **Endpoints** (A, D) have a single gate with one link.
+- The chain can only be extended by deploying a new gate in the next system and linking it.
+
+This is NOT a hub-and-spoke or mesh topology. A player cannot link one gate to multiple destinations simultaneously.
+
+### 3A.3 Cross-System Links Only (Practical Constraint)
+
+The on-chain contract has **no explicit prohibition** against linking two gates in the same solar system — the only check is `distance <= max_distance` via a server-signed proof. However, in practice:
+
+- Players gain no travel utility from same-system links (the purpose of gate links is inter-system transit).
+- The game server would need to sign a distance proof for two structures in the same system — the distance would be very small (sub-AU to tens of AU), which the server might reject or which would be operationally pointless.
+- No known gameplay documentation or community practice describes same-system gate linking.
+
+**For modeling purposes, treat all gate links as cross-system.** If a same-system link were observed, the very small distance (~10^10 to ~10^13 m) would be immediately distinguishable from inter-stellar distances and would confirm co-location without ambiguity.
+
+### 3A.4 Impact on Intersection Logic
+
+The chain topology creates a powerful narrowing pattern. Consider a 4-system chain:
+
+| Link | Observed Distance | Candidate System Pairs |
+|------|------------------|----------------------|
+| A↔B | $D_1$ | {(S₁, S₂), (S₃, S₄)} |
+| B↔C | $D_2$ | {(S₂, S₅), (S₆, S₇)} |
+| C↔D | $D_3$ | {(S₅, S₈)} |
+
+**Intersection on shared systems:**
+1. Link 1 and Link 2 share system B → B must appear in both candidate sets → resolves to $S_2$
+2. With B = $S_2$, Link 1 resolves A = $S_1$ and Link 2 resolves C = $S_5$
+3. Link 3 confirms C = $S_5$ and resolves D = $S_8$
+
+Each additional link in the chain:
+- Adds one new system to identify
+- Provides one additional distance constraint
+- Creates a shared-system intersection with the previous link
+
+**The chain never diverges.** A player's full gate network is a single path (possibly with branches if they have multiple gates in one system linking to different destinations), and every consecutive link pair constrains the intermediate system.
+
+---
+
+## 3B. Data Collection & Observability
+
+### 3B.1 Core Finding: Historical Retrieval Is Fully Supported
+
+An observer does **NOT** need to monitor `link_gates` transactions in real time. All transaction inputs — including the `distance_proof` bytes containing the plaintext `distance: u64` — are permanently stored on-chain and retrievable via standard Sui RPC methods after the fact.
+
+**The observability question has two parts:**
+1. **Is exposure possible at all?** → Yes. Transaction inputs are public on-chain data.
+2. **Must you watch live to capture the data?** → No. Historical queries work. Live monitoring is only needed for *timely* collection, not for *possibility*.
+
+### 3B.2 What Is Visible in a `link_gates` Transaction
+
+When retrieved with `showInput: true`, a `link_gates` transaction exposes:
+
+| Data | Visibility | Notes |
+|------|-----------|-------|
+| Source gate object ID | Visible | Object input in PTB |
+| Destination gate object ID | Visible | Object input in PTB |
+| Character object ID | Visible | Object input |
+| `distance_proof` bytes (BCS-encoded) | **Fully visible** | Pure value argument |
+| Sender address (player) | Visible | Transaction sender |
+| Gas sponsor (if sponsored) | Visible | Transaction gas owner |
+| Transaction timestamp | Visible | Checkpoint timestamp |
+
+The `distance_proof` is a BCS-encoded `LocationProofMessage` + signature containing:
+
+| Field | Type | Extractable? |
+|-------|------|-------------|
+| `server_address` | `address` | Yes |
+| `player_address` | `address` | Yes |
+| `source_structure_id` | `ID` | Yes |
+| `source_location_hash` | `vector<u8>` | Yes (opaque 32-byte hash) |
+| `target_structure_id` | `ID` | Yes |
+| `target_location_hash` | `vector<u8>` | Yes (opaque 32-byte hash) |
+| **`distance`** | **`u64`** | **Yes — plaintext gate-to-gate distance in meters** |
+| `deadline_ms` | `u64` | Yes (proof expiry) |
+| `signature` | `vector<u8>` | Yes (server Ed25519 signature) |
+
+**Note:** `link_gates` does NOT emit an event. Detection requires querying transactions by function call or object mutation, not event filtering.
+
+### 3B.3 Practical Collection Approaches
+
+#### Ad Hoc Historical Query (given a player address or gate ID)
+
+Minimal approach for targeted investigation:
+
+1. Query `sui_queryTransactionBlocks` with filter `{ FromAddress: "<player_address>" }` or `{ ChangedObject: "<gate_object_id>" }`
+2. Fetch full transaction with `sui_getTransactionBlock({ showInput: true })`
+3. Filter for PTB commands targeting `<package>::gate::link_gates`
+4. Extract the `distance_proof` pure argument and BCS-decode the `distance: u64`
+
+**Alternatively**, use the `MoveFunction` filter to find ALL `link_gates` transactions across all players:
+
+```
+sui_queryTransactionBlocks({
+  filter: { MoveFunction: { package: "0x...", module: "gate", function: "link_gates" } }
+})
+```
+
+This approach works at any time — hours, days, or months after the transaction occurred — given that the node retains historical data (archival nodes, or Sui's standard full node with indexer enabled).
+
+#### Continuous Indexer (for broad surveillance)
+
+For comprehensive coverage:
+
+1. Run a custom indexer subscribing to the Sui checkpoint stream (using `sui-data-ingestion` framework or equivalent)
+2. Filter for transactions containing `MoveCall` to `gate::link_gates`
+3. BCS-decode `distance_proof` from each match
+4. Store in a database keyed by (source_gate, destination_gate, player, timestamp, distance)
+
+Since `link_gates` emits no event, the indexer must inspect transaction inputs (not events).
+
+#### GraphQL API (recommended for moderate-scale queries)
+
+Sui's hosted GraphQL endpoint supports filtering by function, sender, and affected object with cursor-based pagination. This requires no infrastructure to maintain.
+
+### 3B.4 Data Retention Caveat
+
+Full nodes may prune old transaction data depending on configuration. For guaranteed long-term historical access:
+- Use archival full nodes
+- Run a Sui full node with `--indexer` flag (maintains PostgreSQL database)
+- Or maintain a custom indexer that captures data at ingestion time
+
+**Bottom line:** An attacker needs no special access or timing. Standard blockchain transparency guarantees apply — all `link_gates` inputs are public, permanent (on archival nodes), and trivially queryable.
 
 ---
 
@@ -282,45 +484,66 @@ All transactions are publicly observable on-chain. An observer has access to the
 
 ### 6.2 Step 1: Compute Candidate Set for A-B
 
-The observer computes all $\binom{8000}{2} \approx 32\text{M}$ pairwise distances between systems in the database. They search for pairs $(S_i, S_j)$ where:
+The observer precomputes all pairwise distances between the ~24,000 systems in the database (or, more efficiently, only those within 55 ly of each other for standard gates). They search for pairs $(S_i, S_j)$ where:
 
-$$|D_{\text{system}}(S_i, S_j) - D_1| \leq 100 \text{ AU}$$
+$$|D_{\text{system}}(S_i, S_j) - D_1| \leq \Delta$$
 
-**Expected result:** 0-2 candidate pairs (from §3.3 analysis).
+Using ±20 AU (typical tolerance), **expected result:** 0–1 candidate pairs.
+Using ±100 AU (worst-case tolerance), **expected result:** 2–6 candidate pairs.
 
-Assume result: {(System 1294, System 5821), (System 3102, System 7744)}
+Assume result (±50 AU): {(System 1294, System 5821), (System 3102, System 7744), (System 6010, System 9231)}
 
 ### 6.3 Step 2: Compute Candidate Set for B-C
 
 Same procedure with $D_2$:
 
-**Expected result:** 0-2 candidate pairs.
+**Expected result:** 1–4 candidate pairs (at ±50 AU tolerance).
 
-Assume result: {(System 5821, System 2087)}
+Assume result: {(System 5821, System 2087), (System 5821, System 4415)}
 
-### 6.4 Step 3: Intersection on Shared Gate B
+### 6.4 Step 3: Intersection on Shared System B
 
-Gate B appears in both links. Its system must be in the intersection of:
-- A-B candidates: systems {1294, 5821, 3102, 7744}
-- B-C candidates: systems {5821, 2087}
+Gate B's system must appear in BOTH candidate sets. Because gate networks are chains (§3A), the system hosting gate B appears in both the A-B and B-C candidate pairs.
+
+- A-B candidate systems (B-side): {5821, 7744, 9231}
+- B-C candidate systems (B-side): {5821}
 
 **Intersection:** System 5821 is the ONLY system appearing in both sets.
 
 **Result:**
-- Gate B → **System 5821** (certain)
-- Gate A → **System 1294** (from A-B pair containing 5821)
-- Gate C → **System 2087** (from B-C pair containing 5821)
+- System B → **System 5821** (certain)
+- System A → **System 1294** (from A-B pair containing 5821)
+- System C → one of {2087, 4415} — further narrowed by a third link C↔D if available
 
-### 6.5 Collapse Rate Assessment
+### 6.5 Chain Topology Advantage
 
-| Topology | Links | Expected unique identification |
-|----------|-------|-------------------------------|
-| A↔B (isolated) | 1 | ~60% (1-2 candidates) |
-| A↔B, B↔C (chain) | 2 | >99% (intersection resolves B) |
-| A↔B, B↔C, A↔C (triangle) | 3 | ~100% (over-determined) |
-| A↔B (same-system) | 1 | 0% inter-system info (confirms co-location only) |
+In the pair-link chain model (§3A), each consecutive link pair shares exactly one system. This means:
 
-### 6.6 Symmetry and Ambiguity
+- A chain of $n$ links provides $n-1$ intersection opportunities
+- Each intersection independently resolves one intermediate system
+- The endpoints are resolved as a side-effect of their neighboring intersection
+
+**Example: A 5-system chain (A↔B↔C↔D↔E) with 4 links:**
+
+| Step | Links Used | Intersection On | Resolves |
+|------|-----------|----------------|----------|
+| 1 | A↔B, B↔C | System B | A, B, C |
+| 2 | B↔C, C↔D | System C | C confirmed, D |
+| 3 | C↔D, D↔E | System D | D confirmed, E |
+
+After processing the chain, all 5 systems are identified with near-certainty.
+
+### 6.6 Collapse Rate Assessment
+
+| Topology | Links | Expected unique identification | Notes |
+|----------|-------|-------------------------------|-------|
+| A↔B (isolated, ±20 AU) | 1 | ~70% (0–1 candidates) | Typical tolerance |
+| A↔B (isolated, ±100 AU) | 1 | ~20% unique (2–6 candidates) | Worst-case tolerance |
+| A↔B, B↔C (chain) | 2 | >99.9% (intersection resolves B) | N=24,000 makes false overlap 0.07% |
+| A↔B↔C↔D (chain) | 3 | ~100% (all systems resolved) | Over-determined |
+| A↔B (same-system) | 1 | 0% inter-system info | Confirms co-location only |
+
+### 6.7 Symmetry and Ambiguity
 
 **Does the symmetry of the universe create ambiguity?**
 
@@ -329,24 +552,30 @@ In principle, a perfectly symmetric crystal-lattice universe would have many dis
 - Clustered into regions, constellations, and "pipes"
 - Based on (or analogous to) real astronomical catalogs
 
-The irregular distribution means that at meter precision, distance collisions are extremely rare. Even in the densest regions, the birthday arithmetic applies: ~32M pairs across ~$10^{18}$ possible values yields near-zero collisions.
+The irregular distribution means that at meter precision, distance collisions are extremely rare. Even with ~24,000 systems and ~288M pairs, the birthday arithmetic applies: ~288M pairs across ~$5 \times 10^{17}$ possible values (within 55 ly) yields expected collisions of ~0.04. **Virtually zero.**
 
-**Counter-argument: What if EVE Frontier uses a MUCH smaller universe?**
+**What if the universe is more compact than assumed?**
 
-If $N$ is significantly smaller (e.g., 500 systems) or the universe is more compact, the analysis still holds. With $N = 500$: $\binom{500}{2} = 124{,}750$ pairs — even fewer candidates per distance observation.
+If the universe diameter is closer to 100 ly (making 55 ly cover most pairs), the max-range bounding provides less reduction, but the birthday math still holds — fewer distinct pairs in a given distance band means the same or better uniqueness.
 
-**Conclusion: Universe symmetry does NOT create meaningful ambiguity at integer-meter precision.**
+If $N$ is significantly smaller (e.g., 500 systems): $\binom{500}{2} = 124{,}750$ pairs — even fewer candidates per distance observation. Uniqueness improves.
+
+**Conclusion: Universe symmetry does NOT create meaningful ambiguity at integer-meter precision.** The corrected universe size (24,000 systems) increases pair count by ~9× compared to the prior 8,000-system estimate, but distance uniqueness remains overwhelming.
 
 ---
 
 ## 7. Final Risk Classification
 
-### 7.1 Classification: ORANGE — Strong Location Inference Possible
+### 7.1 Classification: ORANGE — Retained Under Corrected Assumptions
+
+The ORANGE classification is **unchanged** after incorporating the corrected universe size (24,000 systems) and refined mechanics. The larger universe increases pair counts by ~9× but does not meaningfully degrade the attack — distance uniqueness remains overwhelming, and the larger system count actually *improves* intersection-based narrowing (lower false-overlap probability).
 
 | Classification Element | Assessment |
 |----------------------|------------|
-| **Can we enumerate candidates?** | YES — with near-unique matching at meter precision |
-| **Can multiple links narrow further?** | YES — intersection on shared gates collapses to certainty |
+| **Can we enumerate candidates?** | YES — even with 288M pairs, distances are near-unique at meter precision |
+| **Does max-range bounding help the attacker?** | YES — filtering to ≤55 ly (standard) or ≤110 ly (large) reduces search space by up to 5–20× |
+| **Can multiple links narrow further?** | YES — chain intersection on shared systems collapses to certainty (>99.9%) |
+| **Must the attacker watch live?** | NO — historical queries via standard Sui RPC retrieve all inputs after the fact |
 | **Is the attack practical?** | YES — requires only RPC access + public star database |
 | **What does it reveal?** | Specific solar systems where a player has gates |
 | **Who is affected?** | The player whose `link_gates` transactions are observed |
@@ -363,19 +592,21 @@ The classification stops at ORANGE rather than RED because:
 
 3. **EF-Map coordinate fidelity.** If the EF-Map coordinates differ from the server's internal coordinates (different origin, axis orientation, or precision), a calibration step is required. This is solvable with 1-2 known reference links but adds operational complexity.
 
-4. **Intra-system offset.** The ~±100 AU tolerance from gate positioning introduces enough noise that ~30-40% of single-link observations may yield 2 candidates instead of 1, requiring a second observation to disambiguate.
+4. **Intra-system offset varies.** The tolerance band (±10–100 AU) directly controls candidate count. With worst-case ±100 AU, single-link identification yields 2–6 candidates (at N=24,000), requiring multi-link intersection. With typical ±20 AU, single-link identification is usually unique. The attacker's confidence depends on which tolerance applies.
 
 5. **Same-owner constraint limits scope.** This is per-player self-leakage — the player's OWN system locations are exposed, not other players'. The attacker gains competitive intelligence, not universal surveillance.
+
+6. **No confirmed exploit in the wild.** The attack is theoretically sound and practical to implement, but we have no evidence it has been deployed. The tooling (coordinate database + BCS decoder + RPC queries) requires moderate engineering effort.
 
 ### 7.3 Why Not YELLOW or GREEN
 
 The classification cannot be YELLOW because:
 
-1. **Matching is mathematically near-certain.** With $10^{18}$ possible values and $10^7$ pairs, virtually every distance is unique. This isn't "moderate candidate reduction" — it's near-deterministic.
+1. **Matching is mathematically near-certain.** With ~$5 \times 10^{17}$ possible values (within 55 ly) and ~288M pairs, expected collisions are ~0.04 across the entire universe. Even with 3× the previously assumed system count, virtually every distance remains unique. This isn't "moderate candidate reduction" — it's near-deterministic.
 
-2. **No cryptographic barrier.** The distance value is plaintext. The star database is public. The matching computation is trivial.
+2. **No cryptographic barrier.** The distance value is plaintext in the BCS-encoded proof bytes. The star database is public. The matching computation is trivial. Historical transaction data is permanently available via standard RPC.
 
-3. **Practical adversary model exists.** A competitive player or intelligence service monitoring the blockchain can build this system with minimal engineering effort: one RPC endpoint + one coordinate database + one distance comparison script.
+3. **Practical adversary model exists.** A competitive player or intelligence service monitoring the blockchain can build this system with minimal engineering effort: one RPC endpoint + one coordinate database + one distance comparison script + one BCS decoder.
 
 ### 7.4 Comparison to Prior Assessments
 
@@ -431,37 +662,71 @@ For $k$ pairwise distances with each distance drawn from $[0, n)$, the expected 
 
 $$E[\text{collisions}] = \binom{k}{2} \cdot \frac{1}{n} = \frac{k(k-1)}{2n}$$
 
-With $k = 3.2 \times 10^7$ and $n = 10^{18}$:
+**With N=24,000 systems (corrected from prior N=8,000):**
 
-$$E = \frac{3.2 \times 10^7 \times (3.2 \times 10^7 - 1)}{2 \times 10^{18}} \approx \frac{1.024 \times 10^{15}}{2 \times 10^{18}} \approx 5.12 \times 10^{-4}$$
+$k = \binom{24{,}000}{2} = 287{,}988{,}000 \approx 2.88 \times 10^8$
 
-Expected collisions: ~0.0005 across the entire universe. **Virtually zero.**
+**Unbounded (full distance range $n = 10^{18}$):**
+
+$$E = \frac{(2.88 \times 10^8)^2}{2 \times 10^{18}} = \frac{8.29 \times 10^{16}}{2 \times 10^{18}} \approx 0.041$$
+
+**Bounded (within 55 ly, $n = 5.2 \times 10^{17}$, $k_R \approx 7 \times 10^7$):**
+
+$$E = \frac{(7 \times 10^7)^2}{2 \times 5.2 \times 10^{17}} \approx 0.0047$$
+
+Expected collisions: **< 0.05 in all cases.** Virtually zero, even with 9× more pairs than the prior estimate.
+
+**Comparison to prior N=8,000 estimate:**
+
+| Parameter | N=8,000 (prior) | N=24,000 (corrected) | Change |
+|-----------|-----------------|---------------------|--------|
+| Total pairs $k$ | $3.2 \times 10^7$ | $2.88 \times 10^8$ | 9× |
+| $E[\text{collisions}]$ | $5.1 \times 10^{-4}$ | $4.1 \times 10^{-2}$ | 80× (still ~0) |
+| Uniqueness | >99.9% | >96% | Marginal degradation |
 
 ### Tolerance-Band Expected Matches
 
 For a query distance $D$ with tolerance $\pm \Delta$, the expected number of matching pairs:
 
-$$E[\text{matches}] = k \cdot \frac{2\Delta}{D_{\max}} = 3.2 \times 10^7 \times \frac{2\Delta}{10^{18}}$$
+$$E[\text{matches}] = k \cdot \frac{2\Delta}{D_{\max}}$$
+
+**All pairs, full range ($k = 2.88 \times 10^8$, $D_{\max} = 10^{18}$):**
 
 | $\Delta$ | Physical meaning | $E[\text{matches}]$ |
 |-----------|-----------------|---------------------|
-| 1 m | Integer truncation | $6.4 \times 10^{-11}$ |
-| 1 km | | $6.4 \times 10^{-8}$ |
-| 1 AU ($1.5 \times 10^{11}$ m) | | $0.0096$ |
-| 10 AU | | $0.096$ |
-| 50 AU ($7.5 \times 10^{12}$ m) | System radius | $0.48$ |
-| 100 AU ($1.5 \times 10^{13}$ m) | Max gate offset | $0.96$ |
-| 1 ly ($9.46 \times 10^{15}$ m) | | $60.5$ |
+| 1 m | Integer truncation | $5.76 \times 10^{-10}$ |
+| 1 km | | $5.76 \times 10^{-7}$ |
+| 1 AU ($1.5 \times 10^{11}$ m) | | $0.086$ |
+| 10 AU | Typical gate offset | $0.86$ |
+| 50 AU ($7.5 \times 10^{12}$ m) | System radius | $4.32$ |
+| 100 AU ($1.5 \times 10^{13}$ m) | Worst-case gate offset | $8.64$ |
+| 1 ly ($9.46 \times 10^{15}$ m) | | $5{,}450$ |
 
-### Intersection Probability for Shared Gate
+**Bounded to 55 ly ($k_R \approx 7 \times 10^7$, $D_{\max} = 5.2 \times 10^{17}$):**
+
+| $\Delta$ | $E[\text{matches}]$ |
+|-----------|---------------------|
+| 10 AU | $0.40$ |
+| 20 AU | $0.81$ |
+| 50 AU | $2.02$ |
+| 100 AU | $4.04$ |
+
+**Key insight:** The tolerance band is the dominant parameter. At ±10 AU (typical), even 288M pairs yield < 1 expected match. At ±100 AU (worst-case), ~4–9 candidates require multi-link intersection to resolve.
+
+### Intersection Probability for Shared System
 
 For two candidate sets of sizes $n_1$ and $n_2$ drawn from $N$ systems, the probability of a false intersection:
 
 $$P(\text{false match}) \approx \frac{n_1 \cdot n_2}{N}$$
 
-For $n_1 = n_2 = 2$, $N = 8000$: $P = 0.0005 = 0.05\%$.
+| Tolerance | $n_1 \approx n_2$ | $N$ | $P(\text{false match})$ | Unique ID probability |
+|-----------|-------------------|-----|------------------------|-----------------------|
+| ±20 AU | 1 | 24,000 | ~0% | ~100% |
+| ±50 AU | 2 | 24,000 | 0.017% | 99.98% |
+| ±100 AU | 4 | 24,000 | 0.067% | 99.93% |
+| ±100 AU | 9 | 24,000 | 0.34% | 99.66% |
 
-**Unique identification via intersection: >99.95% probability.**
+**Unique identification via intersection: >99.6% probability** across all tolerance assumptions with 24,000 systems.
 
 ## Appendix B: Key Code References
 
@@ -495,7 +760,11 @@ No devnet testing was performed — the distance values are server-computed and 
 |------------|-----------|-----------------|
 | Distance unit is meters | High (99%+) | If non-meters: requires calibration; uniqueness analysis unchanged if linear unit |
 | Distance metric is Euclidean | Medium (80%) | If Manhattan or other: distance computation changes; uniqueness is similar |
-| ~8,000 solar systems | Medium (70%) | Fewer systems → fewer pairs → MORE unique; more systems → still unique at meter precision |
+| ~24,000 solar systems | Medium-High (80%) | Fewer systems → fewer pairs → MORE unique; more systems → still unique at meter precision (see comparison table in Appendix A) |
 | EF-Map coordinates match server coordinates | Medium (70%) | If different: requires origin/scale calibration from 1-2 known links |
 | Server always computes true distance | High (95%) | If inaccurate: matching fails; but this contradicts the integrity purpose of signatures |
 | Proximity proofs have distance=0 | Medium (60%) | If truthful: proximity proofs also leak (but still server-gated and self-scoped) |
+| Gate links are cross-system only | High (90%) | No contract prohibition, but no gameplay utility for same-system links; if observed, trivially distinguishable by distance magnitude |
+| Typical intra-system gate offset ~10 AU | Medium (65%) | If larger: tolerance band widens, more candidates per single link; intersection still resolves |
+| Worst-case intra-system offset ~100 AU | Medium-High (75%) | If larger: single-link confidence degrades further but multi-link intersection compensates |
+| Historical transaction data available | High (95%) | Archival nodes preserve data; standard full nodes may prune. Custom indexer guarantees retention |
