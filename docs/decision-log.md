@@ -6,6 +6,19 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — EVE Vault Signing Smoke Test Scaffold
+
+- **Goal:** Kill wallet integration uncertainty by building a minimal signing probe against EVE Vault via `@mysten/dapp-kit`.
+- **Decision:** Created `sandbox/evevault-signing-smoke/` — Vite + React + TS + dapp-kit 1.0.3. Scaffold detects wallets via Sui Wallet Standard, connects to "Eve Vault", constructs an empty PTB, and calls `signTransaction()`. TypeScript typecheck and Vite build both pass. Manual browser test pending — EVE Vault is a Chrome extension requiring FusionAuth OAuth + Enoki zkLogin, which cannot be automated from terminal.
+- **Files:** sandbox/evevault-signing-smoke/ (new project), docs/strategy/strategic-next-move-audit-2026-02-18.md
+- **Diff:** +250 / -0 (new scaffold + doc update)
+- **Risk:** Low — sandbox test only, no publishing, no chain mutation
+- **Gates:** typecheck ✅ build ✅ smoke ⏳ (manual browser test pending)
+- **Key finding:** EVE Vault registers as `"Eve Vault"` via wallet standard. Uses zkLogin — no raw private key, needs FusionAuth + Enoki. Standard dapp-kit hooks work without special adapter code.
+- **Follow-ups:** Install EVE Vault extension, run manual 4-step browser test, update strategic audit to PASS/PARTIAL/FAIL.
+
+---
+
 ## 2026-02-18 — Minimal Extension Compile Test Against world-contracts
 
 - **Goal:** Eliminate Day-1 integration risk by confirming a dependent Move package can compile against `vendor/world-contracts` and reference `world::gate`, `world::character`, `world::storage_unit`.

@@ -91,6 +91,35 @@ A minimal Move package (`sandbox/minimal-extension-test/`) was compiled against 
 
 ---
 
+## EVE Vault Signing Smoke Test — Status: SCAFFOLD READY (2026-02-18)
+
+**Objective:** Confirm EVE Vault can connect via `@mysten/dapp-kit`, construct a trivial PTB, sign successfully, and return a valid signature object.
+
+**Scaffold:** `sandbox/evevault-signing-smoke/` — Vite + React + TypeScript + `@mysten/dapp-kit` 1.0.3 + `@mysten/sui` 2.4.0.
+
+**Toolchain verified:**
+- Node: v22.19.0
+- pnpm: 10.16.1
+- @mysten/dapp-kit: 1.0.3 (latest)
+- @mysten/sui: 2.4.0 (latest)
+- TypeScript: 5.9.3
+- Vite: 7.3.1
+
+**Gates:**
+- TypeScript typecheck: PASS
+- Vite production build: PASS
+- Manual browser test: PENDING (requires EVE Vault Chrome extension + FusionAuth OAuth)
+
+**Architecture finding:** EVE Vault registers as `"Eve Vault"` via Sui Wallet Standard (`registerWallet(new EveVaultWallet())`). It uses zkLogin — signing requires FusionAuth OAuth + Enoki API key for address derivation. Detection is automatic via `@mysten/dapp-kit`'s `useWallets()` hook. No special adapter code needed beyond standard `useSignTransaction()`.
+
+**Blocking requirement for manual test:** EVE Vault Chrome extension must be built from source (`vendor/evevault`) or installed from GitHub releases. Requires FusionAuth credentials (EVE Frontier auth server) and Enoki API key for zkLogin. These are not locally available in the sandbox environment.
+
+**Stillness RPC:** Not yet tested. Scaffold defaults to localnet (`http://127.0.0.1:9000`). Switching to Stillness requires updating the network config URL.
+
+**Next step:** Install EVE Vault extension in Chrome, run `pnpm dev` in the sandbox, and execute the manual 4-step test (detect → connect → sign → evaluate). Update this section to PASS/PARTIAL/FAIL after manual test.
+
+---
+
 ## Explicit Verdicts
 
 | Question | Answer |
