@@ -7,6 +7,13 @@
         "**/Thumbs.db": true
     },
 
+    // Prevent TS language server from discovering tsconfig files inside vendor
+    // submodules (their deps are not installed, causing spurious TS errors).
+    // Vendor files remain fully browsable in Explorer and Search.
+    "typescript.tsserver.watchOptions": {
+        "excludeDirectories": ["**/vendor/**"]
+    },
+
     // ─────────────────────────────────────────────────────────────────────────
     // VS Code 1.109+ – Agent & Memory Settings
     // ─────────────────────────────────────────────────────────────────────────
