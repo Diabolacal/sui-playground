@@ -1,0 +1,9 @@
+[package]
+name = "minimal_extension_test"
+edition = "2024.beta"
+
+[dependencies]
+world = { local = "/workspace/world" }
+
+[addresses]
+minimal_extension_test = "0x0"

@@ -85,6 +85,12 @@ These are **not documentation gaps**. They are **empirical unknowns that only te
 
 ---
 
+## Minimal Extension Compile Test — Status: PASS (2026-02-18)
+
+A minimal Move package (`sandbox/minimal-extension-test/`) was compiled against `vendor/world-contracts` (pinned at `eb1d627`, v0.0.11-4) using Sui CLI 1.66.1 inside the builder-scaffold Docker image. The package imports `world::gate`, `world::character`, and `world::storage_unit`, references public structs (`Gate`, `Character`, `StorageUnit`, `JumpPermit`), calls view functions, and type-checks `gate::issue_jump_permit<TestAuth>()` with a custom witness type. Build completed cleanly with no address mismatches, no visibility errors, and no missing capability errors. Cross-package extension compilation is confirmed viable.
+
+---
+
 ## Explicit Verdicts
 
 | Question | Answer |

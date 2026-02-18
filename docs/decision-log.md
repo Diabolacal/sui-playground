@@ -6,6 +6,18 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — Minimal Extension Compile Test Against world-contracts
+
+- **Goal:** Eliminate Day-1 integration risk by confirming a dependent Move package can compile against `vendor/world-contracts` and reference `world::gate`, `world::character`, `world::storage_unit`.
+- **Decision:** Created `sandbox/minimal-extension-test/` with a probe module that imports all three target modules, references public structs (Gate, Character, StorageUnit, JumpPermit), calls view functions, and type-checks `issue_jump_permit<TestAuth>()` with a custom witness. Compiled inside builder-scaffold Docker image (Sui CLI 1.66.1). Result: **PASS** — clean build, no visibility restrictions, no address mismatches.
+- **Files:** sandbox/minimal-extension-test/Move.toml, sandbox/minimal-extension-test/sources/compile_probe.move
+- **Diff:** +75 / -0 (new test package)
+- **Risk:** Low — sandbox compile test only, no publishing, no chain interaction
+- **Gates:** build ✅
+- **Follow-ups:** None — unknown resolved. Extension development can proceed with confidence.
+
+---
+
 ## 2026-02-18 — Upstream Submodule Sync + builder-documentation Added
 
 - **Goal:** Controlled sync of all vendor submodules to latest upstream commits; add new `builder-documentation` submodule; assess impact on internal docs.
