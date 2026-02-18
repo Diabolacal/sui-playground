@@ -2,9 +2,9 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-18
-> **Verdict:** PARTIAL PASS
-> **Sources:** vendor/world-contracts (storage_unit.move, inventory.move, metadata.move), vendor/builder-documentation (dapp-kit.md, storage-unit/README.md, dapps/*), vendor/builder-scaffold (smart_gate/, dapps/), docs/operations/shortlist-viability-validation-report.md, docs/architecture/tradepost-cross-address-ptb-validation.md
+> **Date:** 2026-02-18 (re-checked 2026-02-19)
+> **Verdict:** PARTIAL PASS (unchanged after re-check)
+> **Sources:** vendor/world-contracts v0.0.12 @ 09c2ec2 (storage_unit.move, inventory.move, metadata.move), vendor/builder-documentation @ 185d7a8 (dapp-kit.md, storage-unit/README.md, dapps/*), vendor/builder-scaffold @ c97989f (smart_gate/, dapps/), docs/operations/shortlist-viability-validation-report.md, docs/architecture/tradepost-cross-address-ptb-validation.md, live GitBook (docs.evefrontier.com) cross-check 2026-02-19
 > **Scope:** Validate that the TradePost "buyer journey" (fly up → interact → browse listings → buy → receive items) is implementable with available EVE Frontier Sui/Move primitives
 
 ---
@@ -255,6 +255,53 @@ No existing doc captures the finding that ALL builder-documentation pages for in
 - `Metadata.url` field on SSU (plausible dApp URL slot)
 - dapp-kit accepts `?assemblyId=0x...` URL parameter
 - No confirmation that the game client reads `Metadata.url`
+
+---
+
+## E) In-Game dApp Loading Mechanism — Platform Status
+
+> **Re-checked:** 2026-02-19 — submodules synced to latest, live GitBook cross-validated
+
+### Verdict: STILL UNKNOWN
+
+No documented mechanism exists for how the EVE Frontier game client loads or presents a builder's dApp when a player interacts with an SSU. This finding is unchanged after updating submodules and cross-checking the live GitBook.
+
+### Evidence (exhaustive)
+
+| Source | Version / Date | Finding |
+|---|---|---|
+| `vendor/builder-documentation/dapps/connecting-in-game.md` | 185d7a8 | Content: `//TODO` only |
+| `vendor/builder-documentation/dapps/dapps-quick-start.md` | 185d7a8 | Content: `//TODO` only |
+| `vendor/builder-documentation/dapps/connecting-from-an-external-browser.md` | 185d7a8 | Content: `//TODO` only |
+| `vendor/builder-documentation/dapps/customizing-external-dapps.md` | 185d7a8 | Content: `//TODO` only |
+| Live GitBook `docs.evefrontier.com/dapps/connecting-in-game` | Fetched 2026-02-19, "updated 7 days ago" | Content: `//TODO` only — matches local |
+| Live GitBook `docs.evefrontier.com/dapps/dapps-quick-start` | Fetched 2026-02-19, "updated 7 days ago" | Content: `//TODO` only — matches local |
+| Live GitBook `docs.evefrontier.com/dapp-kit-sdk/dapp-kit` | Fetched 2026-02-19 | Fully populated (304 lines). Describes **external browser** dApp SDK only. No in-game loading. Matches local. |
+| `vendor/builder-documentation/dapp-kit/dapp-kit.md` | 185d7a8 | React SDK: `useSmartObject()`, `useConnection()`, `useSponsoredTransaction()`. Assembly ID via `?assemblyId=0x...` URL param. No in-game rendering API. |
+| `vendor/builder-documentation/smart-assemblies/storage-unit/README.md` | 185d7a8 (unchanged) | 131 lines. Covers inventory + extensions. Zero mention of embedded browser, iframe, dApp URL, in-game UI. |
+| `vendor/builder-documentation/SUMMARY.md` | 185d7a8 | TOC unchanged — same 4 //TODO dApp pages. No new pages added. |
+| `vendor/world-contracts/.../metadata.move` | v0.0.12 @ 09c2ec2 | `Metadata { name, description, url }`. `update_url()` is owner-callable. No on-chain loading mechanism. |
+| `vendor/world-contracts/.../storage_unit.move` | v0.0.12 @ 09c2ec2 | No new functions related to dApp loading. Same API surface as prior version. |
+
+### Strongest Available Signal
+
+1. **`Metadata.url`** on SSU/Gate structs is the only plausible slot for a dApp URL. Owner-updatable via `update_url()`.
+2. **dapp-kit** accepts `?assemblyId=0x...` as a URL parameter, implying the client may pass the assembly ID to an external URL.
+3. **CCP has 4 placeholder pages** in the docs TOC for dApps — the structure is pre-planned but content is unwritten.
+4. **No confirmation** exists that the game client reads `Metadata.url`, opens an iframe, or presents any embedded browser.
+
+### Implications for March 11
+
+- **T1 and T2 remain CRITICAL** — these are the first tests to run on the hackathon test server
+- If the game client does NOT embed dApps, the buyer interacts via external browser (weaker demo narrative but functional)
+- The fallback demo variant (GateControl-only, 2 min) is unaffected — it requires no in-game dApp embedding
+- **Recommendation:** Check EVE Frontier builder Discord channels for player reports or CCP guidance on SSU interaction UX before March 11
+
+### world-contracts v0.0.12 Changes (relevant to TradePost)
+
+- `inventory.move`: New validation `EItemVolumeMismatch` (error code 5) — `deposit_item` now rejects items whose `volume` field differs from existing items with the same `type_id`. No impact on `withdraw_item` (still full-quantity only).
+- No new trade/payment/marketplace primitives added.
+- No partial-quantity withdraw added.
 
 ---
 
