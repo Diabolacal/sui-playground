@@ -6,6 +6,26 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — Sponsor Risk Reclassification + Audit Consolidation
+
+- **Goal:** Correct over-weighted AdminACL sponsor risk classification using expected-value reasoning. Consolidate 6 granular audit files into clean repo structure.
+- **Decision:** AdminACL sponsor access reclassified from CRITICAL to **HIGH (environment-dependent)**. Probability model: ~65% auto-sponsor (Stillness model), ~25% specific wallet path, ~10% no access. Expected cost: ~1.1 hours Day-1 validation. Pre-March organizer escalation replaced with empirical Day-1 Sponsor Validation Protocol (60 min). Even worst-case has fallbacks: Stillness deployment window (April 1–14), silent pre-submission deploy, or local devnet. Six granular audit files (A–F, ~2,100 lines) consolidated into single `sweep-audit-artifacts-2026-02-18.md`. Rationale: sweep document is canonical output; audit files are working notes not individually referenceable.
+- **Files:** docs/architecture/structural-risk-sweep-2026-02-18.md (revised: §1, §3, §4, §5 E8, new §6 addendum), docs/architecture/sweep-audit-artifacts-2026-02-18.md (new — consolidated), docs/architecture/audit-{a..f}-*.md (6 files deleted), docs/README.md (index updated), docs/decision-log.md (this entry)
+- **Diff:** ~+250 revised / -2,100 deleted / +200 consolidated = net -1,650
+- **Risk:** Low — analysis + doc hygiene, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** Execute Day-1 Sponsor Validation Protocol on test server connect (March 11)
+
+## 2026-02-18 — Structural Risk Sweep (Adversarial Pre-Mortem)
+
+- **Goal:** Find the #1 blind spot in CivilizationControl's architecture/implementation plan via adversarial review (6 parallel audit tracks, source code verification).
+- **Decision:** #1 risk is **AdminACL sponsor access on the hackathon test server** — `jump_with_permit()` requires `verify_sponsor(ctx)`, which requires GovernorCap (held by CCP) to add sponsor addresses. GateControl demo Beats 3–5 are BLOCKED without this. TradePost is unaffected (extension paths are sponsor-free). Mitigation: 4-question organizer message pre-March-11; local devnet fallback for demo recording if no access. Secondary risks: partial-quantity withdrawal impossible (full-stack only), EVE Vault sponsored tx is hardcoded stub, Character resolution has no validated automated path, multi-entry portfolio strategy unconfirmed.
+- **Files:** docs/architecture/structural-risk-sweep-2026-02-18.md (new), docs/README.md (index updated)
+- **Diff:** +320 / -0
+- **Risk:** Low — analysis only, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** Send organizer message (4 questions: AdminACL access, admin tools, structure spawning, multi-entry); Day-1 sponsor test on test server; prepare local devnet fallback demo environment
+
 ## 2026-02-18 — TradePost Buyer Journey Validation (PARTIAL PASS)
 
 - **Goal:** Validate (or falsify) that the TradePost "buyer journey" (fly up → interact → browse listings → buy → receive items) is implementable with available EVE Frontier Sui/Move primitives, and that existing docs correctly describe write-path + read-path.
