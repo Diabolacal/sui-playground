@@ -44,7 +44,7 @@
 | world-contracts has a TODO to "mint initial supply of eve tokens" | `world.move` line 8 | [world.move](../../vendor/world-contracts/contracts/world/sources/world.move#L8): `// TODO: mint initial supply of eve tokens` |
 | The `init()` function in `world.move` only creates a `GovernorCap` — no token minting | `world.move` lines 1-16 | [world.move](../../vendor/world-contracts/contracts/world/sources/world.move#L9-L15) |
 | Inventory module has a TODO about using `Coin<T>` for items | `inventory.move` line 42 | [inventory.move](../../vendor/world-contracts/contracts/world/sources/primitives/inventory.move#L42): `// TODO: Use Sui's Coin<T> and Balance<T> for stackability` |
-| Builder scaffold has an empty tokens template | `tokens.move` | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() { // TODO: Implement }` |
+| Builder scaffold has an empty tokens template | `tokens.move` | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() {}` (empty stub; `// TODO: Implement` comment removed as of 2026-02-18 sync) |
 | Internal analysis confirms no coin/token module exists | Multiple internal docs | [hackathon-ideas-v2-doc-enabled.md](../ideas/hackathon-ideas-v2-doc-enabled.md#L61): "world-contracts has no coin/token module" |
 
 **Assessment:** In the current Sui world-contracts repository, an EVE token implementation is not yet present (TODO noted in `world.move`). However, in the live Ethereum-based Frontier cycle, an EVE token is surfaced in-game with Lux conversion. This discrepancy reflects differing implementation states between chains and cycles. No `Coin<EVE>`, `TreasuryCap<EVE>`, or related structs exist in the Sui codebase.
@@ -136,7 +136,7 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 | `TreasuryCap<EVE>` or `TreasuryCap<LUX>` | **Does not exist** | Zero matches |
 | Any `coin::create_currency()` call | **Does not exist** | Zero matches in world-contracts |
 | Any `Balance<T>` usage for tokens | **Does not exist** | Only a TODO comment in inventory.move L42 |
-| `tokens::tokens` scaffold | **Empty stub** | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() { // TODO: Implement }` |
+| `tokens::tokens` scaffold | **Empty stub** | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() {}` (TODO comment removed as of 2026-02-18 sync) |
 
 ### Key TODO Comments
 

@@ -2,7 +2,7 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-02-15
+> **Last updated:** 2026-02-18
 > **Source:** https://docs.evefrontier.com/
 > **Internal review by:** AI agent (initial mapping)
 
@@ -11,6 +11,8 @@
 This document maps official EVE Frontier GitBook builder documentation to internal SUI Playground capabilities and defines when agents should consult it. It is a **structured reference index only** — no external content is mirrored or duplicated here.
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
+
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, commit 3f3c1ab1) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -22,10 +24,10 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 |---------|--------------|-------|--------|
 | Welcome | `/welcome` | 5 pages | Mostly complete |
 | Tools | `/tools` | 2 pages | Partial (GAS Faucet is TODO) |
-| Smart Contracts | `/smart-contracts` | 3 pages | Substantive content |
-| Smart Assemblies | `/smart-assemblies` | 9 pages (3 types × 3) | Introductions done; Configure/Deploy mostly TODO |
-| dApps | `/dapps` | 4 pages | All TODO |
-| EVE Vault | `/eve-vault` | 3 pages | Introduction done; sub-pages TODO |
+| Smart Contracts | `/smart-contracts` | 5 pages | Substantive content (Object Model, Ownership Model now populated) |
+| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); Build pages still stubs; Turret still TODO |
+| dApps | `/dapps` | 4 pages + dapp-kit | dApp sub-pages still TODO; `@evefrontier/dapp-kit` SDK now populated (304 lines) |
+| EVE Vault | `/eve-vault` | 4 pages | Introduction done; GAS Faucet, Wallet Game Setup, Browser Extension still TODO |
 | Troubleshooting | `/troubleshooting` | 3 pages | All TODO |
 | Contributing | `/contributing` | 2 pages | Complete |
 
@@ -96,7 +98,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/builder-scaffold/docker/` (Docker setup)
   - `docs/architecture/sui-playground.md` (our quickstart)
-- **Notable clarifications:** References a `build` branch of builder-scaffold and a `localnet-setup/docker` directory — this may differ from our pinned commit. The docs note "this link will be updated soon." Worth verifying branch alignment.
+- **Notable clarifications:** References a `build` branch of builder-scaffold and a `localnet-setup/docker` directory — this may differ from our pinned commit. The docs note "this link will be updated soon." Worth verifying branch alignment. Note: scaffold renamed `move-contracts/gate/` → `move-contracts/smart_gate/` as of 2026-02-18 sync.
 
 ### GAS Faucet
 
@@ -150,31 +152,31 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 
 - **URL:** https://docs.evefrontier.com/smart-assemblies/storage-unit
 - **Last updated:** ~3 days ago
-- **Summary:** Introduction to SSU as a Move smart contract object. Explains core design, developer/player interaction patterns, and references the world-contracts repo for practical examples. Prerequisites section is `//TODO`.
+- **Summary:** Introduction to SSU as a Move smart contract object. Explains core design, developer/player interaction patterns, and references the world-contracts repo for practical examples. Now 126 lines with substantive content (previously had `//TODO` prerequisites section — now populated).
 - **Why it matters for us:** Directly maps to `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` and the scaffold template at `vendor/builder-scaffold/move-contracts/storage_unit/`.
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
   - `docs/architecture/sui-playground-capabilities.md` §4.2
-- **Notable clarifications:** Page is introductory only. Configure and Deploy sub-pages are `//TODO`.
+- **Notable clarifications:** Build page (`/storage-unit/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page.
 
-### Smart Storage Unit — Configure / Deploy
+### Smart Storage Unit — Build
 
-- **URL:** https://docs.evefrontier.com/smart-assemblies/storage-unit/configure and `/deploy`
+- **URL:** https://docs.evefrontier.com/smart-assemblies/storage-unit/build (restructured from Configure/Deploy to single Build page)
 - **Last updated:** ~4–9 days ago
-- **Summary:** Both pages are `//TODO` placeholders.
-- **Why it matters for us:** When completed, these will document the step-by-step workflow for configuring and deploying SSU extensions. Until then, our capabilities doc §4.2 and `world-contracts/ts-scripts/storage-unit/` are the only references.
+- **Summary:** Stub page (header only, no content). Replaces previous Configure and Deploy sub-pages.
+- **Why it matters for us:** When completed, will document the step-by-step workflow for building SSU extensions. Until then, our capabilities doc §4.2 and `world-contracts/ts-scripts/storage-unit/` are the only references.
 
 ### Smart Gate
 
 - **URL:** https://docs.evefrontier.com/smart-assemblies/gate
 - **Last updated:** ~3 days ago
-- **Summary:** Introduction to the Smart Gate system. Covers gate modeling as Move objects, deployment, management, access configuration with programmable logic, and testing using world-contracts.
-- **Why it matters for us:** Directly maps to our most complex structure type. The extension pattern (authorize → issue permits → gate jumps) is the primary builder moddability surface.
+- **Summary:** Substantive gate documentation (120 lines). Covers default vs custom behavior, JumpPermit struct, Builder Extension Pattern (authorize, issue permits, jump with permit), and includes a Toll Gate Extension code example. Significantly expanded from initial intro page.
+- **Why it matters for us:** Directly maps to our most complex structure type. The extension pattern (authorize → issue permits → gate jumps) is the primary builder moddability surface. Now includes TypeScript + Move code examples for the full extension flow.
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` (718 lines)
   - `vendor/world-contracts/contracts/extension_examples/` (3 extension examples)
   - `docs/architecture/sui-playground-capabilities.md` §4.1
-- **Notable clarifications:** Configure and Deploy sub-pages are `//TODO`.
+- **Notable clarifications:** Build page (`/gate/build`) exists but is empty. Page structure changed from Configure/Deploy to single Build page.
 
 ### Smart Turret
 
@@ -190,6 +192,20 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Last updated:** ~4+ days ago
 - **Summary:** All four pages are `//TODO` placeholders.
 - **Why it matters for us:** When completed, these will document how to build and connect dApps to EVE Frontier. Until then, `vendor/evevault/` is the reference implementation for Sui wallet standard integration.
+- **Notable clarifications:** `vendor/builder-scaffold/dapps/` now contains a React dApp starter using `@evefrontier/dapp-kit` (added 2026-02-18).
+
+### New Pages Discovered (2026-02-18)
+
+The following pages were identified in `vendor/builder-documentation` (2026-02-18 sync). All confirmed populated with substantive content:
+
+| Page | Likely URL | Lines | Summary |
+|------|-----------|-------|--------|
+| Object Model | `/smart-contracts/object-model` | 53 | Sui object types & ownership in EVE Frontier context |
+| Ownership Model | `/smart-contracts/ownership-model` | 104 | Cap-based ownership & access hierarchy |
+| Smart Character | `/smart-assemblies/smart-character` | 34 | Character object structure & interactions |
+| Network Node | `/smart-assemblies/network-node` | 77 | Network Node assembly type documentation |
+| Introduction to Modding | `/smart-assemblies/introduction` | 32 | Builder extension onboarding guide — links to Gate, SSU, Turret |
+| @evefrontier/dapp-kit SDK | `/dapp-kit/dapp-kit` | 304 | React SDK for building EVE Frontier dApps on Sui |
 
 ### Introduction to EVE Vault
 
@@ -225,10 +241,10 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 
 ### Code Is Canonical But Docs Lag
 
-- **Configure/Deploy pages**: All assembly Configure and Deploy sub-pages are `//TODO` — our capabilities doc (§4, §8) is more complete for step-by-step deployment flows.
+- **Build pages**: Assembly Build pages (restructured from Configure/Deploy) are still stubs — our capabilities doc (§4, §8) is more complete for step-by-step deployment flows.
 - **Turret module**: Neither docs nor code have turret implementation — docs page is `//TODO`, code has no turret module.
 - **GAS Faucet**: Docs page is `//TODO` — our local devnet auto-funds; testnet faucet details unknown.
-- **dApps integration**: All 4 dApps pages are `//TODO` — our evevault analysis (§5) is the only reference.
+- **dApps integration**: dApp sub-pages (Quick Start, Connecting, Customizing) are still `//TODO`. However, `@evefrontier/dapp-kit` SDK documentation is now populated (304 lines in `vendor/builder-documentation/dapp-kit/dapp-kit.md`).
 - **Extension examples**: The Interfacing page mentions extension registration but doesn't show the full flow. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples not referenced by the docs.
 - **ZK proximity proofs**: The docs mention zero-knowledge proofs as a "future" alternative to server-signed proofs. Our `vendor/eve-frontier-proximity-zk-poc/` is a working Groth16 implementation — ahead of the docs.
 - **builder-scaffold branch**: The Environment Setup page references a `build` branch and `localnet-setup/docker` directory — this may not match our pinned commit. Verify before following doc instructions verbatim.
@@ -239,7 +255,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 
 1. **Before generating chain interaction flows, sponsorship patterns, or deployment steps**, consult this reference map and the linked official docs pages — especially the "Interfacing with the EVE Frontier World" and "World Explainer" pages.
 2. **Code in `vendor/world-contracts` is canonical; GitBook is explanatory.** If behavior described in docs contradicts Move code, the code wins. Flag the discrepancy.
-3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-15), re-check the relevant pages before finalizing logic.
+3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-18), re-check the relevant pages before finalizing logic.
 4. **For access control patterns**, consult "Introduction to Smart Contracts" — the capability, witness, and hot-potato patterns are explained with rationale not present in code comments.
 5. **For Sui-specific limits** (object size, field counts, gas), consult the "Constraints" page and cross-reference with Sui protocol docs.
 6. **Do not copy GitBook content into internal docs.** Summarize insights and link to the official page. This avoids drift and respects content ownership.
@@ -280,15 +296,19 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 | Environment Setup | https://docs.evefrontier.com/tools/environment-setup |
 | GAS Faucet | https://docs.evefrontier.com/tools/gas-faucet |
 | Intro to Smart Contracts | https://docs.evefrontier.com/smart-contracts/introduction-to-smart-contracts |
+| Object Model | https://docs.evefrontier.com/smart-contracts/object-model |
+| Ownership Model | https://docs.evefrontier.com/smart-contracts/ownership-model |
 | World Explainer | https://docs.evefrontier.com/smart-contracts/eve-frontier-world-explainer |
 | Interfacing with the World | https://docs.evefrontier.com/smart-contracts/interfacing-with-the-eve-frontier-world |
+| Introduction to Modding | https://docs.evefrontier.com/smart-assemblies/introduction |
+| Smart Character | https://docs.evefrontier.com/smart-assemblies/smart-character |
+| Network Node | https://docs.evefrontier.com/smart-assemblies/network-node |
 | Storage Unit | https://docs.evefrontier.com/smart-assemblies/storage-unit |
-| Storage Unit — Configure | https://docs.evefrontier.com/smart-assemblies/storage-unit/configure |
-| Storage Unit — Deploy | https://docs.evefrontier.com/smart-assemblies/storage-unit/deploy |
+| Storage Unit — Build | https://docs.evefrontier.com/smart-assemblies/storage-unit/build |
 | Gate | https://docs.evefrontier.com/smart-assemblies/gate |
-| Gate — Configure | https://docs.evefrontier.com/smart-assemblies/gate/configure |
-| Gate — Deploy | https://docs.evefrontier.com/smart-assemblies/gate/deploy |
+| Gate — Build | https://docs.evefrontier.com/smart-assemblies/gate/build |
 | Turret | https://docs.evefrontier.com/smart-assemblies/turret |
+| @evefrontier/dapp-kit SDK | https://docs.evefrontier.com/dapp-kit |
 | dApps Quick Start | https://docs.evefrontier.com/dapps/dapps-quick-start |
 | EVE Vault Introduction | https://docs.evefrontier.com/eve-vault/introduction-to-eve-vault |
 | LLMs Index | https://docs.evefrontier.com/llms.txt |

@@ -424,12 +424,14 @@ Official hackathon event rules are captured in `docs/research/hackathon-event-ru
 
 EVE Frontier maintains official builder documentation at https://docs.evefrontier.com/ (GitBook). These docs are actively being rewritten for the Sui blockchain transition — many pages contain `//TODO` placeholders.
 
+**Reading hierarchy:** (1) `vendor/builder-documentation` for local content reads (submodule added 2026-02-18), (2) GitBook URLs (`docs.evefrontier.com`) for public citation, (3) `llms.txt` for structural change detection.
+
 **Agent rules:**
 1. When generating chain interaction flows, sponsorship patterns, or deployment steps, consult `docs/research/evefrontier-builder-docs-map.md` and the linked official docs pages.
 2. Code in `vendor/world-contracts` is canonical; GitBook is explanatory. If behavior described in docs contradicts Move code, the code wins — flag the discrepancy.
 3. If official docs show a "Last updated" date newer than the reference map's last internal review date, re-check before finalizing logic.
 4. Do not copy GitBook content into internal docs — summarize insights and link to the official page.
-5. Key pages to always consult: "Interfacing with the EVE Frontier World" (sponsored transactions, read/write paths), "EVE Frontier World Explainer" (three-layer architecture), "Introduction to Smart Contracts" (capability, witness, hot-potato patterns).
+5. Key pages to always consult: "Interfacing with the EVE Frontier World" (sponsored transactions, read/write paths), "EVE Frontier World Explainer" (three-layer architecture), "Introduction to Smart Contracts" (capability, witness, hot-potato patterns), "Object Model" (Sui object types), "Ownership Model" (cap-based access hierarchy), "@evefrontier/dapp-kit" (SDK for builder dApps).
 6. Freshness: Review `docs/research/evefrontier-builder-docs-map.md` weekly during active development; always re-check before hackathon submission freeze.
 
 ## SUI Documentation Policy

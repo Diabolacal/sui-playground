@@ -252,7 +252,7 @@ Side entries serve two purposes: (1) blanket remaining bonus categories Civiliza
 | Dimension | Detail |
 |-----------|--------|
 | **Target Prize** | Most Utility ($5,000 + $1,000 SUI) — or Best Live Frontier Integration if Stillness deployment is feasible |
-| **Concept** | Deploy the existing `corpse_gate_bounty.move` template with a web UI for configuration. Simplest, highest-certainty entry. |
+| **Concept** | Deploy the existing `corpse_gate_bounty.move` template (now under `smart_gate/`) with a web UI for configuration. Simplest, highest-certainty entry. |
 | **Sui Primitive** | Typed witness extension (simpler version of GateControl pattern) |
 | **Build Time** | 6–8 hours LLM-assisted (lowest of all candidates) |
 | **Demo Impact** | 8/10 — "Deposit a corpse. Gate opens. No corpse, no jump." Visceral, immediate, macabre humor. |
@@ -263,7 +263,7 @@ Side entries serve two purposes: (1) blanket remaining bonus categories Civiliza
 
 **Build Plan:**
 1. Deploy `corpse_gate_bounty.move` (possibly with minor type_id configuration)
-2. Minimal React UI: gate owner sets toll item type, jump attempt view shows success/failure
+2. Minimal React UI: gate owner sets toll item type, jump attempt view shows success/failure (scaffold `dapps/` React starter with `@evefrontier/dapp-kit` available as base)
 3. Record demo: corpse deposit → gate opens vs. no corpse → denied
 4. **Stretch:** Deploy to Stillness testnet for Best Live Integration targeting
 

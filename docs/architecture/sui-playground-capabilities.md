@@ -89,10 +89,9 @@ sui client publish -e local --gas-budget 100000000 --json
 The `-e local` flag is **required** to avoid chain ID mismatch after fresh genesis.
 
 Available scaffold packages (at `/workspace/contracts/`):
-- `gate/` — Smart Gate extension template (one empty `jump_through_gate()` function)
+- `smart_gate/` — Smart Gate extension template with examples (`config.move`, `tribe_permit.move`, `corpse_gate_bounty.move`)
 - `storage_unit/` — Smart Storage Unit extension template (one empty `template()` function)
 - `tokens/` — Token creation template (one empty `template()` function)
-- `hello_world/` — Empty placeholder
 
 These are intentionally minimal starting points. The real logic lives in `world-contracts`.
 
@@ -391,10 +390,9 @@ Minimal templates at [move-contracts/](../vendor/builder-scaffold/move-contracts
 
 | Package | Module | Function | Status |
 |---------|--------|----------|--------|
-| `gate` | `gate::gate` | `jump_through_gate()` | Empty stub — template for gate extensions |
+| `smart_gate` | `smart_gate::config`, `smart_gate::tribe_permit`, `smart_gate::corpse_gate_bounty` | `issue_jump_permit<XAuth>()` | Extension examples — config, tribe permit, corpse gate bounty |
 | `storage_unit` | `storage_unit::storage_unit` | `template()` | Empty stub |
 | `tokens` | `tokens::tokens` | `template()` | Empty stub |
-| `hello_world` | — | — | Empty directory |
 
 All tests are commented out. These are **starting points**, not working implementations.
 
@@ -420,7 +418,7 @@ A complete working example of the EVE Frontier zkLogin flow:
 |-----------|--------|
 | `ts-scripts/` | Readme only — no actual scripts |
 | `rust-scripts/` | Readme only — no Rust code |
-| `dapps/` | Readme only — no dApp code |
+| `dapps/` | React dApp starter using `@evefrontier/dapp-kit` (added 2026-02-18) |
 | `setup-world/` | Readme only — links to world-contracts but no automation |
 | `docs/local-setup-for-mac.md` | Empty |
 | `docs/local-setup-for-windows.md` | Empty |
@@ -695,7 +693,7 @@ This is the **reduced-trust** path: the prover never reveals coordinates to anyo
 
 ### Experiment 6: Write a Custom Gate Extension
 
-**Touches:** `move-contracts/gate/` (scaffold), world-contracts extension pattern
+**Touches:** `move-contracts/smart_gate/` (scaffold), world-contracts extension pattern
 **Steps:**
 1. In the scaffold `gate` package, add a dependency on the deployed world-contracts package
 2. Implement a custom witness type (e.g., `struct MyAuth has drop {}`)
@@ -821,7 +819,7 @@ This is the **reduced-trust** path: the prover never reveals coordinates to anyo
 | Entrypoint | [vendor/builder-scaffold/docker/scripts/entrypoint.sh](../vendor/builder-scaffold/docker/scripts/entrypoint.sh) |
 | Setup (first run) | [vendor/builder-scaffold/docker/scripts/setup-local.sh](../vendor/builder-scaffold/docker/scripts/setup-local.sh) |
 | Network switcher | [vendor/builder-scaffold/docker/scripts/switch-network.sh](../vendor/builder-scaffold/docker/scripts/switch-network.sh) |
-| Gate scaffold | [vendor/builder-scaffold/move-contracts/gate/sources/gate.move](../vendor/builder-scaffold/move-contracts/gate/sources/gate.move) |
+| Gate scaffold | [vendor/builder-scaffold/move-contracts/smart_gate/sources/](../vendor/builder-scaffold/move-contracts/smart_gate/sources/) (config.move, tribe_permit.move, corpse_gate_bounty.move) |
 | Storage unit scaffold | [vendor/builder-scaffold/move-contracts/storage_unit/sources/storage_unit.move](../vendor/builder-scaffold/move-contracts/storage_unit/sources/storage_unit.move) |
 | zkLogin CLI | [vendor/builder-scaffold/zklogin/zkLoginTransaction.ts](../vendor/builder-scaffold/zklogin/zkLoginTransaction.ts) |
 
