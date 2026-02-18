@@ -95,9 +95,6 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [research/hackathon-event-rules-source.md](research/hackathon-event-rules-source.md) | Verbatim snapshot of official EVE Frontier Hackathon Event Rules (captured 2026-02-16) |
 | [research/hackathon-event-rules-digest.md](research/hackathon-event-rules-digest.md) | **Practical digest** — dates, eligibility, judging criteria, agent compliance checklist |
 | [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
-| [research/location-proof-leakage-investigation.md](research/location-proof-leakage-investigation.md) | **Location proof leakage investigation** — distance field observability, trilateration feasibility, risk classification (YELLOW) |
-| [research/location-proof-actionability-analysis.md](research/location-proof-actionability-analysis.md) | **Location proof actionability analysis** — ownership constraints, cross-player feasibility, graph reconstruction, CivilizationControl impact (revised to GREEN) |
-| [research/distance-constraint-system-mapping-analysis.md](research/distance-constraint-system-mapping-analysis.md) | **Distance-constraint system mapping** — star database matching feasibility, candidate enumeration, proximity oracle, solar system identification risk (ORANGE) |
 | [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
 
 ## Operations
@@ -129,6 +126,9 @@ _Empty — use for temporary or experimental documents._
 | [archive/ideas/hackathon-ideas-grounded.md](archive/ideas/hackathon-ideas-grounded.md) | _(Superseded by v3)_ Original 20 grounded hackathon ideas (v1) |
 | [archive/ideas/hackathon-ideas-grounded-v2.md](archive/ideas/hackathon-ideas-grounded-v2.md) | _(Superseded by v3)_ 25 ideas validated against official docs (v2) |
 | [archive/ideas/hackathon-ideas-v2-doc-enabled.md](archive/ideas/hackathon-ideas-v2-doc-enabled.md) | _(Superseded by v3)_ 8 doc-enabled ideas supplementing v2 |
+| [archive/research/location-proof-leakage-investigation.md](archive/research/location-proof-leakage-investigation.md) | _Archived research — not active input to hackathon build._ Location proof leakage investigation — distance field observability, trilateration feasibility, risk classification (YELLOW) |
+| [archive/research/location-proof-actionability-analysis.md](archive/research/location-proof-actionability-analysis.md) | _Archived research — not active input to hackathon build._ Location proof actionability analysis — ownership constraints, cross-player feasibility, graph reconstruction, CivilizationControl impact (revised to GREEN) |
+| [archive/research/distance-constraint-system-mapping-analysis.md](archive/research/distance-constraint-system-mapping-analysis.md) | _Archived research — not active input to hackathon build._ Distance-constraint system mapping — star database matching feasibility, candidate enumeration, proximity oracle, solar system identification risk (ORANGE) |
 
 ---
 
