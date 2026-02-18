@@ -137,7 +137,7 @@ CivilizationControl (Command Nexus)
 │   ├── Aggregated Metrics (structure counts, online/offline, revenue, fuel)
 │   ├── Alert / Warning Cards (fuel critical, offline, unlinked, unconfigured)
 │   ├── Quick Action Shortcuts (deploy policy, create listing, bring online)
-│   └── Recent Activity Preview (last 5 events)
+│   └── Recent Signal Preview (last 5 events)
 ├── Gates (Primary Control Plane)
 │   ├── Gate List View (sortable, filterable, taggable)
 │   └── Gate Detail View
@@ -145,7 +145,7 @@ CivilizationControl (Command Nexus)
 │       ├── Access Rules (rule composer entry point)
 │       ├── Economic Rules (toll config + revenue)
 │       ├── Linking (partner display + link/unlink flow)
-│       ├── Activity (gate-scoped event stream)
+│       ├── Signals (gate-scoped event stream)
 │       └── Spatial Assignment (manual system pin)
 ├── Trade Posts
 │   ├── SSU List View (name, ID, status, listings, revenue, inventory)
@@ -159,9 +159,9 @@ CivilizationControl (Command Nexus)
 │   └── Event Detail (timestamp, structure, type, amount, counterparty, tx)
 └── Configuration
     ├── Account (wallet, Character ID, tribe)
-    ├── Structure Labels Manager
-    ├── Spatial Mappings Manager
-    ├── Group / Tag Manager
+    ├── Structure Labels Registry
+    ├── Spatial Mappings Registry
+    ├── Group / Tag Registry
     └── Currency / Display Preferences
 ```
 
@@ -243,14 +243,14 @@ Default sort: **Status (offline first)** — surface problems immediately.
 ### Tagging System
 
 - User-created, color-coded text labels (e.g., "North Corridor", "Revenue Gates")
-- Multiple tags per gate; created inline or managed in Settings
+- Multiple tags per gate; created inline or managed in Configuration
 - Stored in app storage (not on-chain); serve as filter criteria and visual grouping
 
 ### Empty State
 
 **Heading:** "No Gates Found"  
 **Body:** "CivilizationControl manages gates you own in EVE Frontier. Gates are assigned to your Character by the game server — once you have gates in-game, they'll appear here automatically."  
-**Secondary:** "If you own gates but don't see them, check that your wallet is connected to the correct Character in Settings."
+**Secondary:** "If you own gates but don't see them, check that your wallet is connected to the correct Character in Configuration."
 
 No "Create Gate" action — gate creation requires AdminCap (server-side, not player-accessible).
 
@@ -311,7 +311,7 @@ Or warning:
 
 When linked, shows: partner extension match status, partner online status, bidirectional link note.
 
-### 5e. Activity Section
+### 5e. Signals Section
 
 Gate-scoped event stream. Event types:
 
@@ -330,10 +330,10 @@ Time range selector: 1h · 24h · 7d · 30d · All. Auto-refresh: polling every 
 
 | State          | Display                                          | Actions                        |
 | -------------- | ------------------------------------------------ | ------------------------------ |
-| **Assigned**      | "📍 Assigned to: **Jita** (user-curated)"       | "Change System" / "Clear"      |
+| **Assigned**      | "📍 Assigned to: **Jita** (operator-curated)"       | "Change System" / "Clear"      |
 | **Unassigned**    | "No system assigned"                              | "Assign to System" button      |
 
-**Always-visible disclosure (muted):** "User-curated placement — not derived from on-chain data."
+**Always-visible disclosure (muted):** "Operator-curated placement — not derived from on-chain data."
 
 ---
 
@@ -520,7 +520,7 @@ interface SpatialPin {
 ### UI Labels & Disclosures
 
 - Pinned structures display 📍 icon to distinguish user-curated from (future) auto-placement
-- Always-visible: **"User-curated placement — not derived from on-chain data"**
+- Always-visible: **"Operator-curated placement — not derived from on-chain data"**
 - Future-ready note (tooltip): "If CCP exposes a coordinate API, automatic placement will replace manual pins"
 
 ### Solar System Dataset
@@ -592,7 +592,7 @@ CivilizationControl requires wallet connection for all write operations. This se
 - Wallet disconnect clears all cached structure data and returns to "Not Connected" state
 - Address change (wallet switch) triggers full Character re-resolution
 
-**Pre-connect state:** Dashboard shows app branding and a centered "Connect Wallet to Begin" prompt. No structure data loads until wallet is connected and Character is resolved.
+**Pre-connect state:** Command Overview shows app branding and a centered "Connect Wallet to Begin" prompt. No structure data loads until wallet is connected and Character is resolved.
 
 ### 10b. Character Resolution
 
@@ -685,14 +685,14 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 14 | Create listing | Core CRUD; "stock your storefront" moment |
 | 15 | Remove listing | Minimum CRUD lifecycle |
 | 16 | Buyer-facing listing browser | Half the TradePost demo |
-| 17 | Aggregated metrics (dashboard) | "Control room" opening shot — big numbers |
+| 17 | Aggregated metrics (Command Overview) | "Control room" opening shot — big numbers |
 | 18 | Alert/warning cards | Amber/red indicators; visual drama for fuel/offline |
 | 19 | Fuel status overview | Fuel depletion is the opening pain point in demo script |
 | 20 | Real-time event stream | Core non-negotiable per strategy memo; "living control room" |
 | 21 | Toll revenue display (basic) | Inline in feed/gate detail; closes economic narrative |
 | 22 | Trade revenue display (basic) | Inline in feed/SSU detail; closes commerce narrative |
-| 23 | Dashboard view | Landing page; no-click summary of infrastructure health |
-| 24 | Activity feed (basic, unfiltered) | Chronological event stream across all structures |
+| 23 | Command Overview view | Landing page; no-click summary of infrastructure health |
+| 24 | Signal Feed (basic, unfiltered) | Chronological event stream across all structures |
 | 25 | Manual system assignment | Spatial organization — user-curated system pinning enables structure grouping by solar system |
 
 ### Stretch Features (31 items)
@@ -738,10 +738,10 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | Time | Act | Content |
 |------|-----|---------|
 | 0:00–0:25 | **"The Problem"** | Raw CLI terminal, manual `sui client call` commands, error output. "You're flying blind." |
-| 0:25–0:45 | **"The Control Room"** | Dashboard loads — structure list, 4 structures, status indicators, amber fuel warning. "One screen. Every gate. Live status." |
+| 0:25–0:45 | **"The Control Room"** | Command Overview loads — structure list, 4 structures, status indicators, amber fuel warning. "One screen. Every gate. Live status." |
 | 0:45–1:20 | **"Control" (GateControl)** | Click Gate Alpha → authorize extension → configure tribe filter (Tribe Alpha) + toll (2 SUI) → deploy policy → sign. Friendly pilot jumps (✓). Hostile pilot blocked (✗). "On-chain enforcement. No appeals." |
 | 1:20–2:00 | **"Commerce" (TradePost)** | Click SSU → create listing (Fuel Rod: 10 SUI) → buyer browses → buys → atomic settlement. "One click. Atomic settlement. No counterparty risk." |
-| 2:00–2:30 | **"The System"** | Full dashboard. Event feed scrolling. Toll: 2 SUI. Trade: 10 SUI. "The pilot who paid the toll is now your customer. Your infrastructure pays for itself." |
+| 2:00–2:30 | **"The System"** | Full Command Overview. Signal Feed scrolling. Toll: 2 SUI. Trade: 10 SUI. "The pilot who paid the toll is now your customer. Your infrastructure pays for itself." |
 | 2:30–3:00 | **"The Vision"** | Wide shot. "The control plane the frontier doesn't have yet. Gate governance and frontier commerce — integrated, composable, accessible." **"Your gates. Your rules. Your revenue."** |
 
 ### MVP Risk Flags
@@ -946,7 +946,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 ### Core Screens
 
-**Dashboard:** Landing page after wallet connection and Character resolution. Aggregated metrics as card blocks (structure counts, online/offline ratios, revenue totals, fuel alerts). Alert section for structures needing attention (offline, low fuel, unlinked, unconfigured). Recent activity preview (last 5 events). Quick action shortcuts to common flows. Zero-click information surface.
+**Command Overview:** Landing page after wallet connection and Character resolution. Aggregated metrics as card blocks (structure counts, online/offline ratios, revenue totals, fuel alerts). Alert section for structures needing attention (offline, low fuel, unlinked, unconfigured). Recent activity preview (last 5 events). Quick action shortcuts to common flows. Zero-click information surface.
 
 **Gate List:** Primary navigation surface. Sortable, filterable table of all player-owned gates. Columns: status dot, user-assigned name, truncated object ID, link partner, extension badge, rules summary tags, fuel indicator, revenue figure, tag pills. Default sort: offline-first (surface problems). Inline-editable names. Search bar + filter chip row at top.
 
@@ -956,7 +956,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 **TradePost (SSU Detail):** Tabbed detail view accessed from SSU List. Tabs: Inventory (item list with "Create Listing" action per item), Listings (active listing cards with edit/cancel, "New Listing" button, completed listings collapsible), Trade History (transaction log: timestamp, item, price, buyer, tx link), Revenue (totals + period summaries with time range selector).
 
-**Activity Feed:** Global chronological event stream across all structures. Each event row: timestamp, structure name (linked to detail), event type indicator, description text, amount (right-aligned if economic), tx link icon. Time range selector at top (1h / 24h / 7d / 30d / All). Auto-refresh via polling.
+**Signal Feed:** Global chronological event stream across all structures. Each event row: timestamp, structure name (linked to detail), event type indicator, description text, amount (right-aligned if economic), tx link icon. Time range selector at top (1h / 24h / 7d / 30d / All). Auto-refresh via polling.
 
 **Wallet Connection:** Entry point in global header (top-right). Pre-connect state: centered "Connect Wallet to Begin" prompt on main content area. Post-connect: Character resolution flow (automatic attempt → manual fallback modal if needed). See §10 for full state machine.
 
@@ -965,7 +965,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 | Zone | Position | Content | Behavior |
 |------|----------|---------|----------|
 | **Global Header** | Top, full width, fixed | App title (left), wallet button + connection status + network indicator (right) | Always visible; persists across all routes |
-| **Sidebar** | Left, fixed width | Primary nav items (Dashboard, Gates, TradePosts, Activity, Settings) above divider; collapsible structure inventory list below divider | Always visible; structure inventory collapses independently; entire sidebar collapses on narrow viewports |
+| **Sidebar** | Left, fixed width | Primary nav items (Command Overview, Gates, Trade Posts, Signal Feed, Configuration) above divider; collapsible structure inventory list below divider | Always visible; structure inventory collapses independently; entire sidebar collapses on narrow viewports |
 | **Main Content** | Center, fluid width | Active screen content — list views, detail views, dashboard cards | Changes per route; scrollable |
 | **Contextual Panel** | Right, overlay or slide-in | Rule composer, linking flow steps, listing creation — contextual multi-step flows | Visible only during specific interactions; dismissed on completion or cancel |
 
@@ -976,7 +976,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 | **Rule Module Card** | Header row: toggle switch + module title + status badge (Active/Configured/Off). Expandable body: 1-3 config fields (dropdown, numeric input, address list editor). Footer: "Last deployed: [timestamp]" | Rule Composer |
 | **Tag Chip** | Small pill badge with text label + background color. Edit mode adds "×" remove button | Gate list, SSU list, detail view headers |
 | **Status Badge** | Colored dot or pill. States: green (online/active), amber (warning/low fuel/configured-not-deployed), red (offline/error/blocked), gray (unconfigured/unlinked/off) | List columns, detail headers, sidebar inventory |
-| **Activity Feed Item** | Single row: timestamp (left-aligned), structure name (linked), event type icon, description text, amount if economic (right-aligned), tx link icon (far right) | Global activity feed, gate detail activity section |
+| **Signal Feed Item** | Single row: timestamp (left-aligned), structure name (linked), event type icon, description text, amount if economic (right-aligned), tx link icon (far right) | Global activity feed, gate detail activity section |
 | **Modal Dialog** | Centered overlay with backdrop dimming. Header: title + close button. Body: content area. Footer: primary action button + secondary/cancel button | Character ID input, linking confirmation, error displays |
 | **Confirmation Panel** | Inline expandable card. Shows: action summary text, diff display (if modifying existing state), collapsible PTB preview (advanced), "Confirm" + "Cancel" buttons | Deploy policy, create listing, link gates, unlink |
 | **Wallet Button** | Header-positioned button. States: default (outlined "Connect Wallet"), connected (address pill + green status dot, click reveals dropdown), error (amber or red badge with tooltip) | Global header, always visible |

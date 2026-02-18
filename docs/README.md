@@ -51,6 +51,8 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [core/WORKSPACE_ABSTRACT.md](core/WORKSPACE_ABSTRACT.md) | What this workspace is and how to use it |
 | [core/COPILOT_MEMORY_GUIDELINES.md](core/COPILOT_MEMORY_GUIDELINES.md) | What to store in Copilot persistent memory |
 | [core/march-11-reimplementation-checklist.md](core/march-11-reimplementation-checklist.md) | **March 11 carry-forward** — validated patterns, day-1 checklist, pitfalls, DO NOT COPY notice |
+| [core/civilizationcontrol-claim-proof-matrix.md](core/civilizationcontrol-claim-proof-matrix.md) | **Evidence ledger** — every demo claim mapped to tx digest, object ID, overlay format; utility metrics targets |
+| [core/civilizationcontrol-demo-beat-sheet.md](core/civilizationcontrol-demo-beat-sheet.md) | **Demo beat sheet** — 3-min primary loop (Control→Consequence→Revenue), 2-min fallback variant, evidence capture checklist |
 
 ## Architecture
 
@@ -96,6 +98,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [research/location-proof-leakage-investigation.md](research/location-proof-leakage-investigation.md) | **Location proof leakage investigation** — distance field observability, trilateration feasibility, risk classification (YELLOW) |
 | [research/location-proof-actionability-analysis.md](research/location-proof-actionability-analysis.md) | **Location proof actionability analysis** — ownership constraints, cross-player feasibility, graph reconstruction, CivilizationControl impact (revised to GREEN) |
 | [research/distance-constraint-system-mapping-analysis.md](research/distance-constraint-system-mapping-analysis.md) | **Distance-constraint system mapping** — star database matching feasibility, candidate enumeration, proximity oracle, solar system identification risk (ORANGE) |
+| [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
 
 ## Operations
 

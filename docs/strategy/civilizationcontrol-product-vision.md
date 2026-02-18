@@ -22,7 +22,7 @@ Meanwhile, your gates are open to anyone. You want a simple policy: *free for yo
 
 **This is the state of infrastructure management on the frontier today.**
 
-Smart assemblies are powerful. The on-chain architecture supports composable access rules, cross-address inventory operations, and atomic multi-step transactions. The primitives are there. But the tools to wield them — the dashboard, the policy builder, the marketplace, the monitoring layer — don't exist.
+Smart assemblies are powerful. The on-chain architecture supports composable access rules, cross-address inventory operations, and atomic multi-step transactions. The primitives are there. But the instruments to wield them — the command layer, the policy builder, the marketplace, the monitoring layer — don't exist.
 
 The gap between "what the blockchain can do" and "what a tribe leader can actually do" is the entire product.
 
@@ -38,17 +38,17 @@ On one side, your gate policies: who gets in, what they pay, and when. Not as ra
 
 On the other side, your storefronts. Items stocked in your SSUs, listed with prices, browsable by anyone in range. A buyer clicks. Payment flows. The item transfers. One atomic transaction, no trust required, no coordination in Discord.
 
-In the center, a live activity feed. Gate jumps. Purchases. Toll revenue. Who's coming through your territory, how much they're paying, and what they're buying. Not raw blockchain events — readable, filterable, human information.
+In the center, a live Signal Feed. Gate jumps. Purchases. Toll revenue. Who's coming through your territory, how much they're paying, and what they're buying. Not raw blockchain events — readable, filterable, human information.
 
 **CivilizationControl doesn't add new primitives to EVE Frontier. It takes the primitives that already exist — the extension system, the shared objects, the PTB composition layer — and makes them usable by the people who actually run civilizations.**
 
-This is a control plane for the infrastructure you already own. A way to finally *manage your frontier* — structure by structure, policy by policy.
+This is a control plane for the infrastructure you already own. A way to finally *govern your frontier* — structure by structure, policy by policy.
 
 ### Location Constraint — Why List-First, Not Map-First
 
 > **Confirmed constraint (2026-02-16 deep dive):** Structure coordinates are intentionally off-chain. The world-contracts Location struct stores only a 32-byte Poseidon2 hash — **not** raw (x, y, z) coordinates. The hash is irreversible. Wallet authentication does not grant access to raw coordinates. See [authenticated-user-surface-analysis.md §2](../architecture/authenticated-user-surface-analysis.md).
 
-CivilizationControl is a **control plane over owned structure IDs and on-chain state** — not a map. The gate selector is **list-first** (name/ID/status/links/extension), not map-first. All structure data visible in the dashboard (status, fuel, extensions, link partners, inventory) is readable on-chain. Location data is not.
+CivilizationControl is a **control plane over owned structure IDs and on-chain state** — not a map. The gate selector is **list-first** (name/ID/status/links/extension), not map-first. All structure data visible in the Command Overview (status, fuel, extensions, link partners, inventory) is readable on-chain. Location data is not.
 
 Any future map view would require one of:
 1. **Server/API coordinate feed** — game server provides hash→coordinate mapping
@@ -106,7 +106,7 @@ CivilizationControl displays prices in Lux (player-native), settles on-chain in 
 
 You open CivilizationControl and log in through EVE Vault.
 
-The dashboard loads and you see your structures listed in the sidebar: six gates, four SSUs, three network nodes. The first four gates show green status — all online, all passing traffic. Gates five and six show amber — fuel below 30% on the connected NWN.
+The Command Overview loads and you see your structures listed in the sidebar: six gates, four SSUs, three network nodes. The first four gates show green status — all online, all passing traffic. Gates five and six show amber — fuel below 30% on the connected NWN.
 
 You click into Gate North-3. The policy panel shows your current rules: **Tribe Filter** (Tribe 7 allowed) and **Toll** (2 Lux per jump). Both rules are active, composed as layers — not either/or, but both-and. A small counter shows 47 jumps in the last 24 hours and 94 Lux collected in tolls.
 
@@ -116,9 +116,9 @@ Then you switch to TradePost. Your forward supply depot — SSU Echo-2 — is li
 
 You stock five more fuel rods and list them at 35 Lux each.
 
-The activity feed scrolls quietly in the sidebar. A jump notification from Gate North-1: pilot from Tribe 12, toll paid 5 Lux. A purchase notification from SSU Echo-2: pilot bought repair paste, 20 Lux. A fuel warning from NWN-South: estimated 8 hours remaining.
+The Signal Feed scrolls quietly in the sidebar. A jump signal from Gate North-1: pilot from Tribe 12, toll paid 5 Lux. A purchase signal from SSU Echo-2: pilot bought repair paste, 20 Lux. A fuel warning from NWN-South: estimated 8 hours remaining.
 
-For the first time, you can see your toll and trade revenue in real time — in Lux, the currency you actually think in. Not in a spreadsheet. Not in Discord messages. On a dashboard that shows you what's happening, right now, across every structure you own.
+For the first time, you can see your toll and trade revenue in real time — in Lux, the currency you actually think in. Not in a spreadsheet. Not in Discord messages. On a control surface that shows you what's happening, right now, across every structure you own.
 
 ---
 
@@ -128,7 +128,7 @@ For the first time, you can see your toll and trade revenue in real time — in 
 
 Gates are the arteries of the frontier. Whoever sets the rules on gates shapes who moves through their space — and in a universe where distance is vast and resources are scarce, access policy is power.
 
-GateControl turns gate policy configuration from a technical chore into a governance tool. A tribe leader doesn't need to understand Move's type system to say: *my gates are open to allies and closed to hostiles.* They don't need to deploy contracts to charge a toll. They don't need to reconfigure twenty gates one at a time.
+GateControl turns gate policy configuration from a technical chore into a governance instrument. A tribe leader doesn't need to understand Move's type system to say: *my gates are open to allies and closed to hostiles.* They don't need to deploy contracts to charge a toll. They don't need to reconfigure twenty gates one at a time.
 
 GateControl is not about access lists. It's about **governance** — the ability to define, in clear terms, who passes through your gates and under what conditions. It plugs into the existing gate extension model and layers composable rules on top of Frontier's jump system, enforced on-chain, trustlessly, without relying on honor systems or Discord agreements.
 
@@ -150,7 +150,7 @@ What's validated and real:
 - SSU-backed storefront: full lifecycle tested — publish, setup, authorize, stock, list, buy.
 - Three successful cross-address buys at different prices, each with verifiable on-chain events.
 
-### Why They're a System, Not Tools
+### Why They're a System, Not Standalone Instruments
 
 GateControl and TradePost aren't two separate features that happen to ship together. They create a feedback loop:
 
@@ -158,7 +158,7 @@ A gate toll charges for passage through your territory. Where do those pilots sp
 
 When a buyer at your TradePost pays 30 Lux for a fuel cell — an item that the gate on the other side of the system is also demanding as a toll condition — two modules create emergent economic interaction without explicit coupling. The gate drives demand. The storefront fills it. The tribe leader profits from both.
 
-That's not two tools. That's an integrated management suite — gate policy and frontier commerce reinforcing each other.
+That's not two instruments. That's an integrated governance suite — gate policy and frontier commerce reinforcing each other.
 
 ---
 
@@ -171,7 +171,7 @@ Smart assemblies already exist. Gate extensions already exist. The EVE Frontier 
 The primitives are Move modules, typed witnesses, dynamic field dispatch, and PTB composition. They're powerful, elegant, and completely inaccessible to the 98% of tribe leaders who don't write smart contracts.
 
 What doesn't exist yet:
-- **No dashboard.** No way to see all your structures, their status, their activity, in one place.
+- **No command layer.** No way to see all your structures, their status, their activity, in one place.
 - **No policy builder.** No way to configure gate rules without writing Move code.
 - **No marketplace.** No way to list items for sale, discover prices, or buy trustlessly.
 - **No monitoring.** No way to see toll revenue, gate traffic, fuel levels, or trade history.
@@ -193,17 +193,17 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 *[Quick cuts: error messages, manual fuel queries, Discord screenshots of "is the gate down?" messages.]*
 
-**Voiceover:** *"Smart assemblies are the most powerful tool in the frontier. The problem is, they don't come with a dashboard."*
+**Voiceover:** *"The frontier's structures are the most powerful infrastructure on the frontier. The problem is, they don't come with a command layer."*
 
 ### The Reveal — CivilizationControl (0:40–1:10)
 
-*[Cut to: the CivilizationControl dashboard loading. Clean UI. Structure sidebar populating with gates and SSUs. Status indicators going green.]*
+*[Cut to: the CivilizationControl Command Overview loading. Clean UI. Structure sidebar populating with gates and SSUs. Status indicators going green.]*
 
 **Voiceover:** *"CivilizationControl changes that. One screen. Every gate. Every storage unit. Live status. Real-time activity."*
 
-*[Camera pans across the dashboard: structure list, policy panel, event feed.]*
+*[Camera pans across the control surface: structure list, policy panel, Signal Feed.]*
 
-**Voiceover:** *"This is what infrastructure management should feel like on the frontier."*
+**Voiceover:** *"This is what infrastructure command should feel like on the frontier."*
 
 ### Control — GateControl in Action (1:10–1:50)
 
@@ -211,7 +211,7 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 **Voiceover:** *"GateControl lets you set the rules on your gates — who passes through, and what they pay. Tribe filter. Toll. Both active on the same gate, composing as layers within the existing extension model."*
 
-*[A jump event appears in the activity feed: Pilot from Tribe 7, toll paid: 5 Lux. Green checkmark.]*
+*[A jump event appears in the Signal Feed: Pilot from Tribe 7, toll paid: 5 Lux. Green checkmark.]*
 
 **Voiceover:** *"A friendly pilot jumps through. Tribe matches, toll paid, passage granted. One atomic transaction."*
 
@@ -235,13 +235,13 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 ### The System — Closing (2:30–3:00)
 
-*[Pull back to full dashboard view. Multiple gates, multiple SSUs, activity feed scrolling with jumps and purchases. Revenue totals accumulating.]*
+*[Pull back to full Command Overview. Multiple gates, multiple SSUs, Signal Feed scrolling with jumps and purchases. Revenue totals accumulating.]*
 
-**Voiceover:** *"CivilizationControl is more than a single-purpose gate extension or a standalone marketplace. It's a unified management layer — composable gate policies and frontier commerce, integrated in one control room. Your gates, your rules, your revenue."*
+**Voiceover:** *"CivilizationControl is more than a single-purpose gate extension or a standalone marketplace. It's a unified governance layer — composable gate policies and frontier commerce, integrated in one control room. Your gates, your rules, your revenue."*
 
 *[Title card: CivilizationControl — The Frontier Control Room]*
 
-**Voiceover:** *"Built on EVE Frontier's extension model. Built for tribe leaders. Built to make your infrastructure worth managing."*
+**Voiceover:** *"Built on EVE Frontier's extension model. Built for tribe leaders. Built to make your infrastructure worth governing."*
 
 ---
 
@@ -249,7 +249,7 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 ### Player Utility — "Meaningfully changes how players operate"
 
-This is the highest-leverage criterion. CivilizationControl solves a problem that every tribe leader currently handles through Discord, spreadsheets, and trust. Gate management becomes a dashboard. Trading becomes a storefront. Infrastructure monitoring becomes a feed. The utility isn't theoretical — it's the difference between 20 manual CLI commands and one screen.
+This is the highest-leverage criterion. CivilizationControl solves a problem that every tribe leader currently handles through Discord, spreadsheets, and trust. Gate governance becomes a command surface. Trading becomes a storefront. Infrastructure monitoring becomes a feed. The utility isn't theoretical — it's the difference between 20 manual CLI commands and one screen.
 
 ### EVE Frontier Relevance & Vibe — "Natural extension of EVE Frontier"
 
@@ -265,19 +265,19 @@ Everything shown in the demo is real. Seven validation tests passed on devnet. T
 
 ### Creativity & Originality — "Bold, novel, uniquely Frontier"
 
-No one has built a management dashboard for EVE Frontier gate and SSU operations. Tribe leaders have structures but no way to see, configure, or monetize them as a unified system. The composable rule engine — stackable tribe filters and tolls on the same gate via dynamic field dispatch — is a novel pattern that the current builder docs don't demonstrate.
+No one has built a governance layer for EVE Frontier gate and SSU operations. Tribe leaders have structures but no way to see, configure, or monetize them as a unified system. The composable rule engine — stackable tribe filters and tolls on the same gate via dynamic field dispatch — is a novel pattern that the current builder docs don't demonstrate.
 
 ### UX & Usability — "Intuitive and usable in real play"
 
-This is the core thesis. The on-chain primitives exist. The UX doesn't. CivilizationControl is, at its heart, a usability project — turning raw smart contract capability into a dashboard that a non-developer tribe leader can operate. Toggle a policy. Stock a storefront. Watch the revenue. No CLI, no Move code, no PTB composition by hand.
+This is the core thesis. The on-chain primitives exist. The UX doesn't. CivilizationControl is, at its heart, a usability project — turning raw smart contract capability into a control surface that a non-developer tribe leader can operate. Toggle a policy. Stock a storefront. Watch the revenue. No CLI, no Move code, no PTB composition by hand.
 
 ### Visual Presentation & Demo — "Clarity and confidence of presentation"
 
-The demo follows a cinematic narrative arc: Problem → Reveal → Control → Economy → System. It opens with the pain (raw CLI), delivers the solution (the dashboard), demonstrates the mechanics (gate policy, atomic trade), and closes with the system-level payoff (interconnected economy). The recorded format gives full control over pacing, framing, and storytelling.
+The demo follows a cinematic narrative arc: Problem → Reveal → Control → Economy → System. It opens with the pain (raw CLI), delivers the solution (the control surface), demonstrates the mechanics (gate policy, atomic trade), and closes with the system-level payoff (interconnected economy). The recorded format gives full control over pacing, framing, and storytelling.
 
 ### Player Vote (25% of Best Entry Score)
 
-Players vote for mods they want to use. A tribe leader watching the demo will see their own daily pain reflected in the opening — and their fantasy realized in the dashboard. CivilizationControl is the kind of project that makes a player say "I want that" because it solves a problem they already have. Not a clever toy. A tool they need.
+Players vote for mods they want to use. A tribe leader watching the demo will see their own daily pain reflected in the opening — and their fantasy realized in the command view. CivilizationControl is the kind of project that makes a player say "I want that" because it solves a problem they already have. Not a clever toy. An instrument they need.
 
 ---
 
@@ -288,11 +288,11 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 | Deliverable | Why It's Core |
 |---|---|
 | **GateControl Move module** — tribe filter + coin toll, composable as dynamic field rules | The gate policy engine is the headline feature. Without it, there's no "control" in CivilizationControl. |
-| **GateControl web UI** — toggle-based policy builder for gate rules | Without the UI, GateControl is just another Move contract. The dashboard IS the product. |
+| **GateControl web UI** — toggle-based policy builder for gate rules | Without the UI, GateControl is just another Move contract. The control surface IS the product. |
 | **TradePost Move module** — listing CRUD + atomic PTB buy flow | Commerce anchors the economy narrative. Gate tolls without a marketplace is half a story. |
 | **TradePost web UI** — browse listings, one-click buy | Same principle: the UI surfaces the value. A contract without a frontend is a demo, not a product. |
-| **Dashboard shell** — structure sidebar, module switching, connected layout | The "control room" framing requires a unified view. Individual screens don't tell the system story. |
-| **Live event feed** — gate jumps, trade completions, toll revenue | Real-time activity turns a static dashboard into a living control room. This is the "wow" moment. |
+| **Command shell** — structure sidebar, module switching, connected layout | The "control room" framing requires a unified view. Individual screens don't tell the system story. |
+| **Live Signal Feed** — gate jumps, trade completions, toll revenue | Real-time activity turns a static command view into a living control room. This is the "wow" moment. |
 | **Recorded demo video** (2–3 minutes) | Required for submission. The demo IS the presentation for judges and voters. |
 
 ### Would Be Amazing (Stretch — In Priority Order)
@@ -306,7 +306,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 ### Not in Scope (Explicitly Excluded)
 
 - Time-window rule types for gates (interesting but not MVP)
-- Revenue analytics dashboards (the feed provides live data; historical charts are polish)
+- Revenue analytics views (the feed provides live data; historical charts are polish)
 - Mobile/responsive layout (desktop-first is fine for demo and hackathon)
 - ZK privacy rules for gate access (validated on devnet 2026-03-11; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md))
 - Cross-faction diplomatic exchange protocols (fascinating but scope creep)
@@ -319,11 +319,11 @@ EVE Frontier gives players programmable building blocks and drops them in a host
 
 But right now, the builders are working blind. The contracts are powerful, the architecture is elegant, and nobody has built the control room that makes any of it usable.
 
-CivilizationControl isn't just the most technically exotic entry in this hackathon — with ZK-verified gate access validated on devnet (addendum 2026-03-11), it combines zero-knowledge proofs with the practical infrastructure management that tribe leaders need.
+CivilizationControl isn't just the most technically exotic entry in this hackathon — with ZK-verified gate access validated on devnet (addendum 2026-03-11), it combines zero-knowledge proofs with the practical infrastructure governance that tribe leaders need.
 
-What it does is something simpler and harder: it takes the tools that already exist — gates, storage units, tribes, tolls, trades — and turns them into a system that a real tribe leader can see, configure, and profit from. Without writing code. Without trusting strangers. Without flying blind.
+What it does is something simpler and harder: it takes the building blocks that already exist — gates, storage units, tribes, tolls, trades — and turns them into a system that a real tribe leader can see, configure, and profit from. Without writing code. Without trusting strangers. Without flying blind.
 
-The frontier is full of powerful primitives. It's waiting for someone to build the dashboard.
+The frontier is full of powerful primitives. It's waiting for someone to build the command layer.
 
 **That's what we're building.**
 

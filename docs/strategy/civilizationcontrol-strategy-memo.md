@@ -11,21 +11,21 @@
 
 ## 1. Thesis Statement
 
-**Proposal:** CivilizationControl should be the primary hackathon entry — a unified infrastructure management dashboard for EVE Frontier consisting of three tightly integrated Move modules and one stretch module, submitted as a single cohesive system.
+**Proposal:** CivilizationControl should be the primary hackathon entry — a unified infrastructure governance command surface for EVE Frontier consisting of two tightly integrated Move modules and two stretch modules, submitted as a single cohesive system. *(Scope narrowed from original 3+1 through adversarial review — see §3 and §5.)*
 
 ### Core Modules (Non-Negotiable in Thesis)
 
 | Priority | Module | Function | Weighted Score | Risk |
 |----------|--------|----------|----------------|------|
 | 1 | **GateControl** | Composable gate policy engine — tribe filters, time windows, item tolls via dynamic field rule dispatch within a single extension | 7.97 | Green |
-| 2 | **TradePost** | Shared-listing storefront — list items, browse/buy with atomic PTB escrow, supports SUI or faction tokens (SSU-backed option architecturally supported, not yet devnet-validated) | 7.91 | Yellow |
-| 3 | **TribeMint** | Faction currency — `Coin<TribeToken>` flows through GateControl tolls and TradePost purchases as economic glue | 6.31 | Green |
+| 2 | **TradePost** | Shared-listing storefront — list items, browse/buy with atomic PTB escrow, SUI-denominated (SSU-backed option architecturally supported, not yet devnet-validated) | 7.91 | Yellow |
 
-### Stretch Module
+### Stretch Modules
 
 | Priority | Module | Function | Weighted Score | Risk |
 |----------|--------|----------|----------------|------|
-| 4 | **LootDrop** | VRF loot crate via `sui::random` — gamified item distribution through TradePost SSUs | 7.53 | Yellow |
+| S1 | **TribeMint** | Faction currency — `Coin<TribeToken>` flows through GateControl tolls and TradePost purchases as economic glue | 6.31 | Green |
+| S2 | **LootDrop** | VRF loot crate via `sui::random` — gamified item distribution through TradePost SSUs | 7.53 | Yellow |
 
 ### Standalone Side Projects (Considered Separately)
 
@@ -39,8 +39,8 @@
 1. System design scores materially higher than one-off mods on ModDesign criterion (12.5% of judge score).
 2. GateControl is the strongest "Best Entry" backbone based on weighted composite (7.97).
 3. TradePost improves player vote by adding an immediately understood mechanic ("space shop").
-4. TribeMint creates an economic feedback loop that elevates the entire suite above the sum of its parts.
-5. Three tightly integrated modules can be shipped with high polish within the hackathon timeline.
+4. TradePost provides an immediately understood mechanic ("space shop") that raises player vote appeal.
+5. Two tightly integrated modules can be shipped with high polish within the hackathon timeline; TribeMint and LootDrop are stretch goals that add depth without threatening core delivery.
 6. Over-scope is the primary execution risk, managed by strict priority ordering.
 
 ---
@@ -71,7 +71,7 @@ This breadth positions CivilizationControl for "Best Technical Implementation" a
 
 ### Demo Clarity
 
-The proposed demo has a clear narrative arc: problem ("you're blind") → progressive capability (gate policy → storefront → economy) → system reveal ("one system, not three tools"). The climactic moment — buying an item with faction currency that also serves as gate toll — crystallizes the system thesis in a single transaction.
+The proposed demo has a clear narrative arc: problem ("you're blind") → progressive capability (gate policy → storefront → economy) → system reveal ("one system, not three standalone instruments"). The climactic moment — a buyer paying SUI toll at the gate, then spending SUI at the nearby storefront for the very item the gate demands — crystallizes the toll→commerce→revenue loop in a single session.
 
 ---
 
@@ -284,7 +284,7 @@ CivilizationControl's dashboard is a **list-first control plane** — structures
 - GateControl web UI: policy builder with toggle-based rule configuration
 - TradePost Move module: listing CRUD + atomic PTB buy flow
 - TradePost web UI: browse listings, one-click buy
-- Shared dashboard shell with structure inventory sidebar
+- Shared command shell with structure inventory sidebar
 - Live event feed showing JumpEvents and TradeEvents
 
 ### First Cut (Drop Before Cutting Core Quality)
@@ -323,7 +323,7 @@ CivilizationControl's dashboard is a **list-first control plane** — structures
 **Act 1 — "The Problem" (0:00–0:20)**
 > "You've deployed gates and a storage unit in the frontier. But you have no control and no economy. CivilizationControl changes that."
 
-Open dashboard → structure cards show status → click Gate Alpha → currently open to everyone.
+Open Command Overview → structure cards show status → click Gate Alpha → currently open to everyone.
 
 **Act 2 — "Control" (0:20–1:00)**
 > "Let's make Gate Alpha smart."
@@ -343,13 +343,13 @@ Switch to TradePost → create 2 listings (Rare Component: 10 SUI, Fuel Cell: 5 
 > "Atomic, trustless commerce at a player-deployed structure. The first frontier storefront."
 
 **Act 4 — "The System" (1:40–2:00)**
-> "Same auth. Same dashboard. Two assembly types — gates and storage units — one control plane. Gate policy feeds demand. Storefront fulfills it. This is CivilizationControl."
+> "Same auth. Same command view. Two assembly types — gates and storage units — one control plane. Gate policy feeds demand. Storefront fulfills it. This is CivilizationControl."
 
-Dashboard wide shot — structures, events scrolling, both modules active.
+Command Overview wide shot — structures, events scrolling, both modules active.
 
 **The Moment:** When the buyer pays SUI for the Fuel Cell — an item the gate toll is also demanding — judges see two modules creating emergent economic interaction without explicit coupling.
 
-**Remaining 1:00:** System narrative wrap-up, visual dashboard showcase, and "what's next" roadmap slide. (If a live Q&A format is offered, this segment can be adapted for audience interaction.)
+**Remaining 1:00:** System narrative wrap-up, visual command-surface showcase, and "what's next" roadmap slide. (If a live Q&A format is offered, this segment can be adapted for audience interaction.)
 
 ### If TribeMint Ships (Stretch Demo Insert)
 
