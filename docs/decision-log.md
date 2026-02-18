@@ -6,10 +6,22 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — Denial Observability Correction (MoveAbort IS Queryable)
+
+- **Goal:** Determine whether Beat 4 ("Hostile Denied") can remain in the demo — i.e., whether a failed jump attempt produces observable on-chain evidence.
+- **Decision:** Reverses the earlier "omit from MVP" recommendation. Failed Sui transactions ARE stored on-chain and queryable by digest. MoveAbort codes are deterministic: `(smart_gate::tribe_permit, 0)` = ETribeMismatch. For demo, the wallet adapter returns failure synchronously with tx digest + abort code — zero infrastructure required. Beat 4 remains exactly as written. In production, `suix_queryTransactionBlocks` with `FromAddress` filter + client-side failure filtering enables historical denial feeds.
+- **Files:** docs/architecture/read-path-architecture-validation.md (§2.3 rewritten, §2.2/§5.2/§5.3/§6.2/§8 corrected), docs/core/civilizationcontrol-demo-beat-sheet.md (Beat 4 evidence overlay updated with exact mechanism), docs/core/civilizationcontrol-claim-proof-matrix.md (denial evidence row corrected)
+- **Diff:** ~+40 / -25
+- **Risk:** Low — doc corrections only, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** Verify `suix_queryTransactionBlocks` with `FromAddress` filter on hackathon test server; build abort-code→human-label mapping table in dashboard code
+
+---
+
 ## 2026-02-18 — Read-Path Architecture Validation
 
 - **Goal:** Validate CivilizationControl read-path assumptions — wallet→structures discovery, signal feed data sources, architecture options (browser-only vs backend), scale model.
-- **Decision:** Option A (browser-only direct reads) for hackathon demo; Option B (thin backend cache/proxy) for Stillness if >10 concurrent users. Key corrections: (1) Toll revenue tracking requires custom extension events (TollCollectedEvent) — generic Coin\<SUI\> transfers are ambiguous; (2) `AccessGrant` and `ItemPurchased` are sandbox mocks, NOT world-contracts events — extension code must emit equivalents; (3) Policy denial events (MoveAbort) are NOT queryable via standard RPC — omit from MVP; (4) Gate link/unlink and extension authorization emit NO events — must be detected via state polling; (5) Lux→SUI exchange rate is undefined — default 1:1 for MVP.
+- **Decision:** Option A (browser-only direct reads) for hackathon demo; Option B (thin backend cache/proxy) for Stillness if >10 concurrent users. Key corrections: (1) Toll revenue tracking requires custom extension events (TollCollectedEvent) — generic Coin\<SUI\> transfers are ambiguous; (2) `AccessGrant` and `ItemPurchased` are sandbox mocks, NOT world-contracts events — extension code must emit equivalents; (3) Gate link/unlink and extension authorization emit NO events — must be detected via state polling; (4) Lux→SUI exchange rate is undefined — default 1:1 for MVP. *(Note: MoveAbort queryability was initially assessed as a gap here; corrected in the 2026-02-18 Denial Observability entry above.)*
 - **Files:** docs/architecture/read-path-architecture-validation.md (new), docs/ux/civilizationcontrol-ux-architecture-spec.md (Appendix corrected), docs/core/civilizationcontrol-demo-beat-sheet.md (Beat 5 evidence corrected), docs/core/civilizationcontrol-claim-proof-matrix.md (AccessGrant→TollCollectedEvent), docs/architecture/authenticated-user-surface-analysis.md (cross-ref added), docs/README.md (index updated)
 - **Diff:** +420 / -10
 - **Risk:** Low — analysis + doc corrections, no code changes

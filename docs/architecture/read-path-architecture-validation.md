@@ -99,27 +99,53 @@ Step 6: Start polling loop (10s interval)
 | **Gate online/offline** | `StatusChangedEvent` on-chain event | Query by event type, filter by gate IDs | **AVAILABLE** |
 | **Fuel warning** | Derived from object state — NOT an event | Read `NetworkNode.fuel` fields, compute remaining time from `burn_rate_in_ms` | **AVAILABLE (polling)** |
 | **Fuel depleted** | `FuelEvent` with `Action::BURNING_STOPPED` | Query fuel events | **AVAILABLE** |
-| **Policy enforcement (deny)** | Transaction abort (MoveAbort) — NOT an on-chain event | Cannot query failed transactions via standard RPC | **NOT QUERYABLE** — see §2.3 |
+| **Policy enforcement (deny)** | Transaction abort (MoveAbort) — failed tx stored with abort code | Demo: wallet adapter returns failure synchronously; Production: `suix_queryTransactionBlocks` by sender includes failed txs | **AVAILABLE (demo) / PARTIAL (production)** — see §2.3 |
 | **Policy enforcement (allow)** | `JumpEvent` (successful passage = policy allowed it) | Same as Passage completed | **AVAILABLE (implied)** |
 | **Active policy count** | Derived from gate object state (`extension` field) | Read gate objects, check presence of extension TypeName | **AVAILABLE (polling)** |
 | **Governed structures** | Derived from gate object state | Count gates with non-null `extension` field | **AVAILABLE (polling)** |
 | **Link established/broken** | **NO event** — `link_gates()` / `unlink_gates()` silent | Must poll `gate.linked_gate_id` field changes | **POLLING ONLY** |
 | **Extension authorized** | **NO event** — `authorize_extension()` silent | Must poll `gate.extension` field changes | **POLLING ONLY** |
 
-### 2.3 Critical Gap: Denial Events
+### 2.3 Denial Observability
 
-Gate jump denials (policy rejections) result in **transaction aborts** (MoveAbort), not on-chain events. Failed transactions are:
-- Not indexed by standard Sui RPC (`suix_queryEvents` returns only successful tx events)
-- Not queryable by sender or package
-- Visible only in the submitting wallet's transaction history
+Gate jump denials (policy rejections) result in **transaction aborts** (MoveAbort), not on-chain events. However, Sui **does store failed transactions on-chain** and they are queryable:
 
-**Mitigation options:**
-1. **Extension-emitted "check" events** — extension can emit a `PolicyCheckEvent` before calling `issue_jump_permit`, logging the decision regardless of outcome. But an abort would still prevent the event from being emitted.
-2. **Two-step pattern** — separate "evaluate" tx (always succeeds, emits result event) from "execute" tx (may abort). Adds UX complexity.
-3. **Omit denial signals from MVP** — show only successful passages; note "attempted passages" as a stretch feature. **Recommended for hackathon.**
-4. **Backend-mediated** — if the extension runs a relay server that evaluates rules before constructing the PTB, the server can log denials. Adds infrastructure.
+- **Failed tx by digest:** `sui_getTransactionBlock(digest, { showEffects: true })` returns `effects.status: "failure"` with `effects.status.error` containing the MoveAbort module and abort code.
+- **Failed tx by sender:** `suix_queryTransactionBlocks({ filter: { FromAddress: "..." } })` includes failed transactions in results. There is no native filter for failed-only, but client-side filtering on `effects.status` is trivial.
+- **Events are still rolled back** — `suix_queryEvents` does NOT return events from failed transactions. Event-based queries cannot detect denials.
+- **Gas is charged** — the gas coin is mutated, so the failed tx appears in the sender's transaction history.
+- **Abort code is deterministic** — each extension and world-contracts module produces a unique `(module, code)` pair. Example: tribe mismatch = `MoveAbort(smart_gate::tribe_permit, 0)` (ETribeMismatch), distinct from gate-level aborts like `MoveAbort(world::gate, 5)` (ENotOnline).
 
-**Recommendation:** For hackathon, show successful passages only. Label the signal as "Passage completed" (not "Access granted") to avoid implying denial tracking exists.
+#### Demo Mechanism (Zero Additional Infrastructure)
+
+In the demo, the operator controls both the dashboard and the hostile pilot. The flow is:
+
+1. **Hostile pilot's browser** submits `jump()` or `jump_with_permit()` via `signAndExecuteTransaction()`
+2. **Wallet adapter returns the failure response synchronously** — includes tx digest + `effects.status.error` with the abort module and code
+3. **Dashboard receives the failure** (same browser session, or via controlled orchestration) and parses the abort code:
+   - Module `smart_gate::tribe_permit` + code `0` → "Jump denied. Tribe mismatch."
+   - Module `world::gate` + code `5` → "Jump denied. Gate offline."
+   - Module `world::gate` + code `10` → "Jump denied. Permit expired."
+4. **Signal Feed displays** the denial with red accent, pilot address, gate name, and tx digest link
+
+This requires **no indexer, no backend, no event subscription, and no extension code changes**. The failed tx digest is real and verifiable on any Sui explorer.
+
+#### Production Considerations (Post-Demo)
+
+For a production deployment where the gate owner's dashboard must observe **other users'** failed jump attempts:
+
+| Approach | Complexity | Reliability |
+|----------|-----------|-------------|
+| **A. Query all txs touching the gate object** | Low — `suix_queryTransactionBlocks({ filter: { ChangedObject: gate_id } })`, but failed txs may NOT appear (object unchanged on abort) | **Unreliable** — gas coin is the only mutated object |
+| **B. Two-step evaluate-then-execute** | Medium — separate "check" tx (always succeeds, emits `PolicyCheckEvent`) from "jump" tx | **Reliable** — evaluate tx always emits event; but adds UX step for pilots |
+| **C. Backend relay** | Medium — backend evaluates rules, logs decisions, then submits or rejects PTB | **Reliable** — full control over deny logging; but adds infra |
+| **D. Extension-emitted pre-check event** | Low code, but **does not work** — event rolled back on abort | **Not viable** |
+
+For hackathon MVP: **Approach A (demo orchestration)** is sufficient. The demo operator controls both wallets and captures the failure response directly.
+
+For Stillness production: **Approach B or C** would be needed if denial visibility for third-party jumpers is required. This is a post-submission enhancement.
+
+**Recommendation:** Beat 4 ("Hostile denied") remains in the demo exactly as written. The tx digest is real. The abort code is deterministic. The Signal Feed entry is populated from the wallet adapter's failure response. No indexer required.
 
 ### 2.4 Revenue Tracking Architecture
 
@@ -269,16 +295,15 @@ For the Stillness deployment bonus window (14 days post-submission), deploy Opti
 |--------|--------------|-------------|
 | **Historical revenue totals** | Accumulating meaningful revenue requires many transactions over time | Display realistic aggregate with "(sample data)" disclosure; show 1-2 real toll events to prove mechanism |
 | **Trade settled** | TradePost extension may not be fully implemented for demo | Show real `ItemDepositedEvent` + simulated trade completion in feed |
-| **Denial/blocked event** | Failed transactions don't produce events (see §2.3) | Omit from MVP demo; mention as "future capability" if asked |
 | **7d/30d time range data** | Test server won't have 30 days of history | Default to "All" time range; populate with demo-session events |
 
 ### 5.3 Demo Beat Sheet Alignment
 
 | Beat | Data Source | Real or Simulated |
 |------|-----------|-------------------|
-| Beat 3: Structure Discovery | RPC OwnerCap enumeration | **Real** |
-| Beat 4: Policy Deployment | Extension authorization tx | **Real** (tx digest) |
-| Beat 5: Policy Enforcement | `JumpEvent` + custom `TollCollectedEvent` | **Real** (triggered by demo jump) |
+| Beat 3: Policy Deployment | Extension authorization tx | **Real** (tx digest) |
+| Beat 4: Hostile Denied | Failed tx digest + MoveAbort code from wallet adapter | **Real** (tx digest + deterministic abort code; see §2.3) |
+| Beat 5: Ally Tolled | `JumpEvent` + custom `TollCollectedEvent` | **Real** (triggered by demo jump) |
 | Beat 6: Revenue Visibility | Aggregation of `TollCollectedEvent`s | **Hybrid** — real events from demo + sample historical data |
 | Beat 7: Closing Shot (Command Overview) | All signals populated | **Hybrid** — real state reads + sample historical feed |
 
@@ -305,7 +330,7 @@ For the Stillness deployment bonus window (14 days post-submission), deploy Opti
 |--------|----------------------|----------------|
 | Toll collection | No event | Extension must emit `TollCollectedEvent` |
 | Trade completion | No event | Extension must emit `TradeSettledEvent` |
-| Policy denial | Transaction aborts — no event emitted | Omit from MVP; accept as limitation |
+| Policy denial | Transaction aborts — no event emitted; but failed tx IS queryable by digest, and abort code is deterministic | Demo: observe directly from wallet adapter failure response (zero infra). Production: two-step evaluate pattern or backend relay needed for third-party denial visibility. See §2.3. |
 | Gate link/unlink | No event | Detect via state polling (compare `linked_gate_id` between polls) |
 | Extension authorization | No event | Detect via state polling (compare `extension` field between polls) |
 | Tribe change | No event | Detect via state polling (`character.tribe_id`) — low priority |
@@ -416,7 +441,7 @@ GET /health
 | **Stillness deployment** | Option B (thin backend) if >10 users expected | Prevents RPC rate limiting; enables pre-computed revenue; <200 lines additional code |
 | **Character resolution** | Manual fallback Day 1; attempt event indexing within first 2 hours | Risk-ordered; don't block on unknowns |
 | **Revenue tracking** | Custom extension events (TollCollectedEvent, TradeSettledEvent) | No world-contracts support; must be self-sovereign |
-| **Denial signals** | Omit from MVP | Transaction aborts not queryable; suggest as future capability |
+| **Denial signals** | Demo: wallet adapter failure response (synchronous, zero infra); Production: two-step or backend relay | Failed tx stored on-chain with deterministic abort code; demo operator controls both wallets |
 | **Polling interval** | 10 seconds | Matches UX spec; within public RPC limits for single user |
 | **Lux exchange rate** | App-level constant, default 1:1 with SUI for MVP | No canonical rate defined; user-configurable as stretch |
 | **Event subscription** | Polling preferred; WebSocket as stretch | `suix_subscribeEvent` availability unconfirmed on target RPC |

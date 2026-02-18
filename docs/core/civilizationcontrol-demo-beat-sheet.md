@@ -150,9 +150,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **On-screen action:** Signal Feed shows denied jump event with red status badge.
 
 **Evidence overlay required:**
-- Tx digest of the denied attempt: `[TBD-digest]` (or sandbox reference: MoveAbort ETribeMismatch code 0)
-- Event detail: tribe_id mismatch highlighted
+- Tx digest of the denied attempt: `[TBD-digest]` — failed tx IS stored on-chain and verifiable on any Sui explorer
+- MoveAbort code: `(extension_module::tribe_permit, 0)` = ETribeMismatch — deterministic, distinguishable from other abort reasons
 - Pilot address visible (shortened)
+- **Mechanism:** Wallet adapter returns failure response synchronously — `effects.status: "failure"`, `effects.status.error` contains module + abort code. Dashboard parses this to display "Jump denied. Tribe mismatch." No indexer or event subscription needed.
 
 **Purpose:** First consequence of the policy. The operator set a rule; the chain enforced it. Governance → denial.
 

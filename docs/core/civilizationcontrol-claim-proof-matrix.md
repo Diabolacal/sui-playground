@@ -97,8 +97,8 @@ Three quantified targets for the demo. Values marked `[TBD]` are refined during 
 
 | Metric | Target | Evidence Required |
 |---|---|---|
-| Hostile denied (tribe mismatch) | ≥1 visible in Signal Feed | Tx digest showing MoveAbort + event in feed |
-| Ally tolled (payment + passage) | ≥1 visible in Signal Feed | Tx digest showing AccessGrant + toll transfer + event in feed |
+| Hostile denied (tribe mismatch) | ≥1 visible in Signal Feed | Failed tx digest + MoveAbort code `(tribe_permit, 0)` from wallet adapter response |
+| Ally tolled (payment + passage) | ≥1 visible in Signal Feed | Tx digest showing JumpEvent + custom TollCollectedEvent (extension-emitted) |
 | Revenue visible in real-time | Toll revenue counter updates during demo | Before/after balance delta for collector address |
 | Policy change reflected in enforcement | ≥1 policy change → subsequent behavior change shown | Two tx digests: before policy (open) and after policy (filtered) |
 
