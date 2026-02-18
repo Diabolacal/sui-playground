@@ -119,6 +119,8 @@ Step 4: Structure IDs → Full structure data
 | `NetworkNodeCreatedEvent` | `network_node_id`, `assembly_key`, `owner_cap_id`, `type_id` | [network_node.move L77](../vendor/world-contracts/contracts/world/sources/network_node/network_node.move) |
 | `StorageUnitCreatedEvent` | `storage_unit_id`, `assembly_key`, `owner_cap_id`, `type_id`, `location_hash` | [storage_unit.move L80](../vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move) |
 
+> **Extended event audit:** A complete inventory of all 31 event emissions across 16 event types and 9 modules — including signal-to-source mapping for CivilizationControl — is documented in [read-path-architecture-validation.md](read-path-architecture-validation.md) §2.
+
 ---
 
 ## 2. Location Visibility Model

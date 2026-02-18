@@ -894,8 +894,9 @@ The UI communicates that both gates in a link must share the same extension type
 | Gate link partner     | On-chain: `gate.linked_gate_id`          | Same read   |                                |
 | NWN fuel level        | On-chain: `network_node.fuel` fields     | Same read   | `amount / max_capacity` = %    |
 | SSU inventory         | On-chain: dynamic fields on StorageUnit  | ~2-3s       | Query DF keys then read items  |
-| Jump / trade events   | Event subscription or polling            | Near real-time | `JumpEvent`, trade events   |
-| Toll revenue          | Aggregated from payment transfer events  | Derived     | Sum of `Coin<SUI>` transfers   |
+| Jump events           | Event polling (`suix_queryEvents`)       | Near real-time | `JumpEvent` (world-contracts); polling preferred over subscription (availability unconfirmed) |
+| Trade events          | Custom extension events                  | Near real-time | Extension must emit `TradeSettledEvent`; no world-contracts trade event exists |
+| Toll revenue          | Custom extension events                  | Derived     | Extension must emit `TollCollectedEvent`; generic `Coin<SUI>` transfers are ambiguous — see [read-path-architecture-validation.md](../architecture/read-path-architecture-validation.md) §2.4 |
 | Structure labels      | App storage (localStorage)               | Instant     | Not on-chain                   |
 | Spatial pins          | App storage (localStorage)               | Instant     | Not on-chain                   |
 | Tags                  | App storage (localStorage)               | Instant     | Not on-chain                   |

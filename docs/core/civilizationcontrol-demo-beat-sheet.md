@@ -174,9 +174,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **On-screen action:** Signal Feed shows permitted jump + toll payment. Revenue counter increments.
 
 **Evidence overlay required:**
-- Tx digest of the tolled jump: `[TBD-digest]` (or sandbox reference: AccessGrant event + 1 SUI transfer)
+- Tx digest of the tolled jump: `[TBD-digest]`
+- Custom `TollCollectedEvent` from extension (NOT `AccessGrant` — that is a sandbox mock, not a world-contracts event; see [read-path validation](../architecture/read-path-architecture-validation.md) §2.4)
 - Balance delta: operator address +5 SUI
-- AccessGrant event confirmation
+- `JumpEvent` confirmation (world-contracts)
 
 **Purpose:** Second consequence. Same policy, different outcome. The gate discriminates by tribe and collects revenue. Control → Consequence → Revenue in one beat.
 

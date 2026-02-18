@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — Read-Path Architecture Validation
+
+- **Goal:** Validate CivilizationControl read-path assumptions — wallet→structures discovery, signal feed data sources, architecture options (browser-only vs backend), scale model.
+- **Decision:** Option A (browser-only direct reads) for hackathon demo; Option B (thin backend cache/proxy) for Stillness if >10 concurrent users. Key corrections: (1) Toll revenue tracking requires custom extension events (TollCollectedEvent) — generic Coin\<SUI\> transfers are ambiguous; (2) `AccessGrant` and `ItemPurchased` are sandbox mocks, NOT world-contracts events — extension code must emit equivalents; (3) Policy denial events (MoveAbort) are NOT queryable via standard RPC — omit from MVP; (4) Gate link/unlink and extension authorization emit NO events — must be detected via state polling; (5) Lux→SUI exchange rate is undefined — default 1:1 for MVP.
+- **Files:** docs/architecture/read-path-architecture-validation.md (new), docs/ux/civilizationcontrol-ux-architecture-spec.md (Appendix corrected), docs/core/civilizationcontrol-demo-beat-sheet.md (Beat 5 evidence corrected), docs/core/civilizationcontrol-claim-proof-matrix.md (AccessGrant→TollCollectedEvent), docs/architecture/authenticated-user-surface-analysis.md (cross-ref added), docs/README.md (index updated)
+- **Diff:** +420 / -10
+- **Risk:** Low — analysis + doc corrections, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** Day 1 validation on hackathon test server: CharacterCreatedEvent query, RPC OwnerCap discovery, GraphQL availability, event retention window
+
 ## 2026-03-11 — Three-Environment Model Correction
 
 - **Goal:** Correct the two-tier environment assumption (local devnet + Stillness) to a three-tier model by incorporating the dedicated hackathon test server available from March 11.
