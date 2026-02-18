@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-15
+> **Date:** 2026-02-15 (environment model corrected 2026-03-11)
 > **Type:** Adversarial strategy review — thesis, critique, reconciliation
 > **Inputs:** V3 judging-aligned rankings, shortlist recommendations, capability analysis, Sui + EVE Frontier docs
 > **Mode:** Analytical. No hype. No default agreement.
@@ -109,7 +109,7 @@ The thesis claims TribeMint is "connective tissue" that elevates the system scor
 
 **Plausibly.** Consider:
 - GateControl alone scores 7.97 weighted — already highest individual idea.
-- With full polish (5+ rule types, beautiful policy builder UI, live Stillness testnet deployment, ZK privacy rule as differentiator), it could credibly reach 8.5+ weighted.
+- With full polish (5+ rule types, beautiful policy builder UI, live deployment on hackathon test server, ZK privacy rule as differentiator), it could credibly reach 8.5+ weighted.
 - A single module means deeper implementation: more rule types, better error handling, edge case coverage, comprehensive events.
 - Demo is simpler: 90 seconds of focused "before/after" gate behavior, leaving 90 seconds for system depth and narrative in the recorded video.
 - UX can be excellent because all design time goes into one workflow.
@@ -155,7 +155,7 @@ A three-module system with economic feedback loops requires the demo to **teach*
 
 ### Strategy A: Single-Module Ultra-Polish (GateControl)
 
-**Build:** GateControl as a standalone masterpiece — 4-5 rule types (tribe filter, time window, item toll, SUI toll, ZK privacy proof), web-based policy builder with drag/drop rule composition, live Stillness testnet deployment if AdminACL access is available.
+**Build:** GateControl as a standalone masterpiece — 4-5 rule types (tribe filter, time window, item toll, SUI toll, ZK privacy proof), web-based policy builder with drag/drop rule composition, live hackathon test server deployment with full evidence chain.
 
 | Criterion | Estimated Score | vs Thesis |
 |-----------|----------------|-----------|
@@ -299,7 +299,7 @@ CivilizationControl's dashboard is a **list-first control plane** — structures
 - LootDrop VRF module
 - ZK privacy rule in GateControl *(fully validated on devnet 2026-03-11; membership circuit implemented, standalone module published)*
 - Cross-faction exchange
-- Stillness testnet deployment
+- Stillness deployment *(deferred to post-submission bonus window; primary build uses hackathon test server)*
 
 ### Hard Stop Conditions
 
@@ -366,7 +366,7 @@ Insert 30 seconds between Act 3 and Act 4:
 | 2 | **Demo recording discipline** — a poorly structured or unclear recorded demo undermines the system narrative just as much as a live failure would | Medium | High — judges see a confusing video, not a polished system | Storyboard the full flow before recording. Script each segment. Pre-deploy all state on devnet. Record multiple takes and select the best. Add captions and annotations in post-production. |
 | 3 | **Scope creep into TribeMint** — "just one more day" pulls effort from core polish | Medium | Medium — degrades GateControl/TradePost quality | Hard rule: TribeMint starts only after both core modules pass a complete demo rehearsal. No exceptions. |
 | 4 | **`sui::random` calling convention blocks LootDrop** — `entry` function constraint prevents PTB composition with storefront flow | Low | Low — LootDrop is S2 stretch | Test calling convention early. If blocked, LootDrop uses hash-based pseudo-random fallback or is cut entirely. |
-| 5 | **AdminACL/sponsored tx misconfiguration on testnet** — live demo on Stillness requires admin access and correct sponsor setup | High (if attempting testnet) | Medium — demo falls back to local devnet | Default to local devnet demo. Stillness testnet is bonus only. Prepare both environments. |
+| 5 | **AdminACL/sponsored tx misconfiguration** — sponsored transactions require AdminACL registration; hackathon test server may provide GovernorCap access, Stillness (live server) requires CCP cooperation | High (if attempting Stillness) | Medium — demo falls back to hackathon test server or local devnet | Default to hackathon test server (from March 11) for build and evidence. Stillness deployment deferred to post-submission bonus window (14 days post-close). Local devnet as fallback where GovernorCap is available. |
 
 ---
 

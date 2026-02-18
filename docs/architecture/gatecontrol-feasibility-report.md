@@ -369,9 +369,9 @@ All rules stored as dynamic fields under a shared config object (following the `
 
 ### Cross-Cutting Concerns
 
-1. **Cannot test on Stillness (production) without gate ownership** — we need actual in-game gates we own to deploy extensions. Hackathon testing will be devnet-only unless we acquire gates.
-2. **AdminACL sponsorship constraint** — every jump involves CCP's sponsorship infrastructure. Extensions don't bypass this; they add rules on top.
-3. **Location proofs are server-signed** — linking gates requires the game server. On devnet, we self-sign.
+1. **Hackathon test server provides gate access** — the dedicated hackathon test server (available from March 11) provides admin-spawnable structures with pre-published world-contracts. Extensions can be tested against real gate objects without needing Stillness (live server) gate ownership. Local devnet is a fallback.
+2. **AdminACL sponsorship constraint** — every jump involves CCP's sponsorship infrastructure. Extensions don't bypass this; they add rules on top. Test server AdminACL access depends on organizer configuration.
+3. **Location proofs are server-signed** — linking gates requires the game server. On local devnet, we self-sign. On hackathon test server, check if admin tools provide distance proofs.
 
 ---
 

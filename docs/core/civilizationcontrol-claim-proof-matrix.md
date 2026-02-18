@@ -4,13 +4,13 @@
 
 > Evidence ledger mapping every demo claim to its proof artifact.
 > Sources: shortlist-viability-validation-report.md, gate-lifecycle-runbook.md, gatecontrol-feasibility-report.md, tradepost-cross-address-ptb-validation.md, zk-gatepass-feasibility-report.md, civcontrol-independent-audit.md
-> Last updated: 2026-02-18
+> Last updated: 2026-03-11 (environment model corrected)
 
 ---
 
 ## How to Use This Document
 
-Every claim made in the demo must trace to a row in this matrix. During demo recording, overlay the relevant evidence artifact (tx digest, object ID, balance delta) on-screen at the moment the claim is narrated. Rows marked `[TBD-digest]` require capture during hackathon build on the submission devnet/testnet — sandbox digests below are proof-of-pattern, not submission artifacts.
+Every claim made in the demo must trace to a row in this matrix. During demo recording, overlay the relevant evidence artifact (tx digest, object ID, balance delta) on-screen at the moment the claim is narrated. Rows marked `[TBD-digest]` require capture during hackathon build on the **hackathon test server** (primary build environment from March 11) — sandbox digests below are proof-of-pattern, not submission artifacts.
 
 ### Five Non-Negotiable Proof Moments
 
@@ -123,12 +123,12 @@ Three quantified targets for the demo. Values marked `[TBD]` are refined during 
 
 | Gap | What's Needed | When to Capture | Risk if Missing |
 |---|---|---|---|
-| Submission-chain tx digests | All `[TBD-digest]` rows above | During build on submission devnet/testnet | Cannot overlay tx proof in demo |
+| Hackathon test server tx digests | All `[TBD-digest]` rows above | During build on hackathon test server (March 11+) | Cannot overlay tx proof in demo |
 | UI-driven policy change tx | Single tx from "Deploy Policy" button | After GateControl UI is functional | Cannot prove operations reduction claim |
 | UI-driven buy tx | Single tx from "Buy" button | After TradePost UI is functional | Cannot prove commerce UX claim |
 | Real-time Signal Feed screenshot | Screenshot/recording of feed updating in real-time | During demo recording | Cannot prove monitoring claim |
 | Revenue totals | Aggregate SUI revenue figures | At end of demo recording session | Cannot state quantified economic utility |
-| Sponsored tx evidence (stretch) | Tx showing sponsor ≠ sender | If AdminACL access resolved | Cannot prove gas abstraction claim |
+| Sponsored tx evidence (stretch) | Tx showing sponsor ≠ sender | If AdminACL access resolved on test server | Cannot prove gas abstraction claim |
 
 ---
 

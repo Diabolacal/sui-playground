@@ -2,9 +2,21 @@
 
 **Retention:** Carry-forward
 
-- **Date:** 2026-02-18
+- **Date:** 2026-02-18 (environment model corrected 2026-03-11)
 - **Window:** 3 weeks until March 11 coding start
 - **Context:** Pre-hackathon execution bottleneck analysis
+
+---
+
+## Environment Model (Three-Tier)
+
+| Environment | Availability | Purpose | Key Properties |
+|---|---|---|---|
+| **Local DevNet** | Pre-March 11 (now) | Pre-hackathon validation, pattern exploration, compile tests | Docker-based (`builder-scaffold`). GovernorCap available. Self-signed proofs. No world-contracts dependencies tested against live types. |
+| **Hackathon Test Server** | From March 11 (hackathon start) | Primary build/test/evidence environment | Same world-contracts as Stillness. Real Move publishing, real tx digests. Admin-spawnable structures, unlimited currency. Shared among all builders (symmetric visibility). |
+| **Stillness** | Always (live server) | Post-submission deployment bonus + player vote cultivation | Live player server — NOT a testnet. Real player usage. Deployment bonus requires Stillness deploy within 14 days post-submission close. |
+
+**Critical correction:** Earlier versions of this document assumed a two-tier model (local devnet + Stillness). The hackathon test server — available from March 11 — changes the deployment strategy: it provides equivalent evidence quality to Stillness without competitive visibility risk, and the Stillness deployment bonus has a 14-day post-submission window.
 
 ---
 
@@ -15,7 +27,7 @@ The bottleneck is **integration risk** — not documentation, not strategy, not 
 37 documents (~15,580 lines) have been written. Every strategic question is answered. Every architecture pattern is catalogued. Every judging criterion is mapped. The documentation is **saturated**. But the entire validation suite used **zero world-contracts dependencies** — every sandbox module had empty `[dependencies]`. The gap between "pattern validated on standalone mocks" and "extension compiles and executes against published world-contracts types" is the seam most likely to consume Day 1-2 and cascade into demo failure.
 
 Three critical unknowns remain open from the portfolio roadmap §10:
-1. Character resolution on Stillness (RED blocker)
+1. Character resolution on hackathon test server (RED blocker — previously scoped to Stillness; test server provides equivalent validation)
 2. EVE Vault adapter PTB signing (untested)
 3. Multi-submission rule (unconfirmed — entire portfolio strategy hinges on this)
 
@@ -53,8 +65,8 @@ These are **not documentation gaps**. They are **empirical unknowns that only te
 **Why it matters:** These are the only things that can invalidate the entire architecture on Day 1. Character resolution is flagged RED in the auth surface analysis. EVE Vault signing is untested. The multi-submission rule determines whether the portfolio strategy even works. No document can answer these — only experiments and a message to organizers.
 
 **Specific outcome:**
-- Confirm or refute Character event indexing on Stillness RPC (3-4 hours). Decision: event-based resolution vs. manual Character ID input.
-- Build a 50-line HTML page: `@mysten/dapp-kit` → connect EVE Vault → sign a trivial PTB on Stillness (3-4 hours). Pass/fail.
+- Confirm or refute Character event indexing on hackathon test server RPC (3-4 hours). Decision: event-based resolution vs. manual Character ID input. *(Note: test server is the primary target from March 11; Stillness testing is deferred to post-submission deployment phase.)*
+- Build a 50-line HTML page: `@mysten/dapp-kit` → connect EVE Vault → sign a trivial PTB on test server (3-4 hours). Pass/fail.
 - Email/Discord organizers: "Can one team submit multiple entries?" (30 minutes). If no, restructure portfolio before March 11.
 - Compile a minimal Move package that imports `world::gate`, `world::character`, `world::storage_unit` against published world-contracts on local devnet (2-4 hours). Confirm `issue_jump_permit<TestAuth>()` is callable from a dependent package.
 
@@ -73,11 +85,11 @@ These are **not documentation gaps**. They are **empirical unknowns that only te
 
 ### 3. Environment Lock and Freshness Check
 
-**Why it matters:** Docker devnet boot time, frontend dependency compatibility, and world-contracts API stability are Day-1 prerequisites that silently fail when unverified. The reimplementation checklist's assumptions A1-A8 are based on source analysis from Feb 16. Any post-Feb-16 commit to world-contracts could invalidate the pattern catalog.
+**Why it matters:** Docker devnet boot time, frontend dependency compatibility, and world-contracts API stability are Day-1 prerequisites that silently fail when unverified. The reimplementation checklist's assumptions A1-A8 are based on source analysis from Feb 16. Any post-Feb-16 commit to world-contracts could invalidate the pattern catalog. The hackathon test server (available March 11) is the primary build target — local devnet is for pre-hackathon validation only.
 
 **Specific outcome:**
 - `git -C vendor/world-contracts fetch origin` + diff review of `gate.move`, `storage_unit.move`, `access_control.move` (30 minutes). Note any signature changes vs. assumptions.
-- Time Docker devnet cold start. Pre-pull image if >5 minutes (30 minutes).
+- Time Docker devnet cold start. Pre-pull image if >5 minutes (30 minutes). *(Local devnet remains useful for rapid iteration before test server access.)*
 - Create and delete a throwaway Vite+React+TS project with `@mysten/dapp-kit` installed to verify npm compilation (30 minutes).
 - Pin Node.js and pnpm versions (15 minutes).
 
@@ -114,9 +126,9 @@ A minimal Move package (`sandbox/minimal-extension-test/`) was compiled against 
 
 **Blocking requirement for manual test:** EVE Vault Chrome extension must be built from source (`vendor/evevault`) or installed from GitHub releases. Requires FusionAuth credentials (EVE Frontier auth server) and Enoki API key for zkLogin. These are not locally available in the sandbox environment.
 
-**Stillness RPC:** Not yet tested. Scaffold defaults to localnet (`http://127.0.0.1:9000`). Switching to Stillness requires updating the network config URL.
+**Stillness RPC:** Not yet tested. Scaffold defaults to localnet (`http://127.0.0.1:9000`). Initial validation will target the hackathon test server (available from March 11) rather than Stillness. Stillness deployment is deferred to the post-submission bonus window (14 days post-close).
 
-**Next step:** Install EVE Vault extension in Chrome, run `pnpm dev` in the sandbox, and execute the manual 4-step test (detect → connect → sign → evaluate). Update this section to PASS/PARTIAL/FAIL after manual test.
+**Next step:** Install EVE Vault extension in Chrome, run `pnpm dev` in the sandbox, and execute the manual 4-step test (detect → connect → sign → evaluate). Target the hackathon test server RPC once available (March 11). Update this section to PASS/PARTIAL/FAIL after manual test.
 
 ---
 
@@ -135,9 +147,9 @@ A minimal Move package (`sandbox/minimal-extension-test/`) was compiled against 
 
 | Period | Focus | Hours |
 |--------|-------|-------|
-| **Feb 18-23** | Kill unknowns: multi-submission rule, Character resolution, EVE Vault adapter, extension compilation test | ~10-12 |
+| **Feb 18-23** | Kill unknowns: multi-submission rule, Character resolution (target test server from March 11), EVE Vault adapter, extension compilation test | ~10-12 |
 | **Feb 24-Mar 1** | Demo rehearsal + environment lock: OBS setup, narration practice, Docker timing, world-contracts freshness, frontend deps | ~8-10 |
-| **Mar 2-9** | Final prep + **intentional rest**: Track C viability triage, Day-1 timeline mental walkthrough, update carry-forward docs with findings. Then 4 days of genuine rest. | ~5-7 + rest |
+| **Mar 2-9** | Final prep + **intentional rest**: Track C viability triage, Day-1 timeline mental walkthrough (target: test server as primary build environment), update carry-forward docs with findings. Then 4 days of genuine rest. | ~5-7 + rest |
 | **Total** | | **~25 hours of work + 8 days of rest** |
 
 The most counterintuitive recommendation: **do not work every day for 3 weeks.** The prep is mature. The biggest meta-risk now is arriving on March 11 exhausted from continuous analysis. ~25 hours of targeted de-risking, spread across the first two weeks, then rest.

@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-17 (reconciled)  
+> **Date:** 2026-02-17 (reconciled; environment model corrected 2026-03-11)  
 > **Status:** Pre-hackathon planning (code moratorium until March 11)  
 > **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report, narrative voice guide, emotional objective, UX architecture spec, Figma structural wireframe  
 > **Mode:** Competitive strategy — bold, decisive, kill-switch-aware
@@ -265,7 +265,7 @@ Side entries serve two purposes: (1) blanket remaining bonus categories Civiliza
 1. Deploy `corpse_gate_bounty.move` (possibly with minor type_id configuration)
 2. Minimal React UI: gate owner sets toll item type, jump attempt view shows success/failure (scaffold `dapps/` React starter with `@evefrontier/dapp-kit` available as base)
 3. Record demo: corpse deposit → gate opens vs. no corpse → denied
-4. **Stretch:** Deploy to Stillness testnet for Best Live Integration targeting
+4. **Stretch:** Deploy to Stillness (live server) for Best Live Integration targeting (post-submission bonus window)
 
 **Overlap with CivilizationControl:** GateControl absorbs the item toll pattern. But Corpse Toll Road is a *different entry* — simpler, single-purpose, positioned as a utility mod, not a system. The code is distinct (dedicated module vs. dynamic field dispatch). Judges evaluate separately.
 
@@ -372,17 +372,17 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 | Verify multi-submission rules | Before March 1 | Pending | If disallowed, restructure portfolio |
 | Pre-hackathon unknowns de-risking | Feb 17-March 5 | In Progress | Character resolution, wallet adapter, RPC discovery — see §10 |
 | Demo storyboards (all entries) | Feb 25-March 5 | Pending | Pre-plan every demo shot so execution is fast |
-| Devnet environment validation | March 1-5 | Partial | Docker + local devnet confirmed; Stillness testnet untested |
+| Devnet environment validation | March 1-5 | Partial | Docker + local devnet confirmed; hackathon test server available from March 11 (primary build target); Stillness (live server) deferred to post-submission |
 | UI wireframes (Track C entries) | March 1-10 | Pending | Simple layouts for Fortune Gate, Salvage Protocol, Corpse Toll Road |
 
 ### Phase 1: Core Sprint (March 11-17, Days 1-7)
 
 | Day | Focus | Gate |
 |-----|-------|------|
-| 1 | GateControl Move module: tribe filter + coin toll. Full gate lifecycle on devnet. | Gate online + extension authorized by EOD |
-| 2 | GateControl: `issue_jump_permit` → `jump_with_permit` integration. ZK circuit compilation begins (parallel). | Working pass/fail scenarios on devnet |
-| 3 | TradePost Move module: listing CRUD + atomic buy. ZK: Move Groth16 verification on devnet. | Cross-address atomic buy working |
-| 4 | Command Overview shell: structure sidebar + GateControl policy panel + TradePost browse/buy. ZK: gate extension integration. | UI connected to on-chain state |
+| 1 | GateControl Move module: tribe filter + coin toll. Full gate lifecycle on hackathon test server. | Gate online + extension authorized by EOD |
+| 2 | GateControl: `issue_jump_permit` → `jump_with_permit` integration. ZK circuit compilation begins (parallel). | Working pass/fail scenarios on test server |
+| 3 | TradePost Move module: listing CRUD + atomic buy. ZK: Move Groth16 verification on test server. | Cross-address atomic buy working |
+| 4 | Command Overview shell: structure sidebar + GateControl policy panel + TradePost browse/buy. ZK: gate extension integration. | UI connected to on-chain state (test server) |
 | 5 | Integration: shared Signal Feed, GateControl + TradePost in same control surface. ZK kill check. | Full CC demo rehearsal |
 | 6 | Demo rehearsal #1. Record test takes. Fix visual issues. | Watchable 3-min draft video |
 | 7 | Buffer / TribeMint stretch if demo is solid. | CC demo-stable = proceed to Phase 2 |
@@ -406,6 +406,7 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 | 12 | Record final demos for all side entries. Player-vote cutdowns (30-60s per entry). |
 | 13 | Track D (Loot Crate) if all above are done. Otherwise: polish, README docs, repo cleanup. |
 | 14 | Submit all entries via Deepsurge. Cross-check repo hygiene. Verify GitHub visibility. |
+| 14+ | **Post-submission:** Deploy to Stillness (live server) within 14 days for deployment bonus + player vote cultivation. |
 
 ### When to Pivot
 
@@ -414,6 +415,7 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 | TradePost cross-address fails on Day 3 | Pivot CC to Strategy A (solo GateControl + ZK). TradePost becomes separate side entry or cut. |
 | ZK integration fails on Day 3 | Cut ZK. CC ships with tribe + toll rules. Still competitive. |
 | CC not demo-stable by Day 7 | Cancel Phase 2 entirely. All remaining time goes to CC polish and demo. |
+| Test server unavailable | Fall back to local devnet for build/test. Evidence quality equivalent; demo uses devnet digests. |
 | Fortune Gate `sui::random` fails | Fallback to tx hash pseudo-random. Still weird. |
 | Salvage Protocol `unanchor` blocked | Deploy Dead Drop as Most Creative backup. |
 | Day 10 and only 2 sprints complete | Skip Track D. Submit what's ready. |
@@ -452,7 +454,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **MVP mitigation:** Manual Character ID input is already designed into the [UX architecture spec](../ux/civilizationcontrol-ux-architecture-spec.md) §10b as the Day 1 path. Automatic resolution is an upgrade trigger (§12, Trigger 1).
 
-**Pre-hackathon action:** On Stillness testnet, attempt to query `CharacterCreatedEvent` events to verify event indexing viability. Investigate ObjectRegistry discoverability.
+**Pre-hackathon action:** On the hackathon test server (from March 11), attempt to query `CharacterCreatedEvent` events to verify event indexing viability. Investigate ObjectRegistry discoverability. *(Previously scoped to Stillness; test server provides equivalent RPC capabilities with lower competitive visibility risk.)*
 
 ### 10.2 EVE Vault Wallet Adapter Integration — LOW
 
@@ -468,9 +470,9 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **Finding:** `add_sponsor_to_acl()` requires `GovernorCap` — only the package deployer (CCP) can add sponsor addresses. A builder extension **cannot** register its own sponsor. There is no `remove_sponsor_from_acl` function.
 
-**Impact on MVP:** Most CivilizationControl operations (online/offline, authorize extension, deploy policy, unlink gates, create listings) do NOT require sponsorship. Only jump and fuel deposit/withdraw require `verify_sponsor()`.
+**Impact on MVP:** Most CivilizationControl operations (online/offline, authorize extension, deploy policy, unlink gates, create listings) do NOT require sponsorship. Only jump and fuel deposit/withdraw require `verify_sponsor()`. On the hackathon test server, GovernorCap access may differ from Stillness — clarify with organizers.
 
-**Mitigation:** Design the MVP around OwnerCap-only operations. Defer sponsored operations (jump demo, fuel deposit) to stretch or use local devnet where GovernorCap is available. The demo can show gate policy enforcement without requiring a live sponsored jump.
+**Mitigation:** Design the MVP around OwnerCap-only operations. Defer sponsored operations (jump demo, fuel deposit) to stretch or use local devnet / hackathon test server where GovernorCap may be available. The demo can show gate policy enforcement without requiring a live sponsored jump.
 
 **Pre-hackathon action:** Clarify with CCP/hackathon organizers whether builder sponsor addresses can be registered in AdminACL during the hackathon.
 
@@ -479,11 +481,11 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 **Finding:** The 4-step discovery chain (Character → OwnerCaps → authorized_object_id → structure data) is validated on local devnet. Steps 2-4 use standard `suix_getOwnedObjects` and `sui_getObject` — architecturally sound. Step 1 depends on Character resolution (§10.1).
 
 **Unknowns:**
-- `suix_getOwnedObjects` on a Character *object address* (transfer-to-object children) may behave differently on Stillness than on local devnet.
+- `suix_getOwnedObjects` on a Character *object address* (transfer-to-object children) may behave differently on the hackathon test server than on local devnet.
 - EVE Frontier may operate custom RPC middleware that filters non-game-client queries.
 - Pagination behavior for Characters with many OwnerCaps is untested.
 
-**Pre-hackathon action:** Once a Character ID is known on Stillness, run `suix_getOwnedObjects` on the Character's address to verify OwnerCap retrieval works.
+**Pre-hackathon action:** Once a Character ID is known on the hackathon test server (from March 11), run `suix_getOwnedObjects` on the Character's address to verify OwnerCap retrieval works.
 
 ### 10.5 Active Network Visualization — LOW (SCOPED)
 
@@ -497,10 +499,10 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 | Unknown | Risk | Blocks MVP? | Pre-Hackathon Action Required? |
 |---------|------|-------------|-------------------------------|
-| Character resolution | Critical | Yes (degraded with manual fallback) | Yes — event indexing test on Stillness |
+| Character resolution | Critical | Yes (degraded with manual fallback) | Yes — event indexing test on hackathon test server (March 11+) |
 | EVE Vault adapter | Low | Yes if broken | Yes — minimal PTB signing test |
 | AdminACL sponsorship | Medium | No (MVP is OwnerCap-only) | Nice-to-have — clarify with organizers |
-| RPC on live network | Medium | Partially (Step 1 dependent) | Yes — test with known Character on Stillness |
+| RPC on live network | Medium | Partially (Step 1 dependent) | Yes — test with known Character on test server |
 | Network visualization | Low | No | No — scoped to list-first + topology |
 
 ---
@@ -513,9 +515,9 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 | Day | Focus | Deliverable |
 |-----|-------|-------------|
-| 1-2 | **Character resolution research** — attempt event indexing on Stillness; investigate ObjectRegistry discoverability; document findings | Decision: which resolution path to implement on March 11 |
+| 1-2 | **Character resolution research** — prepare event indexing queries for hackathon test server (available March 11); investigate ObjectRegistry discoverability against local devnet; document findings | Decision: which resolution path to implement on March 11 |
 | 3 | **EVE Vault adapter test** — minimal @mysten/dapp-kit app, connect EVE Vault, sign a simple PTB | Pass/fail confirmation; document any friction |
-| 4-5 | **RPC discovery validation** — with a known Character ID on Stillness, test full OwnerCap → structure discovery chain | Confirmed working or documented workaround |
+| 4-5 | **RPC discovery validation** — with a known Character ID on local devnet, test full OwnerCap → structure discovery chain (confirm on test server from March 11) | Confirmed working or documented workaround |
 
 ### Week 2 (Feb 24-March 2): Integration De-Risking
 
@@ -531,7 +533,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 |-----|-------|-------------|
 | 1-2 | **CC demo storyboard finalization** — frame each segment through Active Network consequence lens; identify exact pre-deploy state needed; list every PTB in demo order | Production-ready demo script |
 | 3 | **Track C viability triage** — re-evaluate Fortune Gate (`sui::random` calling convention), Salvage Protocol (`unanchor` access control), Corpse Toll Road (template freshness) against current world-contracts | Go/no-go per Track C candidate |
-| 4-5 | **March 11 Day-1 prep** — Docker + devnet environment validation; pre-stage world-contracts publish scripts; character/gate/SSU setup sequence documented; dependency install list finalized | March 11 ready: environment boots, world publishes, first PTB succeeds within 30 minutes |
+| 4-5 | **March 11 Day-1 prep** — Docker + devnet environment validation; hackathon test server connection details; pre-stage world-contracts publish scripts (local devnet only); character/gate/SSU setup sequence documented; dependency install list finalized | March 11 ready: test server connects, local devnet boots, first PTB succeeds within 30 minutes |
 
 ### Guardrails
 
@@ -547,10 +549,11 @@ By the end of pre-hackathon prep, the following must be true:
 
 - [ ] Character resolution path decided (event indexing, deterministic ID, manual, or hybrid)
 - [ ] EVE Vault PTB signing confirmed working (or fallback identified)
-- [ ] RPC object discovery tested on Stillness (or scoped to local devnet demo)
+- [ ] RPC object discovery tested on hackathon test server (Stillness deferred to post-submission)
 - [ ] Multi-submission rules confirmed (or portfolio restructured)
 - [ ] All demo storyboards drafted with narrative voice applied
-- [ ] Docker + devnet environment boots cleanly in <5 minutes
+- [ ] Docker + local devnet environment boots cleanly in <5 minutes
+- [ ] Hackathon test server connection details documented (RPC URL, faucet, admin tools)
 - [ ] March 11 Day-1 checklist updated with corrections from pre-hackathon validation
 
 ---
@@ -559,18 +562,27 @@ By the end of pre-hackathon prep, the following must be true:
 
 ### Hour 0: Environment Verification (30 min)
 
+**Primary target: Hackathon Test Server** (available from March 11). Local devnet is a fallback for rapid iteration if test server is unavailable.
+
 ```bash
-# Start devnet
+# Option A: Connect to hackathon test server (primary)
+sui client new-env --alias testserver --rpc <TEST_SERVER_RPC_URL>
+sui client switch --env testserver
+sui client active-env  # → "testserver"
+sui client gas         # → funded accounts (unlimited currency on test server)
+
+# Option B: Local devnet fallback
 cd vendor/builder-scaffold/docker
 docker compose run --rm sui-local
-
-# Inside container
 sui client active-env  # → "local"
 sui client gas         # → funded accounts
-sui move build -e local  # → verify toolchain
 ```
 
-### Hour 0.5: Publish World Contracts (1-2 hours)
+**Note:** On the hackathon test server, world-contracts are pre-published and structures can be admin-spawned. On local devnet, you must publish world-contracts yourself.
+
+### Hour 0.5: Publish World Contracts (1-2 hours, local devnet only)
+
+On the hackathon test server, world-contracts are already published — skip to GateControl. On local devnet:
 
 ```bash
 cd /workspace/world-contracts/contracts/world
@@ -709,7 +721,7 @@ For each Deepsurge submission:
 - [ ] No secrets, keys, or mnemonics in repo
 - [ ] No third-party IP violations
 - [ ] No security/equity/financial instrument characteristics
-- [ ] Stillness deployment (bonus, if applicable — within 14 days post-close)
+- [ ] Stillness deployment (bonus — within 14 days post-submission close; primary build uses hackathon test server)
 
 ---
 

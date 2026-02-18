@@ -97,7 +97,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 - **No auto-discovery** — no on-chain enumeration mechanism; must use RPC with known Character ID
 - **4-step discovery chain**: wallet → Character ID (off-chain) → OwnerCaps (RPC) → authorized_object_id → structure data (RPC)
-- **RPC-based discovery unverified on live network** — confirmed on local devnet only (Yellow risk)
+- **RPC-based discovery unverified on live network** — confirmed on local devnet only (Yellow risk). Hackathon test server (from March 11) is the primary validation target; Stillness (live server) deferred to post-submission.
 
 ### Sponsorship & Server
 

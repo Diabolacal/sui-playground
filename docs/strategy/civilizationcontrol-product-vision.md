@@ -301,7 +301,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 |---|---|---|
 | **TribeMint** — faction currency (`Coin<TribeToken>`) | Completes the "tribal economy" narrative; tolls and trades denominated in faction currency instead of raw `Coin<SUI>`. Enables Lux-equivalent pricing in a builder-controlled token. Emotionally powerful but adds integration complexity. | Only after both core modules pass a complete demo rehearsal. |
 | **LootDrop** — VRF loot crate via on-chain randomness | Adds a "surprise and delight" layer; storefronts can sell mystery crates. Compelling demo moment. | Only if TribeMint is stable. |
-| **Stillness testnet deployment** | Earns the "Best Live Frontier Integration" bonus criterion. Shows real-world deployment confidence. | Only if core is polished and time permits. Blocked by sponsored transaction resolution. |
+| **Stillness deployment** | Earns the "Best Live Frontier Integration" bonus criterion. Shows real-world deployment confidence. | Only if core is polished and time permits. Deferred to post-submission bonus window (14 days post-close). Primary build and evidence uses hackathon test server. |
 
 ### Not in Scope (Explicitly Excluded)
 

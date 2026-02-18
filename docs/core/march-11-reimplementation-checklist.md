@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16 (updated with full gate lifecycle rehearsal evidence)  
+> **Date:** 2026-02-16 (updated with full gate lifecycle rehearsal evidence; environment model corrected 2026-03-11)  
 > **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
@@ -97,9 +97,12 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | # | Assumption | How to Verify |
 |---|-----------|---------------|
 | E1 | `world-contracts` repo has not been restructured or renamed | Check GitHub repo, pull latest |
-| E2 | `builder-scaffold` Docker devnet still works with same entrypoint | `docker compose run --rm sui-local` |
+| E2 | `builder-scaffold` Docker devnet still works with same entrypoint (fallback environment) | `docker compose run --rm sui-local` |
 | E3 | Sui CLI supports `--gas-sponsor` flag on `sui client ptb` (NOT `--sponsor`, NOT on `sui client call`) | `sui client ptb --help` |
 | E4 | Local devnet genesis creates faucet for funding test accounts | Check container startup logs |
+| E5 | **Hackathon test server** is available from March 11 with same world-contracts as Stillness | Connect via provided RPC URL; verify with `sui client active-env` |
+| E6 | Test server provides admin-spawnable structures and unlimited currency | Verify with organizer documentation or test server admin tools |
+| E7 | Test server world-contracts package IDs are discoverable (pre-published) | Query test server RPC for known package types |
 
 ---
 
@@ -234,11 +237,11 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 **What:** `jump()` and `jump_with_permit()` require the transaction to be sponsored by an address in `AdminACL`.
 
-**On devnet:** Register a second address as sponsor in `AdminACL`. Use `--gas-sponsor "@0xADDR"` flag on PTB. **Critical:** Self-sponsorship does NOT work — `ctx.sponsor()` returns `None` when sender == gas payer. Must use a *different* address as sponsor. The `sui client ptb` command is required (not `sui client call`) for sponsored transactions.
+**On local devnet / hackathon test server:** Register a second address as sponsor in `AdminACL`. Use `--gas-sponsor "@0xADDR"` flag on PTB. **Critical:** Self-sponsorship does NOT work — `ctx.sponsor()` returns `None` when sender == gas payer. Must use a *different* address as sponsor. The `sui client ptb` command is required (not `sui client call`) for sponsored transactions. On the hackathon test server, AdminACL access depends on organizer configuration — verify early.
 
 **Rehearsal evidence:** Validated with PLAYER_A as sponsor, ADMIN as sender. See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13.
 
-**On production:** The game server sponsors player transactions. Extensions add rules on top of this — they don't bypass sponsorship.
+**On Stillness (live server):** The game server sponsors player transactions. Extensions add rules on top of this — they don't bypass sponsorship.
 
 ---
 
@@ -260,13 +263,18 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 ### Hour 0.5: Environment Verification (30 min)
 
+**Primary target: Hackathon Test Server** (available from March 11). Local devnet is a fallback.
+
 - [ ] Pull latest `world-contracts` — check for API changes since Feb 16
 - [ ] Verify assumptions A1–A4 by reading key function signatures:
   - `gate.move`: `authorize_extension`, `issue_jump_permit`, `jump_with_permit`
   - `storage_unit.move`: `withdraw_item`, `deposit_item`, `authorize_extension`
   - `inventory.move`: `Item` struct abilities
-- [ ] Start local devnet: `cd vendor/builder-scaffold/docker && docker compose run --rm sui-local`
-- [ ] Publish world package: `sui client publish --gas-budget 500000000`
+- [ ] **Connect to hackathon test server:** `sui client new-env --alias testserver --rpc <RPC_URL>` → `sui client switch --env testserver`
+- [ ] Verify test server connection: `sui client active-env` → "testserver"
+- [ ] Check test server for pre-published world-contracts (query known types)
+- [ ] **Fallback:** Start local devnet: `cd vendor/builder-scaffold/docker && docker compose run --rm sui-local`
+- [ ] If using local devnet: Publish world package: `sui client publish --gas-budget 500000000`
 - [ ] Record all shared object IDs (GovernorCap, AdminACL, ObjectRegistry, etc.)
 
 ### Hour 1: GateControl Module (2–3 hours)
@@ -303,9 +311,9 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 - [ ] Write Move unit tests
 - [ ] `sui move build` + `sui move test`
 
-### Hour 5: Integration on Local Devnet (2 hours)
+### Hour 5: Integration on Local Devnet / Test Server (2 hours)
 
-- [ ] Run infrastructure setup chain (Pattern 5) — script if possible
+- [ ] Run infrastructure setup chain (Pattern 5) — on test server if admin tools available, otherwise local devnet
 - [ ] Publish GateControl extension package
 - [ ] Authorize extension on both test gates
 - [ ] Test: correct tribe → permit issued → jump succeeds → JumpEvent emitted
@@ -346,7 +354,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | **SSU offline** | `withdraw_item` / `deposit_item` abort with status check | Ensure SSU is online (connected to fueled NetworkNode) |
 | **Wrong `Character` reference in events** | Misleading event data | Pass the actual buyer's character to `withdraw_item` for meaningful events |
 | **Single extension per object** | Can't have GateControl AND a different extension on the same gate | This is by design. Each gate/SSU gets one extension type. |
-| **Distance proof for `link_gates`** | No game server to sign proofs on devnet | Self-sign: register local keypair as server address, sign your own proof (BCS format, blake2b+ed25519). Use `generate_distance_proof.mjs` as reference. |
+| **Distance proof for `link_gates`** | No game server to sign proofs on local devnet | Self-sign: register local keypair as server address, sign your own proof (BCS format, blake2b+ed25519). Use `generate_distance_proof.mjs` as reference. On hackathon test server, check if admin tools provide distance proofs. |
 | **NetworkNode dependency chain** | ~6 sequential admin operations before gates can go online | Script the full setup chain. Consider a single PTB with all setup calls. |
 | **Coin splitting in PTB** | Buyer must split exact payment from gas coin | Use `--split-coins gas [amount]` in CLI, or `txb.splitCoins()` in SDK |
 | **Item leaves SSU as standalone object** | `withdraw_item` creates a freestanding `Item` — not inside any inventory | This is expected for TradePost. Buyer can later deposit into their own SSU. |
@@ -355,10 +363,11 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 | Pitfall | How to Avoid |
 |---------|--------------|
-| **Chain ID mismatch after fresh genesis** | Always use `--build-env local` flag for build/publish on local devnet. Extension packages need `[environments]` section in Move.toml (`local = "<chain-id>"`) AND a `Pub.local.toml` referencing already-published World dependency. |
+| **Chain ID mismatch after fresh genesis** | Always use `--build-env local` flag for build/publish on local devnet. Extension packages need `[environments]` section in Move.toml (`local = "<chain-id>"`) AND a `Pub.local.toml` referencing already-published World dependency. On hackathon test server, use the server's chain ID instead. |
 | **Port 9000 conflict** | Don't run ZK PoC native devnet and Docker devnet simultaneously |
 | **Docker volume stale state** | If devnet behaves oddly, delete `workspace-data/` and `docker volume rm docker_sui-keystore` |
 | **world-contracts API changed** | Pull latest on hackathon day, verify assumptions A1–A4 before writing code |
+| **Test server unavailable** | Fall back to local devnet. All patterns are validated on local devnet. Evidence quality equivalent for demo purposes. |
 
 ---
 
@@ -446,6 +455,7 @@ Reasons:
 | world-contracts repo deleted or made private | Submodule add fails | Contact organizers; use cached copy from builder-scaffold |
 | TradePost cross-address buy fails on devnet | Integration test (Hour 5) fails | Pivot TradePost to stretch module; submit GateControl as solo entry (Strategy A from strategy memo) |
 | Docker devnet won't start | Environment verification fails | Use native `sui start --with-faucet` instead of Docker |
+| Hackathon test server unavailable on Day 1 | Cannot connect via provided RPC URL | Fall back to local devnet; switch to test server when available |
 
 ---
 

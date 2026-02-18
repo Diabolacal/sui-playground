@@ -284,7 +284,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 | Rank | Idea | What It Takes |
 |------|------|--------------|
-| 1 | Corpse Toll Road (#8) | Deploy existing template code to Stillness testnet. Lowest barrier — working code exists. Needs AdminACL access for sponsored tx. |
+| 1 | Corpse Toll Road (#8) | Deploy existing template code to hackathon test server (build) and Stillness (live server, post-submission). Lowest barrier — working code exists. Needs AdminACL access for sponsored tx. |
 | 2 | Gate Policy Engine (#1) | Deploy extension module + register on a real Stillness gate. Needs game account with owned gate + AdminACL for extension registration. |
 | 3 | Faction Mint (#24) | Deploy `Coin<T>` to Stillness + integrate with existing gates/SSUs. Coin creation is permissionless; integration needs structure ownership. |
 

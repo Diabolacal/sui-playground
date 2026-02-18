@@ -6,6 +6,19 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Three-Environment Model Correction
+
+- **Goal:** Correct the two-tier environment assumption (local devnet + Stillness) to a three-tier model by incorporating the dedicated hackathon test server available from March 11.
+- **Decision:** Updated all strategic and planning documents to reflect three environments: (1) Local DevNet — Docker-based, pre-March 11 validation; (2) Hackathon Test Server — primary build/test/evidence environment from March 11, same world-contracts as Stillness, admin-spawnable structures, unlimited currency, shared among builders; (3) Stillness — live player server, deployment deferred to post-submission bonus window (14 days post-close). Revised launch strategy from "staged Stillness deployment" to "build privately on test server, submit with maximum novelty, deploy to Stillness post-submission."
+- **Files:** docs/strategy/strategic-next-move-audit-2026-02-18.md, docs/strategy/hackathon-portfolio-roadmap.md, docs/strategy/civilizationcontrol-strategy-memo.md, docs/strategy/civilizationcontrol-product-vision.md, docs/core/march-11-reimplementation-checklist.md, docs/core/civilizationcontrol-claim-proof-matrix.md, docs/architecture/gatecontrol-feasibility-report.md, docs/ux/civilizationcontrol-ux-architecture-spec.md, docs/ideas/hackathon-ideas-grounded-v3-judged.md
+- **Diff:** ~+80 / -40 (environment references updated, new environment model section added, hackathon test server as primary target, Stillness testnet misnomer corrected throughout)
+- **Risk:** Low — documentation only, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Key corrections:** (1) "Stillness testnet" → "Stillness (live server)" throughout — Stillness is NOT a testnet; (2) Character resolution, RPC discovery, EVE Vault tests retargeted to hackathon test server instead of Stillness; (3) March 11 execution strategy updated to target test server as Hour 0 primary environment; (4) Stillness deployment deferred to post-submission bonus window
+- **Follow-ups:** Obtain hackathon test server RPC URL and connection details on March 11
+
+---
+
 ## 2026-02-18 — EVE Vault Signing Smoke Test Scaffold
 
 - **Goal:** Kill wallet integration uncertainty by building a minimal signing probe against EVE Vault via `@mysten/dapp-kit`.
