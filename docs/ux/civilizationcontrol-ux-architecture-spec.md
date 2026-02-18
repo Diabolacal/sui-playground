@@ -25,6 +25,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 11. [MVP vs Stretch Table](#11-mvp-vs-stretch-table)
 12. [Design Principles & Upgrade Path](#12-design-principles--upgrade-path)
 13. [Figma-Ready UX Brief (Condensed)](#13-figma-ready-ux-brief-condensed)
+14. [Hierarchy Compression Revision — 2026-02-18](#14-hierarchy-compression-revision--2026-02-18)
 
 ---
 
@@ -946,7 +947,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 ### Core Screens
 
-**Command Overview:** Landing page after wallet connection and Character resolution. Aggregated metrics as card blocks (structure counts, online/offline ratios, revenue totals, fuel alerts). Alert section for structures needing attention (offline, low fuel, unlinked, unconfigured). Recent activity preview (last 5 events). Quick action shortcuts to common flows. Zero-click information surface.
+**Command Overview:** Landing page after wallet connection and Character resolution. **Revenue-dominant metric row:** revenue card takes 2× visual width of other metrics (primary anchor); secondary metrics (total structures, status/policy count, fuel) share remaining width. Revenue displays in Lux with SUI parenthetical and trend indicator. Structures subtitle references governance: "3 Gates (2 governed), 2 TradePosts, 2 Nodes." **Recent Signals section** (promoted): consequence-differentiated rows — denied events (red accent), revenue events (green accent + right-aligned Lux amount), status events (neutral). **Attention Required section** (demoted): compact collapsible one-line items for fuel/offline warnings — max 3 visible, not full cards. Quick action shortcuts to common flows. Zero-click information surface. See §14 for hierarchy rationale.
 
 **Gate List:** Primary navigation surface. Sortable, filterable table of all player-owned gates. Columns: status dot, user-assigned name, truncated object ID, link partner, extension badge, rules summary tags, fuel indicator, revenue figure, tag pills. Default sort: offline-first (surface problems). Inline-editable names. Search bar + filter chip row at top.
 
@@ -1003,6 +1004,69 @@ All UI labels, navigation items, page titles, headings, empty states, confirmati
 When implementing screens defined in this specification, apply the label mapping table (§3 of the narrative guide) and run the Narrative Impact Check (§8) before finalizing copy. Preferred navigation labels are defined in the guide's §4 (Option C — Frontier Authority).
 
 This requirement applies to player-facing surfaces only. Internal component naming, code comments, and technical documentation are excluded.
+
+---
+
+## 14. Hierarchy Compression Revision — 2026-02-18
+
+Revision based on visual hierarchy critique of the initial Command Overview layout (Figma Make static screenshot, 2026-02-18). No scope expansion — reordering, resizing, label correction, and consequence differentiation only.
+
+### Problem
+
+The initial layout reads as a generic SaaS monitoring dashboard: equal-weight metric cards, alert-dominated mid-section, undifferentiated signal rows, and label violations ("Dashboard," "Activity," "Settings," "CRDT"). Fails the 3-Second Emotional Check (§5 of Hackathon Emotional Objective) at 2/5 — below the 3/5 minimum for Command Overview.
+
+### Visual Hierarchy Changes
+
+| Section | Before | After | Rationale |
+|---|---|---|---|
+| **Metric Row** | 4 equal-width cards (Structures, Status, Revenue, Fuel Alerts) | Revenue card at 2× width (hero metric); Structures, Status+Policies, Fuel as secondary | Revenue is the payoff of Control→Consequence→Revenue demo loop; must dominate closing shot (Beat 7) |
+| **Revenue Card** | "18,425 CRDT" | "18,425 Lux (1,842.5 SUI)" with breakdown line: "Gate tolls + Trade revenue" | Canonical currency per spec §5c; breakdown surfaces both revenue streams |
+| **Fuel Alerts Card** | Dedicated metric card slot | Replaced by **Active Policies** count ("3 rules across 2 gates") | Answers "What am I governing?" (3-Second Check pillar 1); fuel warnings surface in Attention Required |
+| **Structures Card** | Subtitle: "3 Gates, 2 TradePosts, 2 Nodes" | "3 Gates (2 governed), 2 TradePosts, 2 Nodes" | One-word governance signal without new data |
+| **Signal Feed** | "Recent Activity" — equal-weight rows, generic type badges | "Recent Signals" — consequence-differentiated: red accent (denied/blocked), green accent + Lux amount (toll/trade), neutral (status) | Enables demo Beats 4-5 distinction; transforms log into intelligence stream |
+| **Alerts Section** | "Alerts" — 3 large cards (~30% viewport) | "Attention Required" — compact one-line items, collapsible (~10% viewport) | Demotes reactive monitoring; promotes governance posture over problem-surfacing |
+
+### Label Corrections (vs. Screenshot)
+
+| Element | Screenshot | Canonical | Source |
+|---|---|---|---|
+| Sidebar nav | Dashboard | **Command Overview** | Voice Guide §4 Option C |
+| Sidebar nav | Activity | **Signal Feed** | Voice Guide §4 Option C |
+| Sidebar nav | Settings | **Configuration** | Voice Guide §4 Option C |
+| Page heading | Dashboard | **Command Overview** | Voice Guide §3 |
+| Subtitle | "Overview of your infrastructure operations" | **"Your infrastructure at a glance"** | UX Spec §6 microcopy |
+| Section | Alerts | **Attention Required** | Governance register |
+| Section | Recent Activity | **Recent Signals** | Voice Guide §3 |
+| Currency | CRDT | **Lux** (SUI parenthetical) | UX Spec §5c |
+
+### Signal Feed Event Copy Corrections
+
+| Screenshot Copy | Canonical Copy |
+|---|---|
+| "Fleet passage recorded" | "Passage completed. +125 Lux" |
+| "Item sold: Advanced Components x50" | "Trade settled. Advanced Components ×50" |
+| "Fuel level warning threshold reached" | "Fuel warning. Beta Gate." |
+| "Linked to Delta Gate in Sector 7" | "Link established. Delta Gate." |
+| "Gate went offline" | "Gamma Gate offline." |
+| "Low fuel - 2 hours remaining" | "Fuel critical. ~2 hours remaining." |
+| "Offline for 45 minutes" | "Offline. 45 minutes." |
+| "Unusual traffic pattern detected" | "Elevated passage rate." |
+
+### 3-Second Check (Post-Revision)
+
+| Question | Before | After |
+|---|---|---|
+| What am I governing? | FAIL — no policy visibility | PASS — Active Policies card + governed gate count |
+| What is under my authority? | PASS | PASS |
+| What is producing value? | PARTIAL — underweight, wrong currency | PASS — revenue-dominant, Lux-denominated |
+| What is at risk? | PASS | PASS — Attention Required section |
+| What am I building? | WEAK | WEAK (acceptable — implicit in structure counts) |
+
+Score: 4/5 pass (up from 2/5). Meets the Command Overview minimum of "all five" answerable.
+
+### Implementation Note
+
+No new Figma brief required — §13 Command Overview description updated inline with hierarchy guidance. All changes are reordering, resizing, label correction, and consequence differentiation within existing data. No new tabs, modules, data types, or scope added.
 
 ---
 
