@@ -178,6 +178,7 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 - Tx digest of the tolled jump: `[TBD-digest]`
 - Custom `TollCollectedEvent` from extension (NOT `AccessGrant` — that is a sandbox mock, not a world-contracts event; see [read-path validation](../architecture/read-path-architecture-validation.md) §2.4)
 - Balance delta: operator address +5 SUI
+- `TollCollectedEvent` (our extension event — NOT a world-contracts event)
 - `JumpEvent` confirmation (world-contracts)
 
 **Purpose:** Second consequence. Same policy, different outcome. The gate discriminates by tribe and collects revenue. Control → Consequence → Revenue in one beat.
@@ -207,7 +208,7 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 **Evidence overlay required:**
 - Tx digest of the buy: `[TBD-digest]` (or sandbox reference: `3GtyTmJmLZxLQ3sqcuGTwoEm566Ts87c8Kedqjfh1NJ2`)
-- ItemPurchased event
+- `TradeSettledEvent` (our extension event — NOT a world-contracts event; replaces sandbox mock `ItemPurchased`)
 - Balance deltas: buyer −30 SUI, seller +30 SUI
 - Listing state: `is_active: true` → `is_active: false`
 
@@ -319,7 +320,7 @@ Use this variant if TradePost UI is not ready at demo recording time. Covers Gat
 **Evidence overlay required:**
 - Tx digest: `[TBD-digest]`
 - Balance delta: operator +5 SUI
-- AccessGrant event
+- `TollCollectedEvent` (extension event)
 
 ---
 
@@ -368,9 +369,9 @@ Before pressing record, confirm every required artifact is captured and accessib
 | Beat 3 | Policy deployment tx digest | ☐ |
 | Beat 3 | Gate object state (before/after extension + dynamic fields) | ☐ |
 | Beat 4 | Denied jump tx digest + error event | ☐ |
-| Beat 5 | Tolled jump tx digest + AccessGrant event | ☐ |
+| Beat 5 | Tolled jump tx digest + `TollCollectedEvent` (extension event) | ☐ |
 | Beat 5 | Operator balance delta (+toll amount) | ☐ |
-| Beat 6 | Buy tx digest + ItemPurchased event | ☐ |
+| Beat 6 | Buy tx digest + `TradeSettledEvent` (extension event) | ☐ |
 | Beat 6 | Buyer/seller balance deltas | ☐ |
 | Beat 6 | Listing state before/after (is_active) | ☐ |
 | Beat 7 | Aggregate revenue total screenshot | ☐ |

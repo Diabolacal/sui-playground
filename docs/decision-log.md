@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — TradePost Buyer Journey Validation (PARTIAL PASS)
+
+- **Goal:** Validate (or falsify) that the TradePost "buyer journey" (fly up → interact → browse listings → buy → receive items) is implementable with available EVE Frontier Sui/Move primitives, and that existing docs correctly describe write-path + read-path.
+- **Decision:** PARTIAL PASS. Core on-chain mechanics (cross-address atomic buy, extension witness pattern, Coin<SUI> settlement, SSU inventory access) are VALIDATED on devnet with tx digests. Two critical unknowns remain: (1) How the game client presents a builder's dApp when a player interacts with an SSU — all builder-docs "Connecting In-Game" pages are `//TODO`; (2) Whether `Metadata.url` is the source for in-game dApp URL embedding. These must be tested on March 11 Hackathon Test Server (tests T1/T2 in checklist). TradePost remains in core MVP with explicit March 11 dependency gate. Doc corrections applied: demo beat sheet event names updated from sandbox mocks (`AccessGrant` → `TollCollectedEvent`, `ItemPurchased` → `TradeSettledEvent`).
+- **Files:** docs/architecture/tradepost-buyer-journey-validation.md (new — verdict, minimal architecture, March 11 test checklist), docs/core/civilizationcontrol-demo-beat-sheet.md (5 event name corrections), docs/README.md (index updated)
+- **Diff:** +250 / -8
+- **Risk:** Low — analysis + doc corrections, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** March 11 tests T1–T4 (critical), T5–T8 (medium); partial-quantity withdraw design decision; builder channel inquiry re: SSU dApp URL configuration
+
 ## 2026-02-18 — Denial Observability Correction (MoveAbort IS Queryable)
 
 - **Goal:** Determine whether Beat 4 ("Hostile Denied") can remain in the demo — i.e., whether a failed jump attempt produces observable on-chain evidence.

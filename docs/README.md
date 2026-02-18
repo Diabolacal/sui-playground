@@ -67,6 +67,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [architecture/world-contracts-auth-model.md](architecture/world-contracts-auth-model.md) | **Deep auth model analysis** — all structs, 40+ functions categorized by auth tier, extension pattern, hidden permission gates |
 | [architecture/authenticated-user-surface-analysis.md](architecture/authenticated-user-surface-analysis.md) | **Authenticated user surface analysis** — structure discovery, location visibility, permission model, off-chain indexing requirements, dashboard feasibility |
 | [architecture/read-path-architecture-validation.md](architecture/read-path-architecture-validation.md) | **Read-path architecture validation** — wallet→structures discovery, event inventory (31 events / 16 types), signal feed data sources, Option A/B/C comparison, scale model, demo data sourcing, gap list |
+| [architecture/tradepost-buyer-journey-validation.md](architecture/tradepost-buyer-journey-validation.md) | **TradePost buyer journey validation** — PARTIAL PASS verdict, minimal architecture (object types, PTB shapes, events), March 11 test checklist, doc corrections |
 
 ## Ideas
 
