@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-18 — Upstream Submodule Sync + builder-documentation Added
+
+- **Goal:** Controlled sync of all vendor submodules to latest upstream commits; add new `builder-documentation` submodule; assess impact on internal docs.
+- **Decision:** Updated builder-scaffold (0e3bbb9a→c97989fb), evevault (654867e0→fe930dbc), world-contracts (aa15075a→eb1d627a). zk-proximity-poc unchanged. Added vendor/builder-documentation (3f3c1ab1) — the GitBook source repo for docs.evefrontier.com, now canonical local read source. Material impact detected: builder-scaffold renamed gate→smart_gate (4 docs affected). World-contracts API unchanged (fuel bug fix only). eVault changes internal only.
+- **Files:** .gitmodules, vendor/builder-scaffold, vendor/evevault, vendor/world-contracts, vendor/builder-documentation (new)
+- **Diff:** +7 / -3 (submodule pointers + .gitmodules)
+- **Risk:** Low — submodule pointer updates only, no internal code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (submodule sync only)
+- **Follow-ups:** Update sui-playground-capabilities.md scaffold paths (4 stale refs). Update evefrontier-builder-docs-map.md (6 new pages, submodule access path). Update copilot-instructions Official Documentation Reference Policy. Update hackathon-portfolio-roadmap.md Corpse Toll Road path (low priority).
+
 ## 2026-02-16 — Gate Lifecycle Documentation Reconciliation
 
 - **Goal:** Post-rehearsal documentation reconciliation — fix known issues, propagate rehearsal status, verify and document single-extension constraint.

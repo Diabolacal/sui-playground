@@ -10,3 +10,6 @@
 [submodule "vendor/eve-frontier-proximity-zk-poc"]
 	path = vendor/eve-frontier-proximity-zk-poc
 	url = https://github.com/evefrontier/eve-frontier-proximity-zk-poc
+[submodule "vendor/builder-documentation"]
+	path = vendor/builder-documentation
+	url = https://github.com/evefrontier/builder-documentation
