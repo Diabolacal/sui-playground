@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-19 — Demo Evidence Mapping + Rehearsal Appendix
+
+- **Goal:** Map every demo beat sheet artifact (tx digest, abort code, balance delta, policy deploy) to its executable script, expected output, capture method, and identify gaps.
+- **Decision:** Created `docs/operations/demo-evidence-appendix.md` — operational appendix with per-beat evidence mapping (Appendixes A–F), script inventory table, and gap analysis.
+- **Files:** docs/operations/demo-evidence-appendix.md (new), docs/README.md (index updated), docs/decision-log.md (this entry)
+- **Diff:** +250 LoC new doc, +1 line index
+- **Risk:** Low — docs only
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Key findings:** Beat 1 (CLI contrast), Beat 6 (trade buy with mock SSU), ZK accent — fully scripted. Beat 4 (hostile denied) and Beat 5 (toll collection) have no rehearsal scripts — marked TODO. Beat 3 (policy deploy) needs submission extension script. Beat 2/7 depend on frontend app (hackathon deliverable, not script gap).
+- **Follow-ups:** Create `hostile_jump_denied.sh`, `toll_jump_rehearsal.sh`, and submission extension deploy script before demo recording.
+
 ## 2026-02-19 — Hybrid Spatial Architecture (EF-Map Context + Native SVG Control)
 
 - **Goal:** Resolve the spatial layer architecture for CivilizationControl. Determine how the Command Overview presents spatial/topological information about the operator's gate network, trade posts, and NWNs.
