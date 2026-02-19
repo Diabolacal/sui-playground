@@ -57,6 +57,8 @@ Any future map view would require one of:
 
 These are optional enhancements, not MVP requirements.
 
+> **Update 2026-02-19:** Spatial architecture resolved. Hybrid model adopted: **Strategic Network Map** (CivControl-native SVG topology from manual pins) for operational governance display + **Cosmic Context Map** (EF-Map embed iframe) for EVE Frontier universe grounding. See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md) and [UX Architecture Spec §9](../ux/civilizationcontrol-ux-architecture-spec.md).
+
 ---
 
 ## Currency Model: Lux, On-Chain Tokens, and Gas

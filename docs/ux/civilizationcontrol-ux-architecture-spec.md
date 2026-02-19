@@ -532,40 +532,60 @@ interface SpatialPin {
 
 ---
 
-## 9. Optional Spatial Layer Model
+## 9. Spatial Layer Model (Resolved — Hybrid Architecture)
 
-### Purpose
+> **Decision status: RESOLVED** — Hybrid Spatial Architecture formally adopted 2026-02-19. Full rationale and capability inventory: [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md). Decision log entry: [2026-02-19 — Hybrid Spatial Architecture](../decision-log.md).
 
-A toggleable visual layer that displays structures the user has manually pinned to solar systems. System-level placement (not exact coordinates). Visual link lines between linked gates. Explicitly supplementary — not required for any operation.
+CivilizationControl uses **two complementary spatial layers**, each assigned to its natural strength. Neither is required for any governance or commerce action — the list view remains the primary navigation surface.
 
-### Characteristics
+### 9a. Strategic Network Map (CivControl-native SVG)
 
-- **Toggle:** Spatial layer can be shown/hidden. All actions remain accessible from list view.
-- **Content:** Only structures with manual pins appear. Unpinned structures show in a separate "Unplaced" list.
-- **Resolution:** System-level granularity (not exact coordinates within a system).
-- **Link lines:** Visual lines connect linked gate pairs (both must be pinned to appear).
+**Role:** Primary operational spatial surface. Displays governance topology with real-time state encoding.
+
+**Characteristics:**
+
+- **Rendering:** React SVG component (~150–200 LoC). Nodes represent systems or structures; edges represent gate links.
+- **Data source:** Manual spatial pins (§8) provide system-level positions. On-chain state provides structure status, policy, links, fuel.
+- **State encoding:** Node color/border reflects online/offline/warning. Edge styling encodes link status (active, degraded, unlinked). Optional badges for policy type, revenue, fuel.
+- **Interactivity:** Click node → navigate to structure detail. Hover → tooltip with status summary. Expandable to occupy primary screen space.
+- **Reactivity:** Standard React state propagation. Structure state changes reflected immediately.
 - **Disclaimer:** Always visible: "User-curated placement; not on-chain."
 
-### What It Is NOT
+**What It Is NOT:**
 
-- Not a real-time position tracker
-- Not derived from chain data
-- Not required for any governance or commerce action
+- Not a real-time position tracker (manual pins, not coordinates)
+- Not derived from chain data (positions are user-curated; only _state_ is on-chain)
 - Not the primary navigation surface (the list is)
+
+**Representation Options:** Three approaches identified (system-level nodes with badges, expandable per-system clusters, lens-based toggling). To be finalized during build phase. See [Spatial Embed Requirements — Representation Options](../architecture/spatial-embed-requirements.md).
+
+### 9b. Cosmic Context Map (EF-Map Embed iframe)
+
+**Role:** Secondary orientational layer. Grounds the governance view in the EVE Frontier universe.
+
+**Characteristics:**
+
+- **Rendering:** EF-Map embed iframe (~10 LoC). URL parameters: `systems` (cyan highlight rings on operator systems), `zoom`, `orbit` (cinematic rotation), `color` (theme).
+- **Colored link lines:** EF-Map embed will support drawing colored lines between linked systems (feature being added by EF-Map maintainer). This provides universe-scale visual link representation that complements the SVG topology's operational link lines.
+- **Interactivity:** Read-only inside CivilizationControl. No click event propagation, no custom markers, no runtime state updates. Reload-based parameter updates only.
+- **Position:** Collapsible panel or secondary tab. Not the primary surface.
+- **Non-blocking:** If ef-map.com is unavailable, CivControl topology still functions.
 
 ### Stretch Enhancements
 
-- Drag-to-reposition nodes within the map view
-- Zoom/pan across system regions
-- Link-line styling (color by status, thickness by revenue)
-- Multi-gate network topology view (graph layout)
+- Drag-to-reposition nodes within the Strategic Network Map
+- Zoom/pan across system regions in the Strategic Network Map
+- Link-line styling (color by status, thickness by revenue) in the Strategic Network Map
+- Sync EF-Map `systems` parameter from manual pin data (auto-highlight pinned systems)
+- Deep-link from Strategic Network Map node → EF-Map centered on that system
 
 ### Upgrade Path
 
 If CCP exposes a coordinate API:
-- Manual pins replaced with real positions
-- Map view promoted from optional overlay to first-class tab
+- Manual pins replaced with real positions in the Strategic Network Map
+- Strategic Network Map promoted from supplementary overlay to first-class tab
 - "User-curated" disclaimer removed for API-sourced positions
+- EF-Map embed role unchanged (cosmic context remains secondary)
 - All other UX structures unchanged
 
 ---
@@ -711,12 +731,12 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 9 | Link gates (with distance proof) | Requires server-side proof generation; uncertain capability |
 | 10 | Link target selection | Cascading dependency on link gates |
 | 11 | Link topology view | Visualization polish |
-| 12 | Visual link lines on map | **Blocked**: coordinates not on-chain |
+| 12 | Visual link lines on map | **Resolved**: Hybrid Spatial Architecture adopted (Strategic Network Map + EF-Map embed). SVG topology draws link lines from manual pin data. EF-Map embed draws colored link lines between system highlights. See §9. |
 | 13 | Edit listing | Create + remove suffices for demo |
 | 14 | Trade history | Requires event aggregation/persistence |
 | 15 | Revenue analytics | Charting library; polish |
-| 16 | Visual system map overlay | **Blocked**: coordinates not on-chain |
-| 17 | Link-line visualization on map | **Blocked**: coordinates not on-chain |
+| 16 | Visual system map overlay | **Resolved**: Strategic Network Map (SVG) uses manual pins for system-level placement. EF-Map embed provides cosmic context. See §9. |
+| 17 | Link-line visualization on map | **Resolved**: Same as #12. SVG topology link lines + EF-Map colored link lines. See §9. |
 | 18 | Drag-to-reposition nodes | Depends on map |
 | 19 | Grouping/tagging | Data model complexity; no demo payoff |
 | 20 | Multi-gate network view | Graph layout engine needed |
@@ -843,11 +863,11 @@ The UI communicates that both gates in a link must share the same extension type
 
 | Aspect | Detail |
 |--------|--------|
-| **Current** | No coordinates on-chain. Manual pinning provides user-curated spatial organization. |
-| **If available** | Auto-place structures using real game coordinates. Replace manual pins with real positions. |
-| **UX change** | Manual Pinning → "Position Override" (optional). Spatial Layer → first-class tab. Link visualization → accurate distances. "User-curated" disclaimer removed for API-sourced positions. |
-| **Code change** | `structure.position` field fills with API data (currently nullable by design). Map component's conditional render path fires. Pin storage gains `source: 'api' \| 'manual'` discriminator. |
-| **Unchanged** | List view (still primary), detail panels, rule composer, trade flows, events, fuel. |
+| **Current** | No coordinates on-chain. Manual pinning provides user-curated spatial organization. Hybrid Spatial Architecture adopted: Strategic Network Map (SVG) for operations + Cosmic Context Map (EF-Map embed) for universe grounding. See §9. |
+| **If available** | Auto-place structures using real game coordinates. Replace manual pins with real positions in Strategic Network Map. |
+| **UX change** | Manual Pinning → "Position Override" (optional). Strategic Network Map → first-class tab. Link visualization → accurate distances. "User-curated" disclaimer removed for API-sourced positions. EF-Map embed role unchanged. |
+| **Code change** | `structure.position` field fills with API data (currently nullable by design). SVG topology component's conditional render path fires. Pin storage gains `source: 'api' \| 'manual'` discriminator. |
+| **Unchanged** | List view (still primary), detail panels, rule composer, trade flows, events, fuel. EF-Map embed (cosmic context). |
 | **Classification** | **Additive.** Position field is nullable by design — filling it triggers existing render paths. Manual pin data migrates to "override" semantics. |
 
 #### Trigger 3: EVE Token on Sui (`Coin<EVE>`)
@@ -948,7 +968,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 ### Core Screens
 
-**Command Overview:** Landing page after wallet connection and Character resolution. **Revenue-dominant metric row:** revenue card takes 2× visual width of other metrics (primary anchor); secondary metrics (total structures, status/policy count, fuel) share remaining width. Revenue displays in Lux with SUI parenthetical and trend indicator. Structures subtitle references governance: "3 Gates (2 governed), 2 TradePosts, 2 Nodes." **Recent Signals section** (promoted): consequence-differentiated rows — denied events (red accent), revenue events (green accent + right-aligned Lux amount), status events (neutral). **Attention Required section** (demoted): compact collapsible one-line items for fuel/offline warnings — max 3 visible, not full cards. Quick action shortcuts to common flows. Zero-click information surface. See §14 for hierarchy rationale.
+**Command Overview:** Landing page after wallet connection and Character resolution. **Revenue-dominant metric row:** revenue card takes 2× visual width of other metrics (primary anchor); secondary metrics (total structures, status/policy count, fuel) share remaining width. Revenue displays in Lux with SUI parenthetical and trend indicator. Structures subtitle references governance: "3 Gates (2 governed), 2 TradePosts, 2 Nodes." **Strategic Network Map section** (below metrics, above signals): Compact SVG topology rendering operator's network — system nodes with structure badges, gate link lines with status encoding. Expandable to full-width. Collapsible for list-focused operators. "User-curated placement" disclosure. EF-Map Cosmic Context available as expandable panel or secondary tab within this section. See §9. **Recent Signals section** (promoted): consequence-differentiated rows — denied events (red accent), revenue events (green accent + right-aligned Lux amount), status events (neutral). **Attention Required section** (demoted): compact collapsible one-line items for fuel/offline warnings — max 3 visible, not full cards. Quick action shortcuts to common flows. Zero-click information surface. See §14 for hierarchy rationale.
 
 **Gate List:** Primary navigation surface. Sortable, filterable table of all player-owned gates. Columns: status dot, user-assigned name, truncated object ID, link partner, extension badge, rules summary tags, fuel indicator, revenue figure, tag pills. Default sort: offline-first (surface problems). Inline-editable names. Search bar + filter chip row at top.
 
@@ -992,7 +1012,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 3. **Progressive disclosure.** Information layers by click depth: Dashboard (0 clicks, aggregate view) → List (0 clicks, structure inventory) → Detail (1 click, single structure) → Composer (2 clicks, policy editing) → Advanced (3+ clicks, ZK config, raw tx data, diagnostics). Non-technical users never need to go past Level 2.
 
-4. **Manual spatial augmentation.** Users optionally assign structures to solar systems for organizational grouping. All spatial labels carry "user-curated" disclosure. No spatial data is required for any governance or commerce action. Spatial layer is supplementary — always available, never mandatory, never primary navigation.
+4. **Manual spatial augmentation with hybrid rendering.** Users optionally assign structures to solar systems for organizational grouping. All spatial labels carry "user-curated" disclosure. No spatial data is required for any governance or commerce action. Spatial layer is supplementary — always available, never mandatory, never primary navigation. The Strategic Network Map (SVG) renders operational topology from manual pins; the Cosmic Context Map (EF-Map embed) provides universe grounding. See §9.
 
 ---
 

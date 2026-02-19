@@ -495,6 +495,8 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **Decision:** List-first control plane is confirmed as the correct approach. The "Active Network" visualization in CivilizationControl shows network topology (which structures are linked and their status), not spatial coordinates. This is already reflected in the UX architecture spec.
 
+> **Update 2026-02-19:** Spatial layer architecture resolved. Hybrid model adopted: **Strategic Network Map** (CivControl-native SVG, ~150–200 LoC, ~2–3h build budget) renders governance topology from manual pins + on-chain state. **Cosmic Context Map** (EF-Map embed, ~10 LoC) provides universe grounding. SVG representation approach deferred to build phase. See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md).
+
 ### Risk Summary
 
 | Unknown | Risk | Blocks MVP? | Pre-Hackathon Action Required? |

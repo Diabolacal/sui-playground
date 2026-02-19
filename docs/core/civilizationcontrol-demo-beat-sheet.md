@@ -81,15 +81,15 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **Narration:**
 > "CivilizationControl changes that."
 
-*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, NWNs. Status indicators resolve to green.]*
+*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, NWNs. Status indicators resolve to green. Strategic Network Map renders — system nodes with structure badges, gate link lines connecting them.]*
 
 > "Every structure you own. Status. Links. Revenue. One view."
 
-*[Camera slowly pans across the Command Overview: structure registry on the left, aggregate stats (total structures, total revenue, active policies), Signal Feed scrolling on the right.]*
+*[Camera slowly pans across the Command Overview: Strategic Network Map showing gate link topology (top), structure registry on the left, aggregate stats (total structures, total revenue, active policies), Signal Feed scrolling on the right. EF-Map Cosmic Context visible in a collapsible panel — operator's systems highlighted in the EVE Frontier starfield.]*
 
 *[Hold for 2 seconds on the full view. Let it breathe.]*
 
-**On-screen action:** Command Overview fully populated with operator's structures.
+**On-screen action:** Command Overview fully populated with operator's structures. Strategic Network Map shows governance topology — system nodes, link lines, status colors. EF-Map panel shows territory in the universe.
 
 **Evidence overlay:** Package ID badge in corner: `[submission-package-ID]`
 
@@ -223,11 +223,11 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **Narration:**
 > "Toll revenue from the gate. Trade revenue from the storefront. Both visible. Both on-chain. Both under your command."
 
-*[Pull back to Command Overview. Full view: gates with green status, trade posts with active listings, Signal Feed scrolling with jumps and transactions.]*
+*[Pull back to Command Overview. Full view: Strategic Network Map showing gate topology with green link lines and active status nodes. Trade posts with active listings. Signal Feed scrolling with jumps and transactions. EF-Map cosmic context expanded — operator's territory highlighted in the starfield, colored link lines drawn between linked systems.]*
 
 > "Your gates. Your rules. Your revenue."
 
-*[Hold for 3 seconds on the full Command Overview. Let the system speak.]*
+*[Hold for 3 seconds on the full Command Overview with topology and cosmic context visible. Let the system speak.]*
 
 *[Title card: "CivilizationControl — The Frontier Control Room"]*
 

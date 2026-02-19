@@ -274,6 +274,8 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 CivilizationControl's dashboard is a **list-first control plane** — structures enumerated by ID/name/status/links, not positioned on a map. Any future map layer requires a server/API coordinate feed, manual user pinning, or third-party mapping tools. The demo and UX framing should reflect this: the gate selector is a structured list with status indicators, not a spatial view. See [authenticated-user-surface-analysis.md §2.5](../architecture/authenticated-user-surface-analysis.md).
 
+> **Update 2026-02-19:** Spatial architecture resolved via **Hybrid model** — list-first remains primary, supplemented by a CivControl-native SVG topology (Strategic Network Map) + EF-Map embed iframe (Cosmic Context Map). See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md).
+
 ---
 
 ## 6. Scope Discipline Rules

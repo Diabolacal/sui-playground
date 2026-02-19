@@ -70,6 +70,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [architecture/tradepost-buyer-journey-validation.md](architecture/tradepost-buyer-journey-validation.md) | **TradePost buyer journey validation** — PARTIAL PASS verdict, minimal architecture (object types, PTB shapes, events), March 11 test checklist, doc corrections |
 | [architecture/structural-risk-sweep-2026-02-18.md](architecture/structural-risk-sweep-2026-02-18.md) | **Structural Risk Sweep** — adversarial pre-mortem synthesizing 6 audit tracks: Top 5 risks ranked (#1 sponsor access reclassified CRITICAL→HIGH with probability model), system dependency graph, Day-1 validation protocol, full assumptions ledger (13 on-chain + 11 environmental + 5 strategy) |
 | [architecture/sweep-audit-artifacts-2026-02-18.md](architecture/sweep-audit-artifacts-2026-02-18.md) | **Sweep audit artifacts** — consolidated working notes from 6 parallel audit tracks (A–F): 58 findings, severity distribution, cross-reference to main report |
+| [architecture/spatial-embed-requirements.md](architecture/spatial-embed-requirements.md) | **Spatial embed requirements** — EF-Map embed capability audit, 12 visual primitives gap analysis, hybrid architecture recommendation (CivControl SVG topology + EF-Map iframe context) |
 
 ## Ideas
 

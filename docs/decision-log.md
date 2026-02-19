@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-19 — Hybrid Spatial Architecture (EF-Map Context + Native SVG Control)
+
+- **Goal:** Resolve the spatial layer architecture for CivilizationControl. Determine how the Command Overview presents spatial/topological information about the operator's gate network, trade posts, and NWNs.
+- **Decision:** **Hybrid model adopted.** Two complementary layers: (1) **Strategic Network Map** — CivControl-native SVG topology (~150–200 LoC React component). Primary operational surface. Renders governance topology from manual spatial pins (§8) + on-chain state. System nodes with structure badges, gate link lines with status encoding. Clickable, reactive, expandable. (2) **Cosmic Context Map** — EF-Map embed iframe (~10 LoC). Secondary orientational layer. Highlights operator systems in EVE Frontier starfield. Draws colored link lines between linked systems (EF-Map capability being added). Read-only, collapsible, non-blocking. **Why embed-only rejected:** EF-Map supports 0 of 12 required visual primitives (no custom markers, no per-structure status, no governance labels, no event animation, no runtime state updates). Category mismatch, not feature gap. **Why native-only rejected:** Loses EVE Frontier cosmic grounding needed for hackathon judges. **Scope discipline:** No SVG implementation before March 11 (hackathon start). Representation approach (system-level nodes vs expandable clusters vs lens toggling) deferred to build phase.
+- **Files:** docs/architecture/spatial-embed-requirements.md (updated: RESOLVED status, scope discipline, representation options, EF-Map link-line capability), docs/ux/civilizationcontrol-ux-architecture-spec.md (updated: §9 rewritten, stretch items 12/16/17 resolved, §13 topology placement, Trigger 2 forward-ref, interaction philosophy), docs/core/civilizationcontrol-demo-beat-sheet.md (updated: Beat 2 + Beat 7 spatial references), docs/strategy/civilizationcontrol-product-vision.md (forward-ref), docs/strategy/civilizationcontrol-strategy-memo.md (forward-ref), docs/strategy/hackathon-portfolio-roadmap.md (forward-ref), docs/architecture/authenticated-user-surface-analysis.md (forward-ref), docs/decision-log.md (this entry)
+- **Diff:** ~+180 revised / -50 replaced = net +130 across 8 files
+- **Risk:** Low — docs/architecture only, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** Finalize SVG representation approach during build phase (post-March 11). Confirm EF-Map colored link-line capability is available before hackathon. Test EF-Map embed iframe performance in demo recording environment.
+
 ## 2026-02-18 — Sponsor Risk Reclassification + Audit Consolidation
 
 - **Goal:** Correct over-weighted AdminACL sponsor risk classification using expected-value reasoning. Consolidate 6 granular audit files into clean repo structure.

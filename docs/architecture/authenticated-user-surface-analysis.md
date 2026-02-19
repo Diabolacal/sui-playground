@@ -194,6 +194,8 @@ A dashboard displaying structure locations on a map requires **one** of:
 
 **Conclusion:** Location display is **not feasible** from on-chain data alone. The hash is one-way. Any map feature requires off-chain coordinate data.
 
+> **Update 2026-02-19:** Spatial architecture resolved. Manual user pinning (option 2 above) adopted as the data source for a CivControl-native SVG topology (Strategic Network Map). EF-Map embed provides additional cosmic context. See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md).
+
 ---
 
 ## 3. Permission Model — Player vs Server
