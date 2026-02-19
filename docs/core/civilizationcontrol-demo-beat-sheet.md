@@ -5,7 +5,7 @@
 > Structured beat-by-beat demo plan for the CivilizationControl hackathon submission video.
 > Structure: Control → Consequence → Revenue (single continuous loop)
 > Sources: civilizationcontrol-product-vision.md, civilizationcontrol-hackathon-emotional-objective.md, civcontrol-independent-audit.md §6, civilizationcontrol-voice-and-narrative.md
-> Last updated: 2026-02-18
+> Last updated: 2026-02-19
 
 ---
 
@@ -49,6 +49,15 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 ---
 
+## Transaction Latency Handling
+
+- **Confirmation >5 seconds:** Continue narration over the wait. Never pause mid-sentence. If confirmation hasn't arrived by the end of the current narration line, hold on the UI (the spinner or pending state is acceptable for 2–3 seconds of dead air max).
+- **Proof overlays:** Only insert after tx confirmation is visible on-screen. Never overlay a digest that hasn't resolved.
+- **Dead air prevention:** If a tx is slow during a live capture, cut to a pre-recorded proof overlay or hold on the Signal Feed (which always has prior entries to show). Re-take the beat if the gap is >5 seconds.
+- **Narration pacing:** The narrator should be ~2 seconds ahead of the UI action. Describe intent ("Policy deployed on-chain") as the tx is confirming, not after.
+
+---
+
 ## Primary Demo Variant: 3 Minutes (Full Loop)
 
 ### Beat 1 — The Problem (0:00–0:25)
@@ -71,6 +80,13 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **Evidence overlay:** None (this is the "before" state).
 
 **Purpose:** Establish pain. Make the viewer feel the gap between what the chain can do and what an operator can actually do.
+
+**Preconditions:**
+- Pre-recorded terminal session with `gate_lifecycle_rehearsal.sh` output (or raw `step*.sh` commands)
+- Discord screenshot prepared ("is the gate down?" message)
+- Failed PTB error screenshot prepared
+
+**Capture mode:** Pre-recorded CLI insert + static screenshot overlays.
 
 ---
 
@@ -102,6 +118,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 - What is at risk? — Fuel/status indicators ✓
 - What am I building? — Structure count ✓
 
+**Preconditions:** Frontend running + connected to submission chain. Operator wallet connected. ≥3 structures online (2 gates + 1 trade post). Package ID known for overlay.
+
+**Capture mode:** Live UI recording.
+
 ---
 
 ### Beat 3 — Control: Set Gate Policy (0:50–1:20)
@@ -132,6 +152,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 **Purpose:** Demonstrate the core value proposition — governance through UI, not CLI. One click replaces 8+ commands.
 
+**Preconditions:** Gate online + linked, NO current extension (clean state). Operator has gas for publish + authorize. Extension package ready. Tribe 7 configured in dropdown.
+
+**Capture mode:** Live UI recording. Proof overlay (tx digest + gate object diff) in post.
+
 ---
 
 ### Beat 4 — Consequence A: Hostile Denied (1:20–1:45)
@@ -156,6 +180,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 - **Mechanism:** Wallet adapter returns failure response synchronously — `effects.status: "failure"`, `effects.status.error` contains module + abort code. Dashboard parses this to display "Jump denied. Tribe mismatch." No indexer or event subscription needed.
 
 **Purpose:** First consequence of the policy. The operator set a rule; the chain enforced it. Governance → denial.
+
+**Preconditions:** Gate has tribe filter active (Beat 3). Hostile pilot funded with gas, character exists with tribe ≠ 7, no valid JumpPermit.
+
+**Capture mode:** Live UI recording (Signal Feed). Proof overlay (tx digest + MoveAbort) in post.
 
 ---
 
@@ -182,6 +210,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 - `JumpEvent` confirmation (world-contracts)
 
 **Purpose:** Second consequence. Same policy, different outcome. The gate discriminates by tribe and collects revenue. Control → Consequence → Revenue in one beat.
+
+**Preconditions:** Gate has tribe filter + toll active (Beat 3). Ally pilot funded ≥10 SUI, character tribe = 7. Operator balance noted before jump.
+
+**Capture mode:** Live UI recording (Signal Feed + revenue counter). Proof overlay (tx digest + balance delta + events) in post.
 
 ---
 
@@ -214,6 +246,10 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 **Purpose:** Complete the economic loop. Gate toll drove foot traffic. Commerce captured the demand. The operator profits from both sides.
 
+**Preconditions:** SSU Trade Post deployed + authorized + online. ≥1 item listed (e.g., Fuel Rod at 30 SUI). Buyer funded ≥35 SUI. Seller balance noted.
+
+**Capture mode:** Live UI recording (TradePost + Signal Feed). Proof overlay (tx digest + balance deltas + listing state) in post.
+
 ---
 
 ### Beat 7 — The System: Revenue Visible (2:40–3:00)
@@ -240,11 +276,19 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 **Purpose:** Close the loop. Pull back from the individual beats to the system view. The operator's frontier is under command. Governance produced consequence. Consequence produced revenue. The system works.
 
+**Preconditions:** All prior beats completed (Beats 3–6 txs confirmed). Command Overview reflects current state. Signal Feed populated.
+
+**Capture mode:** Live UI recording (static hold). Title card in post.
+
 ---
 
 ## Fallback Demo Variant: GateControl-Only (2 Minutes)
 
 Use this variant if TradePost UI is not ready at demo recording time. Covers GateControl end-to-end with the same Control → Consequence → Revenue structure, omitting commerce.
+
+### Fallback Trigger Conditions
+
+Switch from primary to fallback if: TradePost tx fails repeatedly on submission chain, explorer cannot render tx within 30s, wallet adapter disconnects (>2 retries), or primary variant exceeds 3:15 after two takes. Record Beats 1–2 first (reusable across variants).
 
 ### Fallback Beat 1 — The Problem (0:00–0:20)
 
@@ -404,9 +448,44 @@ Per the [Voice & Narrative Guide §7](../strategy/civilizationcontrol-voice-and-
 
 ---
 
+## Demo Account Roles
+
+Role placeholders — populate with real addresses during pre-recording setup.
+
+| Role | Description | Address |
+|---|---|---|
+| **Operator** | Owns structures. Receives toll + trade revenue. Signs policy txs. | `[TBD]` |
+| **Hostile Pilot** | Wrong tribe (≠ filter value). Must be denied. | `[TBD]` |
+| **Ally Pilot / Buyer** | Matching tribe. Jumps gate (tolled), buys at trade post. | `[TBD]` |
+| **Trade Seller** | Stocks SSU. May be Operator or separate address. | `[TBD]` |
+| **Sponsor** | Game server co-signer for sponsored txs. | `[TBD]` |
+
+---
+
+## Recommended Recording Order
+
+Capture in this sequence for non-linear editing flexibility:
+
+1. Pre-recording CLI terminal session (Beat 1 footage) + all proof overlay captures (run txs, screenshot digests/events/balances)
+2. Live UI: Beat 2 (reveal) → Beat 3 (deploy) → Beat 4 (denied) → Beat 5 (tolled) → Beat 6 (buy) → Beat 7 (hold)
+3. Title card + ZK accent (optional) captured separately
+
+---
+
+## Do Not Show During Recording
+
+- Private keys, seed phrases, mnemonics, `.env` files, keystore contents
+- Full wallet addresses (use shortened: `0x1a2b…3c4d`), mainnet balances
+- Browser bookmarks, history, autofill, other tabs (email/chat/social)
+- Local file paths, terminal history from unrelated sessions
+- Devnet reset warnings, chain genesis messages
+
+---
+
 ## References
 
 - [Product Vision — Demo Narrative](../strategy/civilizationcontrol-product-vision.md)
+- [Demo Evidence Appendix](../operations/demo-evidence-appendix.md)
 - [Hackathon Emotional Objective](../strategy/civilizationcontrol-hackathon-emotional-objective.md)
 - [Independent Audit §6](../research/civcontrol-independent-audit.md)
 - [Voice & Narrative Guide](../strategy/civilizationcontrol-voice-and-narrative.md)

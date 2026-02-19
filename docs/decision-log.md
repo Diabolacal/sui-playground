@@ -6,6 +6,15 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-19 — Harden Demo Beat Sheet for Production Execution
+
+- **Goal:** Add structured production scaffolding to the demo beat sheet — preconditions, capture modes, latency handling, account roles, fallback triggers, recording order, safety rules — without altering narrative, timing, or emotional arc.
+- **Decision:** Surgical additions to `civilizationcontrol-demo-beat-sheet.md`. 7 new subsections added (78 lines, 18.8% growth). No narrative text modified.
+- **Files:** docs/core/civilizationcontrol-demo-beat-sheet.md, docs/decision-log.md
+- **Diff:** +78 lines (all structural scaffolding)
+- **Risk:** Low — docs only, no narrative changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+
 ## 2026-02-19 — Demo Evidence Mapping + Rehearsal Appendix
 
 - **Goal:** Map every demo beat sheet artifact (tx digest, abort code, balance delta, policy deploy) to its executable script, expected output, capture method, and identify gaps.
