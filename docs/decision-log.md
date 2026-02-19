@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-19 — Validate GateControl Policy Authoring Model (UI-Driven Feasibility)
+
+- **Goal:** Confirm whether players can configure enforcement rules (deny/allow/toll) via CivilizationControl UI without writing Move code. Determine whether policy is data-driven, requires user-authored Move, or a hybrid.
+- **Decision:** **Model 2 — "Publish once, configure via data."** CivilizationControl team publishes ONE extension package; users configure rules via UI-constructed PTBs that write dynamic fields to a shared config object. End users never write or publish Move code. Per-gate differentiation via gate-ID-keyed compound DF keys.
+- **Files:** docs/architecture/policy-authoring-model-validation.md (new), docs/core/march-11-reimplementation-checklist.md (added findings #8, assumptions A9–A11, Policy Lifecycle block), docs/README.md (index updated), docs/decision-log.md
+- **Diff:** +220 LoC new doc, +18 LoC checklist updates, +1 line index
+- **Risk:** Low — docs only, no code changes
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Key findings:** (1) Extension witness pattern requires a published Move module — but only once by the builder, not per-user. (2) ExtensionConfig + dynamic fields proven in extension_examples and builder-scaffold. (3) Per-gate DF keys and OwnerCap-gated config are design extrapolations — standard Sui patterns but unexercised. (4) EVE Vault wallet signs arbitrary PTBs. (5) No deauthorize_extension exists — extensions can be swapped but not removed. (6) Turret extension docs are //TODO stubs — pattern assumed same as gates.
+- **Day-1 validation:** 5 items (per-gate DF keys, OwnerCap config auth, single-PTB deploy, SDK DF reads, turret extension field).
+
 ## 2026-02-19 — Harden Demo Beat Sheet for Production Execution
 
 - **Goal:** Add structured production scaffolding to the demo beat sheet — preconditions, capture modes, latency handling, account roles, fallback triggers, recording order, safety rules — without altering narrative, timing, or emotional arc.

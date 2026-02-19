@@ -39,6 +39,14 @@ The Smart Gate typed witness extension pattern fully supports composable gate po
 5. **Dynamic field rule composition**: the `extension_examples::config` module proves storing multiple rule types as dynamic fields under a shared config object.
 6. **Tribe filtering**: simple `u32` comparison against `character.tribe_id`. Well-tested in existing examples.
 7. **Single extension per gate/SSU** (verified in source): The `extension` field is `Option<TypeName>` — only one extension type can be active at a time. `authorize_extension` with a new type replaces the previous via `swap_or_fill`. Extension identity uses `type_name::with_defining_ids<Auth>()`, which includes the defining package ID (stable across upgrades). **Design consequence:** GateControl rules AND any ZK privacy rule MUST live in the SAME extension package and share a single `Auth` witness type. Multiple rule types are composed via dynamic fields under one extension, NOT via multiple extensions on the same gate.
+8. **Policy authoring is data-driven, not code-driven** (validated 2026-02-19): The ExtensionConfig + dynamic field pattern enables fully UI-configurable gate policies. CivilizationControl publishes ONE extension package; users configure rules via PTBs that modify dynamic fields on the shared config object. No end user writes or publishes Move code. Per-gate differentiation via gate-ID-keyed compound DF keys. See [policy authoring model validation](../architecture/policy-authoring-model-validation.md) for full analysis.
+
+**Policy Lifecycle (validated model):**
+- **Create:** UI constructs PTB calling `set_tribe_rule()`, `set_coin_toll()`, etc. on shared `ExtensionConfig`. Single PTB for multi-rule changes.
+- **Apply:** Gate owner calls `authorize_extension<GateAuth>` on both linked gates (OwnerCap borrow/return). Can be same PTB as config if same owner.
+- **Update:** Same as Create — single PTB to change any rule parameter. No redeployment.
+- **Reuse:** Extension type shared across all enrolled gates. Per-gate config via gate-ID-keyed DFs. "Copy policy" = UI reads Gate A config, writes same values for Gate B.
+- **Remove rules:** `remove_rule()` DF calls. Extension itself cannot be removed (no `deauthorize_extension`), only swapped.
 
 ### TradePost — Risk: GREEN (downgraded from Yellow)
 
@@ -91,6 +99,9 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | A6 | Dynamic fields on shared objects work as config stores for extension rules | Sui core behavior | Standard Sui feature — unlikely to change |
 | A7 | `Coin<T>` has `key, store` and `transfer::public_transfer` works for payment forwarding | Sui coin module | Standard Sui feature |
 | A8 | Single extension type per gate/SSU (`Option<TypeName>`) — no multi-extension support | gate.move, storage_unit.move extension field | Check `extension` field type |
+| A9 | Policy authoring is data-driven (dynamic field config) — users never publish Move | Extension examples, builder-scaffold, builder-documentation | **VERIFIED 2026-02-19** — See [policy authoring model validation](../architecture/policy-authoring-model-validation.md) |
+| A10 | Per-gate DF keys with compound key structs work | Standard Sui DF capability | Day-1: publish test package with `GateRuleKey { gate_id: ID }` |
+| A11 | OwnerCap<Gate> can gate config updates (self-service model) | Design choice, not in examples | Day-1: add `&OwnerCap<Gate>` param to config function |
 
 ### Environmental Assumptions
 
