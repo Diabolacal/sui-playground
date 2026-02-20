@@ -2,9 +2,9 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-02-18
+> **Last updated:** 2026-02-20 (submodule refresh: 3f3c1ab → c2628fd)
 > **Source:** https://docs.evefrontier.com/
-> **Internal review by:** AI agent (initial mapping)
+> **Internal review by:** AI agent (initial mapping; refreshed 2026-02-20)
 
 ## Purpose
 
@@ -12,7 +12,7 @@ This document maps official EVE Frontier GitBook builder documentation to intern
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
 
-> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, commit 3f3c1ab1) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-02-20 to commit c2628fd) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -24,12 +24,12 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 |---------|--------------|-------|--------|
 | Welcome | `/welcome` | 5 pages | Mostly complete |
 | Tools | `/tools` | 2 pages | Partial (GAS Faucet is TODO) |
-| Smart Contracts | `/smart-contracts` | 5 pages | Substantive content (Object Model, Ownership Model now populated) |
-| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); Build pages still stubs; Turret still TODO |
+| Smart Contracts | `/smart-contracts` | 5 pages | Substantive content (Object Model, Ownership Model now populated); AdminCap → AdminACL rename reflected |
+| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); **Gate Build page now populated** (end-to-end guide); SSU Build still stub; Turret still TODO |
 | dApps | `/dapps` | 4 pages + dapp-kit | dApp sub-pages still TODO; `@evefrontier/dapp-kit` SDK now populated (304 lines) |
 | EVE Vault | `/eve-vault` | 4 pages | Introduction done; GAS Faucet, Wallet Game Setup, Browser Extension still TODO |
 | Troubleshooting | `/troubleshooting` | 3 pages | All TODO |
-| Contributing | `/contributing` | 2 pages | Complete |
+| Contributing | `/contributing` | 2 pages | Complete; **repo now public for contributions** |
 
 ---
 
@@ -98,7 +98,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/builder-scaffold/docker/` (Docker setup)
   - `docs/architecture/sui-playground.md` (our quickstart)
-- **Notable clarifications:** References a `build` branch of builder-scaffold and a `localnet-setup/docker` directory — this may differ from our pinned commit. The docs note "this link will be updated soon." Worth verifying branch alignment. Note: scaffold renamed `move-contracts/gate/` → `move-contracts/smart_gate/` as of 2026-02-18 sync.
+- **Notable clarifications:** References a ~~`build` branch of builder-scaffold and a `localnet-setup/docker` directory~~ **Fixed (2026-02-20):** Clone command no longer references `-b build` branch. Docker path corrected to `docker`. `suiup` bash install script documented for Windows (Git Bash). Node.js/pnpm for TypeScript SDK interaction.
 
 ### GAS Faucet
 
@@ -112,7 +112,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 
 - **URL:** https://docs.evefrontier.com/smart-contracts/introduction-to-smart-contracts
 - **Last updated:** ~3 days ago
-- **Summary:** Explains what smart contracts are in the EVE Frontier context. Covers Move on Sui, deterministic execution, modular design. Details access control patterns: function visibility (`public`, `public(package)`, `public(entry)`), capability-based access (`OwnerCap`, `AdminCap`, `JumpPermit`), typed witness pattern, and `TxContext` usage.
+- **Summary:** Explains what smart contracts are in the EVE Frontier context. Covers Move on Sui, deterministic execution, modular design. Details access control patterns: function visibility (`public`, `public(package)`, `public(entry)`), capability-based access (`OwnerCap`, `AdminACL`, `JumpPermit`), typed witness pattern, `Publisher` object, and `TxContext` usage. **Updated 2026-02-20:** `AdminCap` → `AdminACL` rename reflected; `Publisher` object now documented.
 - **Why it matters for us:** The access control patterns section is essential reading before writing extensions. Explains the capability pattern, hot-potato pattern, and shared objects — all used extensively in world-contracts.
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/access/access_control.move`
@@ -133,12 +133,13 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
   - Primitives expose `public(package)` functions — players cannot call them directly; only assemblies use them internally.
   - Extension registration is dynamic — no redeployment of assemblies needed.
   - Privacy model: hashed locations on-chain, proximity verification via server proofs (with ZK as future alternative).
+  - **Updated 2026-02-20:** Security model language now uses `AdminACL` ("operations require the transaction to be sponsored by an authorised server") instead of `AdminCap`.
 
 ### Interfacing with the EVE Frontier World
 
 - **URL:** https://docs.evefrontier.com/smart-contracts/interfacing-with-the-eve-frontier-world
 - **Last updated:** ~3 days ago
-- **Summary:** Documents write and read paths for chain interaction. Write path: Sui TypeScript SDK with transaction building, `borrow_owner_cap` pattern, and sponsored transactions (player signs intent, sponsor pays gas). Read path: GraphQL (preferred), JSON-RPC (deprecated), gRPC (for throughput), and event subscriptions.
+- **Summary:** Documents write and read paths for chain interaction. Write path: Sui TypeScript SDK with transaction building, `borrow_owner_cap` pattern, and sponsored transactions (player signs intent, sponsor pays gas). Read path: GraphQL (preferred), gRPC (for throughput), and event subscriptions. **Updated 2026-02-20:** JSON-RPC section removed entirely (deprecated). `SuiClient` paragraph added for read operations. TS SDK link updated to `sdk.mystenlabs.com/typescript`.
 - **Why it matters for us:** The sponsored transaction pattern and `borrow_owner_cap` hot-potato flow are critical for any chain interaction. The code examples show the exact SDK calls needed. Also documents the deprecation of JSON-RPC in favor of GraphQL/gRPC.
 - **Overlaps with:**
   - `vendor/world-contracts/ts-scripts/` (TypeScript examples)
@@ -146,7 +147,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Notable clarifications:**
   - Sponsored transactions: `tx.setSender(playerAddress)` + `tx.setGasOwner(adminAddress)` — sponsor must be in `AdminACL`.
   - `borrow_owner_cap` / `return_owner_cap` is a hot-potato pattern — cap must be returned in the same transaction.
-  - JSON-RPC is being deprecated by Sui; new integrations should use GraphQL or gRPC.
+  - **JSON-RPC is fully removed from docs (not just deprecated).** New integrations should use GraphQL, gRPC, or SuiClient.
 
 ### Smart Storage Unit
 
@@ -157,7 +158,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
   - `docs/architecture/sui-playground-capabilities.md` §4.2
-- **Notable clarifications:** Build page (`/storage-unit/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page.
+- **Notable clarifications:** Build page (`/storage-unit/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). **Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions. Our extension path (deposit_item/withdraw_item<Auth>) bypasses both, so no impact on CivilizationControl.
 
 ### Smart Storage Unit — Build
 
@@ -170,13 +171,14 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 
 - **URL:** https://docs.evefrontier.com/smart-assemblies/gate
 - **Last updated:** ~3 days ago
-- **Summary:** Substantive gate documentation (120 lines). Covers default vs custom behavior, JumpPermit struct, Builder Extension Pattern (authorize, issue permits, jump with permit), and includes a Toll Gate Extension code example. Significantly expanded from initial intro page.
-- **Why it matters for us:** Directly maps to our most complex structure type. The extension pattern (authorize → issue permits → gate jumps) is the primary builder moddability surface. Now includes TypeScript + Move code examples for the full extension flow.
+- **Summary:** Substantive gate documentation (120 lines). Covers default vs custom behavior, JumpPermit struct, Move function signatures ("Gate API" section with `AdminACL` as required param for `jump_with_permit`), and includes scaffold links. Significantly expanded from initial intro page.
+- **Why it matters for us:** Directly maps to our most complex structure type. The extension pattern (authorize → issue permits → gate jumps) is the primary builder moddability surface. **AdminCap → AdminACL rename reflected in docs.** Inline TypeScript examples removed; scaffold is now the reference.
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` (718 lines)
   - `vendor/world-contracts/contracts/extension_examples/` (3 extension examples)
+  - `vendor/builder-scaffold/move-contracts/smart_gate/` (canonical gate extension examples)
   - `docs/architecture/sui-playground-capabilities.md` §4.1
-- **Notable clarifications:** Build page (`/gate/build`) exists but is empty. Page structure changed from Configure/Deploy to single Build page.
+- **Notable clarifications:** **Build page (`/gate/build`) is now populated** — full end-to-end build guide covering scaffold walkthrough (config.move, tribe_permit.move, corpse_gate_bounty.move), publish, configure rules, authorize extension, issue permit, jump with permit. Includes a minimal toll gate example. Scaffold links now point to `main` branch.
 
 ### Smart Turret
 
@@ -222,8 +224,8 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 
 - **URL:** https://docs.evefrontier.com/contributing/a-work-in-progress and `/contributing/contributing`
 - **Last updated:** ~5 days ago
-- **Summary:** Acknowledges the docs are being actively rewritten for Sui transition. Community contribution is planned but not yet available (repo not public). Provides PR workflow guidance and editorial guidelines.
-- **Why it matters for us:** Confirms docs are in flux — content may change significantly. Community docs repo is not yet public, so we cannot contribute fixes for `//TODO` pages.
+- **Summary:** Acknowledges the docs are being actively rewritten for Sui transition. ~~Community contribution is planned but not yet available (repo not public).~~ **Updated 2026-02-20:** Repo is now public for contributions. Provides PR workflow guidance and editorial guidelines.
+- **Why it matters for us:** ~~Community docs repo is not yet public, so we cannot contribute fixes for `//TODO` pages.~~ Repo is now public — community contributions are accepted.
 
 ---
 
@@ -236,18 +238,20 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Hot-potato pattern semantics**: The World Explainer explains *why* `OfflineAssemblies` and `ReturnOwnerCapReceipt` lack `drop` — to enforce atomic multi-step transactions. This design intent is not in code comments.
 - **Location privacy rationale**: The docs explain that hashed coordinates preserve information asymmetry (hidden bases) — the Move code stores hashes but doesn't explain the game-design motivation.
 - **Sui-specific constraints**: Object size limits (250KB), max struct fields (32), max dynamic fields per tx (1024) are documented in the Constraints page but not referenced in world-contracts code.
-- **JSON-RPC deprecation**: The Interfacing page notes Sui is deprecating JSON-RPC in favor of GraphQL/gRPC — important for any off-chain integration design.
+- **JSON-RPC deprecation**: ~~The Interfacing page notes Sui is deprecating JSON-RPC in favor of GraphQL/gRPC~~ **Updated 2026-02-20:** JSON-RPC section fully removed from the Interfacing page. SuiClient, GraphQL, and gRPC are the only documented read paths.
 - **LUX / EVE Token economy**: The EVE Vault introduction mentions two currencies (LUX and EVE Token) not referenced in world-contracts code.
 
 ### Code Is Canonical But Docs Lag
 
-- **Build pages**: Assembly Build pages (restructured from Configure/Deploy) are still stubs — our capabilities doc (§4, §8) is more complete for step-by-step deployment flows.
+- **Build pages**: ~~Assembly Build pages (restructured from Configure/Deploy) are still stubs~~ **Updated 2026-02-20:** Gate Build page is now fully populated (end-to-end guide). SSU Build page is still a stub. Our capabilities doc (§4, §8) supplements for SSU deployment flows.
 - **Turret module**: Neither docs nor code have turret implementation — docs page is `//TODO`, code has no turret module.
 - **GAS Faucet**: Docs page is `//TODO` — our local devnet auto-funds; testnet faucet details unknown.
-- **dApps integration**: dApp sub-pages (Quick Start, Connecting, Customizing) are still `//TODO`. However, `@evefrontier/dapp-kit` SDK documentation is now populated (304 lines in `vendor/builder-documentation/dapp-kit/dapp-kit.md`).
-- **Extension examples**: The Interfacing page mentions extension registration but doesn't show the full flow. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples not referenced by the docs.
+- **dApps integration**: dApp sub-pages (Quick Start, Connecting, Customizing) are still `//TODO`. However, `@evefrontier/dapp-kit` SDK documentation is now populated (304 lines in `vendor/builder-documentation/dapp-kit/dapp-kit.md`). **Updated 2026-02-20:** `vendor/builder-scaffold/dapps/` now contains a working React dApp starter with `@evefrontier/dapp-kit` integration (queries.ts shows assembly info + wallet status components).
+- **Extension examples**: ~~The Interfacing page mentions extension registration but doesn't show the full flow.~~ **Updated 2026-02-20:** Gate Build page now documents the full extension flow end-to-end. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples. `vendor/builder-scaffold/move-contracts/smart_gate/` has 3 canonical reference implementations (config.move, tribe_permit.move, corpse_gate_bounty.move).
 - **ZK proximity proofs**: The docs mention zero-knowledge proofs as a "future" alternative to server-signed proofs. Our `vendor/eve-frontier-proximity-zk-poc/` is a working Groth16 implementation — ahead of the docs.
-- **builder-scaffold branch**: The Environment Setup page references a `build` branch and `localnet-setup/docker` directory — this may not match our pinned commit. Verify before following doc instructions verbatim.
+- **builder-scaffold branch**: ~~The Environment Setup page references a `build` branch and `localnet-setup/docker` directory~~ **Updated 2026-02-20:** Fixed — docs now reference `main` branch and correct `docker` directory. Submodule reference removed from builder-documentation repo.
+- **AdminCap → AdminACL discrepancy (NEW 2026-02-20)**: Docs now consistently use `AdminACL` (shared object with authorized sponsor addresses). World-contracts code already uses AdminACL. No functional discrepancy — naming alignment only.
+- **SSU proximity proof discrepancy (NEW 2026-02-20)**: Docs show `deposit_by_owner`/`withdraw_by_owner` taking AdminACL instead of proximity proof. Code still uses proximity proof. Docs note this is temporary "until a location service is available." Our extension path is unaffected.
 
 ---
 
@@ -255,7 +259,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 
 1. **Before generating chain interaction flows, sponsorship patterns, or deployment steps**, consult this reference map and the linked official docs pages — especially the "Interfacing with the EVE Frontier World" and "World Explainer" pages.
 2. **Code in `vendor/world-contracts` is canonical; GitBook is explanatory.** If behavior described in docs contradicts Move code, the code wins. Flag the discrepancy.
-3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-18), re-check the relevant pages before finalizing logic.
+3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-20), re-check the relevant pages before finalizing logic.
 4. **For access control patterns**, consult "Introduction to Smart Contracts" — the capability, witness, and hot-potato patterns are explained with rationale not present in code comments.
 5. **For Sui-specific limits** (object size, field counts, gas), consult the "Constraints" page and cross-reference with Sui protocol docs.
 6. **Do not copy GitBook content into internal docs.** Summarize insights and link to the official page. This avoids drift and respects content ownership.

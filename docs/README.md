@@ -116,6 +116,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [operations/zk-gatepass-feasibility-report.md](operations/zk-gatepass-feasibility-report.md) | **ZK GatePass feasibility** — GREEN, fully validated on local devnet (addendum 2026-03-11); see [validation report](operations/shortlist-viability-validation-report.md) tests 8–10 |
 | [operations/gate-lifecycle-runbook.md](operations/gate-lifecycle-runbook.md) | **Full gate lifecycle runbook** — 13-step procedure from publish to jump_with_permit, with evidence (object IDs, tx digests). Carry-forward. |
 | [operations/demo-evidence-appendix.md](operations/demo-evidence-appendix.md) | **Demo evidence mapping** — maps every beat sheet artifact to its executable script, expected output, and capture method. Gap analysis included. Carry-forward. |
+| [operations/submodule-refresh-prompt.md](operations/submodule-refresh-prompt.md) | **Reusable submodule refresh procedure** — step-by-step commands, audit focus areas, doc update checklist, agent prompt template |
 
 ## UX
 

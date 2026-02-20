@@ -24,6 +24,8 @@ This document captures everything needed to **reimplement CivilizationControl fr
 - A code dump — all sandbox code stays in `sui-playground`
 - A substitute for reading the world-contracts source — this is a map, not the territory
 
+> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold/move-contracts/smart_gate/` now contains 3 canonical reference implementations directly relevant to CivilizationControl: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based gate access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS scripts at `ts-scripts/smart_gate/` and utility library at `ts-scripts/utils/` (config, derive-object-id, proof generation, sponsored tx dual-sign). Builder-documentation `gate/build.md` now provides an end-to-end build guide. New deployment automation scripts at `vendor/world-contracts/scripts/` (deploy-world.sh, seed-world.sh).
+
 ---
 
 ## What Was Validated
@@ -59,6 +61,7 @@ Cross-address PTB item transfer risk is **mitigated**. The typed witness extensi
 5. **Item has `key + store` abilities**: `transfer::public_transfer(item, buyer_address)` is valid after withdrawal.
 6. **Coin payment is trivial**: `Coin<T>` has `key + store`, standard `transfer::public_transfer` to seller.
 7. **Multi-signer PTB does NOT exist on Sui**: confirmed that the extension pattern is the correct (and only viable) path for cross-address atomic trades.
+8. **deposit_item() now merges quantities (2026-02-20)**: When depositing an item with a `type_id` that already exists in the inventory, quantities are merged automatically (world-contracts commit `09c2ec2`). Volumes must match (`EItemVolumeMismatch` error code 5). Simplifies re-stocking — no need to check for existing items.
 
 ### Infrastructure Setup Chain — Risk: GREEN (verbose but mechanical)
 

@@ -126,6 +126,8 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 > **ZK Note:** All ZK GatePass primitives validated on local devnet (2026-03-11). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and on-chain verified. Standalone `zk_gate` module published. See [validation report](../operations/shortlist-viability-validation-report.md) and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2. Remaining: world-contracts integration (Character, AdminACL, sponsored tx).
 
+> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold` now contains canonical gate extension reference implementations: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS script suite + utility library at `ts-scripts/`. Builder-documentation `gate/build.md` now provides end-to-end build guide. `deposit_item()` now merges quantities for same-type items (world-contracts commit 09c2ec2) — simplifies TradePost re-stocking. EVE Vault Quasar sponsorship integration in progress but still stubbed (dual-sign fallback required). See [builder-docs-map](../research/evefrontier-builder-docs-map.md) for details.
+
 | Item | Risk | Action | Time |
 |------|------|--------|------|
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
@@ -252,18 +254,18 @@ Side entries serve two purposes: (1) blanket remaining bonus categories Civiliza
 | Dimension | Detail |
 |-----------|--------|
 | **Target Prize** | Most Utility ($5,000 + $1,000 SUI) — or Best Live Frontier Integration if Stillness deployment is feasible |
-| **Concept** | Deploy the existing `corpse_gate_bounty.move` template (now under `smart_gate/`) with a web UI for configuration. Simplest, highest-certainty entry. |
+| **Concept** | Deploy the existing `corpse_gate_bounty.move` template (now under `smart_gate/`) with a web UI for configuration. Simplest, highest-certainty entry. **Updated 2026-02-20:** builder-scaffold now includes complete TS scripts for the corpse bounty flow (`ts-scripts/smart_gate/collect-corpse-bounty.ts`, `authorise-gate.ts`, `configure-rules.ts`) — further reduces build time. |
 | **Sui Primitive** | Typed witness extension (simpler version of GateControl pattern) |
 | **Build Time** | 6–8 hours LLM-assisted (lowest of all candidates) |
 | **Demo Impact** | 8/10 — "Deposit a corpse. Gate opens. No corpse, no jump." Visceral, immediate, macabre humor. |
 | **Meme Potential** | 7/10 — "Corpse toll" is memorable. Works for EVE's audience. |
 | **Win Probability** | **50-60% for Most Utility.** It's the most directly useful single-feature mod. Every gate owner can immediately use it. Higher if targeting Best Live Integration (fewer competitors). |
 
-**Kill Criteria:** Abandon if template code doesn't compile against current world-contracts within 2 hours (unlikely — it's the scaffold's own template).
+**Kill Criteria:** Abandon if template code doesn't compile against current world-contracts within 2 hours (unlikely — it's the scaffold's own template). **Updated 2026-02-20:** Template confirmed working with pnpm scripts in scaffold. Full TS script suite available.
 
 **Build Plan:**
 1. Deploy `corpse_gate_bounty.move` (possibly with minor type_id configuration)
-2. Minimal React UI: gate owner sets toll item type, jump attempt view shows success/failure (scaffold `dapps/` React starter with `@evefrontier/dapp-kit` available as base)
+2. Minimal React UI: gate owner sets toll item type, jump attempt view shows success/failure (scaffold `dapps/` React starter with `@evefrontier/dapp-kit` available as base — **Updated 2026-02-20:** dApp starter now includes assembly info queries and wallet status components)
 3. Record demo: corpse deposit → gate opens vs. no corpse → denied
 4. **Stretch:** Deploy to Stillness (live server) for Best Live Integration targeting (post-submission bonus window)
 

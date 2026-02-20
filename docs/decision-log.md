@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-20 — Submodule Refresh + Docs Audit
+
+- **Goal:** Update all git submodules to latest upstream, audit changes, update documentation indexes and impacted design docs.
+- **Decision:** Refreshed 4 submodules (builder-documentation, builder-scaffold, evevault, world-contracts). proximity-zk-poc unchanged. Updated builder-docs-map with AdminCap→AdminACL alignment, gate build.md population, JSON-RPC removal, scaffold reference code. Updated hackathon-portfolio-roadmap and march-11-reimplementation-checklist with new upstream reference code notes. Updated stored memory facts.
+- **Files:** vendor/* (submodule pointers), docs/research/evefrontier-builder-docs-map.md, docs/strategy/hackathon-portfolio-roadmap.md, docs/core/march-11-reimplementation-checklist.md, docs/decision-log.md, docs/operations/submodule-refresh-prompt.md (new)
+- **Diff:** 4 submodule pointer updates, ~50 LoC doc edits across 3 files, +1 new operations doc
+- **Risk:** Low — submodule pointer updates + docs only
+- **Gates:** typecheck N/A  build N/A  smoke N/A (no code changes)
+- **Key findings:** (1) world-contracts: inventory deposit_item() now merges same-type quantities (beneficial for TradePost). (2) builder-scaffold: complete smart_gate reference implementation with 3 Move modules + full TS script suite. (3) builder-documentation: Gate build.md fully populated; AdminCap→AdminACL naming alignment; JSON-RPC removed; SSU docs show AdminACL replacing proximity proof (code-docs discrepancy — our extension path unaffected). (4) evevault: SuiClient→SuiGrpcClient migration; Quasar sponsorship API endpoint found but still stubbed; chain support unchanged. (5) No breaking changes to Move function signatures across any submodule.
+
 ## 2026-02-19 — Validate GateControl Policy Authoring Model (UI-Driven Feasibility)
 
 - **Goal:** Confirm whether players can configure enforcement rules (deny/allow/toll) via CivilizationControl UI without writing Move code. Determine whether policy is data-driven, requires user-authored Move, or a hybrid.
