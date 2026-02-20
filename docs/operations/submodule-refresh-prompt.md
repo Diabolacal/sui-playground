@@ -24,7 +24,7 @@
 
 ```bash
 git status
-git submodule status
+git submodule status --recursive
 # Record current pinned SHAs for each submodule
 git diff -- vendor/  # Shows pinned vs checked-out SHA per submodule
 ```
@@ -35,21 +35,28 @@ git diff -- vendor/  # Shows pinned vs checked-out SHA per submodule
 git checkout -b chore/submodule-refresh-YYYYMMDD
 ```
 
-### Step 3: Fetch + Update Each Submodule
+### Step 3: Sync, Init, Fetch + Update Each Submodule
 
 ```bash
-# Fetch all remotes
-git submodule foreach 'git fetch --all --prune'
+# Ensure submodule URLs and branch config are in sync with .gitmodules
+git submodule sync --recursive
+git submodule update --init --recursive
 
-# Checkout + pull default branch for each
-cd vendor/builder-documentation && git checkout main && git pull origin main && cd ../..
-cd vendor/builder-scaffold && git checkout main && git pull origin main && cd ../..
-cd vendor/eve-frontier-proximity-zk-poc && git checkout main && git pull origin main && cd ../..
-cd vendor/evevault && git checkout main && git pull origin main && cd ../..
-cd vendor/world-contracts && git checkout main && git pull origin main && cd ../..
+# Fetch all remotes
+git submodule foreach --recursive 'git fetch --all --prune'
+
+# Checkout + pull default branch for each submodule.
+# NOTE: Not all submodules use 'main'. Detect the default branch first:
+#   git -C vendor/<name> remote show origin | grep 'HEAD branch'
+# Or check .gitmodules for a configured branch. Use the detected branch below.
+cd vendor/builder-documentation && git checkout main && git pull origin main && cd ../..                      
+cd vendor/builder-scaffold && git checkout main && git pull origin main && cd ../..                      
+cd vendor/eve-frontier-proximity-zk-poc && git checkout main && git pull origin main && cd ../..                      
+cd vendor/evevault && git checkout main && git pull origin main && cd ../..                      
+cd vendor/world-contracts && git checkout main && git pull origin main && cd ../..                      
 
 # Verify
-git submodule status
+git submodule status --recursive
 git diff -- vendor/  # Confirms old→new SHA changes
 ```
 
@@ -114,12 +121,33 @@ For each changed submodule:
 
 ## Guardrails
 
-- Never commit inside `vendor/*` directories
-- Never modify files inside submodules
+- Do not create commits inside submodule repos; only update submodule pointers in the parent repo
+- Never modify tracked files inside submodules
 - If local changes exist in a submodule, stop and surface them
 - If breaking changes are found, capture evidence and create a TODO note — don't speculatively fix
 - Minimal doc edits: prefer addenda and callouts over rewrites
 - Update stored memory facts if previously stored facts are now outdated
+
+## Optional: Merge Back to Main (VS Code Flow)
+
+After push + review of the feature branch, merge into `main`:
+
+```bash
+git checkout main
+git pull origin main
+
+# Prefer fast-forward; fall back to normal merge if main diverged
+git merge chore/submodule-refresh-YYYYMMDD --ff-only \
+  || git merge chore/submodule-refresh-YYYYMMDD
+
+git push origin main
+
+# Cleanup (only after main push succeeds)
+git push origin --delete chore/submodule-refresh-YYYYMMDD
+git branch -d chore/submodule-refresh-YYYYMMDD
+```
+
+If `-d` refuses (thinks branch is unmerged), **stop and investigate** — do not force-delete.
 
 ## Agent Prompt (Copy-Paste)
 
