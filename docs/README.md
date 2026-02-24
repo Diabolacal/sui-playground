@@ -94,6 +94,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [strategy/civilizationcontrol-voice-and-narrative.md](strategy/civilizationcontrol-voice-and-narrative.md) | **Canonical UI voice & narrative guide** — positioning, label mapping, microcopy, demo framing, Narrative Impact Check |
 | [strategy/civilizationcontrol-hackathon-emotional-objective.md](strategy/civilizationcontrol-hackathon-emotional-objective.md) | **Hackathon emotional objective** — primary emotional target, Five-Pillar Narrative Lens, 3-Second Emotional Check, consequence layer, demo strategy |
 | [strategy/hackathon-portfolio-roadmap.md](strategy/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 4 tracks, prize mapping, development cadence, kill criteria |
+| [strategy/marketing-plan.md](strategy/marketing-plan.md) | **Marketing & player vote campaign plan** — 4-phase campaign (tease → launch → vote window → Stillness flex), channel playbooks, content cadence, asset checklists |
 | [strategy/strategic-next-move-audit-2026-02-18.md](strategy/strategic-next-move-audit-2026-02-18.md) | **Strategic next-move audit** — pre-hackathon bottleneck analysis, STOP/CONTINUE/START, top-3 actions, calendar sketch |
 
 ## Research (Prep Only — Not for Hackathon Repo)
