@@ -10,6 +10,14 @@
 > **Status:** Pre-hackathon — zero production code exists
 > **Sources:** 22 architecture/strategy/UX/research documents synthesized from sui-playground sandbox
 
+### Status Legend (planning repo)
+
+| Label | Meaning |
+|-------|---------|
+| **CONFIRMED** | Validated in local devnet sandbox (pre-hackathon) |
+| **PROVISIONAL** | Architecturally sound; requires validation on hackathon test server (March 11+) |
+| **BLOCKED** | Requires hackathon infrastructure or organizer-provided access (March 11+) |
+
 ---
 
 ## 1. System Boundaries

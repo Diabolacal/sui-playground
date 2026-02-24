@@ -11,6 +11,14 @@
 > **Sources:** march-11-reimplementation-checklist.md, UX architecture spec, demo beat sheet, gatecontrol-feasibility-report.md, zk-gatepass-feasibility-report.md, read-path-architecture-validation.md, policy-authoring-model-validation.md, shortlist-viability-validation-report.md, builder-scaffold patterns  
 > **Hackathon window:** March 11–31, 2026 (~72 effective hours)
 
+### Status Legend (planning repo)
+
+| Label | Meaning |
+|-------|---------|
+| **CONFIRMED** | Validated in local devnet sandbox (pre-hackathon) |
+| **PROVISIONAL** | Architecturally sound; requires validation on hackathon test server (March 11+) |
+| **BLOCKED** | Requires hackathon infrastructure or organizer-provided access (March 11+) |
+
 ---
 
 ## Phase 0: Day-1 Validation (Hours 0–2)

@@ -9,6 +9,14 @@
 >
 > **Must Re-Audit Before March 11 Launch.**
 
+### Status Legend (planning repo)
+
+| Label | Meaning |
+|-------|---------|
+| **CONFIRMED** | Validated in local devnet sandbox (pre-hackathon) |
+| **PROVISIONAL** | Architecturally sound; requires validation on hackathon test server (March 11+) |
+| **BLOCKED** | Requires hackathon infrastructure or organizer-provided access (March 11+) |
+
 ---
 
 ## Execution Order
