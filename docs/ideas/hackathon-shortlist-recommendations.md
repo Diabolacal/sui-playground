@@ -85,7 +85,7 @@ A unified infrastructure management dashboard for EVE Frontier. Three core modul
 | TradePost | Cross-address PTB item transfer unvalidated | Day-1 de-risk task on local devnet |
 | TribeMint | None — Coin standard is well-documented | — |
 | LootDrop | `sui::random` entry function constraint | Test calling convention early; fallback to hash-based pseudo-random |
-| ZK Gate Pass | ~~Package-naming conflict + bridge complexity~~ Resolved — devnet-validated (2026-03-11). Membership circuit design remains. | Wrapper module validated; see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) |
+| ZK Gate Pass | ~~Package-naming conflict + bridge complexity~~ Resolved — validated on local devnet (sandbox). Membership circuit design remains. | Wrapper module validated; see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md). To re-validate on hackathon test server March 11. |
 
 ---
 

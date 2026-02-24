@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16 (updated with full gate lifecycle rehearsal evidence; environment model corrected 2026-03-11)  
+> **Date:** 2026-02-16 (updated with full gate lifecycle rehearsal evidence; environment model to be confirmed March 11)  
 > **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  

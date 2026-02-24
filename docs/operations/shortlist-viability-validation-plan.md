@@ -16,7 +16,7 @@
 | **GateControl** | Green | Confirm extension + witness pattern works; design coin-toll rule |
 | **TradePost** | Yellow → TBD | Confirm cross-address PTB buy (extension-based `withdraw_item<Auth>`) |
 | TribeMint | Green (deferred) | No validation needed — standard `Coin<T>` pattern |
-| ZK Gate Pass | Green (validated) | Devnet-validated (addendum 2026-03-11); see [validation report](shortlist-viability-validation-report.md) tests 8–10 |
+| ZK Gate Pass | Green (validated) | Devnet-validated on local devnet (sandbox); to re-validate on hackathon test server March 11; see [validation report](shortlist-viability-validation-report.md) tests 8–10 |
 
 ---
 
@@ -322,7 +322,7 @@ The following tests were not part of the original matrix but would be needed for
 
 **Fail criteria:** Both single-tx and two-step approaches fail.
 
-**Expected: GREEN** (depth-0 constraint resolved on 2026-03-11; see [validation report](shortlist-viability-validation-report.md) test 10).
+**Expected: GREEN** (depth-0 constraint resolved on local devnet; see [validation report](shortlist-viability-validation-report.md) test 10). To re-validate on hackathon test server March 11.
 
 ---
 
@@ -348,8 +348,8 @@ The following tests were not part of the original matrix but would be needed for
 
 | Test | Expected | Status |
 |------|----------|--------|
-| 11. ZK Groth16 Standalone Verify | GREEN | **GREEN ✓** (validated 2026-03-11) |
-| 12. ZK + Gate Extension Composition | GREEN | **GREEN ✓** (validated 2026-03-11) |
+| 11. ZK Groth16 Standalone Verify | GREEN | **GREEN ✓** (validated on local devnet) |
+| 12. ZK + Gate Extension Composition | GREEN | **GREEN ✓** (validated on local devnet) |
 | 13. Membership Circuit Off-Chain | GREEN | Pending (implementation task for hackathon start) |
 
 ---

@@ -410,7 +410,7 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 
 ---
 
-> ¹ ZK Gate Pass upgraded from Yellow to **Green** following devnet validation (addendum 2026-03-11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md).
+> ¹ ZK Gate Pass upgraded from Yellow to **Green** following local devnet validation (sandbox; to re-validate on hackathon test server March 11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md).
 
 ## Appendix: Full Idea Registry (28 Ideas)
 

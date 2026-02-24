@@ -63,7 +63,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 - **Coin toll collection** — on-chain `Coin<SUI>` payment transfers to gate operator on jump
 - **Rule composition** — tribe filter AND toll as independent, stackable layers via dynamic field dispatch
 - **Full 13-step gate lifecycle** — end-to-end on local devnet (20 successful transactions, 2026-02-16)
-- **ZK privacy rule (Groth16)** — membership circuit (depth 10, Poseidon(2), 2,430 constraints) on-chain verified; standalone `zk_gate` module published on devnet (2026-03-11)
+- **ZK privacy rule (Groth16)** — membership circuit (depth 10, Poseidon(2), 2,430 constraints) on-chain verified; standalone `zk_gate` module published on local devnet (sandbox validation, to re-validate on hackathon test server March 11)
 - **Atomic buy flow** — buyer pays, receives item, seller receives payment in single on-chain transaction
 - **Cross-address item transfer** — extension's typed witness authorizes withdrawal from seller's SSU without seller online
 - **SSU-backed storefront lifecycle** — publish → setup → authorize → stock → list → buy (devnet validated)

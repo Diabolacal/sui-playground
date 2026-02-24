@@ -1,7 +1,8 @@
 /// ZK Gate — Standalone Groth16 Membership Verification Module
 /// ===========================================================
 /// Extracted from the zk_gatepass_validation PoC into a clean,
-/// production-ready module for GateControl integration.
+/// standalone validation module for GateControl integration pattern testing.
+/// Sandbox only — not submission code.
 ///
 /// Architecture:
 ///   1. ZKGateConfig (shared object) stores the verification key for a circuit

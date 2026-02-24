@@ -4,7 +4,7 @@
 
 > Evidence ledger mapping every demo claim to its proof artifact.
 > Sources: shortlist-viability-validation-report.md, gate-lifecycle-runbook.md, gatecontrol-feasibility-report.md, tradepost-cross-address-ptb-validation.md, zk-gatepass-feasibility-report.md, civcontrol-independent-audit.md
-> Last updated: 2026-03-11 (environment model corrected)
+> Last updated: 2026-02-24 (environment model to be confirmed March 11)
 
 ---
 

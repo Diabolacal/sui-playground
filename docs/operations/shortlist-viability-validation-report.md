@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16 (ZK addendum: 2026-03-11)  
+> **Date:** 2026-02-16 (ZK addendum: sandbox validation, to re-validate March 11)  
 > **Status:** Complete  
 > **Verdict:** GateControl, TradePost, and **ZK GatePass** are all **GREEN — technically viable** on Sui local devnet.  
 > **Plan reference:** [shortlist-viability-validation-plan.md](shortlist-viability-validation-plan.md)
@@ -386,7 +386,7 @@ Players should see **Lux values** as the primary denomination. On-chain settleme
 
 ---
 
-## ZK Gate Pass Rule Validation (Added 2026-02-16, **Devnet-Tested 2026-03-11**)
+## ZK Gate Pass Rule Validation (Added 2026-02-16, **Devnet-Tested on Local Devnet**)
 
 > **Status:** **GREEN — All critical tests passed on Sui local devnet.**
 
@@ -463,7 +463,7 @@ The VK must use arkworks `CanonicalSerialize` compressed format, which includes 
 
 3. ~~**Membership circuit design:**~~ **RESOLVED — Implemented and devnet-validated.** Merkle membership proof circuit (depth 10, Poseidon(2), 2,430 constraints, 1 public input). Valid proof verified, invalid proof rejected, dynamic config + gate composition all working on devnet. See §2.2 addendum below.
 
-### Membership Circuit Addendum (2026-03-11)
+### Membership Circuit Addendum (Sandbox Validation — To Re-Validate March 11)
 
 The membership circuit implementation resolves the final practical implementation gap:
 

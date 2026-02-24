@@ -2,8 +2,8 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16 (ZK devnet addendum: 2026-03-11)  
-> **Status:** Complete — ZK GatePass GREEN (validated on local devnet; evidence captured as addendum dated 2026-03-11)  
+> **Date:** 2026-02-16 (ZK devnet addendum: sandbox validation, to re-validate March 11)  
+> **Status:** Complete — ZK GatePass GREEN (validated on local devnet; evidence captured as sandbox validation addendum; to re-validate on hackathon test server March 11)  
 > **Type:** Feasibility validation (research + architecture analysis, no hackathon code produced)  
 > **Inputs:** `vendor/eve-frontier-proximity-zk-poc`, `vendor/world-contracts`, CC product vision, hackathon roadmap, existing validation reports  
 > **Method:** Four-subagent audit (ZK PoC, GateControl integration, devnet feasibility, kill-switch/fallback)
@@ -26,7 +26,7 @@
 | Fallback plan | **GREEN** | High — tribe filter + toll validated, non-ZK CC is competitive |
 
 > **Update 2026-02-17:** Upgraded from YELLOW-GREEN to GREEN following devnet validation. See §2.1 for test evidence.
-> **Update 2026-03-11:** Membership circuit IMPLEMENTED — Merkle proof (depth 10, Poseidon(2), 2,430 constraints). Standalone `zk_gate` module extracted and validated on devnet. All kill gates passed. See §2.2.
+> **Update 2026-03-11:** Membership circuit IMPLEMENTED — Merkle proof (depth 10, Poseidon(2), 2,430 constraints). Standalone `zk_gate` module extracted and validated on local devnet. All kill gates passed. See §2.2. *Note: This is sandbox validation evidence. To re-validate on hackathon test server March 11.*
 
 **Recommendation:** ZK integration is implementation-ready. All feasibility kill gates passed: circuit compiles (2,430 constraints), valid proof verifies on-chain, invalid proof rejected, ZK + gate composition works in single entry function, standalone module published. Remaining work is hackathon integration with world-contracts (sponsored tx, Character objects). If any RED trigger fires, kill immediately — core CC remains strong without ZK.
 

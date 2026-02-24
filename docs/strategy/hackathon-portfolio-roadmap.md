@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-17 (reconciled; environment model corrected 2026-03-11)  
+> **Date:** 2026-02-17 (reconciled; environment model to be confirmed March 11)  
 > **Status:** Pre-hackathon planning (code moratorium until March 11)  
 > **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report, narrative voice guide, emotional objective, UX architecture spec, Figma structural wireframe  
 > **Mode:** Competitive strategy — bold, decisive, kill-switch-aware
@@ -100,7 +100,7 @@ Per the strategy memo's adversarial critique, TribeMint is **demoted to stretch*
 |----------|--------|--------|----------------|------|
 | 1 | **GateControl** — Composable gate policy engine (tribe filter, coin toll, time window) | Core | 7.97 | Green |
 | 2 | **TradePost** — SSU storefront with atomic PTB escrow | Core | 7.91 | Green (validated) |
-| ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Green (all validated 2026-03-11; membership circuit implemented, standalone module published) |
+| ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Green (all validated on local devnet; membership circuit implemented, standalone module published; to re-validate on hackathon test server March 11) |
 | S1 | TribeMint — Faction `Coin<TribeToken>` | Stretch | 6.31 | Green |
 | S2 | LootDrop — VRF loot crate via `sui::random` | Stretch | 7.53 | Yellow |
 
@@ -116,7 +116,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | Cannibalization | Severe — 29-57% of total dev capacity | Zero — built on same gate extension pattern |
 | Working demo probability | 45-55% full | 50-60% (shared infrastructure reduces setup risk) |
 
-**Decision: ZK is a GateControl rule type, not Track B.** The existing `eve-frontier-proximity-zk-poc` provides 60-70% of the work. The integration seam (circuit → Move verifier → gate extension) is buildable and the core composition (Groth16 verify + gate witness) has been validated on devnet (addendum 2026-03-11). ZK is upside, not dependency.
+**Decision: ZK is a GateControl rule type, not Track B.** The existing `eve-frontier-proximity-zk-poc` provides 60-70% of the work. The integration seam (circuit → Move verifier → gate extension) is buildable and the core composition (Groth16 verify + gate witness) has been validated on local devnet (sandbox). ZK is upside, not dependency.
 
 ### Differentiator
 
@@ -124,7 +124,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 ### Remaining Validation (March 11 De-Risking)
 
-> **ZK Note:** All ZK GatePass primitives validated on local devnet (2026-03-11). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and on-chain verified. Standalone `zk_gate` module published. See [validation report](../operations/shortlist-viability-validation-report.md) and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2. Remaining: world-contracts integration (Character, AdminACL, sponsored tx).
+> **ZK Note:** All ZK GatePass primitives validated on local devnet (sandbox). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and on-chain verified. Standalone `zk_gate` module published. See [validation report](../operations/shortlist-viability-validation-report.md) and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2. Remaining: world-contracts integration (Character, AdminACL, sponsored tx) — to re-validate on hackathon test server March 11.
 
 > **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold` now contains canonical gate extension reference implementations: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS script suite + utility library at `ts-scripts/`. Builder-documentation `gate/build.md` now provides end-to-end build guide. `deposit_item()` now merges quantities for same-type items (world-contracts commit 09c2ec2) — simplifies TradePost re-stocking. EVE Vault Quasar sponsorship integration in progress but still stubbed (dual-sign fallback required). See [builder-docs-map](../research/evefrontier-builder-docs-map.md) for details.
 
@@ -133,7 +133,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
 | GateControl → `issue_jump_permit` → `jump_with_permit` integration | Low (validated) | ✅ Full 13-step gate lifecycle rehearsed on local devnet (2026-02-16). See [runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md). | DONE |
 | Sponsored transaction setup (AdminACL) | Low (validated) | ✅ Sponsor setup + sponsored `deposit_fuel` and `jump_with_permit` validated. Self-sponsorship does NOT work (must use different address). See [runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13. | DONE |
-| ZK circuit → Move Groth16 verification | Low (fully validated) | ✅ Membership circuit implemented & devnet-validated | DONE |
+| ZK circuit → Move Groth16 verification | Low (fully validated) | ✅ Membership circuit implemented & devnet-validated (sandbox) | DONE |
 | Lux-to-SUI display conversion | Low (UX only) | Inspect game server behavior if accessible | 1 hour |
 
 ### Risk Register
@@ -141,7 +141,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
 | 1 | **Full gate lifecycle setup too complex** | Low (mitigated) | Medium (mitigated) | ✅ Full 13-step lifecycle rehearsed end-to-end on local devnet (2026-02-16). Reproducible [runbook](../operations/gate-lifecycle-runbook.md) with 20 successful transactions. Setup is verbose but mechanical — no remaining unknowns. |
-| 2 | **ZK integration fails** | Very Low | Low — GateControl still works without ZK | All primitives validated on devnet (2026-03-11). Membership circuit implemented. Remaining risk is world-contracts integration only. |
+| 2 | **ZK integration fails** | Very Low | Low — GateControl still works without ZK | All primitives validated on local devnet (sandbox). Membership circuit implemented. Remaining risk is world-contracts integration only — to re-validate on hackathon test server March 11. |
 | 3 | **Scope creep into TribeMint** | Medium | Medium | Hard rule: TribeMint starts only after full CC demo rehearsal passes. |
 | 4 | **Demo video quality insufficient** | Low | High | Script, storyboard, and pre-deploy all state before recording. Multiple takes. Post-production captions. Budget 1 full day for demo. |
 | 5 | **Multiple submissions disallowed** | Low | Critical | FAQ indicates yes. Verify with organizer before March 11. If NO: Fortune Gate becomes GateControl's weird-rule-type, pivoting to single-entry strategy. |
@@ -174,13 +174,13 @@ The "Technical Spike" concept is preserved as the ZK Privacy Rule within Track A
 
 ### Kill Criteria (ZK within Track A)
 
-> **Status update (2026-03-11):** All ZK kill gates passed. On-chain Groth16 verification, ZK+gate composition, AND membership circuit (depth 10, Poseidon(2), 2,430 constraints) all validated. Standalone `zk_gate` module published on devnet. No remaining kill gates — ZK integration is implementation-ready.
+> **Planned status checkpoint (March 11):** All ZK kill gates passed on local devnet (sandbox). On-chain Groth16 verification, ZK+gate composition, AND membership circuit (depth 10, Poseidon(2), 2,430 constraints) all validated. Standalone `zk_gate` module published on devnet. No remaining kill gates — ZK integration is implementation-ready. To re-validate on hackathon test server.
 
 | Checkpoint | Deadline | Signal | Status |
 |-----------|----------|--------|--------|
-| Circuit compiles + generates valid proofs | End of Day 1 | If no, ZK is cut | **PASSED** (2026-03-11) |
-| Move Groth16 verifier accepts proof on devnet | End of Day 2 | If no after >4 hours debugging, cut | **PASSED** (2026-03-11) |
-| Full gate extension integration works | Mid-Day 3 | If no, fall back to CLI demo or cut entirely | **PASSED** (2026-03-11) |
+| Circuit compiles + generates valid proofs | End of Day 1 | If no, ZK is cut | **TO RE-VALIDATE** on hackathon test server (passed on local devnet) |
+| Move Groth16 verifier accepts proof on devnet | End of Day 2 | If no after >4 hours debugging, cut | **TO RE-VALIDATE** on hackathon test server (passed on local devnet) |
+| Full gate extension integration works | Mid-Day 3 | If no, fall back to CLI demo or cut entirely | **TO RE-VALIDATE** on hackathon test server (passed on local devnet) |
 
 ---
 
@@ -366,7 +366,7 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 
 | Action | Timeline | Status | Purpose |
 |--------|----------|--------|---------|  
-| ZK circuit design | Feb 20-25 | ✅ DONE (2026-03-11) | Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and devnet-validated |
+| ZK circuit design | Feb 20-25 | 🔲 TO RE-VALIDATE (March 11) | Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and validated on local devnet (sandbox); to re-validate on hackathon test server |
 | Gate lifecycle rehearsal | Feb 15-16 | ✅ DONE (2026-02-16) | Full 13-step lifecycle, 20 txs, reproducible [runbook](../operations/gate-lifecycle-runbook.md) |
 | Narrative layer formalization | Feb 17 | ✅ DONE (2026-02-17) | [Voice & narrative guide](civilizationcontrol-voice-and-narrative.md) + [emotional objective](civilizationcontrol-hackathon-emotional-objective.md) + Narrative Impact Check |
 | UX architecture specification | Feb 16-17 | ✅ DONE (2026-02-17) | Screen hierarchy, interaction flows, data models, [Figma-ready brief](../ux/civilizationcontrol-ux-architecture-spec.md) |

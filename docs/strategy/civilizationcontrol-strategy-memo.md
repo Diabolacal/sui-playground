@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-15 (environment model corrected 2026-03-11)
+> **Date:** 2026-02-15 (environment model to be confirmed March 11)
 > **Type:** Adversarial strategy review — thesis, critique, reconciliation
 > **Inputs:** V3 judging-aligned rankings, shortlist recommendations, capability analysis, Sui + EVE Frontier docs
 > **Mode:** Analytical. No hype. No default agreement.
@@ -29,7 +29,7 @@
 
 ### Standalone Side Projects (Considered Separately)
 
-- ZK Gate Pass (technical flex — validated on devnet, addendum 2026-03-11; integrated into CC as GateControl rule type)
+- ZK Gate Pass (technical flex — validated on local devnet; integrated into CC as GateControl rule type; to re-validate on hackathon test server March 11)
 - Salvage Protocol (creative flex)
 - Fortune Gate (weird flex)
 - Flappy Frontier (meme)
@@ -52,7 +52,7 @@
 The 8 judging criteria each carry 12.5% weight (combined 75%), with player vote at 25%. CivilizationControl targets the multiplier effect:
 
 - **ModDesign (12.5%):** A composable system with shared auth, shared data model, and cross-module economic flow is the textbook definition of a 10/10. Single-module entries cap at ~7-8 on this criterion.
-- **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green risks across all validated components — including ZK GatePass (validated on local devnet, addendum 2026-03-11). Full gate lifecycle (13 steps, 20 transactions) rehearsed end-to-end on local devnet (2026-02-16); see [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md).
+- **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green risks across all validated components — including ZK GatePass (validated on local devnet; to re-validate on hackathon test server March 11). Full gate lifecycle (13 steps, 20 transactions) rehearsed end-to-end on local devnet (2026-02-16); see [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md).
 - **Concept Implementation (12.5%):** Three deployed Move packages with event emission, dynamic field state, and PTB composition demonstrate tangible depth. Template code exists for GateControl's toll pattern.
 - **Frontier Vibe (12.5%):** Gate policy is access governance. Field-deployed commerce extends the economic frontier. Faction currencies create tribal identity. All three map to EVE Online's meta-game culture.
 
@@ -299,7 +299,7 @@ CivilizationControl's dashboard is a **list-first control plane** — structures
 ### Second Cut (Drop Before Cutting First Cut)
 
 - LootDrop VRF module
-- ZK privacy rule in GateControl *(fully validated on devnet 2026-03-11; membership circuit implemented, standalone module published)*
+- ZK privacy rule in GateControl *(validated on local devnet; membership circuit implemented, standalone module published; to re-validate on hackathon test server March 11)*
 - Cross-faction exchange
 - Stillness deployment *(deferred to post-submission bonus window; primary build uses hackathon test server)*
 
@@ -384,7 +384,7 @@ Insert 30 seconds between Act 3 and Act 4:
 
 3. **Prize targeting.** ZK Gate Pass is ranked #1 for "Best Technical Implementation" and #2 for "Most Creative" in the bonus prize analysis. These are distinct prizes from "Best Entry" — a standalone ZK submission does not cannibalize CivilizationControl's primary prize target.
 
-4. **Risk containment.** All ZK primitives validated on devnet (2026-03-11). Standalone `zk_gate` module published with zero world-contracts dependencies. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain. No remaining feasibility risks — only world-contracts integration remains. See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2.
+4. **Risk containment.** All ZK primitives validated on local devnet (sandbox). Standalone `zk_gate` module published with zero world-contracts dependencies. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain. No remaining feasibility risks — only world-contracts integration remains (to re-validate on hackathon test server March 11). See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2.
 
 5. **Demo impact.** "'Generating zero-knowledge proof...' → proof verified on-chain → gate opens → and the blockchain never learned who you were." This is a 30-second moment that lands with any audience. High variance, high reward.
 

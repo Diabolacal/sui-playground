@@ -109,10 +109,10 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 - **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
 - **Follow-ups:** Day 1 validation on hackathon test server: CharacterCreatedEvent query, RPC OwnerCap discovery, GraphQL availability, event retention window
 
-## 2026-03-11 — Three-Environment Model Correction
+## 2026-03-11 (PLANNED) — Three-Environment Model Correction
 
 - **Goal:** Correct the two-tier environment assumption (local devnet + Stillness) to a three-tier model by incorporating the dedicated hackathon test server available from March 11.
-- **Decision:** Updated all strategic and planning documents to reflect three environments: (1) Local DevNet — Docker-based, pre-March 11 validation; (2) Hackathon Test Server — primary build/test/evidence environment from March 11, same world-contracts as Stillness, admin-spawnable structures, unlimited currency, shared among builders; (3) Stillness — live player server, deployment deferred to post-submission bonus window (14 days post-close). Revised launch strategy from "staged Stillness deployment" to "build privately on test server, submit with maximum novelty, deploy to Stillness post-submission."
+- **Decision (planned):** Update all strategic and planning documents to reflect three environments: (1) Local DevNet — Docker-based, pre-March 11 validation; (2) Hackathon Test Server — primary build/test/evidence environment from March 11, same world-contracts as Stillness, admin-spawnable structures, unlimited currency, shared among builders; (3) Stillness — live player server, deployment deferred to post-submission bonus window (14 days post-close). Revised launch strategy from "staged Stillness deployment" to "build privately on test server, submit with maximum novelty, deploy to Stillness post-submission."
 - **Files:** docs/strategy/strategic-next-move-audit-2026-02-18.md, docs/strategy/hackathon-portfolio-roadmap.md, docs/strategy/civilizationcontrol-strategy-memo.md, docs/strategy/civilizationcontrol-product-vision.md, docs/core/march-11-reimplementation-checklist.md, docs/core/civilizationcontrol-claim-proof-matrix.md, docs/architecture/gatecontrol-feasibility-report.md, docs/ux/civilizationcontrol-ux-architecture-spec.md, docs/ideas/hackathon-ideas-grounded-v3-judged.md
 - **Diff:** ~+80 / -40 (environment references updated, new environment model section added, hackathon test server as primary target, Stillness testnet misnomer corrected throughout)
 - **Risk:** Low — documentation only, no code changes
@@ -184,21 +184,21 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
   - Extension packages need `[environments]` section + `Pub.local.toml`
 - **Follow-ups:** None — runbook is carry-forward ready
 
-## 2026-03-11 — ZK GatePass: Membership Circuit Implemented & Module Extracted
+## 2026-03-11 (PLANNED) — ZK GatePass: Membership Circuit Implemented & Module Extracted
 
 - **Goal:** Complete remaining ZK implementation: design Merkle membership circuit, extract standalone `zk_gate` module, validate on devnet
-- **Decision:** All ZK kill gates passed. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented in Circom, compiled, trusted setup complete, proof generated and verified off-chain. Standalone `zk_gate` Move module extracted and published on local devnet. On-chain tests: valid proof verified, invalid proof rejected, dynamic config + gate composition working.
+- **Decision (planned):** All ZK kill gates passed on local devnet (sandbox). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented in Circom, compiled, trusted setup complete, proof generated and verified off-chain. Standalone `zk_gate` Move module extracted and published on local devnet. On-chain tests: valid proof verified, invalid proof rejected, dynamic config + gate composition working. To re-validate on hackathon test server.
 - **Files:** sandbox/validation/zk_membership/ (circuit, serializer, input generator), sandbox/validation/zk_gate/ (Move module), docs/operations/zk-gatepass-feasibility-report.md (§2.2 updated), docs/operations/shortlist-viability-validation-report.md (membership addendum), docs/strategy/hackathon-portfolio-roadmap.md (status updated), docs/strategy/civilizationcontrol-strategy-memo.md (status updated)
 - **Diff:** +350 / -30 (circuit + Move module + doc updates)
 - **Risk:** Low — sandbox validation; no production code
 - **Gates:** typecheck N/A  build ✅ (Move build -e local)  smoke: 4 devnet tx all SUCCESS
 - **Follow-ups:** World-contracts integration (Character, AdminACL, sponsored tx) during hackathon
 
-## 2026-03-11 — ZK GatePass Upgraded to GREEN (Devnet Validated)
+## 2026-03-11 (PLANNED) — ZK GatePass Upgraded to GREEN (Devnet Validated)
 
 - **Goal:** Validate ZK Groth16 verification and ZK+gate composition on local devnet (tests 8–10)
 - **Context:** Sandbox addendum capturing devnet evidence for ZK GatePass. Standalone Groth16 verify, negative test, and ZK-to-gate composition (ZKAuth witness consumed by `Auth: drop` generic) all confirmed working in single-PTB transactions.
-- **Decision:** GREEN — ZK GatePass is fully validated. Prior composition gap (depth-0 constraint) is resolved. Membership circuit design + package extraction remain as March 11 implementation tasks.
+- **Decision:** GREEN — ZK GatePass is fully validated on local devnet (sandbox). Prior composition gap (depth-0 constraint) is resolved. Membership circuit design + package extraction remain as March 11 implementation tasks.
 - **Files:** docs/operations/shortlist-viability-validation-report.md (tests 8–10 added), docs/operations/zk-gatepass-feasibility-report.md (§2.1 evidence table added), sandbox/validation/zk_gatepass_validation/ (Move packages)
 - **Diff:** +120 / -5
 - **Risk:** Low — validation only; no production code
@@ -209,11 +209,11 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 - **Goal:** Determine if ZK-verified gate access (Groth16 membership proof) is feasible as a GateControl rule type within CivilizationControl
 - **Context:** Four-subagent research sprint: ZK PoC audit, GateControl integration analysis, devnet feasibility assessment, kill-switch/fallback design. No hackathon code produced.
-- **Decision:** YELLOW-GREEN — architecturally feasible, pursue on March 11 with disciplined kill checkpoints. Both primitives (Groth16 on Sui, gate extension witness) proven independently. Critical gap: composing them in single transaction (depth-0 constraint). Two-step fallback (P1) available if single-tx fails. Maximum 28-hour ZK budget (25% of sprint). *(Upgraded to GREEN on 2026-03-11 — see entry above.)*
+- **Decision:** YELLOW-GREEN — architecturally feasible, pursue on March 11 with disciplined kill checkpoints. Both primitives (Groth16 on Sui, gate extension witness) proven independently. Critical gap: composing them in single transaction (depth-0 constraint). Two-step fallback (P1) available if single-tx fails. Maximum 28-hour ZK budget (25% of sprint). *(Upgraded to GREEN on local devnet — see entry above; to re-validate on hackathon test server March 11.)*
 - **Alternatives considered:** (1) Off-chain proof + signature relay — rejected, not trustless, judges see through it; (2) ZK as standalone entry — already ruled out in portfolio strategy; (3) Skip ZK entirely — rejected, +0.50 score uplift justifies bounded 28-hour risk
 - **Files:** docs/operations/zk-gatepass-feasibility-report.md (new), docs/architecture/zk-killswitch-fallback-analysis.md (new), docs/operations/shortlist-viability-validation-plan.md (updated), docs/operations/shortlist-viability-validation-report.md (updated), docs/README.md (updated)
 - **Diff:** +550 / -5
-- **Risk:** Medium — bounded by kill criteria (Day 1: circuit compile, Day 2: on-chain verify, Day 3 AM: gate integration). *(All composition gates passed on 2026-03-11; membership circuit remains the primary implementation gate.)*
+- **Risk:** Medium — bounded by kill criteria (Day 1: circuit compile, Day 2: on-chain verify, Day 3 AM: gate integration). *(All composition gates passed on local devnet (sandbox); membership circuit remains the primary implementation gate for March 11.)*
 - **Gates:** typecheck N/A  build N/A  smoke N/A (research + docs only)
 - **Follow-ups:** Execute Tests 11-13 on March 11; resolve package naming conflict; design membership circuit
 

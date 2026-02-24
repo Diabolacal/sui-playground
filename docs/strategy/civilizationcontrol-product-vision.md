@@ -310,7 +310,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 - Time-window rule types for gates (interesting but not MVP)
 - Revenue analytics views (the feed provides live data; historical charts are polish)
 - Mobile/responsive layout (desktop-first is fine for demo and hackathon)
-- ZK privacy rules for gate access (validated on devnet 2026-03-11; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md))
+- ZK privacy rules for gate access (validated on local devnet; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md); to re-validate on hackathon test server March 11)
 - Cross-faction diplomatic exchange protocols (fascinating but scope creep)
 
 ---
@@ -321,7 +321,7 @@ EVE Frontier gives players programmable building blocks and drops them in a host
 
 But right now, the builders are working blind. The contracts are powerful, the architecture is elegant, and nobody has built the control room that makes any of it usable.
 
-CivilizationControl isn't just the most technically exotic entry in this hackathon — with ZK-verified gate access validated on devnet (addendum 2026-03-11), it combines zero-knowledge proofs with the practical infrastructure governance that tribe leaders need.
+CivilizationControl isn't just the most technically exotic entry in this hackathon — with ZK-verified gate access validated on local devnet (sandbox validation; to re-validate on hackathon test server March 11), it combines zero-knowledge proofs with the practical infrastructure governance that tribe leaders need.
 
 What it does is something simpler and harder: it takes the building blocks that already exist — gates, storage units, tribes, tolls, trades — and turns them into a system that a real tribe leader can see, configure, and profit from. Without writing code. Without trusting strangers. Without flying blind.
 
