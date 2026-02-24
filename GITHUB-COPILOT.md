@@ -2,6 +2,8 @@
 
 This file defines the guardrails, workflow, and minimal verification steps that GitHub Copilot-style agents must follow when making changes in this repository.
 
+> For full project context, agent guardrails, and documentation index, see `AGENTS.md` and `docs/README.md`.
+
 ## Purpose
 - Provide an always-available, repo-level contract describing what edits are safe for an automated assistant to make without additional approvals.
 - Keep the project baseline intact and ensure small, testable changes are applied with proper checks.

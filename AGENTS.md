@@ -20,6 +20,7 @@ Useful entry points:
 - **Documentation Index**: `docs/README.md` — central map for all project documentation
 - **Guardrails**: `.github/copilot-instructions.md` (source of truth for patterns)
 - **Decisions**: `docs/decision-log.md` (newest first)
+- **System Spec**: `docs/core/spec.md` — CivilizationControl boundaries, on-chain model, risk model
 
 ## Three-tier boundaries
 
@@ -141,7 +142,7 @@ When resuming after context loss: (1) read Working Memory file, (2) restate Obje
 - Move completed Working Memory files to `docs/archive/working_memory/` or delete.
 - Keep at most one active file per task.
 - If exceeding ~200 lines, summarize into decision log and trim.
-
+> **CivilizationControl sprints:** Use the extended template in `docs/core/memory.md`, which adds Environment State, Evidence Captured, Commands Run, and Next Step Pointer sections.
 ## Context Discipline & Subagent Policy
 
 Subagents are the **primary mechanism** for complex work. Use them by default for:
@@ -255,5 +256,6 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 - Skim last ~40 lines of `docs/decision-log.md` for recent initiatives
 - Review `docs/README.md` for documentation map and taxonomy
 - **For Sui local devnet operations**, read `docs/architecture/sui-playground.md` first
+- **For CivilizationControl implementation**, read `docs/core/spec.md` (system spec) and `docs/core/day1-checklist.md` (Day-1 validation)
 
 — Keep this file concise. Update when operating rules or architecture materially change.

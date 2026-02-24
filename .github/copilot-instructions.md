@@ -74,6 +74,8 @@ npm run build            # Must succeed
 - `docs/`: Structured documentation (see `docs/README.md` for index)
 - `docs/core/`: Essential docs to carry into hackathon repo
 - `docs/architecture/`: Technical capability and system design
+- `docs/strategy/`: Product positioning and narrative voice (see Hackathon Narrative section)
+- `docs/ux/`: UX architecture specifications
 - `docs/ideas/`: Hackathon project ideas
 - `docs/operations/`: Process guides, checklists, templates
 - `docs/working_memory/`: Ephemeral agent task tracking (gitignored)
@@ -333,6 +335,8 @@ Status: [In Progress / Paused / Completed]
 
 ### Cleanup
 Upon task completion, move Working Memory files to `docs/archive/working_memory/` (or delete if trivial) and note the move in the decision log when relevant.
+
+> **CivilizationControl sprints:** Use the extended template in `docs/core/memory.md`, which adds Environment State (package IDs, network), Evidence Captured (proof moment tracking), and Commands Run sections.
 
 ## Response Framing
 - Start with a purposeful plan; reserve redundant labels only when they aid scanning.

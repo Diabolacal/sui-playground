@@ -53,6 +53,11 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [core/march-11-reimplementation-checklist.md](core/march-11-reimplementation-checklist.md) | **March 11 carry-forward** — validated patterns, day-1 checklist, pitfalls, DO NOT COPY notice |
 | [core/civilizationcontrol-claim-proof-matrix.md](core/civilizationcontrol-claim-proof-matrix.md) | **Evidence ledger** — every demo claim mapped to tx digest, object ID, overlay format; utility metrics targets |
 | [core/civilizationcontrol-demo-beat-sheet.md](core/civilizationcontrol-demo-beat-sheet.md) | **Demo beat sheet** — 3-min primary loop (Control→Consequence→Revenue), 2-min fallback variant, evidence capture checklist |
+| [core/civilizationcontrol-implementation-plan.md](core/civilizationcontrol-implementation-plan.md) | **Atomic implementation plan** — 45 steps across 7 phases (~68h), Day-1 validation first, ZK kill criteria, demo capture |
+| [core/spec.md](core/spec.md) | **System specification** — boundaries, on-chain model, module architecture, UX hierarchy, demo architecture, risk model, embargo assumptions |
+| [core/memory.md](core/memory.md) | **Working memory template** — structured hackathon sprint tracking, recovery procedure, proof moment evidence slots |
+| [core/day1-checklist.md](core/day1-checklist.md) | **Day-1 chain validation checklist** — 10 structured checks with commands, expected output, fallbacks, GO/NO-GO gate |
+| [core/validation.md](core/validation.md) | **Validation procedures** — step-level verification, build/lint gates, deterministic proof moment validation, runtime expectations |
 
 ## Architecture
 
@@ -103,6 +108,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [research/hackathon-event-rules-digest.md](research/hackathon-event-rules-digest.md) | **Practical digest** — dates, eligibility, judging criteria, agent compliance checklist |
 | [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
 | [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
+| [research/location-proof-independent-audit.md](research/location-proof-independent-audit.md) | **Location proof independent audit** — distance proof observability, trilateration analysis, risk classification |
 
 ## Operations
 
