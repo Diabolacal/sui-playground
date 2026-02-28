@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-28 — Submodule Refresh + Breaking Changes Audit
+
+- **Goal:** Update all git submodules to latest upstream, audit changes, update documentation with breaking change findings.
+- **Decision:** Refreshed 4 submodules (builder-documentation c2628fd→6b6fae8, builder-scaffold 9edb532→6bc43a1, evevault ed238c2→687d432, world-contracts 09c2ec2→e508451). proximity-zk-poc unchanged.
+- **Files:** vendor/* (4 submodule pointer updates), docs/research/evefrontier-builder-docs-map.md, docs/core/march-11-reimplementation-checklist.md, docs/strategy/hackathon-portfolio-roadmap.md, docs/decision-log.md
+- **Diff:** 4 submodule pointer updates, ~80 LoC doc edits across 4 files
+- **Risk:** Low — submodule pointer updates + docs only
+- **Gates:** typecheck N/A  build N/A  smoke N/A (no code changes)
+- **Key findings:** (1) world-contracts v0.0.13: proximity proof REMOVED from owner-path SSU functions (withdraw_by_owner, withdraw) — replaced by AdminACL verify_sponsor. Extension path unaffected. (2) link_gates now requires AdminACL param + authorized sponsored tx. (3) SDK migration: SuiClient → SuiJsonRpcClient (@mysten/sui/jsonRpc) across world-contracts + builder-scaffold. (4) New EVE token asset (Coin\<EVE\>, 10B supply, 9 decimals, AdminCap+EveTreasury). (5) New gate link/unlink events. (6) builder-scaffold: proof.ts deleted, corpse_gate_bounty updated to AdminACL. (7) EVE Vault: sign-and-execute now functional, default chain devnet→testnet, sponsored tx API URL changed with assemblyType param, 2-min timeout guard. (8) builder-documentation: minor Move docs URL fix. **No pattern-breaking changes for CivilizationControl** — all validated extension/witness patterns remain intact.
+- **Follow-ups:** Re-validate deployment sequence on hackathon test server March 11 (step numbering changed due to AdminCap removal from setup chain). Consider EVE token as coin toll currency option.
+
 ## 2026-02-20 — Submodule Refresh + Docs Audit
 
 - **Goal:** Update all git submodules to latest upstream, audit changes, update documentation indexes and impacted design docs.

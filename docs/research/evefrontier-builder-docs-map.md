@@ -2,9 +2,9 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-02-20 (submodule refresh: 3f3c1ab → c2628fd)
+> **Last updated:** 2026-02-28 (submodule refresh: c2628fd/9edb532/ed238c2/09c2ec2 → 6b6fae8/6bc43a1/687d432/e508451)
 > **Source:** https://docs.evefrontier.com/
-> **Internal review by:** AI agent (initial mapping; refreshed 2026-02-20)
+> **Internal review by:** AI agent (initial mapping; refreshed 2026-02-28)
 
 ## Purpose
 
@@ -12,7 +12,7 @@ This document maps official EVE Frontier GitBook builder documentation to intern
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
 
-> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-02-20 to commit c2628fd) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-02-28 to commit 6b6fae8) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -117,7 +117,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/access/access_control.move`
   - `docs/architecture/sui-playground-capabilities.md` §4.9 (access control model)
-- **Notable clarifications:** Links to Move Book for capability and witness patterns. Explicitly documents that shared objects use Sui's built-in versioning for concurrent updates.
+- **Notable clarifications:** Links to Move Book for capability and witness patterns. Explicitly documents that shared objects use Sui's built-in versioning for concurrent updates. **Updated 2026-02-28:** Move docs URL updated from `/concepts/move` to `/concepts/sui-move-concepts`.
 
 ### EVE Frontier World Explainer
 
@@ -158,7 +158,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
   - `docs/architecture/sui-playground-capabilities.md` §4.2
-- **Notable clarifications:** Build page (`/storage-unit/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). **Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions. Our extension path (deposit_item/withdraw_item<Auth>) bypasses both, so no impact on CivilizationControl.
+- **Notable clarifications:** Build page (`/gate/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). ~~**Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions.~~ **Updated 2026-02-28:** Discrepancy resolved — world-contracts code now matches docs. `withdraw_by_owner` takes `admin_acl: &AdminACL` and calls `admin_acl.verify_sponsor(ctx)`. Proximity proof removed from all owner-path SSU functions. Our extension path (deposit_item/withdraw_item<Auth>) is unaffected.
 
 ### Smart Storage Unit — Build
 
@@ -250,8 +250,13 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Extension examples**: ~~The Interfacing page mentions extension registration but doesn't show the full flow.~~ **Updated 2026-02-20:** Gate Build page now documents the full extension flow end-to-end. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples. `vendor/builder-scaffold/move-contracts/smart_gate/` has 3 canonical reference implementations (config.move, tribe_permit.move, corpse_gate_bounty.move).
 - **ZK proximity proofs**: The docs mention zero-knowledge proofs as a "future" alternative to server-signed proofs. Our `vendor/eve-frontier-proximity-zk-poc/` is a working Groth16 implementation — ahead of the docs.
 - **builder-scaffold branch**: ~~The Environment Setup page references a `build` branch and `localnet-setup/docker` directory~~ **Updated 2026-02-20:** Fixed — docs now reference `main` branch and correct `docker` directory. Submodule reference removed from builder-documentation repo.
-- **AdminCap → AdminACL discrepancy (NEW 2026-02-20)**: Docs now consistently use `AdminACL` (shared object with authorized sponsor addresses). World-contracts code already uses AdminACL. No functional discrepancy — naming alignment only.
-- **SSU proximity proof discrepancy (NEW 2026-02-20)**: Docs show `deposit_by_owner`/`withdraw_by_owner` taking AdminACL instead of proximity proof. Code still uses proximity proof. Docs note this is temporary "until a location service is available." Our extension path is unaffected.
+- **AdminCap → AdminACL discrepancy (2026-02-20)**: Docs now consistently use `AdminACL` (shared object with authorized sponsor addresses). World-contracts code already uses AdminACL. No functional discrepancy — naming alignment only.
+- ~~**SSU proximity proof discrepancy (2026-02-20)**: Docs show `deposit_by_owner`/`withdraw_by_owner` taking AdminACL instead of proximity proof. Code still uses proximity proof.~~ **RESOLVED 2026-02-28:** world-contracts code now matches docs — proximity proof fully removed from owner-path SSU functions, replaced by `admin_acl.verify_sponsor(ctx)`. Our extension path was never affected.
+- **SDK migration (NEW 2026-02-28)**: Both world-contracts and builder-scaffold TS scripts migrated from `SuiClient` (`@mysten/sui/client`) to `SuiJsonRpcClient` (`@mysten/sui/jsonRpc`). EVE Vault previously migrated to `SuiGrpcClient` (`@mysten/sui/grpc`). Three different client types across the ecosystem — builder dApps should use `SuiJsonRpcClient`.
+- **EVE token asset (NEW 2026-02-28)**: New `contracts/assets/` package in world-contracts. `Coin<EVE>` with 10B supply, 9 decimals, AdminCap + EveTreasury pattern. `transfer_from_treasury`, `burn_from_treasury` functions. Relevant for CivilizationControl coin toll (potential to accept EVE instead of just SUI).
+- **Gate link/unlink events (NEW 2026-02-28)**: `GateLinkedEvent` and `GateUnlinkedEvent` now emitted by `link_gates`/`unlink_gates`. Useful for dashboard monitoring.
+- **Proximity proof removed from builder-scaffold (NEW 2026-02-28)**: `ts-scripts/utils/proof.ts` entirely deleted. `collect-corpse-bounty.ts` no longer takes proximity proofs. Uses AdminACL + sponsored tx instead.
+- **EVE Vault default chain (NEW 2026-02-28)**: Default chain switched from `SUI_DEVNET_CHAIN` to `SUI_TESTNET_CHAIN`. Chain order in wallet adapter: testnet first, devnet second.
 
 ---
 
@@ -259,7 +264,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 
 1. **Before generating chain interaction flows, sponsorship patterns, or deployment steps**, consult this reference map and the linked official docs pages — especially the "Interfacing with the EVE Frontier World" and "World Explainer" pages.
 2. **Code in `vendor/world-contracts` is canonical; GitBook is explanatory.** If behavior described in docs contradicts Move code, the code wins. Flag the discrepancy.
-3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-20), re-check the relevant pages before finalizing logic.
+3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-28), re-check the relevant pages before finalizing logic.
 4. **For access control patterns**, consult "Introduction to Smart Contracts" — the capability, witness, and hot-potato patterns are explained with rationale not present in code comments.
 5. **For Sui-specific limits** (object size, field counts, gas), consult the "Constraints" page and cross-reference with Sui protocol docs.
 6. **Do not copy GitBook content into internal docs.** Summarize insights and link to the official page. This avoids drift and respects content ownership.

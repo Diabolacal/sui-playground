@@ -2,8 +2,8 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-16 (updated with full gate lifecycle rehearsal evidence; environment model to be confirmed March 11)  
-> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED**  
+> **Date:** 2026-02-16 (updated 2026-02-28 with world-contracts v0.0.13 breaking changes; environment model to be confirmed March 11)  
+> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
 > **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for module tests; [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) for complete 13-step gate lifecycle with transaction digests
@@ -25,6 +25,16 @@ This document captures everything needed to **reimplement CivilizationControl fr
 - A substitute for reading the world-contracts source — this is a map, not the territory
 
 > **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold/move-contracts/smart_gate/` now contains 3 canonical reference implementations directly relevant to CivilizationControl: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based gate access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS scripts at `ts-scripts/smart_gate/` and utility library at `ts-scripts/utils/` (config, derive-object-id, proof generation, sponsored tx dual-sign). Builder-documentation `gate/build.md` now provides an end-to-end build guide. New deployment automation scripts at `vendor/world-contracts/scripts/` (deploy-world.sh, seed-world.sh).
+
+> **BREAKING CHANGES (2026-02-28 submodule refresh — world-contracts v0.0.13, builder-scaffold 6bc43a1):**
+> 1. **Proximity proof REMOVED** from all owner-path SSU functions (`withdraw_by_owner`, `withdraw`). Replaced by `admin_acl: &AdminACL` + `admin_acl.verify_sponsor(ctx)`. Marked as temporary "until a location service is available." Our extension path (`withdraw_item<Auth>`, `deposit_item<Auth>`) is unaffected.
+> 2. **`link_gates` now requires `admin_acl: &AdminACL`** parameter (additional shared object in PTB). Must be an authorized sponsored tx.
+> 3. **corpse_gate_bounty updated**: `ServerAddressRegistry` param → `AdminACL` param, proximity_proof param removed. Reference code in builder-scaffold matches.
+> 4. **SDK migration**: All TS scripts migrated from `SuiClient` (`@mysten/sui/client`) to `SuiJsonRpcClient` (`@mysten/sui/jsonRpc`). `decodeSuiPrivateKey` field: `schema` → `scheme`.
+> 5. **`proof.ts` deleted** from builder-scaffold — proximity proof generation utility removed entirely. Distance proof for `link_gates` still uses server-signed proofs (ServerAddressRegistry still exists for that purpose).
+> 6. **New EVE token asset** (`contracts/assets/`): `Coin<EVE>`, 10B supply, 9 decimals, AdminCap + EveTreasury. Relevant for coin toll (accept EVE instead of just SUI).
+> 7. **New gate events**: `GateLinkedEvent`, `GateUnlinkedEvent` emitted by `link_gates`/`unlink_gates`.
+> 8. **EVE Vault default chain** switched from devnet to testnet. Sponsored tx API URL changed with new `assemblyType` param.
 
 ---
 
@@ -57,7 +67,7 @@ Cross-address PTB item transfer risk is **mitigated**. The typed witness extensi
 1. **Extension-based SSU access does NOT require OwnerCap**: `withdraw_item<Auth>()` and `deposit_item<Auth>()` only need the `Auth` witness value and shared object references. No sender check, no OwnerCap.
 2. **Always accesses main inventory**: extension functions use `storage_unit.owner_cap_id` as the dynamic field key, accessing the owner's inventory — not an ephemeral per-caller inventory.
 3. **Existing test proves the pattern**: `test_swap_ammo_for_lens` in `storage_unit_tests.move` validates cross-address extension-mediated inventory operations.
-4. **TradePost is simpler than the swap test**: it avoids `deposit_by_owner`/`withdraw_by_owner` entirely — no proximity proof, no ephemeral inventory, no OwnerCap needed in the buy path.
+4. **TradePost is simpler than the swap test**: it avoids `deposit_by_owner`/`withdraw_by_owner` entirely — no OwnerCap needed in the buy path. (**Updated 2026-02-28:** proximity proof also removed from owner-path functions, replaced by AdminACL verify_sponsor.)
 5. **Item has `key + store` abilities**: `transfer::public_transfer(item, buyer_address)` is valid after withdrawal.
 6. **Coin payment is trivial**: `Coin<T>` has `key + store`, standard `transfer::public_transfer` to seller.
 7. **Multi-signer PTB does NOT exist on Sui**: confirmed that the extension pattern is the correct (and only viable) path for cross-address atomic trades.
@@ -78,8 +88,8 @@ The full deployment sequence from world-contracts init to a working jump/trade w
 ### Capability Hierarchy — Risk: GREEN
 
 Three-tier access control is clean and well-documented:
-- **GovernorCap** (singleton) → creates AdminCaps, manages server registry + sponsor ACL
-- **AdminCap** → anchors/unanchors structures, creates OwnerCaps, creates characters
+- **GovernorCap** (singleton) → creates AdminACL sponsors, manages server registry
+- **AdminACL** (shared object) → `verify_sponsor(ctx)` on all state-mutating operations; GovernorCap holder adds/removes sponsors via `add_sponsor_to_acl`
 - **OwnerCap\<T\>** → per-object operations (online, link, authorize_extension)
 - OwnerCaps are held by Character objects (transfer-to-object pattern)
 - Borrow/return is a hot-potato pattern: `borrow_owner_cap<T>()` → operation → `return_owner_cap()`
@@ -218,23 +228,22 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 **Sequence (each step depends on the previous):**
 1. **Publish world package** → receive `GovernorCap`
-2. **Create AdminCap** → `access::create_admin_cap(governor_cap)` (module is `world::access`, NOT `world::access_control`)
-3. **Register server address** → `server::register(server_registry, admin_cap, server_addr)`
-4. **Add sponsor to ACL** → `access::add_access(admin_acl, admin_cap, sponsor_addr)` — **must be a different address than the sender for sponsored txs**
-5. **Configure fuel** → `fuel::set_fuel_efficiency(fuel_config, admin_cap, type_id, efficiency)`
-6. **Configure energy** → `energy::set_energy_config(energy_config, admin_cap, gate_type_id, energy_amount)`
-7. **Set gate max distance** → `gate::set_max_distance(gate_config, admin_cap, type_id, max_distance)`
-8. **Create Characters** → `character::create_character(...)` + `share_character()`
-9. **Anchor NetworkNode** → `network_node::anchor(...)` + `share_network_node()`
-10. **Fuel NWN + online** → `deposit_fuel()` + `online()`
-11. **Anchor Gates** → `gate::anchor(...)` + `share_gate()` (repeat for each gate)
-12. **Online Gates** → `gate::online(...)` (needs energy from NWN)
-13. **Link Gates** → `gate::link_gates(...)` (needs server-signed distance proof)
-14. **Anchor SSUs** → `storage_unit::anchor(...)` + `share_storage_unit()`
-15. **Online SSUs** → `storage_unit::online(...)`
-16. **Authorize extensions** → on both gates and trade SSUs
+2. **Add sponsor to AdminACL** → `access::add_sponsor_to_acl(admin_acl, governor_cap, sponsor_addr)` — **must be a different address than the sender for sponsored txs**
+3. **Register server address** → `access::register_server_address(server_registry, governor_cap, server_addr)` (for distance proofs)
+4. **Configure fuel** → `fuel::set_fuel_efficiency(fuel_config, admin_cap, type_id, efficiency)`
+5. **Configure energy** → `energy::set_energy_config(energy_config, admin_cap, gate_type_id, energy_amount)`
+6. **Set gate max distance** → `gate::set_max_distance(gate_config, admin_cap, type_id, max_distance)`
+7. **Create Characters** → `character::create_character(...)` + `share_character()`
+8. **Anchor NetworkNode** → `network_node::anchor(...)` + `share_network_node()`
+9. **Fuel NWN + online** → `deposit_fuel()` + `online()`
+10. **Anchor Gates** → `gate::anchor(...)` + `share_gate()` (repeat for each gate)
+11. **Online Gates** → `gate::online(...)` (needs energy from NWN)
+12. **Link Gates** → `gate::link_gates(...)` (needs server-signed distance proof + AdminACL sponsored tx)
+13. **Anchor SSUs** → `storage_unit::anchor(...)` + `share_storage_unit()`
+14. **Online SSUs** → `storage_unit::online(...)`
+15. **Authorize extensions** → on both gates and trade SSUs
 
-**Self-signed proofs (devnet only):** Generate an Ed25519 keypair, register its derived address as "server address" in step 3, then sign distance proofs with it for `link_gates()`. **Signature format:** `digest = blake2b256(0x030000 || bcs_message_bytes)`, Ed25519-sign the digest. **Proof format:** `[0x00 flag] + [64-byte sig] + [32-byte pubkey]` = 97 bytes. `verify_distance` does NOT check deadline (unlike `verify_proximity`). `vector<u8>` args in PTB must use `"vector[0xHH,0xHH,...]"` format. Full working proof generator at `sandbox/validation/generate_distance_proof.mjs` (ESM, requires `@noble/hashes@2`). See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Step 9.
+**Self-signed proofs (devnet only):** Generate an Ed25519 keypair, register its derived address as "server address" in step 3, then sign distance proofs with it for `link_gates()`. **Note (2026-02-28):** `link_gates` now also requires `admin_acl: &AdminACL` param and the tx must be authorized sponsored (`admin_acl.verify_sponsor(ctx)`). **Signature format:** `digest = blake2b256(0x030000 || bcs_message_bytes)`, Ed25519-sign the digest. **Proof format:** `[0x00 flag] + [64-byte sig] + [32-byte pubkey]` = 97 bytes. `verify_distance` does NOT check deadline (unlike `verify_proximity`). `vector<u8>` args in PTB must use `"vector[0xHH,0xHH,...]"` format. Full working proof generator at `sandbox/validation/generate_distance_proof.mjs` (ESM, requires `@noble/hashes@2`). See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Step 9.
 
 ### Pattern 6: OwnerCap Borrow/Return Hot-Potato
 
@@ -418,7 +427,7 @@ Reasons:
 | Gate | `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` | `authorize_extension`, `issue_jump_permit`, `jump_with_permit`, `jump`, `link_gates`, `online` |
 | Storage Unit | `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` | `authorize_extension`, `withdraw_item`, `deposit_item`, `game_item_to_chain_inventory` |
 | Network Node | `vendor/world-contracts/contracts/world/sources/network_node/network_node.move` | `anchor`, `online`, `deposit_fuel`, `connect_assemblies` |
-| Access Control | `vendor/world-contracts/contracts/world/sources/access/access_control.move` | Module name is `world::access` (NOT `world::access_control`). Functions: `create_admin_cap`, `add_access` (sponsors), `verify_sponsor` |
+| Access Control | `vendor/world-contracts/contracts/world/sources/access/access_control.move` | Module name is `world::access` (NOT `world::access_control`). Functions: `add_sponsor_to_acl` (GovernorCap-gated), `verify_sponsor`, `create_owner_cap`, `create_owner_cap_by_id`, `delete_owner_cap`. AdminACL is a shared object with `authorized_sponsors` table. |
 | Character | `vendor/world-contracts/contracts/world/sources/character/character.move` | `create_character`, `borrow_owner_cap`, `return_owner_cap` |
 | Inventory | `vendor/world-contracts/contracts/world/sources/primitives/inventory.move` | `withdraw_item`, `deposit_item`, `Item` struct |
 | Sig Verify | `vendor/world-contracts/contracts/world/sources/crypto/sig_verify.move` | `verify_signature`, `derive_address_from_public_key` |
