@@ -271,6 +271,34 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 
 ---
 
+## Check 11: In-Game Browser Surface Validation
+
+**Priority:** MEDIUM — required for "Best Live Frontier Integration" bonus
+**Time budget:** 15 minutes
+**Step ID:** Part of S07
+
+| Field | Value |
+|-------|-------|
+| **Check** | CivilizationControl DApp loads and renders in EVE Frontier in-game embedded browser |
+| **Pre-requisite** | DApp deployed to HTTPS hosting (Cloudflare Pages) with at least a shell page |
+| **Command** | Navigate to DApp URL in-game via a structure's DApp URL setting |
+| **Expected Output** | (a) Page loads over HTTPS without mixed-content blocks. (b) CSS renders correctly at ~787×1198 portrait. (c) `window.ethereum` detected, 0 Sui wallets — "Viewing Mode" badge displayed. (d) Sui RPC calls succeed (structure data loads). (e) No CSP violations in console. |
+| **Fallback** | If in-game loading fails: external browser only for demo. Document as submission constraint. In-game integration bonus forfeited. |
+
+### Sub-checks
+
+| Sub-check | Command | Expected |
+|-----------|---------|----------|
+| 11a. HTTPS loads | Open DApp URL in-game | Page renders, no security errors |
+| 11b. Portrait layout | Visual inspection at ~787px width | Cards/list readable, no horizontal overflow |
+| 11c. Wallet detection | Check console / UI state | EVM wallet detected, "Viewing Mode" shown |
+| 11d. RPC from webview | Load a gate/SSU page with known objectId in URL | Structure data displays |
+| 11e. ObjectId from URL | Navigate to `/gate/0x<id>` | Correct gate data loads |
+
+**Result:** ☐ PASS ☐ PARTIAL (note which sub-checks failed) ☐ FAIL — external browser only
+
+---
+
 ## Summary Gate
 
 All checks completed. Record final status:
@@ -287,6 +315,7 @@ All checks completed. Record final status:
 | 8. Event schema | ☐ | |
 | 9. Proof moments | ☐ | |
 | 10. Wallet connectivity | ☐ | |
+| 11. In-game browser surface | ☐ | |
 
 **GO / NO-GO Decision:**
 - All CRITICAL checks pass → **GO** — proceed to Phase 1 Foundation

@@ -145,12 +145,20 @@ Judged by a panel of 3 qualified judges + 25% player vote weighting:
 - [x] Deploy to Stillness for the bonus criteria (within 14 days post-close)
 - [x] Prepare demo materials and documentation
 
+### In-game browser constraints (2026-02-28)
+- The in-game embedded browser (Chromium 122 CEF) provides portrait viewport (~787×1198) and dark mode preference
+- **No Sui Wallet Standard in-game** — only EVM wallet (EIP-6963 "EVE Frontier Wallet"). DApp users are read-only in-game.
+- UX designs targeting "Best Live Frontier Integration" or "UX & Usability" criteria must account for portrait-first layout and read-only in-game mode
+- Live Frontier integration requires HTTPS hosting, portrait-responsive layout, and either read-only mode or Sui wallet relay (unconfirmed) from the embedded browser
+- Full reference: [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md)
+
 ### When to consult this document
 - Before starting any code generation that will be part of the Entry → verify hackathon has started
 - Before creating token/financial mechanics → verify no security/equity characteristics
 - Before submission → verify all repo hygiene requirements met
 - When evaluating idea fit → cross-reference judging criteria weights
 - When planning bonus prize strategy → check Stillness deployment timeline
+- When designing in-game DApp surface → verify portrait-first layout and wallet constraints
 
 ---
 

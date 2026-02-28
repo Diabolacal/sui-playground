@@ -177,6 +177,12 @@ On local devnet: Self-deploy world package → own GovernorCap → add own addre
 **Dependencies:** S01  
 **Description:** Initialize frontend application with Vite + React + TypeScript. Install core dependencies: `@mysten/dapp-kit`, `@mysten/sui`, `@tanstack/react-query`. Set up project structure matching the UX architecture spec's screen hierarchy: pages for Command Overview, Gates, Trade Posts, Signal Feed, Configuration. Add Tailwind CSS (or similar utility-first CSS).
 
+**In-game browser considerations:**
+- Configure viewport meta tag for portrait orientation (787×1198 native in-game resolution)
+- Add CSS breakpoint at ≤800px targeting the in-game embedded browser
+- Default to dark theme (`prefers-color-scheme: dark`) — the game client background is dark
+- Reference: [in-game-dapp-surface.md](../architecture/in-game-dapp-surface.md)
+
 **Files:**
 - `frontend/package.json`
 - `frontend/tsconfig.json`
@@ -207,6 +213,15 @@ On local devnet: Self-deploy world package → own GovernorCap → add own addre
 **Description:** Set up `@mysten/dapp-kit` wallet adapter with `SuiClientProvider`, `WalletProvider`, and `QueryClientProvider`. Configure network targeting (devnet/testnet/custom RPC from S04). Add Connect Wallet button in global header. Validate that wallet connection works with EVE Vault or standard Sui wallet.
 
 Per UX spec §10: implement connection states (Not Connected, Connecting, Connected, Wrong Network, Extension Missing). Connected state shows truncated address + green dot.
+
+**CRITICAL — In-game vs external browser context detection:**
+- The in-game DApp browser provides an **EVM wallet** (detected via EIP-6963) but **zero Sui wallets** via Wallet Standard. This means Sui write operations (signing transactions) are impossible from within the game client.
+- Detect context at startup: if EIP-6963 wallet discovered AND zero Sui Wallet Standard wallets → enter **read-only "Viewing Mode"**.
+- In Viewing Mode: display a persistent "Viewing Mode" badge in the header. Hide or disable all write-action buttons (Deploy Policy, Buy, Create Listing, etc.). Show a tooltip: "Connect a Sui wallet in an external browser to perform actions."
+- External browser: standard `@mysten/dapp-kit` WalletProvider flow with full read/write access.
+- Reference: [in-game-dapp-surface.md §4](../architecture/in-game-dapp-surface.md)
+
+**Assumption to verify (Day-1):** In-game browser provides EVM wallet but zero Sui wallets — confirm this is still the case on the hackathon test server.
 
 **Files:**
 - `frontend/src/App.tsx` (providers wrapping)
@@ -400,6 +415,8 @@ Steps:
 **Effort:** 2 hours  
 **Dependencies:** S07, S08  
 **Description:** Implement the Gate List view per UX spec §4. After wallet connects and Character is resolved, enumerate OwnerCap<Gate> objects via `suix_getOwnedObjects` (filter by StructType). Read each gate's state via `sui_multiGetObjects`. Display in a list/table with columns: Status (color dot), Name (user-assigned label from localStorage), ID (truncated), Link Partner, Extension badge, Rules summary, Fuel source status.
+
+Implement portrait-responsive layout — card grid at ≤800px (in-game browser), table at ≥800px (external browser). Validate at 787px viewport width.
 
 Read path follows §1 of read-path-architecture-validation.md:
 1. Character ID → `suix_getOwnedObjects(character_object_address, OwnerCap<Gate> filter)` 
@@ -819,6 +836,8 @@ Stretch: Attempt automatic resolution via `suix_queryEvents({ MoveEventType: "..
 
 Store resolved Character ID in session storage. All structure discovery depends on this.
 
+**In-game URL context:** If launched from the in-game DApp browser, check URL path parameters for structure context. The DApp URL format should support `/gate/<objectId>` or `/ssu/<objectId>` so that clicking a structure in-game deep-links directly to its detail page, bypassing manual Character resolution for read-only viewing.
+
 **Files:**
 - `frontend/src/components/CharacterResolver.tsx`
 - `frontend/src/hooks/useCharacter.ts`
@@ -956,6 +975,8 @@ Run Narrative Impact Check (§8) on: navigation labels, page titles, headings, e
 **Dependencies:** S31  
 **Description:** Verify that snarkjs WASM prover generates valid membership proofs in the browser. Load circuit WASM + zkey into browser. Generate proof with test inputs. Serialize to Sui format (128 bytes proof + 32 bytes public input). Verify timing < 2 seconds.
 
+**In-game browser limitation:** The in-game browser lacks `crossOriginIsolated` (no COOP/COEP headers), so `SharedArrayBuffer` is unavailable and snarkjs WASM prover is limited to **single-threaded mode**. Verify proof generation time in single-threaded mode stays under the kill threshold. Test explicitly with `Cross-Origin-Isolation: false` in DevTools to simulate.
+
 **Kill criteria R2:** If browser proof generation takes > 5 seconds or WASM loading fails → KILL.
 
 **Files:**
@@ -1076,6 +1097,14 @@ Member list management: simple address list editor. Compute Poseidon Merkle root
 - 1 NWN (fueled, online, connected to gates + SSU)
 - Structure labels assigned in the UI
 - All structures online
+
+**In-game browser validation:** After deploying the DApp to a reachable URL, load it inside the EVE Frontier in-game browser. Verify:
+- Page loads without CSP or CORS errors
+- Viewport renders correctly at 787×1198 portrait
+- Read-only Viewing Mode activates (EVM wallet detected, no Sui wallet)
+- Deep-link URL `/gate/<objectId>` resolves to the correct gate detail
+- No `crossOriginIsolated`-dependent features fail silently
+- Reference: [in-game-dapp-surface.md](../architecture/in-game-dapp-surface.md)
 
 Run the full infrastructure setup sequence (Pattern 5) if on local devnet. On test server: use admin tools.
 
@@ -1454,3 +1483,4 @@ S01 → S02 → S03 → S04 → S05 → S09 → S10 → S11 → S12 → S13 → 
 - [Policy Authoring Model Validation](../architecture/policy-authoring-model-validation.md)
 - [Shortlist Viability Validation Report](../operations/shortlist-viability-validation-report.md)
 - [Hackathon Rules Digest](../research/hackathon-event-rules-digest.md)
+- [In-Game DApp Surface Analysis](../architecture/in-game-dapp-surface.md)

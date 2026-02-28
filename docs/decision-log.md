@@ -6,6 +6,18 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-02-28 — In-Game DApp Browser Surface Integration
+
+- **Goal:** Integrate confirmed in-game embedded browser capabilities into CivilizationControl planning. Probe data (`capabilities.json`) captured from EVE Frontier's Chromium 122 CEF webview.
+- **Decision:** In-game browser provides read-only surface (no Sui Wallet Standard — only EVM/EIP-6963). Portrait viewport 787×1198 is the hard layout constraint. Write operations require external browser with EVE Vault. Created canonical reference doc + updated 7 planning documents.
+- **Files:** docs/architecture/in-game-dapp-surface.md (NEW), docs/ux/civilizationcontrol-ux-architecture-spec.md, docs/core/spec.md, docs/core/day1-checklist.md, docs/core/civilizationcontrol-demo-beat-sheet.md, docs/core/civilizationcontrol-implementation-plan.md, docs/research/hackathon-event-rules-digest.md, docs/README.md
+- **Diff:** ~550 LoC added across 8 files (1 new + 7 updated)
+- **Risk:** Low — planning docs only, no code changes
+- **Gates:** N/A (documentation only)
+- **Follow-ups:** Day-1 Check 11 validates in-game loading. EVE Vault in-game relay feasibility TBD (stretch).
+
+---
+
 ## 2026-02-28 — Submodule Refresh + Breaking Changes Audit
 
 - **Goal:** Update all git submodules to latest upstream, audit changes, update documentation with breaking change findings.

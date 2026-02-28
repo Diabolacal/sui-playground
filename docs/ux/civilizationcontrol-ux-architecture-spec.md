@@ -26,6 +26,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 12. [Design Principles & Upgrade Path](#12-design-principles--upgrade-path)
 13. [Figma-Ready UX Brief (Condensed)](#13-figma-ready-ux-brief-condensed)
 14. [Hierarchy Compression Revision — 2026-02-18](#14-hierarchy-compression-revision--2026-02-18)
+15. [In-Game DApp Surface Architecture](#15-in-game-dapp-surface-architecture-2026-02-28)
 
 ---
 
@@ -126,11 +127,25 @@ Structural UX planning document for the CivilizationControl governance dashboard
 - **Sponsorship required for core gameplay** — gas abstraction needs separate sponsor address
 - **Currency display requires conversion logic** — players think Lux, settlement is SUI
 
+### In-Game DApp Browser (Confirmed 2026-02-28)
+
+- **Portrait viewport: 787 × 1198 px** — all layouts must render in ~800px width; tables >4 columns must collapse to cards
+- **Dark mode default** — `prefers-color-scheme: dark`; UI must default to dark theme
+- **No Sui Wallet Standard in-game** — game injects EVM wallet only (EIP-6963); `@mysten/dapp-kit` discovers zero Sui wallets
+- **Read-only in-game default** — without Sui wallet, in-game users can only view governance state. Write operations require external browser with EVE Vault
+- **No `crossOriginIsolated`** — `SharedArrayBuffer` unavailable; ZK WASM prover limited to single-threaded mode
+- **ObjectId from URL only** — no automatic structure context injection; DApp URL must contain structure objectId
+- **Storage is cache-tier only** — localStorage/IndexedDB available but persistence across game restarts unverified
+- **No browser extensions** — CEF doesn't load Chrome extensions; no EVE Vault, no Sui Wallet in-game
+- **Full reference:** [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md)
+
 ---
 
 ## 3. Screen Hierarchy
 
 > **Display label convention:** Player-facing navigation labels follow [Voice & Narrative Guide §4, Option C](../strategy/civilizationcontrol-voice-and-narrative.md). The structural names below map to display labels as follows: Dashboard → **Command Overview**, Activity → **Signal Feed**, Settings → **Configuration**. Gates and Trade Posts retain their names. Apply the [Narrative Impact Check](../strategy/civilizationcontrol-voice-and-narrative.md) (§8) when implementing any UI surface defined here.
+
+> **In-game viewport constraint (2026-02-28):** The in-game browser viewport is 787×1198 portrait. The sidebar navigation described below collapses to a hamburger drawer at ≤800px. The contextual panel becomes a full-screen overlay. All content flows single-column. See [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md) §2.
 
 ```
 CivilizationControl (Command Nexus)
@@ -594,6 +609,8 @@ If CCP exposes a coordinate API:
 
 CivilizationControl requires wallet connection for all write operations. This section defines the connection lifecycle, Character resolution, sponsor verification, and failure handling that gate the user into the operational dashboard.
 
+> **In-game wallet constraint (2026-02-28):** The in-game embedded browser has NO Sui Wallet Standard provider — only an EVM wallet (EIP-6963 "EVE Frontier Wallet"). In-game users operate in **read-only mode** by default. Write operations require either (a) a Sui wallet in an external browser, or (b) a future EVE Vault relay bridge (unconfirmed). The DApp must detect in-game vs external browser context and adapt accordingly. See [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md) §4.
+
 ### 10a. Connect Wallet (EVE Vault)
 
 **Button placement:** Top-right of global header, persistent across all screens.
@@ -602,6 +619,7 @@ CivilizationControl requires wallet connection for all write operations. This se
 
 | State | Display | Behavior |
 |-------|---------|----------|
+| **In-Game (Read-Only)** | "Viewing Mode" badge + "Open in Browser" link | Detected automatically: EVM wallet present, 0 Sui wallets. Full data display, no write operations. |
 | **Not Connected** | "Connect Wallet" button (outlined, prominent) | Click opens EVE Vault connection dialog |
 | **Connecting** | "Connecting..." with spinner | Auto-resolves or times out (10s) |
 | **Connected** | Truncated address + green dot (e.g., `0x1a2b...9f0e ●`) | Click reveals dropdown: Character info, network, disconnect |
@@ -659,6 +677,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 
 | Permission Level | Requirements | Actions Available |
 |-----------------|-------------|-------------------|
+| **In-Game (View-Only)** | In-game browser detected (EVM wallet, no Sui) | View all structure state, events, revenue. "Open in Browser" CTA for write operations. |
 | **Read-only** | Sui RPC only (no wallet) | View structure state, event history, fuel levels, link topology |
 | **Player actions** | Connected wallet + Character resolved | Online/offline toggle, authorize extension, unlink gates, deploy policy, create/remove listings |
 | **Server-dependent actions** | Connected wallet + CCP server reachable | Link gates (distance proof) |
@@ -681,6 +700,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | Server unreachable | Partial | Inline warning on proof-dependent actions | Retry; non-proof actions unaffected |
 | Transaction rejected by wallet | Transient | Toast notification | Review and retry |
 | Transaction failed on-chain | Transient | Error card with tx digest link | Diagnose via explorer; retry |
+| In-game browser (no Sui wallet) | Expected | "Viewing Mode" badge, full read access, "Open in Browser" for writes | Open DApp in external browser with EVE Vault |
 
 ---
 
@@ -715,6 +735,8 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 23 | Command Overview view | Landing page; no-click summary of infrastructure health |
 | 24 | Signal Feed (basic, unfiltered) | Chronological event stream across all structures |
 | 25 | Manual system assignment | Spatial organization — user-curated system pinning enables structure grouping by solar system |
+| 26 | Portrait-responsive layout | In-game browser viewport is 787×1198 portrait; not polish — deployment surface requirement for "Best Live Frontier Integration" bonus |
+| 27 | In-game read-only detection | Auto-detect in-game browser (EVM wallet, no Sui); display "Viewing Mode" badge; required for in-game deployment |
 
 ### Stretch Features (31 items)
 
@@ -751,6 +773,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 29 | Group/tag manager | Tags are stretch |
 | 30 | Account info display | Wallet visible in header |
 | 31 | Lux-denominated display | Exchange rate unresolved; raw SUI fallback |
+| 32 | EVE Vault in-game relay | postMessage bridge for Sui signing from in-game browser; unconfirmed feasibility |
 
 ### Demo Scenario — 3-Minute Script (MVP Only)
 
@@ -773,6 +796,8 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | **Real-time event stream** | Medium — `suix_subscribeEvent` availability uncertain on all endpoints | MVP default: polling 3-5s. WebSocket is stretch. |
 | **Buyer-facing listing browser** | Low-Medium — cross-address atomic buy PTB via SDK untested | Validate SDK PTB construction Day 3. Flow is proven; SDK wrapper is the risk. |
 | **Extension authorization** | Low-Medium — type mismatches fail silently | Validated on devnet via CLI; web needs testing. |
+| **In-game portrait layout** | Low-Medium — confirmed viewport (787×1198) but untested with CivControl UI | Validate on simulated viewport Day 1. Card layouts degrade gracefully. |
+| **No Sui wallet in-game** | Low (by design) — read-only mode is acceptable in-game | Read-only is the planned in-game experience. External browser for writes. |
 
 **Systemic risk:** Wallet adapter integration. Every write operation goes through browser wallet. If EVE Vault or Sui wallet adapter has PTB compatibility issues, all writes are blocked. **Validate wallet signing of a simple PTB on Day 1 before building any UI.**
 
@@ -986,10 +1011,10 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 | Zone | Position | Content | Behavior |
 |------|----------|---------|----------|
-| **Global Header** | Top, full width, fixed | App title (left), wallet button + connection status + network indicator (right) | Always visible; persists across all routes |
-| **Sidebar** | Left, fixed width | Primary nav items (Command Overview, Gates, Trade Posts, Signal Feed, Configuration) above divider; collapsible structure inventory list below divider | Always visible; structure inventory collapses independently; entire sidebar collapses on narrow viewports |
-| **Main Content** | Center, fluid width | Active screen content — list views, detail views, dashboard cards | Changes per route; scrollable |
-| **Contextual Panel** | Right, overlay or slide-in | Rule composer, linking flow steps, listing creation — contextual multi-step flows | Visible only during specific interactions; dismissed on completion or cancel |
+| **Global Header** | Top, full width, fixed | App title (left), wallet button + connection status + network indicator (right) | Always visible; persists across all routes. **Portrait (≤800px):** wallet/status moves below title row or becomes icon-only. |
+| **Sidebar** | Left, fixed width | Primary nav items (Command Overview, Gates, Trade Posts, Signal Feed, Configuration) above divider; collapsible structure inventory list below divider | Always visible; structure inventory collapses independently; entire sidebar collapses on narrow viewports. **Portrait (≤800px):** collapses to hamburger drawer (top-left icon). |
+| **Main Content** | Center, fluid width | Active screen content — list views, detail views, dashboard cards | Changes per route; scrollable. **Portrait (≤800px):** full-width single-column; tables collapse to card grids. |
+| **Contextual Panel** | Right, overlay or slide-in | Rule composer, linking flow steps, listing creation — contextual multi-step flows | Visible only during specific interactions; dismissed on completion or cancel. **Portrait (≤800px):** becomes full-screen overlay with back navigation. |
 
 ### Core UI Components
 
@@ -1088,6 +1113,83 @@ Score: 4/5 pass (up from 2/5). Meets the Command Overview minimum of "all five" 
 ### Implementation Note
 
 No new Figma brief required — §13 Command Overview description updated inline with hierarchy guidance. All changes are reordering, resizing, label correction, and consequence differentiation within existing data. No new tabs, modules, data types, or scope added.
+
+---
+
+## 15. In-Game DApp Surface Architecture (2026-02-28)
+
+Confirmed constraints from the EVE Frontier embedded Chromium browser. Full reference: [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md).
+
+### Portrait-First Layout (787 × 1198 px)
+
+All CivilizationControl screens must render in a portrait viewport approximately 800px wide and 1200px tall.
+
+| Desktop Element | Portrait Adaptation |
+|----------------|-------------------|
+| Sidebar navigation | Collapsible hamburger drawer (top-left icon) |
+| Gate/SSU list table (9 columns) | Card grid — prioritize: Status, Name, Rules, Revenue; expand for details |
+| Rule Composer modules | Full-width stacked cards |
+| Contextual panel (detail, linking) | Full-screen overlay with back navigation |
+| Revenue metric row (“2× width” card) | First card in vertical stack (no side-by-side) |
+| Strategic Network Map (SVG) | Full-width, collapsible (collapsed by default) |
+| EF-Map embed (iframe) | Full-width iframe, aspect ratio preserved |
+| Signal Feed | Full-width chronological list (already narrow-friendly) |
+
+### Action-Card Pattern
+
+In-game UI uses a card-based action pattern:
+
+| Card Type | Content | In-Game Behavior | External Browser Behavior |
+|-----------|---------|-------------------|---------------------------|
+| Gate Status | Online/Offline + rule summary | Read-only display | Toggle + configure |
+| Listing | Item + price + seller | "View" only | "Buy" button active |
+| Rule Module | Filter/toll configuration | Read-only preview | Edit + deploy |
+| Revenue | Aggregate toll/trade amounts | Display with tx links | Display with tx links |
+
+### Proof Overlay Pattern
+
+Evidence overlays (tx digests, event data) display identically in both contexts — they are read-only data. The "View on Explorer" link uses `window.open` (available in-game) or clipboard copy fallback.
+
+### Event Polling Model
+
+| Event Type | Poll Interval | Cache |
+|------------|--------------|-------|
+| Structure state changes | 5-10s | No (always fresh from RPC) |
+| Jump events (permit, deny) | 5s | IndexedDB append-only |
+| Trade events | 5s | IndexedDB append-only |
+| Revenue aggregates | Derived from cached events | Recompute on update |
+
+Polling uses `@tanstack/react-query` with configurable `refetchInterval`. IndexedDB cache enables instant page loads for historical data, with chain re-validation on session start.
+
+### Failure State UX
+
+| Failure | In-Game Treatment | External Browser Treatment |
+|---------|-------------------|----------------------------|
+| RPC unreachable | "Chain data unavailable — retrying" banner | Same |
+| Invalid objectId in URL | "Structure not found" centered message | Same |
+| No wallet (in-game expected) | "Viewing Mode — Open in browser to manage" | "Connect Wallet" prompt |
+| Transaction failed | N/A (no writes in-game) | Error toast with tx digest |
+| Wallet rejected | N/A (no writes in-game) | "Transaction cancelled" toast |
+
+### Wallet Prompt Expectations
+
+- **In-game:** No wallet prompts ever appear. All interactions are read-only.
+- **External browser:** Standard EVE Vault popup for each transaction. One approval per PTB.
+- **Sponsored transactions:** Backend co-signs after user; no additional user prompt for gas.
+
+### Demo-Beat Alignment
+
+The 3-minute demo captures in the beat sheet are compatible with both contexts:
+
+| Beat | In-Game Capture | External Browser Capture |
+|------|----------------|---------------------------|
+| Beat 2 (Command Overview) | Valid — portrait layout shows structure list, status, alerts | Valid — standard layout |
+| Beat 3 (Policy deploy) | Not possible in-game (requires signing) | **Primary capture source** |
+| Beat 4-5 (Hostile denied, Ally tolled) | Signal Feed visible in-game (read-only evidence) | **Primary capture source** for tx signing |
+| Beat 6 (Trade buy) | Not possible in-game | **Primary capture source** |
+| Beat 7 (Revenue visible) | Valid — Command Overview revenue display | Valid |
+
+**Recommendation:** Demo video captures writes in external browser, but can optionally show the in-game read-only view as supplementary footage demonstrating live Frontier integration (Stillness deployment bonus).
 
 ---
 

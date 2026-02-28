@@ -385,6 +385,44 @@ Switch from primary to fallback if: TradePost tx fails repeatedly on submission 
 
 ---
 
+## In-Game Demo Variant (Supplementary)
+
+**Purpose:** Demonstrate live Frontier integration for "Best Live Frontier Integration" bonus (Stillness deployment).
+
+**Context:** The in-game embedded browser provides a read-only view (no Sui wallet). This variant supplements the primary demo video with in-game footage showing CivilizationControl operating live within EVE Frontier.
+
+### Capture Strategy
+
+The in-game variant is NOT a standalone demo — it supplements the primary 3-minute loop captured in an external browser. In-game footage serves as evidence of live deployment.
+
+| Capture Order | Content | What It Proves |
+|--------------|---------|---------------|
+| 1 | Navigate to a gate structure in-game → DApp loads in embedded browser | Live Frontier integration works |
+| 2 | Command Overview visible in portrait format (~787×1198) | UI renders correctly in-game |
+| 3 | Signal Feed shows recent gate events (from external browser demo beats) | Real-time data flows to in-game view |
+| 4 | "Viewing Mode" badge visible | Context-appropriate UX (read-only acknowledged) |
+| 5 | Navigate to Trade Post SSU → listings visible | SSU storefront accessible in-game |
+
+### In-Game Viewport Note
+
+The in-game browser renders at approximately 787×1198 portrait. Demo captures should ensure:
+- Text is readable at this resolution
+- Card layouts stack correctly (no table overflow)
+- "Viewing Mode" badge is clearly visible
+- "Open in Browser" link is prominent for write operations
+
+### When to Include
+
+Include in-game footage only if:
+1. DApp is deployed to Cloudflare Pages (HTTPS)
+2. Structure DApp URLs are configured in-game
+3. Portrait layout validates at 787×1198 (Check 11 passed)
+4. Stillness deployment has been live for ≥48 hours before submission
+
+If any prerequisite fails, omit in-game footage entirely — the primary demo stands alone.
+
+---
+
 ## Optional ZK Accent Segment (30 seconds, insert before closing beat if stable)
 
 If ZK GatePass is integrated and stable, insert this 30-second segment before the closing beat in the primary variant (between Beat 6 and Beat 7, adjusting timing to stay within 3:30 max):

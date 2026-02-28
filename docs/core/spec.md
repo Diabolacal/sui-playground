@@ -42,6 +42,8 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 - @tanstack/react-query — RPC query caching + polling
 - Tailwind CSS — styling
 
+> **In-game browser constraint (2026-02-28):** The EVE Frontier in-game embedded browser (Chromium 122 CEF) provides NO Sui Wallet Standard provider. `@mysten/dapp-kit` wallet discovery finds zero Sui wallets in-game. In-game users are read-only. Write operations require an external browser with EVE Vault. See [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md).
+
 ### 1.2 What CivilizationControl IS NOT (Non-Goals)
 
 | Exclusion | Rationale |
@@ -56,6 +58,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | No EF-Map visual primitives | 0/12 required primitives available. CivControl-native SVG topology for Day-1 |
 | No drag-and-drop rule ordering | Fixed evaluation order enforced in Move module |
 | No server-side analytics | No backend |
+| No in-game write operations for Day-1 | In-game browser lacks Sui wallet. Read-only in-game surface; external browser for writes. EVE Vault relay is stretch. |
 
 ### 1.3 External Dependencies
 
@@ -63,8 +66,9 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 |------------|------|--------|----------|
 | Sui RPC (fullnode) | Read/Write | Available | Local devnet via Docker |
 | world-contracts v0.0.13 | Move dependency | Pinned @ e508451 | Carry cached copy |
-| EVE Vault wallet | Browser extension | Functional (687d432) | Standard Sui wallet |
+| EVE Vault wallet | Browser extension (external browser only) | Functional (687d432) | Standard Sui wallet |
 | @mysten/dapp-kit | NPM package | Stable | — |
+| In-game embedded browser | DApp runtime | Confirmed (787×1198 portrait, no Sui wallet) | Read-only mode; external browser for writes |
 | AdminACL (sponsored tx) | On-chain whitelist | **BLOCKED until Day-1** | Non-sponsored fallback |
 | EF-Map iframe | Visual context | Optional | SVG topology only |
 
@@ -235,7 +239,7 @@ Opinionated card-based UI (not visual programming). Two MVP module cards:
 
 ### 4.3 Wallet Integration
 
-5 connection states: Disconnected → Connecting → Connected (no character) → Connected (with character) → Connected (sponsored).
+6 connection states: In-Game (Read-Only) → Disconnected → Connecting → Connected (no character) → Connected (with character) → Connected (sponsored). In-game state detected automatically when EVM wallet present and zero Sui wallets registered.
 
 Character resolution: Manual paste of Character ID (MVP). Automated event-based lookup (stretch).
 
@@ -284,6 +288,7 @@ If TradePost UI not ready: 2-minute GateControl-only (Beats 1–5 + close). Drop
 | 3 | EVE Vault sponsored tx stub | HIGH | Standard wallet dual-sign fallback | Known (hardcoded digest) |
 | 4 | Character resolution fails | HIGH | Manual Character ID input | S27 UX fallback |
 | 5 | world-contracts API breaking change | MEDIUM | Pin to known commit, check Day-1 | S03 signature verification |
+| 6 | In-game browser has no Sui wallet | MEDIUM | Read-only in-game mode + external browser for writes. EVE Vault relay is stretch goal. | Context detection on page load |
 
 ---
 
@@ -295,7 +300,7 @@ If TradePost UI not ready: 2-minute GateControl-only (Beats 1–5 + close). Drop
 |----|-----------|--------|-----------------|
 | H1 | Sponsor address addable to AdminACL | BLOCKED | S05 |
 | H2 | Wallet → Character resolution works | PROVISIONAL | S27 |
-| H3 | In-game dApp SSU model works | BLOCKED | Day-1 test |
+| H3 | In-game dApp surface works | BLOCKED | Day-1 test: (a) HTTPS loads in embedded browser, (b) portrait layout renders at 787×1198, (c) Sui RPC calls succeed from webview, (d) read-only mode with "Viewing Mode" badge, (e) objectId parsed from URL |
 | H4 | Coin<SUI> toll works on target network | PROVISIONAL | S14 |
 | H5 | Event query performance ≤ 10s | PROVISIONAL | S26 |
 | H6 | world-contracts v0.0.13 stable | PROVISIONAL | S03 |

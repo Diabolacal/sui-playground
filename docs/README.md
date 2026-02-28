@@ -76,6 +76,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [architecture/structural-risk-sweep-2026-02-18.md](architecture/structural-risk-sweep-2026-02-18.md) | **Structural Risk Sweep** — adversarial pre-mortem synthesizing 6 audit tracks: Top 5 risks ranked (#1 sponsor access reclassified CRITICAL→HIGH with probability model), system dependency graph, Day-1 validation protocol, full assumptions ledger (13 on-chain + 11 environmental + 5 strategy) |
 | [architecture/sweep-audit-artifacts-2026-02-18.md](architecture/sweep-audit-artifacts-2026-02-18.md) | **Sweep audit artifacts** — consolidated working notes from 6 parallel audit tracks (A–F): 58 findings, severity distribution, cross-reference to main report |
 | [architecture/spatial-embed-requirements.md](architecture/spatial-embed-requirements.md) | **Spatial embed requirements** — EF-Map embed capability audit, 12 visual primitives gap analysis, hybrid architecture recommendation (CivControl SVG topology + EF-Map iframe context) |
+| [architecture/in-game-dapp-surface.md](architecture/in-game-dapp-surface.md) | **In-game DApp browser surface** — confirmed runtime constraints (viewport, wallet, storage, security), DApp URL strategy, gate/SSU UI responsibilities, wallet states, deployment implications |
 | [architecture/policy-authoring-model-validation.md](architecture/policy-authoring-model-validation.md) | **Policy authoring model validation** — VERIFIED: data-driven policies via dynamic fields, users never write Move, publish-once/configure-forever model, policy lifecycle, Day-1 validation steps |
 
 ## Ideas
@@ -108,6 +109,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [research/hackathon-event-rules-source.md](research/hackathon-event-rules-source.md) | Verbatim snapshot of official EVE Frontier Hackathon Event Rules (captured 2026-02-16) |
 | [research/hackathon-event-rules-digest.md](research/hackathon-event-rules-digest.md) | **Practical digest** — dates, eligibility, judging criteria, agent compliance checklist |
 | [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
+| [research/capabilities.json](research/capabilities.json) | **In-game browser capabilities** — raw probe data from EVE Frontier embedded WebView (Chromium 122 CEF), captured 2026-02-28 |
 | [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
 | [research/location-proof-independent-audit.md](research/location-proof-independent-audit.md) | **Location proof independent audit** — distance proof observability, trilateration analysis, risk classification |
 
