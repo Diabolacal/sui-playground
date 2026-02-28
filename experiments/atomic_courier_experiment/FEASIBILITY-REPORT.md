@@ -1,104 +1,175 @@
-# Atomic Courier — Feasibility Report
+# Atomic Courier Experiment — Feasibility Report
 
 **Retention:** Sandbox-only
 
-## Verdict: FEASIBLE ✓
+## Verdict: FEASIBLE ✓ (Extended)
 
-Withdraw + deposit + Coin transfer all execute atomically in a single PTB on Sui. The transaction either completes entirely or fails entirely — no partial state.
+Phase 1 proved single-PTB atomic SSU-to-SSU item transfer with coin payment.
+Phase 2 extends this with a **full economic contract**: collateral escrow, reward escrow, deadline-based expiry, state machine transitions, and dispute-free settlement.
 
-## Test Execution Summary
+All paths validated on local Sui devnet (Sui CLI 1.66.2, chain ID `cdda0001`).
 
-| Step | Operation | Result |
-|------|-----------|--------|
-| 1 | Setup (register server, add sponsor to ACL) | ✓ |
-| 2 | Create Character | ✓ |
-| 3 | Create NetworkNode | ✓ |
-| 4 | Deposit Fuel + Online NWN | ✓ |
-| 5 | Create SSU A (source) | ✓ |
-| 6 | Create SSU B (destination) | ✓ |
-| 7 | Online both SSUs | ✓ |
-| 8 | Authorize XAuth extension on both SSUs | ✓ |
-| 9 | Mint item into SSU A | ✓ |
-| **10** | **ATOMIC TRANSFER** | **✓** |
+---
 
-## Atomic Transfer Transaction
+## Critical Domain Constraint — Game ↔ Chain Boundary
 
-**Digest:** `EfVqghq3Tv3UPb553ZbJ8uinEhCBoMd9k2zyZG122hun`
+In the real EVE Frontier game:
+- **Withdrawing** an item from an SSU removes it on-chain and materializes it in the player's in-game inventory.
+- **Depositing** into an SSU consumes the in-game item and re-materializes it on-chain.
 
-### Operations in Single PTB
-1. `splitCoins(gas, [1000])` — create reward coin
-2. `atomic_transfer::atomic_transfer_test(ssuA, ssuB, character, 446, rewardCoin)` which internally:
-   - `storage_unit::withdraw_item<XAuth>(ssuA, character, x_auth(), 446, ctx)` → `Item`
-   - `storage_unit::deposit_item<XAuth>(ssuB, character, item, x_auth(), ctx)`
-   - `transfer::public_transfer(rewardCoin, courier)`
-   - `event::emit(AtomicTransferEvent{...})`
+**Therefore:**
+- The chain **cannot "hold"** a physical item during transit — the courier carries it in-game.
+- The chain **CAN** enforce economic incentives and authorization rules.
 
-### Emitted Event
-```json
-{
-  "character_id": "0x8bfb71592bbd2c5aa6895e655c89af17e514c1959b7c06b91e1c402b9749f22b",
-  "courier": "0xce00d0d0048e08f05bc33676b37a37a1b47c813088f40b366d54690fa8c1d462",
-  "dest_ssu_id": "0x2573636537e1036ce3f4496dcb24fc7e1dcbb03df2d94b63913eb5d0ecfd0fc8",
-  "item_type_id": "446",
-  "reward_amount": "1000",
-  "source_ssu_id": "0xfd0e48548ec741ec3c5ac84f5e7760caf44e708f47c1369fafe593048dce398c"
-}
+This experiment models "cargo custody" as an **on-chain job receipt / claim token**, not as a real SSU item persisting during transit. Where SSU withdraw/deposit would be used in production, they act as **pickup/dropoff triggers**, not continuous custody.
+
+---
+
+## Phase 2 — Courier Escrow State Machine
+
+### State Diagram
+
+```
+  post_job()         accept_job()         complete_job()
+  [Creator] ──────► POSTED ──────────► ACTIVE ──────────► COMPLETED
+                      │                   │
+                      │ cancel_job()       │ expire_job()
+                      ▼                   ▼
+                   CANCELLED           EXPIRED
 ```
 
-### Gas Analysis
-| Metric | Value |
-|--------|-------|
-| Computation | 1,000,000 MIST |
-| Storage | 14,675,600 MIST |
-| Rebate | 13,550,724 MIST |
-| **Net** | **2,124,876 MIST (~0.002 SUI)** |
+### Objects
 
-### Objects Mutated (5)
-1. SSU A (`StorageUnit`) — item withdrawn from inventory
-2. SSU B (`StorageUnit`) — item deposited into inventory
-3. SSU A Inventory (dynamic field) — item count decremented
-4. SSU B Inventory (dynamic field) — item count incremented
-5. Gas Coin (`Coin<SUI>`) — split for reward
+| Object | Type | Key Properties |
+|--------|------|---------------|
+| `CourierJob` | Shared | creator, courier (optional), reward (Balance<SUI>), collateral (Balance<SUI>), collateral_required, deadline_ms, state |
+| `JobReceipt` | Owned (courier) | job_id, courier address — proof of assignment |
 
-## Borrow Analysis
+### Entry Functions
 
-| Function | Auth Required | AdminACL? | Sponsorship? |
-|----------|--------------|-----------|--------------|
-| `withdraw_item<XAuth>` | `XAuth` (drop witness) | No | No |
-| `deposit_item<XAuth>` | `XAuth` (drop witness) | No | No |
-| `transfer::public_transfer` | None | No | No |
+| Function | Auth | Transitions | Settlement |
+|----------|------|-------------|------------|
+| `post_job` | Creator (sender) | → Posted | Creator escrows reward |
+| `accept_job` | Any (becomes courier) | Posted → Active | Courier escrows collateral; receives JobReceipt |
+| `cancel_job` | Creator only | Posted → Cancelled | Reward returned to creator |
+| `complete_job` | Creator only | Active → Completed | Courier receives reward + collateral back |
+| `expire_job` | Anyone | Active → Expired | Creator receives slashed collateral + reward back |
 
-**Key finding:** The entire atomic transfer requires NO AdminACL and NO sponsored transaction. The extension's `XAuth` witness (minted via `public(package) fun x_auth()`) provides all necessary authorization. This means the operation is player-callable (or callable by any party) without admin involvement.
+### Settlement Rules
 
-## Gate Jump Viability
+**On completion (delivery confirmed):**
+- Courier receives escrowed reward
+- Courier receives escrowed collateral back (full return)
 
-The `issue_jump_permit` function also uses the same `Auth` witness pattern (no AdminACL). However, `jump_with_permit` requires AdminACL + sponsorship. This means:
+**On expiry (deadline passed, delivery not confirmed):**
+- Creator receives courier's collateral (full slash)
+- Creator receives their reward back
 
-- **Toll without jump** (Concept 3 "Atomic Courier"): Fully feasible — SSU item transfer + payment, no AdminACL needed
-- **Toll with jump**: Requires AdminACL for the `jump_with_permit` call, but `issue_jump_permit` is player-direct. A combined PTB would need sponsored tx for the jump portion.
+**On cancellation (before any courier accepts):**
+- Creator receives their reward back
 
-## Architecture Implications for CivilizationControl
+---
 
-1. **Extension-based access is sufficient** for SSU operations — no need for AdminACL in the courier transfer path
-2. **Single PTB atomicity** eliminates the need for escrow or multi-step flows
-3. **Low gas cost** (~0.002 SUI) makes per-transfer fees practical
-4. **`public(package)` witness minting** ensures only the extension package can authorize operations — secure by design
-5. **Character `&Character` (immutable ref)** works for withdraw/deposit — character is not mutated, only SSUs are
+## Test Results
+
+### Test 01 — Post → Accept → Complete (Happy Path) ✓
+
+| Step | Operation | Result | Gas (net MIST) |
+|------|-----------|--------|----------------|
+| 1 | Post Job (reward=0.05 SUI, collateral_req=0.1 SUI) | ✓ | 1,908,960 |
+| 2 | Accept Job (courier deposits 0.1 SUI collateral) | ✓ | -778,628 (rebate!) |
+| 3 | Complete Job (creator confirms delivery) | ✓ | 3,007,084 |
+
+**Balance deltas:**
+- Creator: -54,916,044 MIST (= -reward - gas)
+- Courier: +50,778,628 MIST (= +reward - accept gas)
+
+### Test 02 — Post → Accept → Expire (Slashing) ✓
+
+| Step | Operation | Result | Gas (net MIST) |
+|------|-----------|--------|----------------|
+| 1 | Post Job (reward=0.03 SUI, collateral_req=0.08 SUI, deadline=+15s) | ✓ | 2,887,080 |
+| 2 | Accept Job | ✓ | 3,133,852 |
+| 3 | Wait for chain clock to pass deadline | ✓ | — |
+| 4 | Expire Job (called by creator) | ✓ | 3,007,084 |
+
+**Balance deltas:**
+- Creator: +74,105,836 MIST (= +slashed_collateral - gas)
+- Courier: -83,133,852 MIST (= -collateral - gas)
+
+### Test 03 — Post → Cancel (Before Accept) ✓
+
+| Step | Operation | Result | Gas (net MIST) |
+|------|-----------|--------|----------------|
+| 1 | Post Job (reward=0.025 SUI) | ✓ | 930,840 |
+| 2 | Cancel Job | ✓ | 2,016,652 |
+
+**Balance delta:**
+- Creator: -2,947,492 MIST (= gas only; reward returned)
+
+---
+
+## Gas Analysis Summary
+
+| Operation | Net Gas (MIST) | Net Gas (SUI) |
+|-----------|----------------|---------------|
+| post_job | ~1.9–2.9M | ~0.002–0.003 |
+| accept_job | ~1.2–3.1M | ~0.001–0.003 |
+| complete_job | ~3.0M | ~0.003 |
+| expire_job | ~3.0M | ~0.003 |
+| cancel_job | ~2.0M | ~0.002 |
+| **Full happy path** | **~5.1M** | **~0.005** |
+| **Full expire path** | **~9.0M** | **~0.009** |
+
+---
+
+## Architectural Decisions
+
+1. **Balance<SUI> over Coin<SUI> for escrow storage.** Coin doesn't have `drop` ability, making Option<Coin> mutations impossible. Balance allows zero-value initialization and clean split/join operations.
+
+2. **Shared CourierJob object.** Any potential courier needs read access to evaluate the job; making it shared enables this. The tradeoff is consensus latency on mutations, but for a job coordination object this is acceptable.
+
+3. **Creator-confirms-delivery model.** In this minimal probe, the creator (job poster) confirms delivery. In production, delivery proof could come from an SSU deposit event, an extension witness, or a multi-party oracle.
+
+4. **Anyone-can-expire rule.** After the deadline, anyone can trigger expiry. This prevents deadlocked jobs and enables third-party cleanup bots.
+
+5. **Chain clock for deadlines.** On local devnet, the `sui::clock::Clock` object progresses with validator checkpoints (~2 second resolution), not wall-clock time. Test scripts poll the chain clock to detect deadline passage.
+
+---
+
+## What Remains Untestable Until March 11
+
+1. **Game-native jump integration.** `jump_with_permit` requires AdminACL + sponsorship in the real game world. The courier's physical transit happens in-game, not on-chain.
+
+2. **SSU ↔ in-game inventory bridge.** Real `withdraw_item` and `deposit_item` require game-server coordination. Our Phase 1 test uses the raw on-chain SSU calls, which work on localnet but don't model the game-server handshake.
+
+3. **Cross-extension composition.** Combining courier escrow with gate extension (toll + jump) in a single PTB requires the deployed game world with all assemblies configured.
+
+4. **EVE coin (Coin<EVE>).** The real game uses EVE tokens for tolls and payments. Localnet only has SUI.
+
+5. **Multi-party delivery proof.** Production might use SSU deposit events, oracle attestations, or proximity proofs as delivery triggers instead of creator confirmation.
+
+---
+
+## Files
+
+| File | Purpose |
+|------|---------|
+| `sources/courier_escrow.move` | Economic contract: escrow, collateral, deadline, state machine |
+| `sources/atomic_transfer.move` | Phase 1: SSU-to-SSU atomic transfer test |
+| `sources/config.move` | Extension pattern (ExtensionConfig + AdminCap + XAuth) |
+| `scripts/utils.ts` | Shared test utilities (RPC, signing, balance, chain time) |
+| `scripts/01_post_accept_complete.ts` | Happy path test |
+| `scripts/02_post_accept_expire.ts` | Expiry + collateral slashing test |
+| `scripts/03_cancel_before_accept.ts` | Cancellation test |
+| `phase3-reseed-and-test.ts` | Phase 1 atomic transfer test (prior work) |
+
+---
 
 ## Environment
 
 - **Network:** Local Sui devnet (Docker, `http://127.0.0.1:9000`)
 - **Sui CLI:** 1.66.2-a9a6825eaf62
-- **Package:** Combined world + experiment (published via `test-publish --with-unpublished-dependencies`)
-- **Package ID:** `0xe8aff0035db4e0754fa3565bb68049cb4cb1a1daa6bda6b9e20b016efb511d25`
-
-## Files
-
-- `sources/atomic_transfer.move` — Core test function (withdraw + deposit + transfer)
-- `sources/config.move` — Extension pattern (ExtensionConfig + AdminCap + XAuth)
-- `phase3-reseed-and-test.ts` — Complete end-to-end test script
-- `Move.toml` — Package manifest
-
-## Recommendation
-
-**Proceed with Atomic Courier as a viable CivilizationControl mechanism.** The on-chain atomicity guarantee eliminates the primary risk (partial execution / item loss). The extension-based auth model means no admin involvement is needed for the transfer operation itself — only for initial setup (SSU creation, extension authorization, NWN fueling).
+- **Chain ID:** cdda0001
+- **Package:** `0xec1e614ee9c83a2aeb72fe1250590f345b56e2503d68d39e13a78f031cd17d26`
+- **Published via:** `test-publish --with-unpublished-dependencies`

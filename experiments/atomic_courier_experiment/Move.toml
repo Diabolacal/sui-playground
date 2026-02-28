@@ -9,7 +9,6 @@ world = { local = "../../world-contracts/contracts/world" }
 
 [addresses]
 atomic_courier_experiment = "0x0"
-world = "0x0636897f29ef8bfbccca4fdcfb2202bd2adc34734544b6688405f047da7a9be4"
 
 [environments]
 localnet = "cdda0001"
