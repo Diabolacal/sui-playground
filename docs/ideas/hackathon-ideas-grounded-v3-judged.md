@@ -116,6 +116,10 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 | 26 | 10 | Structure Insurance | 7 | 6 | 2 | 6 | 7 | 6 | 5 | 3 | 5.25 | 4 | **4.94** | Red |
 | 27 | 19 | Corp Treasury Mgr | 5 | 2 | 3 | 5 | 7 | 2 | 3 | 3 | 3.75 | 2 | **3.31** | Red |
 | 28 | 28 | Extension Forge | 4 | 5 | 6 | 2 | 2 | 3 | 3 | 3 | 3.50 | 2 | **3.13** | Green |
+| — | 29 | Flappy Frontier | 6 | 4 | 7 | 6 | 5 | 6 | 8 | 8 | 6.25 | 9 | **6.94** | Green |
+| — | 30 | Atomic Courier | 8 | 7 | 8 | 7 | 8 | 7 | 5 | 7 | 7.13 | 6 | **6.84** | Green |
+
+> **IDs 29–30 added 2026-02-28.** Flappy Frontier and Atomic Courier scored using the same rubric as IDs 1–28. Rankings are not re-sorted to preserve original ordering; new entries are appended. If sorted by weighted score, Flappy Frontier (6.94) would rank ~8th and Atomic Courier (6.84) would rank ~9th.
 
 ### Top 10 Rationales
 
@@ -443,7 +447,7 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 | 25 | Zero-Friction Portal | Both | Onboarding | Yellow |
 | 26 | Fortune Gate | V2-doc-enabled | Economy | Yellow |
 | 27 | Trophy Case | V2-doc-enabled | Infrastructure | Green |
-| 28 | Extension Forge | V2-doc-enabled | Dev Tooling | Green |
+| 28 | Extension Forge | V2-doc-enabled | Dev Tooling | Green |\n| 29 | Flappy Frontier | V3-new (2026-02-28) | Game / Player Vote | Green |\n| 30 | Atomic Courier | V3-new (2026-02-28) | Economy / Logistics | Green |
 
 ---
 

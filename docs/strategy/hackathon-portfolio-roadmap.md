@@ -2,9 +2,9 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-17 (reconciled; environment model to be confirmed March 11)  
+> **Date:** 2026-02-28 (refreshed; Flappy Frontier + Atomic Courier + Gate Presets added)  
 > **Status:** Pre-hackathon planning (code moratorium until March 11)  
-> **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report, narrative voice guide, emotional objective, UX architecture spec, Figma structural wireframe  
+> **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report, narrative voice guide, emotional objective, UX architecture spec, Figma structural wireframe, atomic courier experiment (validated), in-game DApp surface analysis  
 > **Mode:** Competitive strategy — bold, decisive, kill-switch-aware
 
 ---
@@ -25,24 +25,27 @@ The EVE Frontier hackathon has 8 prizes across 6 categories. One entry can win m
 | **C2 — Fast Sprint** | Salvage Protocol | Most Creative | 1.5 | Medium-High |
 | **C3 — Fast Sprint** | Corpse Toll Road | Most Utility / Best Live Integration | 0.5–1 | Very High |
 | **D — Wildcard** | Loot Crate | Best Technical (backup) | 1.5 | Medium |
+| **E — Sprint** | Flappy Frontier | Player Vote weapon + Weirdest backup | 1–2 | High |
+| **F — Sprint** | Atomic Courier | Most Utility backup / Most Creative | 1–2 | Medium-High |
 
-**Total entries: 4 (flagship + 3 sprints), with 1 optional wildcard.**
+**Total entries: 4–6 (flagship + 3–5 sprints), with 1 optional wildcard.**
 
 ### Win Thesis (One Sentence)
 
-CivilizationControl wins Best Entry by being the only system-level submission in a field of single-feature mods, while three surgical side entries snipe every remaining bonus category — guaranteeing at minimum $10k+ in prizes and maximizing expected value across the entire prize pool.
+CivilizationControl wins Best Entry by being the only system-level submission in a field of single-feature mods, while up to five surgical side entries snipe every remaining bonus category — guaranteeing at minimum $10k+ in prizes and maximizing expected value across the entire prize pool.
 
 ### Expected Value Analysis
 
 | Scenario | Probability | Prize Value |
 |----------|------------|-------------|
+| CC wins 1st Best Entry + 3 bonus wins | 10% | $30,000 + tokens |
 | CC wins 1st Best Entry + 2 bonus wins | 15% | $25,000 + tokens |
 | CC wins 2nd/3rd + 2 bonus wins | 25% | $17,500–$20,000 |
-| CC wins 1 bonus + 2 side bonus wins | 30% | $15,000 |
-| 2 bonus wins only (CC misses top 3) | 20% | $10,000 |
+| CC wins 1 bonus + 2–3 side bonus wins | 25% | $15,000–$20,000 |
+| 2 bonus wins only (CC misses top 3) | 15% | $10,000 |
 | 1 bonus win | 10% | $5,000 |
 
-**Weighted expected value: ~$15,000–$17,000.** This is a portfolio bet, not a single-entry gamble.
+**Weighted expected value: ~$16,000–$19,000.** Expanded portfolio (Flappy + Courier) improves category coverage and player vote surface. This is a portfolio bet, not a single-entry gamble.
 
 ---
 
@@ -64,14 +67,18 @@ CivilizationControl wins Best Entry by being the only system-level submission in
     │ • GateControl      │   │ C2: Salvage Proto│   │ → Best Technical    │
     │ • TradePost        │   │ C3: Corpse Toll  │   │   (only if CC       │
     │ • ZK Privacy Rule  │   │                  │   │    doesn't need it) │
-    │                    │   │                  │   │                     │
-    │ → Best Entry 1st   │   │ → Weirdest       │   └─────────────────────┘
-    │ → Best Technical   │   │ → Most Creative  │
-    │                    │   │ → Most Utility   │
-    └────────────────────┘   └──────────────────┘
-
-    Track B (ZK Spike) → INTEGRATED into Track A as GateControl rule type
-                          (not standalone — cannibalization risk too high)
+    │ • Gate Presets     │   │                  │   │                     │
+    │   (enhancement)    │   │                  │   └─────────────────────┘
+    │                    │   │                  │
+    │ → Best Entry 1st   │   │ → Weirdest       │   ┌─────────────────────┐
+    │ → Best Technical   │   │ → Most Creative  │   │  TRACK E + F        │
+    │                    │   │ → Most Utility   │   │  Sprint Extensions  │
+    └────────────────────┘   └──────────────────┘   │                     │
+                                                    │ E: Flappy Frontier  │
+    Track B (ZK Spike) → INTEGRATED into Track A    │ F: Atomic Courier   │
+      (not standalone — cannibalization risk too     │ → Player Vote       │
+       high)                                        │ → Most Utility bkup │
+                                                    └─────────────────────┘
 ```
 
 ### Why This Shape
@@ -103,6 +110,7 @@ Per the strategy memo's adversarial critique, TribeMint is **demoted to stretch*
 | ZK | **ZK Privacy Rule** — Groth16-verified gate access (Merkle membership proof) | Core differentiator | +1.5 est. | Green (all validated on local devnet; membership circuit implemented, standalone module published; to re-validate on hackathon test server March 11) |
 | S1 | TribeMint — Faction `Coin<TribeToken>` | Stretch | 6.31 | Green |
 | S2 | LootDrop — VRF loot crate via `sui::random` | Stretch | 7.53 | Yellow |
+| S3 | **Gate Preset Switching** — Manual topology reconfiguration presets (A/B/C) | Enhancement (cuttable) | N/A (CivControl value-add) | Green |
 
 ### Why ZK Is Now Core (Not Track B)
 
@@ -306,26 +314,110 @@ If CC ships with LootDrop as stretch module, do NOT submit Loot Crate separately
 
 ---
 
+## 6a. Track E — Flappy Frontier (Sprint)
+
+**One-sentence pitch:** *"A Frontier-themed Flappy Bird with on-chain leaderboard and token-gated score submission — the player vote weapon."*
+
+| Dimension | Detail |
+|-----------|--------|
+| **Target Prize** | Player Vote impact (25% of Best Entry) + Weirdest Idea backup |
+| **Concept** | Simple in-game-friendly web game (Flappy Bird style, space-themed). Portrait layout fits in-game webview (787×1198px) and works identically in external browser. Free-play mode for anyone; pay 1 token to submit score to on-chain leaderboard. Weekly payout to top N (e.g., top 3) funded by submission fees. |
+| **Sui Primitive** | On-chain leaderboard (dynamic fields or sorted table), `Coin<SUI>` payment, `Clock` for weekly epochs |
+| **Build Time** | 10–16 hours LLM-assisted |
+| **Demo Impact** | 8/10 — Immediately playable, visually distinct from governance entries. "Play the game, the blockchain keeps score." |
+| **Meme Potential** | 9/10 — Shareable gameplay clips. "Flappy Frontier" is instantly memorable. Player vote pull: 9/10. |
+| **In-Game Viability** | **Excellent.** Canvas 2D / WebGL supported in CEF webview. Mouse/keyboard input works. Portrait orientation natural for Flappy. DApp URL loadable from SSU. |
+| **Win Probability** | Player vote impact: **High** (drives vote share for Best Entry). Standalone prize: **30-40%** for Weirdest backup if Fortune Gate is cut. |
+
+**Wallet constraint:** No Sui wallet in-game (CEF doesn't support extensions). In-game = free-play only. Score submission + leaderboard viewing require external browser with EVE Vault or other Sui wallet. In-game shows "Open in Browser to submit score" CTA.
+
+**Domain:** `flappyfrontier` — discoverability asset. Players can type the URL into any SSU's DApp URL field to load it in-game.
+
+**Deliverables:**
+1. Minimal Move package: `Leaderboard` (sorted, top-N stored on-chain), `Treasury` (submit fee collection + weekly payout)
+2. Web UI: Canvas 2D game + wallet connect flow + leaderboard display
+3. Demo plan: 30–60 seconds — play game → submit score → leaderboard updates → show treasury payout mechanism
+
+**Kill Criteria:** Abandon if Canvas 2D game loop isn't playable within 6 hours. Fallback: static leaderboard-only page (no game, just score submission via CLI → web leaderboard display).
+
+**Build Plan:**
+1. Game engine: simple Canvas 2D loop (bird + pipes + score), ~200 LoC (4-6h)
+2. Move package: `Leaderboard` + `Treasury` with submit/payout entry functions (3-4h)
+3. Wallet integration + submit flow (2-3h)
+4. Demo recording (1h)
+
+**Why It Matters:** Player vote is 25% of Best Entry score. A fun, shareable mini-game drives more player votes than any governance dashboard. Flappy Frontier is the trojan horse that boosts CivilizationControl's total score while standing on its own as a complete Sui integration showcase.
+
+---
+
+## 6b. Track F — Atomic Courier (Sprint)
+
+**One-sentence pitch:** *"Trustless delivery contracts — post a job, lock collateral, deliver or get slashed. Economic enforcement on-chain."*
+
+| Dimension | Detail |
+|-----------|--------|
+| **Target Prize** | Most Utility (backup to C3) / Most Creative (backup to C2) |
+| **Concept** | On-chain courier job protocol: creator posts job with SUI reward, courier accepts by locking collateral, completes delivery for reward or misses deadline and gets slashed. Full state machine with events. |
+| **Sui Primitive** | `Balance<SUI>` escrow, `Clock` deadlines, shared object coordination, typed receipts |
+| **Build Time** | 8–14 hours LLM-assisted (Move code 90% done from experiment) |
+| **Demo Impact** | 7/10 — "Post. Accept. Deliver. Settle." Clear economic enforcement. Strongest when showing the slash scenario. |
+| **Validated Scope** | **Core protocol 100% validated** on local devnet: post/accept/complete/expire/cancel with escrow + collateral + deadline + slashing. See `experiments/atomic_courier_experiment/FEASIBILITY-REPORT.md`. |
+| **Win Probability** | **35-45%** for Most Utility or Most Creative. Novel protocol + proven code + clean demo. |
+
+**What IS proven (local devnet):**
+- Reward escrow (`Balance<SUI>`) — held in shared `CourierJob` object
+- Collateral lock + slashing on deadline miss
+- State machine: Posted → Active → Completed/Expired, Posted → Cancelled
+- `JobReceipt` (owned proof of assignment)
+- Events for all transitions (5 event types)
+- Anyone-can-expire rule (third-party cleanup)
+- Gas costs: ~0.005 SUI for full happy path
+
+**What is NOT proven (out of MVP scope):**
+- SSU ↔ in-game inventory bridge (game-server coordination)
+- Gate jump runtime integration (AdminACL + sponsorship)
+- Cross-extension composition in single PTB
+- `Coin<EVE>` substitution (tests use SUI)
+- Concurrent job handling
+- Turret/gate allowlisting hooks
+
+**Position as separate sprint project** — not merged into CivControl. Different domain (logistics vs. governance), different Sui primitives exercised, independent demo arc.
+
+**Deliverables:**
+1. Move package: `courier_escrow` (adapt from experiment — cleanup + production hardening)
+2. Minimal web UI: post job form + job browser + accept/complete/expire actions + balance display
+3. Demo plan: 60–90 seconds — post job → accept with collateral → complete delivery → settlement. Second scenario: deadline miss → collateral slashed.
+
+**Kill Criteria:** Abandon if world-contracts integration for SSU triggers blocks clean escrow flow within 4 hours. Fallback: pure economic demo (no SSU item custody — just SUI escrow + deadline enforcement).
+
+**Non-Goals (scope guardrails):**
+- No SSU item custody simulation (economic enforcement only)
+- No gate/turret integration (future enhancement, not MVP)
+- No sponsored transactions (courier operations are direct-sign)
+- No in-game functionality (external browser only for courier dApp)
+
+---
+
 ## 7. Prize Category Mapping Matrix
 
 | Prize | Primary Entry | Backup Entry | Competition Level | Our Strength | Win % |
 |-------|--------------|-------------|-------------------|--------------|-------|
 | **Best Entry 1st** | CivilizationControl | — | High (all entries eligible) | System-level design, ZK differentiator, strong demo | 15-20% |
-| **Best Entry 2nd** | CivilizationControl | — | High | Same | 20-25% |
+| **Best Entry 2nd** | CivilizationControl | — | High | Same + player vote from Flappy Frontier | 20-25% |
 | **Best Entry 3rd** | CivilizationControl | — | High | Same | 25-30% |
 | **Best Technical** | CivilizationControl (ZK rule) | Loot Crate (Track D) | Medium (15-25 entries) | Groth16 + dynamic fields + PTB composition | 30-40% |
-| **Most Utility** | Corpse Toll Road (C3) | CivilizationControl (if not winning Best Entry) | Medium (15-25 entries) | Working code, immediate player value | 35-45% |
-| **Most Creative** | Salvage Protocol (C2) | Dead Drop (backup) | Low-Medium (10-15 entries) | Novel mechanism nobody else will attempt | 50-60% |
-| **Weirdest Idea** | Fortune Gate (C1) | Dead Drop (backup) | Low (5-10 entries) | Maximum commitment to the bit | 65-75% |
-| **Best Live Integration** | Corpse Toll Road (C3 stretch) | — | Very Low (<5 entries) | Scaffold infrastructure + devnet experience | 40-60% (if Stillness accessible) |
+| **Most Utility** | Corpse Toll Road (C3) | Atomic Courier (Track F) | Medium (15-25 entries) | Working code, immediate player value | 40-50% |
+| **Most Creative** | Salvage Protocol (C2) | Atomic Courier (Track F) | Low-Medium (10-15 entries) | Novel mechanism nobody else will attempt | 50-60% |
+| **Weirdest Idea** | Fortune Gate (C1) | Flappy Frontier (Track E) | Low (5-10 entries) | Maximum commitment to the bit | 65-75% |
+| **Best Live Integration** | Corpse Toll Road (C3 stretch) | Flappy Frontier (Track E) | Very Low (<5 entries) | Scaffold infrastructure + devnet experience | 40-60% (if Stillness accessible) |
 
 ### Prize Coverage
 
-In the best case, we can win **4 prizes simultaneously** (Best Entry + Weirdest + Most Creative + Most Utility) because each is a separate entry.
+In the best case, we can win **5 prizes simultaneously** (Best Entry + Weirdest + Most Creative + Most Utility + Best Live Integration) because each is a separate entry.
 
 In the worst case, we win **1 prize** (Weirdest Idea via Fortune Gate) — which is still $5,000 + $1,000 SUI for a half-day of work.
 
-**The portfolio strategy ensures nonzero prize capture.** This is the key insight: a single flagship that misses the top 3 wins nothing. A portfolio that includes Fortune Gate wins *something* almost certainly.
+**The portfolio strategy ensures nonzero prize capture.** This is the key insight: a single flagship that misses the top 3 wins nothing. A portfolio that includes Fortune Gate wins *something* almost certainly. Adding Flappy Frontier improves player vote coverage for Best Entry (25% of score) and provides a Weirdest backup. Atomic Courier deepens Most Utility/Most Creative backup coverage with validated code.
 
 ---
 
@@ -340,23 +432,28 @@ In the worst case, we win **1 prize** (Weirdest Idea via Fortune Gate) — which
 | C2 (Salvage) | Low-Medium (`unanchor` access) | Low (one module) | Low (1.5 days) | Medium (conceptual, not visual) |
 | C3 (Corpse Toll) | Very Low (template exists) | Very Low (one module) | Very Low (half-day) | Low (clear before/after) |
 | D (Loot Crate) | Low-Medium (`sui::random` entry constraint) | Low | Low (1.5 days) | Low (universal mechanic) |
+| E (Flappy Frontier) | Low (Canvas 2D + simple Move) | Low (one game + one package) | Low (1-2 days) | Very Low (gameplay is inherently demo-ready) |
+| F (Atomic Courier) | Very Low (Move code validated) | Low (economic-only MVP) | Low (1-2 days, Move 90% done) | Medium (economic, not visual) |
 
 ### Failure Cascade Analysis
 
 | If This Fails... | Then... | Impact on Portfolio |
 |-------------------|---------|-------------------|
 | ZK integration fails | CC falls back to tribe + toll rules (still strong entry) | Low — CC still competitive |
+| Gate Preset Switching fails | CC drops enhancement; core GateControl + TradePost unaffected | Very Low — optional accent |
 | TradePost fails | CC pivots to Strategy A (solo GateControl) | Medium — weaker ModDesign score |
-| Fortune Gate fails (`sui::random`) | Use tx hash pseudo-random fallback | Low — still weird enough |
-| Salvage Protocol fails (`unanchor` blocked) | Deploy Dead Drop as Most Creative backup | Low — category still covered |
-| Corpse Toll fails (template mismatch) | CC absorbs Most Utility targeting | Low — covered |
+| Fortune Gate fails (`sui::random`) | Use tx hash pseudo-random fallback; or swap Flappy Frontier into Weirdest slot | Low — still weird enough |
+| Salvage Protocol fails (`unanchor` blocked) | Deploy Atomic Courier or Dead Drop as Most Creative backup | Low — category still covered |
+| Corpse Toll fails (template mismatch) | Atomic Courier absorbs Most Utility targeting | Low — covered |
+| Flappy Frontier fails (Canvas issues) | Drop to static leaderboard; player vote still viable via other entries | Low — nice-to-have |
+| Atomic Courier fails (world-contracts integration) | Pure economic demo (no SSU); or cut entirely | Very Low — backup entry |
 | Multiple submissions disallowed | Fortune Gate becomes GateControl weird-rule; only CC submitted | Medium — lose bonus category snipes |
 
 ### Worst-Case Floor
 
 Even in the worst failure cascade, we submit CivilizationControl (GateControl alone) with tribe filter + coin toll. This is a validated, working extension module. Weighted score: ~7.5. Competitive for top 5 in Best Entry, competitive for Best Technical Implementation or Most Utility.
 
-**The portfolio never reaches zero.** The validation work already completed ensures a minimum viable submission exists today (structurally — code written after March 11).
+**The portfolio never reaches zero.** The validation work already completed ensures a minimum viable submission exists today (structurally — code written after March 11). The Atomic Courier experiment provides an additional validated fallback: if all Track C entries fail, the courier economic protocol can be submitted as a standalone entry with proven code.
 
 ---
 
@@ -393,23 +490,25 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 
 **Hard Rule: No Phase 2 until CC produces a watchable 3-minute demo video (draft quality).**
 
-### Phase 2: Sprint Blitz (Days 8-10)
+### Phase 2: Sprint Blitz (Days 8-12)
 
 | Day | Project | Hours | Demo |
 |-----|---------|-------|------|
 | 8 AM | Corpse Toll Road (C3) | 4-6h | Record 60s demo by lunch |
 | 8 PM | Fortune Gate (C1) | 4-6h | `sui::random` integration + slot animation |
 | 9 | Fortune Gate (finish) + Salvage Protocol (C2 start) | 8-10h | Fortune Gate demo by noon |
-| 10 | Salvage Protocol (finish) | 6-8h | Record demo |
+| 10 | Salvage Protocol (finish) + Flappy Frontier (E start) | 8-10h | Salvage demo recorded |
+| 11 | Flappy Frontier (finish game + Move package) | 8-10h | Game playable + leaderboard on devnet |
+| 12 | Atomic Courier (F) — adapt experiment code + minimal UI | 8-10h | Courier demo recorded |
 
-### Phase 3: Polish & Submit (Days 11-14)
+**Priority order if time runs short:** C3 → C1 → E → C2 → F → D. Flappy Frontier is prioritized over Salvage because player vote impact (25% of Best Entry) outweighs Most Creative category coverage.
+
+### Phase 3: Polish & Submit (Days 13-14)
 
 | Day | Focus |
 |-----|-------|
-| 11 | Re-record CC demo (final quality). Captions, annotations, B-roll. |
-| 12 | Record final demos for all side entries. Player-vote cutdowns (30-60s per entry). |
-| 13 | Track D (Loot Crate) if all above are done. Otherwise: polish, README docs, repo cleanup. |
-| 14 | Submit all entries via Deepsurge. Cross-check repo hygiene. Verify GitHub visibility. |
+| 13 | Re-record CC demo (final quality). Captions, annotations, B-roll. Record final demos for all side entries. Player-vote cutdowns (30-60s per entry). |
+| 14 | Track D (Loot Crate) if all above are done. Otherwise: polish, README docs, repo cleanup. Submit all entries via Deepsurge. Cross-check repo hygiene. Verify GitHub visibility. |
 | 14+ | **Post-submission:** Deploy to Stillness (live server) within 14 days for deployment bonus + player vote cultivation. |
 
 ### When to Pivot
@@ -420,9 +519,11 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 | ZK integration fails on Day 3 | Cut ZK. CC ships with tribe + toll rules. Still competitive. |
 | CC not demo-stable by Day 7 | Cancel Phase 2 entirely. All remaining time goes to CC polish and demo. |
 | Test server unavailable | Fall back to local devnet for build/test. Evidence quality equivalent; demo uses devnet digests. |
-| Fortune Gate `sui::random` fails | Fallback to tx hash pseudo-random. Still weird. |
-| Salvage Protocol `unanchor` blocked | Deploy Dead Drop as Most Creative backup. |
-| Day 10 and only 2 sprints complete | Skip Track D. Submit what's ready. |
+| Fortune Gate `sui::random` fails | Fallback to tx hash pseudo-random. Or swap Flappy Frontier into Weirdest slot. |
+| Salvage Protocol `unanchor` blocked | Deploy Atomic Courier or Dead Drop as Most Creative backup. |
+| Day 10 and only 2 sprints complete | Skip Tracks D, E, F. Submit what's ready. |
+| Flappy game too slow in CEF | Strip to external-browser-only. Still works as player vote driver. |
+| Atomic Courier world-contracts integration fails | Pure economic demo (SUI escrow only, no SSU). |
 
 ### When to Sprint
 
@@ -643,11 +744,13 @@ Each entry exercises different Sui capabilities, preventing pattern overlap and 
 
 | Entry | Primary Sui Primitive | Overlaps? |
 |-------|-----------------------|-----------|
-| CivilizationControl | Dynamic fields, typed witness, Coin\<T\>, PTB composition, (Groth16) | — |
+| CivilizationControl | Dynamic fields, typed witness, Coin\<T\>, PTB composition, (Groth16), gate link/unlink (presets) | — |
 | Fortune Gate | `sui::random` VRF | No |
 | Salvage Protocol | Storage rebate economics, structure lifecycle | No |
 | Corpse Toll Road | Typed witness (simpler), item deposit/withdraw | Partial (simpler GateControl) |
 | Loot Crate (Track D) | `sui::random` + dynamic field loot tables | Overlaps Fortune Gate on VRF |
+| Flappy Frontier (Track E) | On-chain leaderboard (dynamic fields), `Coin<SUI>` fee, `Clock` epochs | Minimal (different domain) |
+| Atomic Courier (Track F) | `Balance<SUI>` escrow, `Clock` deadlines, shared objects, typed receipts | No (logistics vs. governance) |
 
 **Diversity is high.** Judges seeing all four entries would recognize breadth across the Sui primitive surface.
 
@@ -712,6 +815,29 @@ Each entry exercises different Sui capabilities, preventing pattern overlap and 
 | Deposit | 0:10-0:25 | Deposit corpse → gate opens |
 | Denied | 0:25-0:40 | No corpse → "Access denied" |
 | Tag | 0:40-0:55 | "Corpse Toll Road. Bring a body or walk." |
+
+### Flappy Frontier (60 sec)
+
+**Tone:** Fun, accessible, "blockchain? what blockchain?"
+
+| Segment | Duration | Visual |
+|---------|----------|--------|
+| Gameplay | 0:00-0:20 | Play the game — frontier-themed pipes, space background. Score climbing. |
+| Submit | 0:20-0:35 | "Submit Score" → wallet signs → leaderboard updates on-chain |
+| Leaderboard | 0:35-0:45 | Top 3 displayed. "Weekly payout from the treasury." |
+| Tag | 0:45-0:55 | "Flappy Frontier. Play. Compete. Earn. On-chain." |
+
+### Atomic Courier (60-90 sec)
+
+**Tone:** Precise, economic, proof-of-enforcement.
+
+| Segment | Duration | Visual |
+|---------|----------|--------|
+| Post Job | 0:00-0:15 | Creator posts job: 0.1 SUI reward, 0.08 SUI collateral required, 60s deadline |
+| Accept | 0:15-0:30 | Courier accepts → collateral locked → JobReceipt issued |
+| Deliver | 0:30-0:45 | Complete delivery → reward paid → collateral returned |
+| Slash | 0:45-1:05 | Second scenario: deadline expires → collateral slashed to creator |
+| Tag | 1:05-1:15 | "Atomic Courier. Deliver or pay the price. On-chain enforcement." |
 
 ---
 

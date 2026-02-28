@@ -442,6 +442,31 @@ If ZK GatePass is integrated and stable, insert this 30-second segment before th
 
 ---
 
+## Optional Gate Preset Switching Accent (10 seconds, insert after Beat 3 if stable)
+
+If Gate Preset Switching (S46) is implemented and stable, insert this 5–10 second accent after Beat 3 (Set Gate Policy) and before Beat 4 (Hostile Denied). Does NOT extend the critical arc — purely a "bonus flex."
+
+**Narration:**
+> "And when strategy shifts — switch the entire network topology in one click."
+
+*[Strategic Network Map visible. Operator clicks "Ring" preset → links visually reconfigure → event feed shows link/unlink confirmations.]*
+
+> "Three routes dropped. Two new routes opened. The network adapts."
+
+**On-screen action:** Preset button click → SVG map edges animate to new topology → 2-3 events appear in Signal Feed.
+
+**Evidence overlay required:**
+- Tx digest(s) of unlink/link operations: `[TBD-digest]`
+- Before/after topology diff visible on SVG map
+
+**Purpose:** Demonstrate infrastructure-level governance — not just per-gate policy, but network-wide topology control. Reinforces "command layer" narrative without requiring extended explanation.
+
+**Preconditions:** S45 (Strategic Network Map) and S46 (Preset Switching) both complete. At least 3 gates pinned and initially linked. Preset definitions loaded.
+
+**Non-goals:** No explanation of how link/unlink works. No dive into distance proofs. Pure visual payoff.
+
+---
+
 ## Evidence Capture Checklist (Pre-Recording)
 
 Before pressing record, confirm every required artifact is captured and accessible for overlay:
@@ -468,7 +493,9 @@ Before pressing record, confirm every required artifact is captured and accessib
 | Variant | Duration | Beats | Features Covered |
 |---|---|---|---|
 | **Primary** | 3:00 | 7 | GateControl + TradePost |
+| **Primary + Preset Switching** | 3:10 | 7 + accent | GateControl + TradePost + topology switching |
 | **Primary + ZK** | 3:30 | 8 | GateControl + TradePost + ZK accent |
+| **Primary + Presets + ZK** | 3:40 | 8 + accent | Full suite (maximum flex) |
 | **Fallback (GateControl-only)** | 2:00 | 6 | GateControl only |
 
 ---

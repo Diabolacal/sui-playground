@@ -86,6 +86,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 |------|---------|
 | [ideas/hackathon-ideas-grounded-v3-judged.md](ideas/hackathon-ideas-grounded-v3-judged.md) | **V3: 28 ideas scored against 8 judging criteria + player vote** — ranked list, CivilizationControl suite, bonus prize alignment |
 | [ideas/hackathon-shortlist-recommendations.md](ideas/hackathon-shortlist-recommendations.md) | Shortlist companion — top picks by category, recommended CivilizationControl module set, implementation order |
+| [ideas/wildcard-sprint-analysis.md](ideas/wildcard-sprint-analysis.md) | **Wildcard sprint:** 6 high-variance concepts, ranked top 3, selected winner (Atomic Courier) with 3-day sprint plan |
 
 ## Strategy
 
@@ -95,7 +96,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [strategy/civilizationcontrol-product-vision.md](strategy/civilizationcontrol-product-vision.md) | Human-centered product vision pitch — problem, vision, demo narrative, judging alignment |
 | [strategy/civilizationcontrol-voice-and-narrative.md](strategy/civilizationcontrol-voice-and-narrative.md) | **Canonical UI voice & narrative guide** — positioning, label mapping, microcopy, demo framing, Narrative Impact Check |
 | [strategy/civilizationcontrol-hackathon-emotional-objective.md](strategy/civilizationcontrol-hackathon-emotional-objective.md) | **Hackathon emotional objective** — primary emotional target, Five-Pillar Narrative Lens, 3-Second Emotional Check, consequence layer, demo strategy |
-| [strategy/hackathon-portfolio-roadmap.md](strategy/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 4 tracks, prize mapping, development cadence, kill criteria |
+| [strategy/hackathon-portfolio-roadmap.md](strategy/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 6 tracks (CC + Fortune Gate + Salvage + Corpse Toll + Flappy Frontier + Atomic Courier), prize mapping, development cadence, kill criteria |
 | [strategy/marketing-plan.md](strategy/marketing-plan.md) | **Marketing & player vote campaign plan** — 4-phase campaign (tease → launch → vote window → Stillness flex), channel playbooks, content cadence, asset checklists |
 | [strategy/strategic-next-move-audit-2026-02-18.md](strategy/strategic-next-move-audit-2026-02-18.md) | **Strategic next-move audit** — pre-hackathon bottleneck analysis, STOP/CONTINUE/START, top-3 actions, calendar sketch |
 

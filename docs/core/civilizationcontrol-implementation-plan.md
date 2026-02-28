@@ -1361,6 +1361,43 @@ Always-visible disclaimer: "User-curated placement; not on-chain."
 
 ---
 
+### S46 — Gate Preset Switching (Enhancement, Cuttable)
+
+**Phase:** UX (enhancement — after S45, cuttable without affecting core delivery)  
+**Status:** PROVISIONAL  
+**Effort:** 2–3 hours  
+**Dependencies:** S45, S44, S18  
+**Description:** Provide preset topology configurations for a gate network. The operator selects from predefined topologies (A/B/C presets) via the Strategic Network Map UI. On click, the system issues the necessary `unlink_gates` + `link_gates` transactions to realize the target topology.
+
+**Scope:**
+- 2–3 hardcoded preset topologies (e.g., "Hub-and-spoke", "Ring", "Full mesh") for the operator's owned gates
+- UI: Preset selector buttons on the Strategic Network Map (§9a). Clicking a preset shows a diff preview (current vs. target links), then executes on confirmation.
+- PTB helper: `buildPresetTopologyTx(currentLinks, targetLinks)` in `ptb.ts` — batches `unlink_gates` and `link_gates` calls
+
+**Non-Goals (hard scope guardrails):**
+- No automation (no scheduled switching, no event-triggered switching)
+- No pathfinding or routing engine
+- No dynamic preset generation (presets are hardcoded for demo)
+- No multi-owner coordination (only gates owned by the operator)
+
+**Key Constraint:** `link_gates` requires AdminACL sponsor + server-signed distance proof. `unlink_gates` requires only OwnerCaps. This asymmetry means teardown (unlink) is player-callable but setup (re-link) is server-dependent. If distance proof is unavailable, preset switching can only demonstrate unlinking (partial demo still valuable — "shutdown route" preset).
+
+**Files:**
+- `frontend/src/components/PresetSelector.tsx`
+- `frontend/src/lib/presets.ts` (topology definitions)
+- `frontend/src/lib/ptb.ts` (add `buildPresetTopologyTx`)
+
+**Definition of Done:**
+- Preset buttons visible on Strategic Network Map
+- Clicking preset shows link diff (add/remove)
+- Confirmation triggers appropriate unlink + link transactions
+- Event feed shows topology change
+- `npm run build` passes
+
+**Demo value:** 5–10 seconds — click preset → links visually update on map → event feed confirms. Placed as optional accent in demo beat sheet (after core proof moments).
+
+---
+
 ## Summary Table
 
 | ID | Title | Phase | Status | Effort | Deps |
@@ -1410,6 +1447,7 @@ Always-visible disclaimer: "User-curated placement; not on-chain."
 | S43 | Polling + state management (cross-cutting) | Foundation | PROVISIONAL | 2h | S08 |
 | S44 | PTB construction library (cross-cutting) | Foundation | CONFIRMED | 2h | S08, S10 |
 | S45 | Strategic Network Map (SVG) | UX (stretch) | PROVISIONAL | 3h | S25, S28 |
+| S46 | Gate Preset Switching (enhancement) | UX (enhancement) | PROVISIONAL | 2.5h | S45, S44, S18 |
 
 ---
 
@@ -1424,10 +1462,10 @@ Always-visible disclaimer: "User-curated placement; not on-chain."
 | UX Polish + Signal Feed | S25–S30 | 10.5h |
 | ZK GatePass (stretch) | S31–S35 | 6.5h |
 | Demo + Submission | S36–S42 | 11h |
-| Cross-cutting | S43–S45 | 7h |
-| **Total** | **45 steps** | **~68h** |
+| Cross-cutting | S43–S46 | 9.5h |
+| **Total** | **46 steps** | **~70.5h** |
 
-Fits within the 72-hour hackathon window with ~4 hours of buffer. ZK stretch (6.5h) is cuttable without affecting core submission.
+Fits within the 72-hour hackathon window with ~1.5 hours of buffer. ZK stretch (6.5h) and Gate Preset Switching (2.5h) are independently cuttable without affecting core submission.
 
 ---
 
