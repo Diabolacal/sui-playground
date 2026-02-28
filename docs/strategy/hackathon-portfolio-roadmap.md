@@ -134,7 +134,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 |------|------|--------|------|
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
 | GateControl → `issue_jump_permit` → `jump_with_permit` integration | Low (validated) | ✅ Full 13-step gate lifecycle rehearsed on local devnet (2026-02-16). See [runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md). | DONE |
-| Sponsored transaction setup (AdminACL) | Low (validated) | ✅ Sponsor setup + sponsored `deposit_fuel` and `jump_with_permit` validated. Self-sponsorship does NOT work (must use different address). See [runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13. | DONE |
+| Sponsored transaction setup (AdminACL) | Low (validated) | ✅ Sponsor setup + sponsored `deposit_fuel` and `jump_with_permit` validated. `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present — non-sponsored tx succeeds if sender is in AdminACL. See [runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13. | DONE |
 | ZK circuit → Move Groth16 verification | Low (fully validated) | ✅ Membership circuit implemented & devnet-validated (sandbox) | DONE |
 | Lux-to-SUI display conversion | Low (UX only) | Inspect game server behavior if accessible | 1 hour |
 

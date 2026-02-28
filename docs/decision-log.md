@@ -203,7 +203,7 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
   - Module `world::access` (NOT `world::access_control`)
   - PTB type args use inline `<Type>` syntax, NOT `--type-args`
   - `vector<u8>` uses `vector[0xHH,...]` format
-  - Self-sponsorship does NOT work — must use different address
+  - Self-sponsorship does NOT work — must use different address *(Correction 2026-02-28: `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present — non-sponsored txs succeed if sender is in AdminACL)*
   - Extension packages need `[environments]` section + `Pub.local.toml`
 - **Follow-ups:** None — runbook is carry-forward ready
 

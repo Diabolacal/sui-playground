@@ -34,7 +34,7 @@ sui client ptb \
 
 **Most common failure:** `MoveAbort` in `verify_sponsor` — causes:
 - Sponsor address not registered in AdminACL (re-run Step 3a/3c)
-- Sender and sponsor are the same address — self-sponsorship does NOT work (`ctx.sponsor()` returns `None` when sender == gas payer)
+- Sender not in AdminACL and no separate sponsor — `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present; the resolved address must exist in `AdminACL.authorized_sponsors`
 - Used `sui client call` instead of `sui client ptb` (only PTB supports `--gas-sponsor`)
 
 ---
@@ -50,7 +50,7 @@ These are critical findings from the rehearsal. **Read before executing.**
 
 ### Sponsored Transactions
 - `--gas-sponsor "@0xADDR"` (note the `@` prefix)
-- **Self-sponsorship does NOT work.** `ctx.sponsor()` returns `None` when sender == gas payer. Must use a different address as sponsor
+- **`verify_sponsor` has sender fallback.** When sender == gas payer, `ctx.sponsor()` returns `None` and `verify_sponsor` falls back to `ctx.sender()`. If the sender's address is in AdminACL, a non-sponsored transaction succeeds. A dedicated sponsor address is recommended for CLI testing clarity
 - Sponsor address must be registered in AdminACL via `access::add_access`
 
 ### Object Abilities

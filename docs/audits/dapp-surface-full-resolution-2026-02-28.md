@@ -169,7 +169,7 @@ Post-fix grep verification:
 - ✅ Zero remaining "EVE Token not on Sui" in target documents
 - ✅ Zero remaining "0.0005 SUI" inconsistent rate
 - ✅ Zero remaining "Under a thousand MIST" in demo beat sheet
-- ⚠️ Residual "self-sponsorship does NOT work" in 4 non-target docs (gate-lifecycle-runbook.md, decision-log.md, hackathon-portfolio-roadmap.md, march-11-reimplementation-checklist.md) — out of audit scope but flagged for future cleanup.
+- ~~⚠️ Residual "self-sponsorship does NOT work" in 4 non-target docs~~ → ✅ Resolved in follow-up micro-sweep (2026-02-28): gate-lifecycle-runbook.md, decision-log.md, hackathon-portfolio-roadmap.md, march-11-reimplementation-checklist.md all corrected.
 
 ---
 

@@ -260,7 +260,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 **What:** `jump()` and `jump_with_permit()` require the transaction to be sponsored by an address in `AdminACL`.
 
-**On local devnet / hackathon test server:** Register a second address as sponsor in `AdminACL`. Use `--gas-sponsor "@0xADDR"` flag on PTB. **Critical:** Self-sponsorship does NOT work — `ctx.sponsor()` returns `None` when sender == gas payer. Must use a *different* address as sponsor. The `sui client ptb` command is required (not `sui client call`) for sponsored transactions. On the hackathon test server, AdminACL access depends on organizer configuration — verify early.
+**On local devnet / hackathon test server:** Register a second address as sponsor in `AdminACL`. Use `--gas-sponsor "@0xADDR"` flag on PTB. **Note:** `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present (`ctx.sponsor()` returns `None` when sender == gas payer). If the sender's address is in AdminACL, a standard non-sponsored transaction succeeds. A dedicated sponsor address is recommended for CLI testing clarity. The `sui client ptb` command is required (not `sui client call`) for sponsored transactions. On the hackathon test server, AdminACL access depends on organizer configuration — verify early.
 
 **Rehearsal evidence:** Validated with PLAYER_A as sponsor, ADMIN as sender. See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13.
 
