@@ -9,6 +9,7 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 - `research/` — External inspiration and UX research (prep only)
 - `operations/` — Bootstrap checklists, process guides, workspace rules
 - `ux/` — UX architecture specs and interaction design
+- `analysis/` — Cross-cutting analytical artifacts (assumption registries, fragility audits)
 - `audits/` — Reconciliation and consistency audit reports
 - `sandbox/` — Temporary or experimental documents
 - `archive/` — Deprecated but retained documents
@@ -140,6 +141,12 @@ All documents under `docs/` must begin with a header block declaring their reten
 | File | Purpose |
 |------|---------|
 | [audits/dapp-surface-full-resolution-2026-02-28.md](audits/dapp-surface-full-resolution-2026-02-28.md) | **Full reconciliation report** — 30 findings (C/H/M/L) from adversarial consistency audit across 8 planning docs, 20 fixed, 6 false positives, 4 already correct |
+
+## Analysis
+
+| File | Purpose |
+|------|---------|
+| [analysis/assumption-registry-and-demo-fragility-audit.md](analysis/assumption-registry-and-demo-fragility-audit.md) | **Assumption registry + demo fragility audit** — 87 material assumptions across 16 categories, beat-by-beat determinism scoring, top 5 structural risks, pre-recording checklist, failure scenario responses |
 
 ## Sandbox
 
