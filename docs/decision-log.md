@@ -6,6 +6,18 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-01 — Atomic Courier Feasibility Confirmed (Local Devnet)
+
+- **Goal:** Determine whether `withdraw_item + deposit_item + Coin<SUI> transfer` can execute atomically in a single PTB on Sui (world contracts).
+- **Decision:** **FEASIBLE.** All three operations execute atomically in one transaction. Extension-based auth (`XAuth` witness) provides all needed authorization — no AdminACL or sponsorship required for the transfer path. Net gas cost ~0.002 SUI. 5 objects mutated (2 SSUs, 2 Inventories, 1 Coin).
+- **Files:** `experiments/atomic_courier_experiment/` (Move sources, TS test script, feasibility report)
+- **Diff:** ~600 LoC added (Move: ~120, TS: ~490, report: ~130)
+- **Risk:** Low — sandbox experiment, not committed to hackathon repo
+- **Gates:** typecheck N/A (Move), build ✅ (compiled + published), smoke ✅ (executed on local devnet)
+- **Follow-ups:** Proceed with Atomic Courier as viable CivilizationControl mechanism. Test with EVE Token (not just SUI) if needed. Consider gate jump integration (requires AdminACL for `jump_with_permit`).
+
+---
+
 ## 2026-02-28 — In-Game DApp Browser Surface Integration
 
 - **Goal:** Integrate confirmed in-game embedded browser capabilities into CivilizationControl planning. Probe data (`capabilities.json`) captured from EVE Frontier's Chromium 122 CEF webview.
