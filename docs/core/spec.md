@@ -62,8 +62,8 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | Dependency | Type | Status | Fallback |
 |------------|------|--------|----------|
 | Sui RPC (fullnode) | Read/Write | Available | Local devnet via Docker |
-| world-contracts v0.0.12 | Move dependency | Pinned @ 09c2ec2 | Carry cached copy |
-| EVE Vault wallet | Browser extension | STUB sponsored tx | Standard Sui wallet |
+| world-contracts v0.0.13 | Move dependency | Pinned @ e508451 | Carry cached copy |
+| EVE Vault wallet | Browser extension | Functional (687d432) | Standard Sui wallet |
 | @mysten/dapp-kit | NPM package | Stable | — |
 | AdminACL (sponsored tx) | On-chain whitelist | **BLOCKED until Day-1** | Non-sponsored fallback |
 | EF-Map iframe | Visual context | Optional | SVG topology only |
@@ -298,7 +298,7 @@ If TradePost UI not ready: 2-minute GateControl-only (Beats 1–5 + close). Drop
 | H3 | In-game dApp SSU model works | BLOCKED | Day-1 test |
 | H4 | Coin<SUI> toll works on target network | PROVISIONAL | S14 |
 | H5 | Event query performance ≤ 10s | PROVISIONAL | S26 |
-| H6 | world-contracts v0.0.12 stable | PROVISIONAL | S03 |
+| H6 | world-contracts v0.0.13 stable | PROVISIONAL | S03 |
 
 ### Day-1 Hard Stops
 

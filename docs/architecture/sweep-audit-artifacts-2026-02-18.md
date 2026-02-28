@@ -69,6 +69,8 @@
 
 **Promoted to main report:** C-1 → Risk #4 (character resolution)
 
+> **Update 2026-02-28:** C-10 is partially superseded — `link_gates`/`unlink_gates` now emit `GateLinkedEvent`/`GateUnlinkedEvent` (world-contracts v0.0.13 @ e508451). `authorize_extension` still emits no event.
+
 ---
 
 ## Audit D: Wallet / TX Parsing / Failure Modes
@@ -86,6 +88,8 @@
 | D-7 | zkLogin proof expiry mid-demo | LOW | Proof valid for epoch (~24h); demo is <30 min |
 
 **Promoted to main report:** D-1 → Risk #3 (EVE Vault stub)
+
+> **Update 2026-02-28:** D-1 is superseded — EVE Vault sponsored transactions are now functional (commit 687d432). Sign-and-execute works via `window.postMessage` relay. API URL changed to `/${assemblyType}/${action}` format with `X-Tenant` header. Default chain switched to testnet.
 
 ---
 

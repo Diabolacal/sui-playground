@@ -132,7 +132,7 @@ Fallback: `cd vendor/builder-scaffold/docker && docker compose run --rm sui-loca
 
 On test server: Check if admin tools allow adding a sponsor address. If GovernorCap is held by CCP, request sponsor registration or verify if builder addresses are pre-authorized.
 
-On local devnet: Self-deploy world package → own GovernorCap → add own address as sponsor via `access::add_access()`. Self-sponsorship does NOT work — must use a different address.
+On local devnet: Self-deploy world package → own GovernorCap → add own address as sponsor via `add_sponsor_to_acl()`. Self-sponsorship does NOT work — must use a different address.
 
 **Files:**
 - `notes/day1-validation.md`

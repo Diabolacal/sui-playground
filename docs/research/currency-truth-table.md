@@ -40,21 +40,21 @@
 | Fact | Source | Citation |
 |------|--------|----------|
 | EVE Token is described as the "ecosystem" token | EVE Frontier GitBook → EVE Vault Introduction page | [evefrontier-builder-docs-map.md](evefrontier-builder-docs-map.md#L196-L197) |
-| EVE Token has **no `Coin<T>` implementation** in world-contracts | Code search + Sui docs reference map | [sui-documentation-reference-map.md](sui-documentation-reference-map.md#L96): "GitBook mentions LUX/EVE Token conceptually but no Coin<T> module exists in world-contracts" |
+| EVE Token now has a **`Coin<EVE>` implementation** in world-contracts (v0.0.13) | `contracts/assets/sources/EVE.move` | `Coin<EVE>`: 10B supply, 9 decimals, OTW pattern via `coin_registry`. Separate `AdminCap` (not world AdminACL) + `EveTreasury` (deployer-owned). Functions: `transfer_from_treasury`, `burn_from_treasury`. |
 | world-contracts has a TODO to "mint initial supply of eve tokens" | `world.move` line 8 | [world.move](../../vendor/world-contracts/contracts/world/sources/world.move#L8): `// TODO: mint initial supply of eve tokens` |
 | The `init()` function in `world.move` only creates a `GovernorCap` — no token minting | `world.move` lines 1-16 | [world.move](../../vendor/world-contracts/contracts/world/sources/world.move#L9-L15) |
 | Inventory module has a TODO about using `Coin<T>` for items | `inventory.move` line 42 | [inventory.move](../../vendor/world-contracts/contracts/world/sources/primitives/inventory.move#L42): `// TODO: Use Sui's Coin<T> and Balance<T> for stackability` |
 | Builder scaffold has an empty tokens template | `tokens.move` | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() {}` (empty stub; `// TODO: Implement` comment removed as of 2026-02-18 sync) |
 | Internal analysis confirms no coin/token module exists | Multiple internal docs | [hackathon-ideas-v2-doc-enabled.md](../ideas/hackathon-ideas-v2-doc-enabled.md#L61): "world-contracts has no coin/token module" |
 
-**Assessment:** In the current Sui world-contracts repository, an EVE token implementation is not yet present (TODO noted in `world.move`). However, in the live Ethereum-based Frontier cycle, an EVE token is surfaced in-game with Lux conversion. This discrepancy reflects differing implementation states between chains and cycles. No `Coin<EVE>`, `TreasuryCap<EVE>`, or related structs exist in the Sui codebase.
+**Assessment:** ~~Previously unimplemented.~~ As of world-contracts v0.0.13 (commit e508451), `Coin<EVE>` is implemented in `contracts/assets/sources/EVE.move`. It uses the OTW pattern via `coin_registry` with 10B supply and 9 decimals. It has a separate `AdminCap` (distinct from the world `AdminACL`) and an `EveTreasury` object owned by the deployer. Functions include `transfer_from_treasury` and `burn_from_treasury`, with a 10M initial deployer allocation and burn-only supply after init. In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion.
 
 ### Implementation State Clarification
 
 | Environment | EVE Token Status | Notes |
 |---|---|---|
 | **Ethereum live cycle** | EVE token exists in current deployment | Surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE) |
-| **Sui world-contracts repo** | EVE token not yet implemented | Only a `// TODO` comment in `world.move`; no `Coin<T>` module |
+| **Sui world-contracts repo** | `Coin<EVE>` implemented (v0.0.13) | `contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, OTW via `coin_registry`, separate AdminCap + EveTreasury (deployer-owned) |
 | **Devnet validation** | Uses `Coin<SUI>` for settlement | All builder examples and validated flows use SUI |
 | **March 11 sandbox** | Must verify official economic token type | May differ from both live Ethereum cycle and current Sui contracts |
 
@@ -128,14 +128,18 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 | `world::inventory` | `Item` | [inventory.move](../../vendor/world-contracts/contracts/world/sources/primitives/inventory.move#L46-L54) | 46-54 | In-game item representation (has `key, store`); **NOT a Coin** |
 | `world::access` | `AdminACL` | [access_control.move](../../vendor/world-contracts/contracts/world/sources/access/access_control.move#L37-L39) | 37-39 | Contains `authorized_sponsors` for sponsored tx verification |
 
-### Token-Related Code That Does NOT Exist
+### Token-Related Code Status
+
+> **Updated 2026-02-28:** `Coin<EVE>` now exists as of world-contracts v0.0.13 (commit e508451).
 
 | Expected | Status | Evidence |
 |----------|--------|----------|
-| `Coin<EVE>` or `Coin<LUX>` | **Does not exist** | Zero matches across all `.move` files |
-| `TreasuryCap<EVE>` or `TreasuryCap<LUX>` | **Does not exist** | Zero matches |
-| Any `coin::create_currency()` call | **Does not exist** | Zero matches in world-contracts |
-| Any `Balance<T>` usage for tokens | **Does not exist** | Only a TODO comment in inventory.move L42 |
+| `Coin<EVE>` | **Now exists** (v0.0.13) | `contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, OTW via `coin_registry`, separate AdminCap + EveTreasury (deployer-owned) |
+| `Coin<LUX>` | **Does not exist** | Zero matches across all `.move` files |
+| `TreasuryCap<EVE>` | **Managed via `coin_registry`** | EVE uses OTW pattern; treasury cap is consumed during `coin_registry` registration (`make_supply_burn_only_init`) |
+| `TreasuryCap<LUX>` | **Does not exist** | Zero matches |
+| `coin::create_currency()` call | **Exists for EVE** | Used in `EVE.move` via `coin_registry::new_currency_with_otw` |
+| `Balance<T>` usage for tokens | **Exists for EVE** | `EveTreasury` holds `Balance<EVE>` |
 | `tokens::tokens` scaffold | **Empty stub** | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() {}` (TODO comment removed as of 2026-02-18 sync) |
 
 ### Key TODO Comments
@@ -158,7 +162,7 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 | [shortlist-viability-validation-report.md](../operations/shortlist-viability-validation-report.md) | All tests use `Coin<SUI>`, prices in MIST | Only SUI has been validated on devnet |
 | [tradepost-cross-address-ptb-validation.md](../architecture/tradepost-cross-address-ptb-validation.md) | `Coin<SUI>` throughout, one mention of `Coin<TribeToken>` compatibility | Architecture designed for SUI, extensible to custom `Coin<T>` |
 | [evefrontier-builder-docs-map.md](evefrontier-builder-docs-map.md) | LUX + EVE Token mentioned from GitBook | Only doc referencing official CCP currencies |
-| [sui-documentation-reference-map.md](sui-documentation-reference-map.md) | `Coin<T>` / `TreasuryCap<T>` as Sui standards | Confirms no token implementation in world-contracts |
+| [sui-documentation-reference-map.md](sui-documentation-reference-map.md) | `Coin<T>` / `TreasuryCap<T>` as Sui standards | `Coin<EVE>` now implemented in world-contracts v0.0.13 via `coin_registry` OTW pattern |
 
 ---
 
@@ -166,7 +170,7 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 
 1. **LUX is a game-server currency**, not an on-chain token. It is mentioned only in the EVE Frontier GitBook and has no Move implementation.
 
-2. **EVE Token is planned but unimplemented.** The `world.move` init function has a TODO to mint EVE tokens, but no `Coin<EVE>` type or minting logic exists in world-contracts.
+2. **EVE Token is now implemented.** As of world-contracts v0.0.13, `Coin<EVE>` exists in `contracts/assets/sources/EVE.move` (10B supply, 9 decimals, separate AdminCap + EveTreasury, burn-only after init with 10M deployer allocation). ~~The previous `// TODO` in `world.move` has been superseded.~~
 
 3. **All builder-accessible currency operations currently use `Coin<SUI>`** (native Sui token). Tolls, trades, and prices are denominated in SUI/MIST. This is the only validated on-chain payment mechanism.
 

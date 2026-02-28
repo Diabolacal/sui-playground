@@ -42,8 +42,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 ### Server-Proof Operations (OwnerCap + server-signed attestation)
 
-- Link gates — requires distance proof (Ed25519 signed by server in `ServerAddressRegistry`)
-- Deposit/withdraw items to/from SSU — requires proximity proof
+- Link gates — requires distance proof (Ed25519 signed by server in `ServerAddressRegistry`) + AdminACL `verify_sponsor()` required
 - Bridge chain→game items — requires location proof
 
 ### Sponsored Operations (AdminACL-listed sponsor paying gas)
@@ -51,6 +50,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 - Default jump (no extension) — `verify_sponsor()` required
 - Jump with permit — valid `JumpPermit` + sponsor
 - Deposit/withdraw fuel to/from NWN — OwnerCap + sponsor
+- Deposit/withdraw items to/from SSU (owner-path) — `verify_sponsor()` required (proximity proof removed)
 
 ### Extension-Controlled Operations (Auth witness — only from extension packages)
 
@@ -323,7 +323,7 @@ Gate-scoped event stream. Event types:
 | **Toll Collection**    | "14:23 · 5 Lux (0.5 SUI) from Pilot-0x3f2a"                 |
 | **Status Change**      | "09:00 · Offline → Online · You"                              |
 | **Extension Change**   | "08:55 · None → GateControl"                                  |
-| **Link Change**        | "08:50 · Linked to Gate South-1"                               |
+| **Link Change**        | "08:50 · Linked to Gate South-1" (on-chain: `GateLinkedEvent` / `GateUnlinkedEvent`) |
 
 Time range selector: 1h · 24h · 7d · 30d · All. Auto-refresh: polling every 10 seconds.
 
@@ -661,8 +661,8 @@ The UI surfaces permission boundaries so users understand what they can do at th
 |-----------------|-------------|-------------------|
 | **Read-only** | Sui RPC only (no wallet) | View structure state, event history, fuel levels, link topology |
 | **Player actions** | Connected wallet + Character resolved | Online/offline toggle, authorize extension, unlink gates, deploy policy, create/remove listings |
-| **Server-dependent actions** | Connected wallet + CCP server reachable | Link gates (distance proof), deposit/withdraw items (proximity proof) |
-| **Sponsored actions** | Connected wallet + authorized sponsor | Jump, fuel deposit/withdraw |
+| **Server-dependent actions** | Connected wallet + CCP server reachable | Link gates (distance proof) |
+| **Sponsored actions** | Connected wallet + authorized sponsor | Jump, fuel deposit/withdraw, SSU item deposit/withdraw (owner-path) |
 
 **UI treatment:**
 - Unavailable actions show disabled buttons with tooltip explaining the missing requirement
@@ -817,7 +817,7 @@ Complexity surfaces in calibrated layers:
 
 #### 5. Server-Proof Abstraction
 
-Operations requiring server computation (distance proofs, proximity verification) are presented as single-step actions. The user clicks "Link Gates" and sees a result — never "Step 1: Request proof, Step 2: Verify signature, Step 3: Submit transaction."
+Operations requiring server computation (distance proofs for gate linking) or AdminACL sponsorship (SSU item transfer, jump) are presented as single-step actions. The user clicks "Link Gates" and sees a result — never "Step 1: Request proof, Step 2: Verify signature, Step 3: Submit transaction."
 
 **Example:** User selects two gates, clicks "Link," sees "Linking..." → "Linked ✓." Behind the scenes: coordinate computation, Ed25519 attestation, PTB construction, submission — all invisible.
 

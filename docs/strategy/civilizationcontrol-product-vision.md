@@ -63,13 +63,13 @@ These are optional enhancements, not MVP requirements.
 
 ## Currency Model: Lux, On-Chain Tokens, and Gas
 
-> **Status:** Partially validated. On-chain settlement uses `Coin<SUI>` today. In the Sui world-contracts repository, an EVE token implementation is not yet present (TODO noted in `world.move`). However, in the live Ethereum-based Frontier cycle, an EVE token is surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). Lux is the in-game engine currency that players earn and spend — it has no on-chain representation in the Sui codebase.
+> **Status:** Partially validated. On-chain settlement uses `Coin<SUI>` today. As of world-contracts v0.0.13, `Coin<EVE>` now exists on-chain (`contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, separate AdminCap + EveTreasury, burn-only after init). In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). Lux is the in-game engine currency that players earn and spend — it has no on-chain representation in the Sui codebase. Whether CivilizationControl tolls settle in `Coin<SUI>` or `Coin<EVE>` requires sandbox validation.
 
 ### How Players Think About Money
 
 - **Lux** is the in-game currency. Players earn Lux, see prices in Lux, and think in Lux. This is the language of the game economy.
 - **On-chain settlement** currently uses `Coin<SUI>` (the Sui blockchain's native token). Tolls, trades, and storefront purchases all settle in SUI on-chain.
-- **EVE Token** is the ecosystem settlement token. In the live Ethereum-based Frontier cycle, it exists in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). However, in the current Sui world-contracts repository, no `Coin<EVE>` type, `TreasuryCap<EVE>`, or minting mechanism exists yet — only a `// TODO` placeholder. This discrepancy reflects differing implementation states between chains and cycles.
+- **EVE Token** is the ecosystem settlement token. As of world-contracts v0.0.13, `Coin<EVE>` is now implemented on Sui (`contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, OTW via `coin_registry`, separate AdminCap + EveTreasury). In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). Whether on-chain settlement migrates from `Coin<SUI>` to `Coin<EVE>` requires sandbox validation.
 - **Gas (SUI)** is a separate concern — the transaction fee for executing on-chain operations. Gas should be abstracted from the player experience, ideally via sponsored transactions.
 
 ### CivilizationControl UX Implications
@@ -86,7 +86,7 @@ These are optional enhancements, not MVP requirements.
 | Item | Status | Notes |
 |------|--------|-------|
 | Lux-to-SUI exchange rate | **Partially known** | Observed in live Ethereum cycle UI: 10,000 Lux = 1 EVE token. Lux-to-SUI rate depends on EVE-to-SUI exchange, which is undefined. If CivilizationControl displays Lux values, the conversion rate must be confirmed in the March 11 sandbox — either by the game server, a fixed ratio, or builder configuration. |
-| EVE Token availability | **Sui: unimplemented; Ethereum live cycle: exists** | `vendor/world-contracts` (Sui) contains only a `// TODO` placeholder. Builder contracts (`tokens.move` in scaffold) are empty stubs. The live Ethereum-based Frontier cycle surfaces EVE token in-game. |
+| EVE Token availability | **Sui: implemented (v0.0.13); Ethereum live cycle: exists** | `Coin<EVE>` exists in `contracts/assets/sources/EVE.move` (10B supply, 9 decimals, separate AdminCap + EveTreasury). The live Ethereum-based Frontier cycle also surfaces EVE token in-game. Whether builders can interact with `Coin<EVE>` (toll collection, trade settlement) requires sandbox validation. |
 | Automatic Lux→on-chain conversion | **Not confirmed** | No mechanism exists that converts Lux to any on-chain token automatically. This may be a game-server-side operation, a future platform feature, or a UX design requirement for CivilizationControl to solve. |
 | Sponsored transactions for gas abstraction | **Implemented but access-controlled** | `AdminACL.verify_sponsor()` exists in world-contracts. Builders need AdminACL authorization. Requires sandbox validation on March 11. |
 | `Coin<T>` generic toll support | **Architecturally possible** | The toll mechanism can accept any `Coin<T>` type. If TribeMint ships, faction currency tolls are feasible. Current validation uses `Coin<SUI>` only. |

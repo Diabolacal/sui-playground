@@ -135,6 +135,8 @@ Always a **single PTB**. Toggle tribe on/off, change toll amount, add addresses 
 
 **Sponsored transaction feature is a STUB** — returns hardcoded mock digest `"0x1234567890"`. Use standard dual-signing pattern for sponsored txs.
 
+> **Update 2026-02-28:** EVE Vault sponsored transactions are now functional (commit 687d432). Sign-and-execute works via `window.postMessage` relay. API URL changed to `/${assemblyType}/${action}` format. Default chain switched to testnet.
+
 **Chain support:** Only `sui:devnet` and `sui:testnet` exposed. No localnet or mainnet.
 
 ---

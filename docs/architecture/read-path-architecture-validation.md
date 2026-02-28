@@ -103,7 +103,7 @@ Step 6: Start polling loop (10s interval)
 | **Policy enforcement (allow)** | `JumpEvent` (successful passage = policy allowed it) | Same as Passage completed | **AVAILABLE (implied)** |
 | **Active policy count** | Derived from gate object state (`extension` field) | Read gate objects, check presence of extension TypeName | **AVAILABLE (polling)** |
 | **Governed structures** | Derived from gate object state | Count gates with non-null `extension` field | **AVAILABLE (polling)** |
-| **Link established/broken** | **NO event** — `link_gates()` / `unlink_gates()` silent | Must poll `gate.linked_gate_id` field changes | **POLLING ONLY** |
+| **Link established/broken** | `GateLinkedEvent` / `GateUnlinkedEvent` (world-contracts v0.0.13) | Subscribe or query by event type | **AVAILABLE (events)** |
 | **Extension authorized** | **NO event** — `authorize_extension()` silent | Must poll `gate.extension` field changes | **POLLING ONLY** |
 
 ### 2.3 Denial Observability
@@ -331,7 +331,7 @@ For the Stillness deployment bonus window (14 days post-submission), deploy Opti
 | Toll collection | No event | Extension must emit `TollCollectedEvent` |
 | Trade completion | No event | Extension must emit `TradeSettledEvent` |
 | Policy denial | Transaction aborts — no event emitted; but failed tx IS queryable by digest, and abort code is deterministic | Demo: observe directly from wallet adapter failure response (zero infra). Production: two-step evaluate pattern or backend relay needed for third-party denial visibility. See §2.3. |
-| Gate link/unlink | No event | Detect via state polling (compare `linked_gate_id` between polls) |
+| Gate link/unlink | `GateLinkedEvent` / `GateUnlinkedEvent` (world-contracts v0.0.13) | Subscribe or query by event type; polling no longer required |
 | Extension authorization | No event | Detect via state polling (compare `extension` field between polls) |
 | Tribe change | No event | Detect via state polling (`character.tribe_id`) — low priority |
 

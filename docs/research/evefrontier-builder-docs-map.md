@@ -147,7 +147,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Notable clarifications:**
   - Sponsored transactions: `tx.setSender(playerAddress)` + `tx.setGasOwner(adminAddress)` — sponsor must be in `AdminACL`.
   - `borrow_owner_cap` / `return_owner_cap` is a hot-potato pattern — cap must be returned in the same transaction.
-  - **JSON-RPC is fully removed from docs (not just deprecated).** New integrations should use GraphQL, gRPC, or SuiClient.
+  - **JSON-RPC is fully removed from docs (not just deprecated).** New integrations should use GraphQL, gRPC, or `SuiJsonRpcClient` (SDK v2; replaces the deprecated `SuiClient` from `@mysten/sui/client`).
 
 ### Smart Storage Unit
 
@@ -238,7 +238,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Hot-potato pattern semantics**: The World Explainer explains *why* `OfflineAssemblies` and `ReturnOwnerCapReceipt` lack `drop` — to enforce atomic multi-step transactions. This design intent is not in code comments.
 - **Location privacy rationale**: The docs explain that hashed coordinates preserve information asymmetry (hidden bases) — the Move code stores hashes but doesn't explain the game-design motivation.
 - **Sui-specific constraints**: Object size limits (250KB), max struct fields (32), max dynamic fields per tx (1024) are documented in the Constraints page but not referenced in world-contracts code.
-- **JSON-RPC deprecation**: ~~The Interfacing page notes Sui is deprecating JSON-RPC in favor of GraphQL/gRPC~~ **Updated 2026-02-20:** JSON-RPC section fully removed from the Interfacing page. SuiClient, GraphQL, and gRPC are the only documented read paths.
+- **JSON-RPC deprecation**: ~~The Interfacing page notes Sui is deprecating JSON-RPC in favor of GraphQL/gRPC~~ **Updated 2026-02-20:** JSON-RPC section fully removed from the Interfacing page. `SuiJsonRpcClient` (SDK v2, replaces deprecated `SuiClient`), GraphQL, and gRPC are the only documented read paths.
 - **LUX / EVE Token economy**: The EVE Vault introduction mentions two currencies (LUX and EVE Token) not referenced in world-contracts code.
 
 ### Code Is Canonical But Docs Lag

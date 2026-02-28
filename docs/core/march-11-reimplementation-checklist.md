@@ -71,7 +71,7 @@ Cross-address PTB item transfer risk is **mitigated**. The typed witness extensi
 5. **Item has `key + store` abilities**: `transfer::public_transfer(item, buyer_address)` is valid after withdrawal.
 6. **Coin payment is trivial**: `Coin<T>` has `key + store`, standard `transfer::public_transfer` to seller.
 7. **Multi-signer PTB does NOT exist on Sui**: confirmed that the extension pattern is the correct (and only viable) path for cross-address atomic trades.
-8. **deposit_item() now merges quantities (2026-02-20)**: When depositing an item with a `type_id` that already exists in the inventory, quantities are merged automatically (world-contracts commit `09c2ec2`). Volumes must match (`EItemVolumeMismatch` error code 5). Simplifies re-stocking — no need to check for existing items.
+8. **deposit_item() now merges quantities (2026-02-20)**: When depositing an item with a `type_id` that already exists in the inventory, quantities are merged automatically (confirmed in world-contracts commit `09c2ec2`, still valid at `e508451`). Volumes must match (`EItemVolumeMismatch` error code 5). Simplifies re-stocking — no need to check for existing items.
 
 ### Infrastructure Setup Chain — Risk: GREEN (verbose but mechanical)
 

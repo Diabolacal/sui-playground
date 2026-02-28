@@ -457,14 +457,14 @@ EVE Frontier has a layered currency architecture that affects how CivilizationCo
 |-------|----------|----------------|-------------------|
 | **In-game economy** | **Lux** | Game server | Primary — what players earn, see, and think in |
 | **On-chain settlement** | **`Coin<SUI>`** | Sui blockchain | Secondary — shown as implementation detail or in parentheses |
-| **Planned ecosystem token** | **EVE Token** | Sui: not yet implemented; Ethereum live cycle: exists in-game | Sui world-contracts has TODO only; live Ethereum cycle surfaces EVE token with Lux conversion (10,000 Lux = 1 EVE) |
+| **Ecosystem token** | **`Coin<EVE>`** | Sui: implemented (v0.0.13); Ethereum live cycle: exists in-game | `contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, separate AdminCap + EveTreasury. Live Ethereum cycle also surfaces EVE token with Lux conversion (10,000 Lux = 1 EVE) |
 | **Builder faction token** | **`Coin<TribeToken>`** | Builder-deployed (TribeMint) | Optional — tribe-specific economic layer alongside Lux |
 | **Gas** | **SUI** (gas fees) | Sui blockchain | Hidden — abstracted via sponsored transactions |
 
 ### Key Facts
 
 - **Lux is never mentioned** in world-contracts Move code — it's a game-server concept with no on-chain representation.
-- **EVE Token is not yet implemented in Sui world-contracts** (only a `// TODO` in `world.move`). However, in the live Ethereum-based Frontier cycle, an EVE token is surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). There is no `Coin<EVE>` or `TreasuryCap<EVE>` in the Sui codebase. The `tokens.move` template in builder-scaffold is an empty stub.
+- **`Coin<EVE>` is now implemented in Sui world-contracts** (v0.0.13, `contracts/assets/sources/EVE.move`): 10B supply, 9 decimals, OTW via `coin_registry`, separate AdminCap + EveTreasury (deployer-owned), burn-only after init. In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). Whether on-chain settlement migrates from `Coin<SUI>` to `Coin<EVE>` requires sandbox validation.
 - **All validated on-chain payments use `Coin<SUI>`.** Gate tolls and TradePost purchases settle in SUI.
 - **Lux-to-EVE exchange rate observed: 10,000 Lux = 1 EVE token** (observed in live Ethereum cycle UI; requires sandbox confirmation). Lux-to-SUI rate depends on EVE-to-SUI exchange, which is undefined. If the UI displays Lux values, the conversion rate must be confirmed during March 11 sandbox testing.
 - **Sponsored transactions are implemented** (`AdminACL.verify_sponsor()`) but require authorization. Gas abstraction is architecturally supported.

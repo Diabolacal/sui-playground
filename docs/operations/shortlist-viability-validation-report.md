@@ -377,7 +377,7 @@ These do not block the hackathon (the extension logic is independent of the jump
 | Item | Status | Impact |
 |------|--------|--------|
 | **Lux** (in-game currency) | Not referenced in any Move code | Lux is a game-server concept. CivilizationControl's UI must bridge Lux display values to on-chain `Coin<T>` amounts. |
-| **EVE Token** | Unimplemented on-chain | No `Coin<EVE>` exists. If/when it launches, the same `Coin<T>` patterns apply. |
+| **EVE Token** | Implemented on-chain (v0.0.13), not yet validated in devnet flows | `Coin<EVE>` now exists (`contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, separate AdminCap + EveTreasury). Not yet validated in devnet toll/trade flows — the same `Coin<T>` patterns apply. |
 | **Lux-to-SUI exchange rate** | Undefined | The UI needs a conversion rate to display Lux values. This is a UX design decision, not a contract constraint. |
 | **Sponsored transactions** | Implemented but access-controlled | `AdminACL.verify_sponsor()` exists. Builders need authorization. Affects gas abstraction UX. |
 
