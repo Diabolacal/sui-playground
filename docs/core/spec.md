@@ -99,7 +99,7 @@ Every chain write the app performs, with exact Move targets:
 
 | Operation | Move Call | Auth Required | Notes |
 |-----------|----------|---------------|-------|
-| Request jump permit | `civcontrol::gate_permit::request_jump_permit(config, src, dst, character, payment, clock, ctx)` | AdminACL sponsor | Evaluates all rules, emits TollCollectedEvent |
+| Request jump permit | `civcontrol::gate_permit::request_jump_permit(config, src, dst, character, payment, clock, ctx)` | Extension witness (GateAuth) | Evaluates all rules, emits TollCollectedEvent. Auth is the typed `GateAuth` witness — no AdminACL or verify_sponsor involved. |
 | Execute jump | `gate::jump_with_permit(src, dst, character, permit, clock, ctx)` | AdminACL sponsor | Consumes JumpPermit (owned, deleted on use — not a hot-potato; `key, store` abilities). **PROVISIONAL:** Issue + jump are two separate transactions; permit is transferred to character address, not returned in PTB. |
 
 #### Phase: Trade
@@ -123,18 +123,18 @@ All reads are browser-side via Sui JSON-RPC:
 | Balance | `suix_getBalance(address, "0x2::sui::SUI")` | SUI balance display |
 | Inventory | `suix_getDynamicFields(inventory_uid)` | SSU item listing |
 
-**Polling interval:** 10 seconds (MVP). No WebSocket, no indexer subscription.
+**Polling interval:** 10 seconds (MVP default). Per-data-type intervals may vary — see [in-game-dapp-surface.md §10](../architecture/in-game-dapp-surface.md) for granular rates (structure state: 5–10s, rules: 15–30s, events: 5s). No WebSocket, no indexer subscription.
 
 ### 2.3 Sponsored Transaction Model
 
 **Requirement:** `gate::jump()` and `gate::jump_with_permit()` call `admin_acl.verify_sponsor(ctx)`. The sponsor (gas payer) must be in the `AdminACL.authorized_sponsors` table.
 
-**Self-sponsorship prohibition:** When `tx_context::sender(ctx) == tx_context::sponsor(ctx)` (gas payer is the signer), `tx_context::sponsor()` returns `Option::none`, which fails `verify_sponsor()`.
+**Sponsorship semantics:** `verify_sponsor(ctx)` checks `tx_context::sponsor(ctx)` first; if `Option::none` (non-sponsored tx), it falls back to `tx_context::sender(ctx)`. Therefore a non-sponsored transaction succeeds if the **sender** is in `AdminACL.authorized_sponsors`. Self-sponsorship (sender == sponsor) is equivalent to a non-sponsored tx from the sender — it does not cause a special failure.
 
 **Dual-sign pattern** (from builder-scaffold `transaction.ts`):
 1. Player constructs PTB
 2. Player signs (user signature)
-3. Sponsor (CivControl backend or admin key) co-signs for gas
+3. Sponsor (admin key — team-held keypair) co-signs for gas
 4. Both signatures submitted together
 
 **Day-1 validation required:** Whether CivControl team address can be added to `AdminACL.authorized_sponsors`. Requires `GovernorCap` held by CCP.

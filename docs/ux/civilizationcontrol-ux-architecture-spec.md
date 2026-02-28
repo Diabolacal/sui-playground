@@ -102,7 +102,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 ### Sponsorship & Server
 
-- **Self-sponsorship does NOT work** — sender == gas_payer causes `ctx.sponsor()` to return `None`
+- **`verify_sponsor` has sender fallback** — when no sponsor is present (non-sponsored tx), `verify_sponsor(ctx)` falls back to `tx_context::sender(ctx)`. Self-sponsorship (sender == gas_payer) is equivalent to a non-sponsored tx. A non-sponsored transaction succeeds if the sender is in AdminACL.
 - **Sponsor must be in AdminACL** — added via `add_sponsor_to_acl()` (requires GovernorCap)
 - **No `remove_sponsor_from_acl` function** — once added, non-removable without package upgrade
 - **Location proofs bind to sender** — `message.player_address == ctx.sender()`, non-transferable
@@ -115,7 +115,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 ### Currency Constraints
 
-- **EVE Token not on Sui** — only `// TODO` placeholder in world-contracts
+- **EVE Token exists on Sui** — `Coin<EVE>` is published (10B supply, 9 decimals, burn-only after init) but **not yet integrated** into CivilizationControl. Day-1 settlement uses `Coin<SUI>` only.
 - **Lux has no on-chain representation** — purely in-game engine currency
 - **Lux-to-SUI exchange rate undefined** — display convenience only
 
@@ -152,7 +152,7 @@ CivilizationControl (Command Nexus)
 ├── Command Overview (Dashboard)
 │   ├── Aggregated Metrics (structure counts, online/offline, revenue, fuel)
 │   ├── Alert / Warning Cards (fuel critical, offline, unlinked, unconfigured)
-│   ├── Quick Action Shortcuts (deploy policy, create listing, bring online)
+│   ├── Quick Action Shortcuts (deploy policy, create listing, bring online) — **external browser only; hidden in-game read-only mode**
 │   └── Recent Signal Preview (last 5 events)
 ├── Gates (Primary Control Plane)
 │   ├── Gate List View (sortable, filterable, taggable)
@@ -316,7 +316,7 @@ Or warning:
 | **Jump Count**       | "94 jumps (last 24h) · 1,247 all-time"            |
 | **Configure Toll**   | → opens Rule Composer economic module             |
 
-**Currency display convention:** Primary in Lux, parenthetical in SUI. Example: "42 Lux (4.2 SUI)".
+**Currency display convention:** Primary in Lux, parenthetical in SUI. Example: "42 Lux (4.2 SUI)". **Note:** Lux-to-SUI exchange rate is a display placeholder (assumed 1 Lux = 0.1 SUI for UX examples). Actual rate is undefined and subject to game economy; Lux-denominated display is stretch goal (#31).
 
 ### 5d. Linking Section
 
@@ -494,6 +494,7 @@ Evaluation order is fixed and opinionated. Users do not arrange or reorder rules
 ### Constraints
 
 - `link_gates` requires OwnerCaps for **both** gates — same-owner or multi-party coordination
+- `link_gates` requires **AdminACL sponsor** — the transaction must be sponsored by an address in `AdminACL.authorized_sponsors` (or sent by a sender in AdminACL). This is a server-dependent operation.
 - Distance proof is server-signed and ephemeral (has expiry)
 - Route hash is direction-agnostic: A↔B is the same link
 - **Unlinking is simpler:** `unlink_gates` — no server proof needed, but still requires both OwnerCaps
@@ -685,7 +686,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 
 **UI treatment:**
 - Unavailable actions show disabled buttons with tooltip explaining the missing requirement
-- The Settings panel displays current permission level as a summary: "Connected · Character resolved · Sponsor active" (or partial states)
+- The Configuration panel displays current permission level as a summary: "Connected · Character resolved · Sponsor active" (or partial states)
 - Admin-only operations (AdminCap) are never shown in the UI under any circumstance
 
 ### 10e. Failure States Summary
@@ -768,7 +769,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 24 | Event type filtering | Polish for activity feed |
 | 25 | Structure-specific filtering | Polish for activity feed |
 | 26 | Time range filtering | Polish for activity feed |
-| 27 | Structure label manager (settings) | Inline renaming suffices |
+| 27 | Structure label manager (configuration) | Inline renaming suffices |
 | 28 | Spatial mappings manager | Maps are stretch |
 | 29 | Group/tag manager | Tags are stretch |
 | 30 | Account info display | Wallet visible in header |
@@ -848,7 +849,7 @@ Operations requiring server computation (distance proofs for gate linking) or Ad
 
 #### 6. Lux-Denominated Clarity
 
-All economic values display in Lux (in-game currency players think in). SUI settlement is secondary/parenthetical. Format: **"Toll: 5 Lux (0.0005 SUI)"** — Lux first, SUI second.
+All economic values display in Lux (in-game currency players think in). SUI settlement is secondary/parenthetical. Format: **"Toll: 5 Lux (0.5 SUI)"** — Lux first, SUI second.
 
 **Why:** Players already price things in Lux. Displaying raw SUI makes the dashboard feel like a blockchain tool rather than a game management tool. Lux-first keeps the frontier metaphor intact.
 
@@ -945,7 +946,7 @@ The UI communicates that both gates in a link must share the same extension type
 | Structure labels      | App storage (localStorage)               | Instant     | Not on-chain                   |
 | Spatial pins          | App storage (localStorage)               | Instant     | Not on-chain                   |
 | Tags                  | App storage (localStorage)               | Instant     | Not on-chain                   |
-| Lux exchange rate     | App settings (user-configured)           | Instant     | Display convenience only       |
+| Lux exchange rate     | App configuration (user-configured)      | Instant     | Display convenience only       |
 | Character→Wallet      | Off-chain resolution                     | Bootstrap   | Event index or server API      |
 
 ---

@@ -23,6 +23,8 @@
 
 Complete checks sequentially. Record results in `notes/day1-validation.md`. If any HARD STOP triggers, halt and execute the documented fallback before continuing.
 
+> **Time budget note:** Individual check budgets sum to ~160 minutes. The Phase 0 window is 120 minutes. Checks 8–11 may overlap with Phase 1 Foundation work — run them in parallel with S07 (project scaffold) if AdminACL resolution (Check 5) completes under budget.
+
 ---
 
 ## Check 1: Hackathon Start Date Confirmation
@@ -183,6 +185,8 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 | All branches fail | 60 min | **HARD STOP for sponsored operations.** Submit GateControl config-only demo (no jumps). |
 
 **Result:** ☐ Branch A ☐ Branch B ☐ Branch C ☐ HARD STOP — Sponsor Address: __________
+
+> **Note (verify_sponsor sender fallback):** `verify_sponsor(ctx)` checks `tx_context::sponsor(ctx)` first; if `Option::none` (non-sponsored tx), it falls back to `tx_context::sender(ctx)`. A non-sponsored transaction succeeds if the sender is in AdminACL. Self-sponsorship (sender == sponsor) is equivalent to a non-sponsored tx — it does not cause a special failure. Branch C on local devnet may use sender-in-AdminACL as explicit verification path.
 
 ---
 

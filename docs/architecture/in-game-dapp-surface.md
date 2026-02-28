@@ -87,7 +87,8 @@
 1. **`@mysten/dapp-kit` `WalletProvider` auto-discovery finds nothing.** The standard Sui wallet connection flow (ConnectButton → select wallet → approve) will not work in-game.
 
 2. **All Sui transactions require an alternative signing path in-game:**
-   - **Primary:** Sponsored transactions via the Quasar/CCP backend, where the backend signs on behalf of the player (requires AdminACL enrollment)
+   - **Primary (in-game):** Read-only mode — no Sui wallet available, no signing possible. All data visible via Sui RPC; write operations disabled.
+   - **Primary (external browser):** Sponsored transactions via AdminACL-enrolled sponsor address co-signing. Player signs PTB + sponsor co-signs for gas.
    - **Stretch:** EVE Vault `postMessage` relay — if EVE Vault exposes a signing bridge to the webview (unconfirmed)
    - **External browser fallback:** Player opens the DApp URL in a standalone browser where EVE Vault extension is installed
 
@@ -169,7 +170,7 @@ Each EVE Frontier structure can have a DApp URL configured by its owner. The URL
 |---------|-------------|---------|
 | Gate DApp | `https://<host>/gate/<gateObjectId>` | Visitor sees gate rules, status, and jump info. Owner sees full governance panel. |
 | SSU / Trade Post DApp | `https://<host>/ssu/<ssuObjectId>` | Buyer sees listings. Owner sees inventory + listing management. |
-| Configurator | `https://<host>/configure` | Owner-only: multi-structure governance dashboard (Command Overview) |
+| Configurator | `https://<host>/configure` | Owner-only: multi-structure governance dashboard (Command Overview). **External browser only** — requires wallet for write operations. In-game loads as read-only view. |
 
 ### Context Discovery
 
@@ -246,7 +247,7 @@ When the gate owner visits (wallet connected, OwnerCap resolved):
 
 **"Hostile denied" proof surfacing:**
 - Signal feed entry: "Jump denied — Tribe mismatch" with tx digest link
-- Event data: `MoveAbort` code from failed `request_jump_permit` call
+- Event data: `MoveAbort` code from failed `request_jump_permit` call — parsed from **wallet adapter failure response** (`effects.status.error`), NOT from on-chain events (MoveAbort reverts all effects including events)
 - Overlay: Digest + abort code as on-chain enforcement evidence
 
 ---
@@ -325,7 +326,7 @@ The in-game DApp must clearly communicate sponsorship state to users:
 |----------|-------------|
 | Sponsor active + AdminACL enrolled | Green "Sponsored" badge — gas fees abstracted |
 | Sponsor not enrolled | Amber warning: "Gas sponsorship unavailable — some operations require manual gas" |
-| Self-sponsorship detected | Error: "Self-sponsorship not supported — use a separate sponsor address" |
+| Self-sponsorship detected | Info: "Non-sponsored transaction — sender address used for AdminACL check" |
 | Transaction pending sponsorship | Spinner: "Awaiting sponsor co-signature..." |
 
 **Transparency:** Every sponsored transaction displays: "Gas paid by: [sponsor address]" in the transaction confirmation tooltip.

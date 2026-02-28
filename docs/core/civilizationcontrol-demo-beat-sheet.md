@@ -97,15 +97,15 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **Narration:**
 > "CivilizationControl changes that."
 
-*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, NWNs. Status indicators resolve to green. Strategic Network Map renders — system nodes with structure badges, gate link lines connecting them.]*
+*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, NWNs. Status indicators resolve to green. *(If Strategic Network Map is implemented:)* Strategic Network Map renders — system nodes with structure badges, gate link lines connecting them.]*
 
 > "Every structure you own. Status. Links. Revenue. One view."
 
-*[Camera slowly pans across the Command Overview: Strategic Network Map showing gate link topology (top), structure registry on the left, aggregate stats (total structures, total revenue, active policies), Signal Feed scrolling on the right. EF-Map Cosmic Context visible in a collapsible panel — operator's systems highlighted in the EVE Frontier starfield.]*
+*[Camera slowly pans across the Command Overview: structure registry on the left, aggregate stats (total structures, total revenue, active policies), Signal Feed scrolling on the right. *(If Strategic Network Map ready:)* Strategic Network Map showing gate link topology (top). *(If EF-Map Cosmic Context ready:)* EF-Map panel shows territory in the universe.]*
 
 *[Hold for 2 seconds on the full view. Let it breathe.]*
 
-**On-screen action:** Command Overview fully populated with operator's structures. Strategic Network Map shows governance topology — system nodes, link lines, status colors. EF-Map panel shows territory in the universe.
+**On-screen action:** Command Overview fully populated with operator's structures. *(If Strategic Network Map available:)* Strategic Network Map shows governance topology — system nodes, link lines, status colors. *(If EF-Map panel available:)* EF-Map panel shows territory in the universe. *(Minimum:)* Structure list with status indicators and aggregate metrics.
 
 **Evidence overlay:** Package ID badge in corner: `[submission-package-ID]`
 
@@ -177,7 +177,7 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 - Tx digest of the denied attempt: `[TBD-digest]` — failed tx IS stored on-chain and verifiable on any Sui explorer
 - MoveAbort code: `(extension_module::tribe_permit, 0)` = ETribeMismatch — deterministic, distinguishable from other abort reasons
 - Pilot address visible (shortened)
-- **Mechanism:** Wallet adapter returns failure response synchronously — `effects.status: "failure"`, `effects.status.error` contains module + abort code. Dashboard parses this to display "Jump denied. Tribe mismatch." No indexer or event subscription needed.
+- **Mechanism:** Wallet adapter returns failure response synchronously — `effects.status: "failure"`, `effects.status.error` contains module + abort code. Dashboard parses this to display "Jump denied. Tribe mismatch." No indexer or event subscription needed. **Note:** MoveAbort reverts ALL effects including events — no on-chain events from denied jumps. Detection relies entirely on the wallet adapter failure response or explorer tx status.
 
 **Purpose:** First consequence of the policy. The operator set a rule; the chain enforced it. Governance → denial.
 
@@ -211,7 +211,7 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 **Purpose:** Second consequence. Same policy, different outcome. The gate discriminates by tribe and collects revenue. Control → Consequence → Revenue in one beat.
 
-**Preconditions:** Gate has tribe filter + toll active (Beat 3). Ally pilot funded ≥10 SUI, character tribe = 7. Operator balance noted before jump.
+**Preconditions:** Gate has tribe filter + toll active (Beat 3). Ally pilot funded ≥10 SUI, character tribe = 7. Operator balance noted before jump. **Sponsorship:** `jump_with_permit` requires AdminACL-authorized sponsor co-signature (or sender in AdminACL). Ensure sponsor address is enrolled before this beat.
 
 **Capture mode:** Live UI recording (Signal Feed + revenue counter). Proof overlay (tx digest + balance delta + events) in post.
 
@@ -259,7 +259,7 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **Narration:**
 > "Toll revenue from the gate. Trade revenue from the storefront. Both visible. Both on-chain. Both under your command."
 
-*[Pull back to Command Overview. Full view: Strategic Network Map showing gate topology with green link lines and active status nodes. Trade posts with active listings. Signal Feed scrolling with jumps and transactions. EF-Map cosmic context expanded — operator's territory highlighted in the starfield, colored link lines drawn between linked systems.]*
+*[Pull back to Command Overview. Full view: Signal Feed scrolling with jumps and transactions. *(If Strategic Network Map ready:)* Strategic Network Map showing gate topology with green link lines and active status nodes. Trade posts with active listings. *(If EF-Map ready:)* EF-Map cosmic context expanded — operator's territory highlighted in the starfield, colored link lines drawn between linked systems.]*
 
 > "Your gates. Your rules. Your revenue."
 
@@ -346,7 +346,7 @@ Switch from primary to fallback if: TradePost tx fails repeatedly on submission 
 
 **Evidence overlay required:**
 - Tx digest: `[TBD-digest]`
-- MoveAbort ETribeMismatch event
+- MoveAbort ETribeMismatch code (from wallet failure response)
 
 ---
 
@@ -432,7 +432,7 @@ If ZK GatePass is integrated and stable, insert this 30-second segment before th
 
 *[Signal Feed: "ZK pass verified. Proof valid. Gate North-5." Green indicator with a distinctive ZK badge.]*
 
-> "Groth16 verification on Sui. Under a thousand MIST in gas. Privacy-preserving governance."
+> "Groth16 verification on Sui. About a thousand MIST in gas. Privacy-preserving governance."
 
 **Evidence overlay required:**
 - Tx digest: `AkEBgfdpGxHDNXVJ6HBAKFooWnD6F47gcYAzPnCbahQq` (or submission equivalent)
@@ -450,7 +450,7 @@ Before pressing record, confirm every required artifact is captured and accessib
 |---|---|---|
 | Beat 3 | Policy deployment tx digest | ☐ |
 | Beat 3 | Gate object state (before/after extension + dynamic fields) | ☐ |
-| Beat 4 | Denied jump tx digest + error event | ☐ |
+| Beat 4 | Denied jump tx digest + MoveAbort code (from wallet failure response, not events) | ☐ |
 | Beat 5 | Tolled jump tx digest + `TollCollectedEvent` (extension event) | ☐ |
 | Beat 5 | Operator balance delta (+toll amount) | ☐ |
 | Beat 6 | Buy tx digest + `TradeSettledEvent` (extension event) | ☐ |
