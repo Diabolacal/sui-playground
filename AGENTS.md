@@ -16,6 +16,8 @@ Purpose: Provide persistent, high-signal context and guardrails for agent mode i
 - Backend: {{BACKEND_DESCRIPTION}}
 - Data: {{DATA_DESCRIPTION}}
 
+> **Glossary note:** If you see "SWE" in voice notes or transcripts, it refers to **Sui** (the blockchain). Transcription tools frequently mishear it.
+
 Useful entry points:
 - **Documentation Index**: `docs/README.md` — central map for all project documentation
 - **Guardrails**: `.github/copilot-instructions.md` (source of truth for patterns)
