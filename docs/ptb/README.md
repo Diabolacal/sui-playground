@@ -1,0 +1,81 @@
+# PTB Pattern Library
+
+**Retention:** Prep-only
+
+- **Status:** Pattern/Template (Non-Canonical)
+- **Last Verified:** Not yet verified on hackathon test server
+- **Revalidation Required:** Yes
+
+---
+
+## What This Is
+
+A **pattern substrate for LLM-assisted coding** — transaction assembly templates, skeleton PTBs, and proof-extraction guidance designed to accelerate CivilizationControl implementation on March 11.
+
+These documents capture structural patterns learned from world-contracts analysis and builder-scaffold reference implementations. They use **placeholders** for all contract-specific values (package IDs, module names, function signatures, type arguments).
+
+## What This Is NOT
+
+- **Not canonical spec.** `spec.md` defines what CivilizationControl does. These docs describe how PTBs are assembled generically.
+- **Not verified contract wiring.** Function signatures may have changed since these patterns were drafted. The turret branch or other upstream merges may alter parameters, object types, or auth requirements.
+- **Not copy-paste production code.** No TypeScript implementation exists here. These are documentation templates only.
+- **Not execution authority.** The March-11 Reimplementation Checklist (`march-11-reimplementation-checklist.md`) remains the execution authority for all implementation decisions.
+
+## How to Use on March 11
+
+1. **Read spec + March-11 checklist first.** These establish intent, boundaries, and execution order.
+2. **Open this PTB README** as the entry point to transaction assembly guidance.
+3. **Revalidate all placeholders** against the latest `world-contracts` commit on the hackathon test server:
+   - Confirm function signatures (parameter count, types, ordering)
+   - Confirm object types and abilities (`key`, `store`, `drop`)
+   - Confirm auth requirements (AdminACL, extension witness, OwnerCap)
+   - Confirm shared vs owned object status
+4. **Only then generate TypeScript** — using revalidated patterns as input to LLM-assisted code generation.
+
+> **Always confirm signatures against the latest deployment.** World-contracts is actively evolving. A pattern that was valid during sandbox testing may require adjustment.
+
+---
+
+## Document Index
+
+| Document | Purpose |
+|----------|---------|
+| [ptb-patterns.md](ptb-patterns.md) | Core PTB assembly patterns — coin handling, shared/owned objects, capability patterns, multi-call ordering, failure surfaces |
+| [proof-extraction-moveabort.md](proof-extraction-moveabort.md) | Proof extraction under MoveAbort constraints — digest-based evidence, demo capture strategy, abort code revalidation |
+| [atomic-settlement-skeleton.md](atomic-settlement-skeleton.md) | Contract-agnostic settlement skeleton — placeholder-based step sequence with revalidation checklist |
+| [governance-admin-skeletons.md](governance-admin-skeletons.md) | Governance/admin PTB skeletons — capability handling, shared object mutation, admin-operation templates |
+
+---
+
+## Assumptions & Unknowns
+
+- World-contracts may change pre-March-11 (turret branch, hotfixes, breaking changes)
+- Turret branch may alter function signatures, parameter ordering, or type arguments
+- SSU withdraw/deposit may delete/recreate objects (do not assume object continuity across game boundary)
+- Package IDs used in these docs are **placeholders only** — real IDs are assigned at publish time
+- Auth model may change (AdminACL membership rules, verify_sponsor fallback behavior)
+- MoveAbort behavior and abort codes must be revalidated on the hackathon test server
+
+## Invalidation Triggers
+
+Any of the following events invalidates patterns in this library and requires re-verification:
+
+- [ ] World-contracts merge changing function signatures or parameter types
+- [ ] SSU semantics differ on hackathon test server vs local devnet
+- [ ] Auth model change (AdminACL, verify_sponsor, extension witness requirements)
+- [ ] New dependency on indexer or events not available in test environment
+- [ ] Object ability changes (key/store/drop) affecting PTB construction
+- [ ] Shared object conversion (owned↔shared) changing transaction ordering rules
+
+---
+
+## Document Authority Reminder
+
+| Role | Document |
+|------|----------|
+| Execution authority | `march-11-reimplementation-checklist.md` |
+| Intent authority | `spec.md` |
+| Validation authority | `validation.md` |
+| Pattern acceleration (this library) | `docs/ptb/` — subordinate to all of the above |
+
+Pattern libraries accelerate implementation but **never override** checklist, spec, or validation authority.

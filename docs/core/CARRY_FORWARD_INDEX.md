@@ -10,6 +10,9 @@ This document is the **definitive list** of files intended to be copied into the
 
 When copying, update project name, scope, and any sandbox-specific references to match the specific hackathon build.
 
+Execution authority remains `march-11-reimplementation-checklist.md`.
+Pattern libraries (e.g., PTB docs) accelerate implementation but do not override checklist or spec authority.
+
 ---
 
 ## Core Documents (always copy)
@@ -67,6 +70,19 @@ When copying, update project name, scope, and any sandbox-specific references to
 |------|---------|
 | `docs/README.md` | Documentation index (update for new repo) |
 | `docs/decision-log.md` | Decision log (start fresh in new repo) |
+
+## PTB Pattern Library (copy as templates — revalidate on Day 1)
+
+| File | Purpose |
+|------|---------|
+| `docs/ptb/README.md` | PTB library entry point — usage instructions, authority reminder, document index |
+| `docs/ptb/ptb-patterns.md` | Core PTB assembly patterns — coin handling, shared/owned objects, capabilities, multi-call ordering |
+| `docs/ptb/proof-extraction-moveabort.md` | Proof extraction under MoveAbort constraints — digest-based evidence, demo capture strategy |
+| `docs/ptb/atomic-settlement-skeleton.md` | Contract-agnostic settlement skeleton — placeholder-based step sequences, revalidation checklist |
+| `docs/ptb/governance-admin-skeletons.md` | Governance/admin PTB skeletons — capability handling, shared object mutation, rule configuration |
+
+These documents are pattern templates only.
+All function signatures, object requirements, and package IDs must be revalidated against the latest world-contracts commit and hackathon test server deployment before implementation.
 
 ---
 

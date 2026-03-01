@@ -198,6 +198,12 @@ Consistent naming conventions used across all active documents.
 |------|---------|
 | [ux/civilizationcontrol-ux-architecture-spec.md](ux/civilizationcontrol-ux-architecture-spec.md) | **UX Architecture Specification** — screen hierarchy, gate list/detail, rule composer, linking flow, manual pinning, spatial layer, MVP vs stretch, design principles & upgrade path |
 
+## PTB Pattern Library
+
+| File | Purpose |
+|------|---------|
+| [ptb/README.md](ptb/README.md) | **PTB Pattern Library entry point** — transaction assembly templates, skeleton PTBs, proof-extraction guidance (non-canonical, revalidation required) |
+
 ## Audits
 
 | File | Purpose |
