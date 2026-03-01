@@ -17,6 +17,33 @@ A pre-hackathon sandbox: validate Sui tooling, world-contracts interactions, and
 
 ---
 
+## Quickstart (Reproducible Setup)
+
+Vendor submodules are **required** — many docs reference `vendor/` paths, and sandbox experiments depend on `vendor/builder-scaffold/docker` for local Sui devnet.
+
+```bash
+# Clone with submodules (recommended)
+git clone --recurse-submodules <repo-url>
+
+# If already cloned without submodules
+git submodule update --init --recursive
+```
+
+**Verify submodules loaded:**
+
+```bash
+# All of these directories should exist and be non-empty
+ls vendor/builder-scaffold
+ls vendor/world-contracts
+ls vendor/builder-documentation
+ls vendor/evevault
+ls vendor/eve-frontier-proximity-zk-poc
+```
+
+> **Note:** Sandbox experiments (under `experiments/` and `sandbox/`) rely on `vendor/builder-scaffold/docker` for local Sui devnet and will not run without submodules initialized.
+
+---
+
 ## Start here
 
 | Doc | Purpose |

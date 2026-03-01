@@ -15,8 +15,8 @@ This skill covers SSH-based or local Docker container management for the project
 # Local Docker
 docker ps
 
-# Remote (via SSH)
-ssh {{SSH_ALIAS}} "docker ps"
+# Remote (via SSH — N/A for this sandbox workspace, local development only)
+ssh <your-ssh-alias> "docker ps"
 ```
 
 ## Services

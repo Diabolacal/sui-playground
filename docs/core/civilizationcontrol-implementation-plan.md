@@ -2,6 +2,17 @@
 
 **Retention:** Carry-forward
 
+## Document Authority
+
+| Role | Document |
+|------|----------|
+| Execution authority | `march-11-reimplementation-checklist.md` |
+| Intent authority | `spec.md` |
+| Validation authority | `validation.md` |
+| Expanded reference | `civilizationcontrol-implementation-plan.md` (this document) |
+
+> If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
+
 > **PRE-HACKATHON PROVISIONAL PLAN**
 > Must be re-audited against live world contracts and documentation before March 11 execution.
 

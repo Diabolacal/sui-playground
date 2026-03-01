@@ -2,6 +2,17 @@
 
 **Retention:** Carry-forward
 
+## Document Authority
+
+| Role | Document |
+|------|----------|
+| Execution authority | `march-11-reimplementation-checklist.md` (this document) |
+| Intent authority | `spec.md` |
+| Validation authority | `validation.md` |
+| Expanded reference | `civilizationcontrol-implementation-plan.md` |
+
+> If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
+
 > **Date:** 2026-02-16 (updated 2026-02-28 with world-contracts v0.0.13 breaking changes; environment model to be confirmed March 11)  
 > **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  

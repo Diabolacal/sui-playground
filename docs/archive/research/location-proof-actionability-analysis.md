@@ -1,6 +1,6 @@
 # Location Proof Actionability Analysis
 
-**Retention:** Prep-only
+**Retention:** Archive
 
 ## 1. Executive Verdict
 

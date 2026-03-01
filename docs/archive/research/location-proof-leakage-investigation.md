@@ -1,6 +1,6 @@
 # Location Proof Leakage Investigation
 
-**Retention:** Prep-only
+**Retention:** Archive
 
 ## Executive Summary
 

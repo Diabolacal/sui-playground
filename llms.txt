@@ -1,4 +1,6 @@
-# {{PROJECT_NAME}} — Documentation Map
+# Sui Playground (Hackathon Planning Workspace) — Documentation Map
+
+> **NOTE:** This repository is a multi-project planning workspace. On March 11, documentation copied into submission repos must update project name and scope to the specific hackathon build.
 
 > **Note to Agents**: This file serves as a high-level map to the most important documentation in this repository.
 > For agent guardrails, see `.github/copilot-instructions.md` and `AGENTS.md`.

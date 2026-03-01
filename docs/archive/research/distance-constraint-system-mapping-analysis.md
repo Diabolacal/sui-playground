@@ -1,6 +1,6 @@
 # Distance-Constraint Solar System Mapping Analysis
 
-**Retention:** Prep-only
+**Retention:** Archive
 
 ## 1. Executive Verdict
 

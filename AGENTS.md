@@ -1,4 +1,6 @@
-# Agents Context — {{PROJECT_NAME}}
+# Agents Context — Sui Playground (Hackathon Planning Workspace)
+
+> **NOTE:** This repository is a multi-project planning workspace. On March 11, documentation copied into submission repos must update project name and scope to the specific hackathon build.
 
 Purpose: Provide persistent, high-signal context and guardrails for agent mode in this repository. VS Code will automatically ingest this file (1.104+). Keep it short and link out for depth.
 
@@ -11,10 +13,10 @@ Purpose: Provide persistent, high-signal context and guardrails for agent mode i
 
 ## Project quick facts
 
-- What: {{PROJECT_DESCRIPTION}}
-- Frontend: `{{FRONTEND_DIR}}/` ({{FRONTEND_STACK}})
-- Backend: {{BACKEND_DESCRIPTION}}
-- Data: {{DATA_DESCRIPTION}}
+- What: Pre-hackathon sandbox for Sui tooling validation and EVE Frontier governance experimentation
+- Frontend: N/A (sandbox workspace — no deployed frontend)
+- Backend: N/A (sandbox workspace — experiments run against local Sui devnet)
+- Data: Local Sui devnet state + vendor submodule references (read-only)
 
 > **Glossary note:** If you see "SWE" in voice notes or transcripts, it refers to **Sui** (the blockchain). Transcription tools frequently mishear it.
 
@@ -36,7 +38,7 @@ Useful entry points:
 
 ⚠️ **Ask first (coordinate before action):**
 - Modifying core API contracts or protocol definitions
-- Changes to high-risk runtime surfaces ({{HIGH_RISK_SURFACES}})
+- Changes to high-risk runtime surfaces (vendor submodule boundaries, Sui key material, Docker compose state)
 - Signing, certificate, or credential handling
 - Creating distribution packages
 - Breaking changes to cross-system payload schemas

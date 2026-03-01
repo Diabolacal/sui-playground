@@ -1,4 +1,6 @@
-# Copilot Project Instructions ({{PROJECT_NAME}})
+# Copilot Project Instructions (Sui Playground — Hackathon Planning Workspace)
+
+> **NOTE:** This repository is a multi-project planning workspace. On March 11, documentation copied into submission repos must update project name and scope to the specific hackathon build.
 
 Purpose: Authoritative source of truth for AI agent guardrails, interaction patterns, and workflow conventions in this VS Code project. GitHub Copilot loads this file automatically. Follow the patterns below when adding or modifying code. Optimized for a "vibe coding" workflow: the human provides intent (non‑coder friendly) and the AI agent converts intent into safe, minimal, verifiable changes.
 
@@ -30,47 +32,40 @@ If stuck: ask for "safer alternative" or "explain tradeoffs". Avoid giving line-
 These rules have the highest precedence. `AGENTS.md` mirrors them in shortened form; if wording differs, this section wins.
 
 1. **Execute commands yourself.** Run CLI/git/HTTP commands directly unless a secret prompt is needed, then launch the command and let the operator paste the secret locally. Summarize results instead of listing commands for the user to run.
-2. **Deploy protocol.** Feature branches must deploy as previews and report the preview URL (never deploy to production from a feature branch). Production deploys only come from `main` after merge. **Deploy commands MUST be run from `{{FRONTEND_DIR}}/`** to pick up project bindings.
+2. **Deploy protocol.** Feature branches must deploy as previews and report the preview URL (never deploy to production from a feature branch). Production deploys only come from `main` after merge. **Deploy commands MUST be run from the frontend project directory** to pick up project bindings. *(N/A for this sandbox workspace — no deployed frontend.)*
 3. **Working memory discipline.** Consider a Working Memory file when: (a) a task spans multiple real-world sessions, (b) VS Code shows "summarizing conversation" or ≥70% context, or (c) operator explicitly asks. For most single-session work, proceed directly — Working Memory is optional, not blocking.
 4. **Decision logging.** Any non-trivial behavior change, data migration, or platform action must be reflected in `docs/decision-log.md`.
 5. **No regressions.** All persistence changes must target the project's current platform abstraction — do not reintroduce deprecated providers.
 
 ## Architecture Overview
-<!-- Customize per project. Keep this section updated with high-level data flow. -->
-- Frontend: `{{FRONTEND_DIR}}/` — {{FRONTEND_STACK}}
-- Backend / API: {{BACKEND_DESCRIPTION}}
-- Data flow: {{DATA_FLOW_DESCRIPTION}}
-- Key entry points: {{KEY_ENTRY_POINTS}}
+<!-- This is a sandbox/planning workspace. Architecture sections apply to hackathon submission repos after March 11. -->
+- Frontend: N/A (sandbox workspace — no deployed frontend)
+- Backend / API: N/A (experiments run against local Sui devnet)
+- Data flow: Local Sui devnet → Move contracts → CLI/TS scripts (see `vendor/builder-scaffold/`)
+- Key entry points: `docs/README.md` (documentation index), `vendor/builder-scaffold/` (devnet environment), `experiments/` (sandbox Move contracts)
 
 ## Quick Command Reference
 
 ```bash
-# Frontend
-cd {{FRONTEND_DIR}}
-npm install              # First-time setup
-npm run dev              # Development server
-npm run build            # Production build
-npm run typecheck        # TypeScript validation
+# Sui Move (primary workflow for this sandbox)
+sui move build --path <contract-dir>     # Build Move package
+sui move test --path <contract-dir>      # Run Move tests
+sui client publish --path <contract-dir>  # Publish to active network
+sui client active-env                     # Verify active Sui environment
 
-# Deploy (preview — feature branches)
-{{DEPLOY_COMMAND}} --branch <branch-name>
-
-# Deploy (production — main branch only, after merge)
-{{DEPLOY_COMMAND}} --branch main
-
-# Platform CLI inspection
-{{PLATFORM_CLI_INSPECT}}
+# Submodule management
+git submodule update --init --recursive   # Initialize all vendor submodules
 
 # Verification gates (run after ANY code change)
-npm run typecheck        # Must pass
-npm run build            # Must succeed
-# Manual smoke: {{SMOKE_CHECKLIST}}
+sui move build --path <contract-dir>     # Must compile
+sui move test --path <contract-dir>      # Must pass
+# Manual smoke: Sui devnet reachable, submodules initialized, Move build succeeds
 ```
 
 ## Key Folders / Files
 <!-- Customize per project -->
-- `{{FRONTEND_DIR}}/src/`: Application source
-- `{{API_DIR}}/`: API / serverless functions
+- `experiments/`: Sandbox Move contract experiments
+- `sandbox/`: Isolated validation tests
 - `docs/`: Structured documentation (see `docs/README.md` for index)
 - `docs/core/`: Essential docs to carry into hackathon repo
 - `docs/architecture/`: Technical capability and system design
@@ -134,7 +129,7 @@ If user asks for broad refactor, first propose smallest path to accomplish user-
 ## Quality Gates (Always)
 - Typecheck passes (no new TS errors).
 - Build succeeds.
-- Smoke: {{SMOKE_CHECKLIST}}
+- Smoke: Sui devnet reachable, submodules initialized, Move build succeeds
 - Additional (if metrics): event appears in server-side whitelist and is displayed or intentionally documented as hidden.
 - Run the relevant checks yourself whenever tooling is available. If a gate cannot be executed (e.g., missing dependency, platform constraint), call it out explicitly with the command you would have run and any fallback validation performed.
 

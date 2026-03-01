@@ -1,4 +1,4 @@
-# Plan a change — {{PROJECT_NAME}}
+# Plan a change — Sui Playground (Hackathon Planning Workspace)
 
 mode: agent
 

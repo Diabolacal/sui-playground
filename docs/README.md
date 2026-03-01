@@ -1,5 +1,7 @@
 # Documentation Index
 
+**Retention:** Carry-forward
+
 Structured documentation for the SUI Playground workspace. Documents are organized by lifecycle and purpose.
 
 **Taxonomy:**
@@ -119,6 +121,7 @@ Consistent naming conventions used across all active documents.
 | [core/memory.md](core/memory.md) | **Working memory template** — structured hackathon sprint tracking, recovery procedure, proof moment evidence slots |
 | [core/day1-checklist.md](core/day1-checklist.md) | **Day-1 chain validation checklist** — 10 structured checks with commands, expected output, fallbacks, GO/NO-GO gate |
 | [core/validation.md](core/validation.md) | **Validation procedures** — step-level verification, build/lint gates, deterministic proof moment validation, runtime expectations |
+| [core/CARRY_FORWARD_INDEX.md](core/CARRY_FORWARD_INDEX.md) | **Carry-forward export index** — definitive list of files to copy into hackathon submission repo |
 
 ## Architecture
 

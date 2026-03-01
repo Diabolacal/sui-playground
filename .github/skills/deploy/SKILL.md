@@ -13,17 +13,19 @@ This skill handles deployments for the project.
 
 ### Always deploy from the correct directory
 
+> **Note:** This sandbox workspace has no deployed frontend. Deploy skills apply after March 11 in hackathon submission repos.
+
 ```bash
-cd {{FRONTEND_DIR}}
+cd <frontend-dir>
 npm run build
-{{DEPLOY_COMMAND}} --branch <branch-name>
+<deploy-command> --branch <branch-name>
 ```
 
 ### Feature branches use preview deploys
 
 ```bash
 # For feature branches (creates preview deployment)
-{{DEPLOY_COMMAND}} --branch feature/my-branch
+<deploy-command> --branch feature/my-branch
 
 # ALWAYS report the preview URL to the user for testing
 # Do NOT rely on alias URLs if they may have stale cache
@@ -34,8 +36,8 @@ npm run build
 ```bash
 # Only after merge to main AND explicit approval
 git checkout main
-cd {{FRONTEND_DIR}} && npm run build
-{{DEPLOY_COMMAND}} --branch main
+cd <frontend-dir> && npm run build
+<deploy-command> --branch main
 ```
 
 ### Verification steps
