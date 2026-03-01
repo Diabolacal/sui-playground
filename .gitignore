@@ -11,6 +11,7 @@ Desktop.ini
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+!.vscode/tasks.json
 !.vscode/prompts/
 !.vscode/mcp.json
 

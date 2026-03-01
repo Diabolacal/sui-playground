@@ -7,6 +7,18 @@
         "**/Thumbs.db": true
     },
 
+    // Reduce search noise from vendor submodule build artifacts and generated
+    // files. Vendor source code and docs remain searchable.
+    "search.exclude": {
+        "**/vendor/**/node_modules": true,
+        "**/vendor/**/build": true,
+        "**/vendor/**/dist": true,
+        "**/vendor/**/target": true,
+        "**/vendor/**/docker/workspace-data": true,
+        "**/vendor/**/.turbo": true,
+        "**/vendor/**/Move.lock": true
+    },
+
     // Prevent TS language server from discovering tsconfig files inside vendor
     // submodules (their deps are not installed, causing spurious TS errors).
     // Vendor files remain fully browsable in Explorer and Search.
