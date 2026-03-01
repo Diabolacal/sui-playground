@@ -273,8 +273,8 @@ use world::{character::Character, gate::{Self, Gate}};
 use gatecontrol::config::{Self, GateAuth, AdminCap, GateConfig};
 
 /// Dynamic field value for coin toll configuration
-public struct CoinTollConfig has drop, store {
-    price_in_mist: u64,       // toll amount in MIST (1 SUI = 10^9 MIST)
+public struct CoinTollRule has drop, store {
+    price_mist: u64,           // toll amount in MIST (1 SUI = 10^9 MIST)
     treasury: address,         // address receiving toll payments
 }
 
@@ -291,10 +291,10 @@ public fun pay_toll_and_jump(
     ctx: &mut TxContext,
 ) {
     // Read toll config from dynamic field
-    let toll = config.borrow_rule<CoinTollKey, CoinTollConfig>(CoinTollKey {});
+    let toll = config.borrow_rule<CoinTollKey, CoinTollRule>(CoinTollKey {});
     
     // Verify payment amount
-    assert!(coin::value(&payment) >= toll.price_in_mist, ETollInsufficient);
+    assert!(coin::value(&payment) >= toll.price_mist, ETollInsufficient);
     
     // Transfer payment to treasury
     transfer::public_transfer(payment, toll.treasury);

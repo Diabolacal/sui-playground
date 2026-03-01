@@ -82,7 +82,7 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 |-------|-------|
 | **Check** | `gate::issue_jump_permit<Auth: drop>` is public, callable from external packages |
 | **Command** | `grep -n "issue_jump_permit" vendor/world-contracts/contracts/world/sources/assemblies/gate.move` |
-| **Expected Output** | Public function accepting source Gate, dest Gate, Character, Auth witness, expiry, ctx |
+| **Expected Output** | Public function accepting source Gate, dest Gate, Character, extension witness, expiry, ctx |
 | **Fallback** | **HARD STOP.** Cannot implement GateControl without this function. |
 
 ### A3: storage_unit::withdraw_item without OwnerCap

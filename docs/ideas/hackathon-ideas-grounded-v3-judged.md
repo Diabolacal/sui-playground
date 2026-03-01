@@ -93,7 +93,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 | 3 | 8 | Corpse Toll Road | 8 | 7 | 9 | 7 | 9 | 6 | 7 | 8 | 7.63 | 8 | **7.72** | Green |
 | 4 | 21 | Loot Crate | 8 | 7 | 6 | 8 | 6 | 8 | 8 | 8 | 7.38 | 8 | **7.53** | Yellow |
 | 5 | 7 | Alliance Gate Network | 9 | 8 | 5 | 8 | 10 | 8 | 6 | 8 | 7.75 | 7 | **7.56** | Yellow |
-| 6 | 5 | ZK Gate Pass | 9 | 8 | 5 | 5 | 7 | 10 | 5 | 9 | 7.25 | 7 | **7.19** | Green¹ |
+| 6 | 5 | ZK GatePass | 9 | 8 | 5 | 5 | 7 | 10 | 5 | 9 | 7.25 | 7 | **7.19** | Green¹ |
 | 7 | 14 | Tribal Diplomacy | 8 | 7 | 6 | 7 | 9 | 7 | 6 | 7 | 7.13 | 6 | **6.84** | Yellow |
 | 8 | 12 | Bounty Board | 8 | 6 | 4 | 8 | 9 | 6 | 6 | 6 | 6.63 | 8 | **6.97** | Yellow |
 | 9 | 23 | Salvage Protocol | 7 | 6 | 7 | 5 | 9 | 9 | 6 | 6 | 6.88 | 5 | **6.41** | Green |
@@ -190,7 +190,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 ---
 
-#### #6 — ZK Gate Pass (ID 5) — Weighted: 7.19
+#### #6 — ZK GatePass (ID 5) — Weighted: 7.19
 
 **Why it would be adopted:** No other hackathon entry will have ZK-gated game infrastructure. The technical achievement is memorable and the "privacy-preserving jump" narrative is unique.
 
@@ -264,7 +264,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 | Rank | Idea | Why |
 |------|------|-----|
-| 1 | ZK Gate Pass (#5) | Groth16 proof → on-chain verification → game action. Unique technical depth across the full stack. |
+| 1 | ZK GatePass (#5) | Groth16 proof → on-chain verification → game action. Unique technical depth across the full stack. |
 | 2 | Gate Policy Engine (#1) | Dynamic field rule composition within single-extension constraint. Deepest world-contracts integration. |
 | 3 | Energy Arbitrage Bot (#17) | Hot-potato `OfflineAssemblies` chain in PTB demonstrates advanced Sui transaction composition. |
 
@@ -273,7 +273,7 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 | Rank | Idea | Why |
 |------|------|-----|
 | 1 | Salvage Protocol (#23) | Uses Sui's own gas rebate mechanism as a gameplay reward. Nobody else will think of this. |
-| 2 | ZK Gate Pass (#5) | ZK proofs for game infrastructure access — unique intersection of cryptography and gameplay. |
+| 2 | ZK GatePass (#5) | ZK proofs for game infrastructure access — unique intersection of cryptography and gameplay. |
 | 3 | Dead Drop (#9) | Spy gameplay on blockchain with hash-keyed slots. The concept is evocative even if diluted by event-layer privacy leak. |
 
 ### Weirdest Idea
@@ -396,7 +396,7 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 
 15 patterns from web3 gaming hackathon analysis, applied to scoring:
 
-1. **Novel mechanism > visual polish** — ZK Gate Pass and Salvage Protocol scored up on Creativity; Corp Command Center scored down on ModDesign despite nice UI potential.
+1. **Novel mechanism > visual polish** — ZK GatePass and Salvage Protocol scored up on Creativity; Corp Command Center scored down on ModDesign despite nice UI potential.
 2. **Real-world utility bridge** — SSU Storefront scored highest on Player Utility because it connects chain activity to immediate in-game value (buying/selling items players need).
 3. **Composability as superpower** — GateControl's dynamic field rule dispatch and Faction Mint's `Coin<T>` composability boosted ModDesign scores. These are systems others can build on.
 4. **Scope ruthlessly — expect 25% completion** — The CivilizationControl suite is scoped to 3 core modules with pre-validated building blocks (existing template code for tolls, standard Coin pattern). Stretch features are explicitly optional.
@@ -414,7 +414,7 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 
 ---
 
-> ¹ ZK Gate Pass upgraded from Yellow to **Green** following local devnet validation (sandbox; to re-validate on hackathon test server March 11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md).
+> ¹ ZK GatePass upgraded from Yellow to **Green** following local devnet validation (sandbox; to re-validate on hackathon test server March 11). See [validation report](../operations/shortlist-viability-validation-report.md) tests 8–10 and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md).
 
 ## Appendix: Full Idea Registry (28 Ideas)
 
@@ -424,7 +424,7 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 | 2 | Corp Command Center | V2-grounded | Dashboard | Green |
 | 3 | SSU Storefront | V2-grounded | Economy | Yellow |
 | 4 | Killmail Intelligence | V2-grounded | Analytics | Green |
-| 5 | ZK Gate Pass | V2-grounded | ZK/Privacy | Green¹ |
+| 5 | ZK GatePass | V2-grounded | ZK/Privacy | Green¹ |
 | 6 | Fuel Watch | V2-grounded | Monitoring | Green |
 | 7 | Alliance Gate Network | V2-grounded | Governance | Yellow |
 | 8 | Corpse Toll Road | V2-grounded | Economy | Green |

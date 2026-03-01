@@ -1,4 +1,4 @@
-# ZK Gate Pass — Kill-Switch & Fallback Analysis
+# ZK GatePass — Kill-Switch & Fallback Analysis
 
 **Retention:** Carry-forward
 

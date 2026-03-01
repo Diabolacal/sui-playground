@@ -13,11 +13,11 @@
 | Assembly | Hook | Auth Required | Key Property |
 |----------|------|---------------|-------------|
 | Gate | `authorize_extension<Auth>` | OwnerCap only | swap_or_fill — silently replaces existing |
-| Gate | `issue_jump_permit<Auth>` | Auth witness only — NO AdminACL | Player-callable, both gates must share extension type |
+| Gate | `issue_jump_permit<Auth>` | Extension witness only — NO AdminACL | Player-callable, both gates must share extension type |
 | Gate | `jump_with_permit` | AdminACL (sponsored) | Consumes permit, emits JumpEvent |
 | SSU | `authorize_extension<Auth>` | OwnerCap only | Same swap_or_fill pattern |
-| SSU | `deposit_item<Auth>` | Auth witness only — NO AdminACL | Extension-controlled deposits |
-| SSU | `withdraw_item<Auth>` | Auth witness only — NO AdminACL | Extension-controlled withdrawals |
+| SSU | `deposit_item<Auth>` | Extension witness only — NO AdminACL | Extension-controlled deposits |
+| SSU | `withdraw_item<Auth>` | Extension witness only — NO AdminACL | Extension-controlled withdrawals |
 
 **Shared Objects (extension-readable state):**
 - `AdminACL` — sponsor whitelist
@@ -81,7 +81,7 @@
 | **PTB multi-step atomic** | No other chain can do 5+ cross-object operations atomically | Toll → Permit → Jump → Deposit in ONE transaction |
 | **Hot-potato enforcement** | Protocol-level guarantee of operation completion | OwnerCap borrow/return, receipt consumption |
 | **Dynamic fields** | Upgradeable state without contract upgrade | ExtensionConfig with arbitrary typed rules |
-| **Object capabilities** | Fine-grained access control via object ownership | OwnerCap, AdminCap, Auth witness |
+| **Object capabilities** | Fine-grained access control via object ownership | OwnerCap, AdminCap, extension witness |
 | **Shared objects** | Concurrent access to global state | Character, Gate, SSU, Killmail — all extension-readable |
 | **Transfer-to-object (Receiving)** | Objects as children of objects | OwnerCap lives under Character |
 | **Deterministic object IDs** | Pre-compute addresses from BCS | ObjectRegistry → off-chain coordination |
@@ -254,7 +254,7 @@ Everyone builds access control or marketplaces. Nobody builds logistics. This cr
 - Dynamic fields: escrow conditions stored per-deposit as typed DFs
 - Shared objects: SSU as escrow vault
 - PTB composition: deposit + condition-setting in one tx; withdrawal + payment in one tx
-- Object capabilities: Auth witness gates both deposit and withdrawal
+- Object capabilities: extension witness gates both deposit and withdrawal
 
 **Why Technically Impressive:**
 SSU extensions are completely unexplored — no scaffold implementation exists. This is first-mover on a blank canvas. The conditional logic (time-lock, recipient-specific, payment-gated) demonstrates dynamic field composability.
@@ -319,7 +319,7 @@ Gate owners competing is obvious. Gate owners *cooperating* with automated reven
 - Gate location data → route visualization
 
 **Sui Primitives Leveraged:**
-- Hot-potato-like urgency: permits expire, creating real-time pressure  
+- Timestamp-based urgency: permits expire, creating real-time pressure  
 - PTB: claim permit + jump at each checkpoint
 - Dynamic fields: race state (checkpoints, standings, completing times)
 - Events: JumpEvent at each checkpoint → real-time race tracking via indexer

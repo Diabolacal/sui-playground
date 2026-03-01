@@ -178,7 +178,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 **Decision: Track B does not exist as a separate track.**
 
-The ZK feasibility analysis conclusively shows that ZK Gate Pass delivers higher expected value as an integrated GateControl rule type than as a standalone entry. See §3 for rationale.
+The ZK feasibility analysis conclusively shows that ZK GatePass delivers higher expected value as an integrated GateControl rule type than as a standalone entry. See §3 for rationale.
 
 The "Technical Spike" concept is preserved as the ZK Privacy Rule within Track A. If ZK integration hits kill criteria, Track A gracefully degrades to a two-rule-type gate policy engine + TradePost — still the strongest entry in the field.
 

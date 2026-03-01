@@ -29,7 +29,7 @@
 
 ### Standalone Side Projects (Considered Separately)
 
-- ZK Gate Pass (technical flex — validated on local devnet; integrated into CC as GateControl rule type; to re-validate on hackathon test server March 11)
+- ZK GatePass (technical flex — validated on local devnet; integrated into CC as GateControl rule type; to re-validate on hackathon test server March 11)
 - Salvage Protocol (creative flex)
 - Fortune Gate (weird flex)
 - Flappy Frontier (meme)
@@ -123,7 +123,7 @@ The thesis claims TribeMint is "connective tissue" that elevates the system scor
 - TribeMint's player vote is 5/10. Custom currency is an abstraction most players don't instinctively value.
 - The system's average player vote is (6 + 8 + 5) / 3 = 6.33. TradePost carries this. Without TradePost, it's 5.5.
 
-A focused GateControl + ZK Gate Pass entry could score 6 + 7 = 6.5 average player vote, comparable to the full suite. The suite's player vote advantage is almost entirely from TradePost — which could also be built as a two-module entry.
+A focused GateControl + ZK GatePass entry could score 6 + 7 = 6.5 average player vote, comparable to the full suite. The suite's player vote advantage is almost entirely from TradePost — which could also be built as a two-module entry.
 
 ### 3.5 Is Integration Complexity Underestimated?
 
@@ -374,7 +374,7 @@ Insert 30 seconds between Act 3 and Act 4:
 
 ## 9. Standalone Decision
 
-### Pick: ZK Gate Pass
+### Pick: ZK GatePass
 
 **Justification:**
 
@@ -382,17 +382,17 @@ Insert 30 seconds between Act 3 and Act 4:
 
 2. **Existing foundation.** The `eve-frontier-proximity-zk-poc` in this workspace is a working proof-of-concept with Circom circuits, browser-side proof generation via snarkjs, and Move verification code. The gap is integration with the gate extension pattern, not building from scratch.
 
-3. **Prize targeting.** ZK Gate Pass is ranked #1 for "Best Technical Implementation" and #2 for "Most Creative" in the bonus prize analysis. These are distinct prizes from "Best Entry" — a standalone ZK submission does not cannibalize CivilizationControl's primary prize target.
+3. **Prize targeting.** ZK GatePass is ranked #1 for "Best Technical Implementation" and #2 for "Most Creative" in the bonus prize analysis. These are distinct prizes from "Best Entry" — a standalone ZK submission does not cannibalize CivilizationControl's primary prize target.
 
 4. **Risk containment.** All ZK primitives validated on local devnet (sandbox). Standalone `zk_gate` module published with zero world-contracts dependencies. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain. No remaining feasibility risks — only world-contracts integration remains (to re-validate on hackathon test server March 11). See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2.
 
 5. **Demo impact.** "'Generating zero-knowledge proof...' → proof verified on-chain → gate opens → and the blockchain never learned who you were." This is a 30-second moment that lands with any audience. High variance, high reward.
 
-**Why not Salvage Protocol:** While Salvage Protocol (ranked #1 Most Creative) is the most novel concept, it requires calling `unanchor()` — an admin-only function. On testnet, you'd need AdminCap access, which may not be available. ZK Gate Pass operates at the extension layer, which is builder-accessible.
+**Why not Salvage Protocol:** While Salvage Protocol (ranked #1 Most Creative) is the most novel concept, it requires calling `unanchor()` — an admin-only function. On testnet, you'd need AdminCap access, which may not be available. ZK GatePass operates at the extension layer, which is builder-accessible.
 
 **Why not Fortune Gate:** Weighted score 5.38. Fun but insubstantial. Not worth the opportunity cost.
 
-**Constraint:** ZK Gate Pass should only be pursued if CivilizationControl's core (GateControl + TradePost) is fully stable before Day 5. If it threatens core polish, cut it.
+**Constraint:** ZK GatePass should only be pursued if CivilizationControl's core (GateControl + TradePost) is fully stable before Day 5. If it threatens core polish, cut it.
 
 ---
 
@@ -402,7 +402,7 @@ Insert 30 seconds between Act 3 and Act 4:
 |----------|--------|
 | **Final recommended core modules** | GateControl + TradePost (two-module tight integration) |
 | **Does TribeMint survive critique?** | No, as a core module. Demoted to Stretch 1. Its weighted score (6.31) is below average, its player vote (5/10) is weak, and Coin<T> cross-module integration complexity makes it a poor risk/reward trade for core status. It becomes valuable stretch if time permits. |
-| **Is standalone ZK/Salvage still advised?** | Yes — ZK Gate Pass, conditional on core stability. Targets "Best Technical Implementation" without competing with CivilizationControl's "Best Entry" positioning. Salvage Protocol is less viable due to AdminCap dependency. |
+| **Is standalone ZK/Salvage still advised?** | Yes — ZK GatePass, conditional on core stability. Targets "Best Technical Implementation" without competing with CivilizationControl's "Best Entry" positioning. Salvage Protocol is less viable due to AdminCap dependency. |
 
 ---
 

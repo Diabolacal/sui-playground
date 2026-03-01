@@ -51,7 +51,7 @@
 | 7 | SSU-Backed Storefront (Devnet) | GREEN | **GREEN ✓** | Devnet — witness-gated extension withdrawal + atomic buy (details below) |
 | 8 | ZK Groth16 Standalone Verify | GREEN | **GREEN ✓** | Devnet — valid proof verified, `is_valid=true` event emitted |
 | 9 | ZK Groth16 Negative Test | GREEN | **GREEN ✓** | Devnet — invalid inputs rejected, `is_valid=false` event emitted |
-| 10 | ZK + Gate Composition | GREEN | **GREEN ✓** | Devnet — ZK verify → auth witness → mock gate consumption in single PTB |
+| 10 | ZK + Gate Composition | GREEN | **GREEN ✓** | Devnet — ZK verify → extension witness → mock gate consumption in single PTB |
 
 **Overall: 10/10 GREEN. No blocking issues found.**
 
@@ -386,7 +386,7 @@ Players should see **Lux values** as the primary denomination. On-chain settleme
 
 ---
 
-## ZK Gate Pass Rule Validation (Added 2026-02-16, **Devnet-Tested on Local Devnet**)
+## ZK GatePass Rule Validation (Added 2026-02-16, **Devnet-Tested on Local Devnet**)
 
 > **Status:** **GREEN — All critical tests passed on Sui local devnet.**
 

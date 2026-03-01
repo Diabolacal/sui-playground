@@ -493,7 +493,7 @@ Before pressing record, confirm every required artifact is captured and accessib
 | Variant | Duration | Beats | Features Covered |
 |---|---|---|---|
 | **Primary** | 3:00 | 7 | GateControl + TradePost |
-| **Primary + Preset Switching** | 3:10 | 7 + accent | GateControl + TradePost + topology switching |
+| **Primary + Preset Switching** | 3:10 | 7 + accent | GateControl + TradePost + Preset Switching |
 | **Primary + ZK** | 3:30 | 8 | GateControl + TradePost + ZK accent |
 | **Primary + Presets + ZK** | 3:40 | 8 + accent | Full suite (maximum flex) |
 | **Fallback (GateControl-only)** | 2:00 | 6 | GateControl only |

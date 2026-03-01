@@ -189,7 +189,7 @@
 
 ## Appendix B — Optional ZK Accent Segment (30 seconds)
 
-**What the beat shows:** ZK gate pass — pilot proves membership without revealing identity → Groth16 verifies on-chain → gate opens.
+**What the beat shows:** ZK GatePass — pilot proves membership without revealing identity → Groth16 verifies on-chain → gate opens.
 
 **(a) Basic Groth16 verification:**
 

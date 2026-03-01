@@ -16,7 +16,7 @@
 | **GateControl** | Green | Confirm extension + witness pattern works; design coin-toll rule |
 | **TradePost** | Yellow → TBD | Confirm cross-address PTB buy (extension-based `withdraw_item<Auth>`) |
 | TribeMint | Green (deferred) | No validation needed — standard `Coin<T>` pattern |
-| ZK Gate Pass | Green (validated) | Devnet-validated on local devnet (sandbox); to re-validate on hackathon test server March 11; see [validation report](shortlist-viability-validation-report.md) tests 8–10 |
+| ZK GatePass | Green (validated) | Devnet-validated on local devnet (sandbox); to re-validate on hackathon test server March 11; see [validation report](shortlist-viability-validation-report.md) tests 8–10 |
 
 ---
 
@@ -139,7 +139,7 @@ module gate_toll::gate_toll {
        _: &mut TxContext,
    ): Item
    ```
-   - Takes Auth witness, NOT OwnerCap → **buyer does not need seller's OwnerCap**
+   - Takes extension witness, NOT OwnerCap → **buyer does not need seller's OwnerCap**
    - No proximity proof required
    - No server address verification required
 
@@ -159,7 +159,7 @@ module gate_toll::gate_toll {
        _: &mut TxContext,
    )
    ```
-   - Same pattern as withdraw — Auth witness, not OwnerCap
+   - Same pattern as withdraw — extension witness, not OwnerCap
 
 **Conclusion:** Cross-address atomic buy is feasible:
 - Seller authorizes `TradeAuth` extension on their SSU (one-time setup)
@@ -283,7 +283,7 @@ The following tests were not part of the original matrix but would be needed for
 
 ---
 
-## ZK Gate Pass Rule Validation (Added 2026-02-16)
+## ZK GatePass Rule Validation (Added 2026-02-16)
 
 > **Context:** ZK integration feasibility for CivilizationControl's GateControl module. These tests validate whether Groth16 ZK proof verification can be composed with the gate extension witness pattern. See [ZK GatePass Feasibility Report](zk-gatepass-feasibility-report.md) for full analysis.
 >
@@ -344,7 +344,7 @@ The following tests were not part of the original matrix but would be needed for
 
 ---
 
-### Decision Outcomes (ZK Gate Pass)
+### Decision Outcomes (ZK GatePass)
 
 | Test | Expected | Status |
 |------|----------|--------|

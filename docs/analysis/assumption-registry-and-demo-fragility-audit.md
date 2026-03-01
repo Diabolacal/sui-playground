@@ -71,7 +71,7 @@
 | ID | Description | Source(s) | Dependency Type | Risk | March 11 | Fallback |
 |----|------------|-----------|-----------------|------|----------|----------|
 | A-08 | `authorize_extension<Auth: drop>` is public and accepts any custom Auth type with `drop` ability | gate.move L121-125, march-11-checklist A1 | Contract behavior | High | Yes | If restricted to whitelist, CivControl is blocked; no workaround |
-| A-09 | Each gate supports exactly ONE extension type (`Option<TypeName>`) via `swap_or_fill` | gate.move L121-125, spec.md S3.5 | Contract behavior | High | No | All rule types must compose inside one package with one Auth witness |
+| A-09 | Each gate supports exactly ONE extension type (`Option<TypeName>`) via `swap_or_fill` | gate.move L121-125, spec.md S3.5 | Contract behavior | High | No | All rule types must compose inside one package with one extension witness |
 | A-10 | `authorize_extension` silently replaces existing extension — no event, no revert | gate.move L121-125, march-11-checklist GateControl validation #7 | Contract behavior | High | No | Poll gate extension state; document trust assumption for partner gates |
 | A-11 | Extension identity uses `type_name::with_defining_ids<Auth>()` including the defining package ID (stable across compatible upgrades) | march-11-checklist GateControl validation #7 | Contract behavior | Medium | No | If unstable, every upgrade requires re-authorization on all gates |
 | A-12 | `x_auth()` witness constructor MUST be `public(package)`, not `public` | builder-scaffold config.move L87, extension_examples config.move L22 (divergence) | Contract behavior | High | No | Security-critical; `public` allows any external package to forge witness |
@@ -432,7 +432,7 @@ The CivControl extension package must be published correctly on the first attemp
 (a) A compatible upgrade (preserves TypeName, additive only), or
 (b) A full redeploy + re-authorization on every enrolled gate.
 
-With all rule types (tribe, toll, trade, optionally ZK) composing inside a single package with a single Auth witness (A-09), a bug in any rule type forces re-authorization of all gates.
+With all rule types (tribe, toll, trade, optionally ZK) composing inside a single package with a single extension witness (A-09), a bug in any rule type forces re-authorization of all gates.
 
 Impact: Time-critical during hackathon; no safety net for Move logic bugs.
 
@@ -497,7 +497,7 @@ Derived from the fragility audit. Complete ALL items before pressing record.
 | # | Check | Validates | Assumptions |
 |---|-------|-----------|-------------|
 | 7 | Publish CivControl extension package on test server | Package compiles against test server world-contracts | A-46, A-48 |
-| 8 | Call `authorize_extension<CivControlAuth>` on a test gate | Extension registration works | A-08, A-09 |
+| 8 | Call `authorize_extension<GateAuth>` on a test gate | Extension registration works | A-08, A-09 |
 | 9 | Verify gate object shows `extension: Some(TypeName)` with correct defining package ID | TypeName stable | A-11 |
 | 10 | Verify `withdraw_item<TradeAuth>` succeeds without OwnerCap on test server | Cross-address buy viable | A-73 |
 | 11 | Verify `Item` can be `public_transfer`-ed to buyer address | Item has `store` ability | A-25 |

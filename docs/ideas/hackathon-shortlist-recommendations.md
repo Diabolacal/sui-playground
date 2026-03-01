@@ -43,13 +43,13 @@ A unified infrastructure management dashboard for EVE Frontier. Three core modul
 3. **Corp Command Center** — Single pane of glass for all structures.
 
 ### Best Technical Implementation
-1. **ZK Gate Pass** — Full ZK stack: circuit → browser proof → on-chain verification → game action.
+1. **ZK GatePass** — Full ZK stack: circuit → browser proof → on-chain verification → game action.
 2. **Gate Policy Engine** — Dynamic field rule dispatch within single-extension constraint.
 3. **Energy Arbitrage Bot** — Hot-potato PTB chain demonstrating advanced transaction composition.
 
 ### Most Creative
 1. **Salvage Protocol** — Uses Sui's gas rebate as a gameplay reward. Nobody else will think of this.
-2. **ZK Gate Pass** — ZK proofs for game infrastructure. Unique category intersection.
+2. **ZK GatePass** — ZK proofs for game infrastructure. Unique category intersection.
 3. **Dead Drop** — Spy gameplay on blockchain. Evocative concept despite privacy limitations.
 
 ### Weirdest Idea
@@ -72,7 +72,7 @@ A unified infrastructure management dashboard for EVE Frontier. Three core modul
 | **2 modules** | GateControl + TradePost | ~8.0 |
 | **3 modules** | GateControl + TradePost + TribeMint (full CivilizationControl) | ~8.5+ (system bonus) |
 | **3 + stretch** | Full CivilizationControl + LootDrop | ~8.8+ |
-| **Going for creativity prize** | ZK Gate Pass (ID 5) standalone | ~7.2 (high variance) |
+| **Going for creativity prize** | ZK GatePass (ID 5) standalone | ~7.2 (high variance) |
 | **Going for weirdest** | Fortune Gate (ID 26) standalone | ~5.4 (fun, low score) |
 
 ---
@@ -85,7 +85,7 @@ A unified infrastructure management dashboard for EVE Frontier. Three core modul
 | TradePost | Cross-address PTB item transfer unvalidated | Day-1 de-risk task on local devnet |
 | TribeMint | None — Coin standard is well-documented | — |
 | LootDrop | `sui::random` entry function constraint | Test calling convention early; fallback to hash-based pseudo-random |
-| ZK Gate Pass | ~~Package-naming conflict + bridge complexity~~ Resolved — validated on local devnet (sandbox). Membership circuit design remains. | Wrapper module validated; see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md). To re-validate on hackathon test server March 11. |
+| ZK GatePass | ~~Package-naming conflict + bridge complexity~~ Resolved — validated on local devnet (sandbox). Membership circuit design remains. | Wrapper module validated; see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md). To re-validate on hackathon test server March 11. |
 
 ---
 

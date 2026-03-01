@@ -40,6 +40,65 @@ All documents under `docs/` must begin with a header block declaring their reten
 
 ---
 
+## Canonical Terminology
+
+Consistent naming conventions used across all active documents.
+
+### Product & Module Names
+
+| Term | Context | Notes |
+|------|---------|-------|
+| **CivilizationControl** | Full product/submission name | Abbreviation: **CC** |
+| **GateControl** | UI label for the gate governance module | Player-facing display name |
+| **TradePost** | UI label for the SSU commerce module | Player-facing display name |
+| **ZK GatePass** | ZK-gated access rule (no space in "GatePass") | Integrated into GateControl as a rule type |
+
+### On-Chain Types & Functions
+
+| Term | Layer | Notes |
+|------|-------|-------|
+| `GateAuth` | CivControl gate extension witness type | Concrete type implementing `Auth: drop` |
+| `TradeAuth` | CivControl trade extension witness type | Concrete type implementing `Auth: drop` |
+| `XAuth` | Builder-scaffold example witness | Only use when discussing scaffold examples |
+| `authorize_extension<T>` | World-contracts function | Registers extension on a gate/SSU |
+| `gate::issue_jump_permit<Auth>()` | World-contracts issuance function | Extension-callable, no AdminACL required |
+| `civcontrol::request_jump_permit()` | CivControl wrapper function | Internally calls `gate::issue_jump_permit<GateAuth>()` |
+| `gate::jump_with_permit()` | World-contracts consumption function | Requires AdminACL; deletes the permit object |
+| `JumpPermit` | World-contracts struct (`key, store`) | Single-use, consumed (object deleted) by `jump_with_permit`. NOT hot-potato. |
+
+### Rule Struct Naming
+
+| Key Struct | Value Struct | Purpose |
+|------------|-------------|---------|
+| `TribeRuleKey` | `TribeRule { tribe_id }` | Tribe-based access filtering |
+| `CoinTollKey` | `CoinTollRule { price_mist, treasury }` | SUI toll per jump |
+
+### Currency & Units
+
+| Term | Context | Notes |
+|------|---------|-------|
+| **SUI** | Day-1 display denomination | User-facing amounts (e.g., "Toll: 5 SUI") |
+| **MIST** | On-chain smallest unit | 1 SUI = 10⁹ MIST. Move struct fields use `u64` in MIST |
+| `Coin<SUI>` | On-chain token type | Day-1 settlement token |
+| **Lux** | In-game display currency (stretch goal) | No on-chain representation; exchange rate undefined for MVP |
+| `price_mist` | Canonical field name for toll/price amounts | Not `price_in_mist` |
+
+### Access Control
+
+| Term | Meaning |
+|------|---------|
+| **AdminACL** | On-chain sponsor whitelist (canonical capitalization) |
+| **`verify_sponsor`** | World-contracts function; falls back to `ctx.sender()` when no sponsor |
+| **Extension witness** | The typed witness pattern (`Auth: drop`) used by gate/SSU extensions |
+
+### Feature Names
+
+| Term | Canonical Form | Notes |
+|------|---------------|-------|
+| Gate topology reconfiguration | **Gate Preset Switching** | Predefined link-topology presets (S46) |
+
+---
+
 ## Decision Log
 
 | File | Purpose |
@@ -70,7 +129,7 @@ All documents under `docs/` must begin with a header block declaring their reten
 | [architecture/gate-lifecycle-function-reference.md](architecture/gate-lifecycle-function-reference.md) | Gate lifecycle complete function call reference — all signatures, types, dependency chain, OwnerCap borrow/return pattern |
 | [architecture/gatecontrol-feasibility-report.md](architecture/gatecontrol-feasibility-report.md) | GateControl feasibility validation — gate architecture, extension pattern, toll options, validation plan |
 | [architecture/tradepost-cross-address-ptb-validation.md](architecture/tradepost-cross-address-ptb-validation.md) | TradePost cross-address PTB risk validation — SSU ownership model, extension pattern analysis, atomic trade design, test plan |
-| [architecture/zk-killswitch-fallback-analysis.md](architecture/zk-killswitch-fallback-analysis.md) | ZK Gate Pass kill-switch & fallback analysis — GREEN/YELLOW/RED criteria, day-by-day checkpoints, partial ZK options, demo narratives |
+| [architecture/zk-killswitch-fallback-analysis.md](architecture/zk-killswitch-fallback-analysis.md) | ZK GatePass kill-switch & fallback analysis — GREEN/YELLOW/RED criteria, day-by-day checkpoints, partial ZK options, demo narratives |
 | [architecture/world-contracts-auth-model.md](architecture/world-contracts-auth-model.md) | **Deep auth model analysis** — all structs, 40+ functions categorized by auth tier, extension pattern, hidden permission gates |
 | [architecture/authenticated-user-surface-analysis.md](architecture/authenticated-user-surface-analysis.md) | **Authenticated user surface analysis** — structure discovery, location visibility, permission model, off-chain indexing requirements, dashboard feasibility |
 | [architecture/read-path-architecture-validation.md](architecture/read-path-architecture-validation.md) | **Read-path architecture validation** — wallet→structures discovery, event inventory (31 events / 16 types), signal feed data sources, Option A/B/C comparison, scale model, demo data sourcing, gap list |

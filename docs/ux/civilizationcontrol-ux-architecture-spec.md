@@ -53,7 +53,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 - Deposit/withdraw fuel to/from NWN — OwnerCap + sponsor
 - Deposit/withdraw items to/from SSU (owner-path) — `verify_sponsor()` required (proximity proof removed)
 
-### Extension-Controlled Operations (Auth witness — only from extension packages)
+### Extension-Controlled Operations (extension witness — only from extension packages)
 
 - Issue jump permit — `issue_jump_permit<Auth>` requires extension's witness type; both source and destination gates must share the same extension type
 - Extension deposit/withdraw item to SSU — typed witness authorization enables cross-address operations without owner being online
@@ -373,7 +373,7 @@ Time range selector: 1h · 24h · 7d · 30d · All. Auto-refresh: polling every 
 | **Toggle**      | On / Off                                                               |
 | **Config**      | **Allowed Tribe ID**: Dropdown / numeric input (u32)                   |
 | **Status**      | "Tribe Filter: Allow Tribe 7 only" or "Tribe Filter: Off"             |
-| **On-Chain**    | Dynamic field `TribeConfigKey → TribeConfig { tribe_id }` on GateConfig |
+| **On-Chain**    | Dynamic field `TribeRuleKey → TribeRule { tribe_id }` on GateConfig |
 
 #### Coin Toll (Economic Rule)
 
@@ -383,7 +383,7 @@ Time range selector: 1h · 24h · 7d · 30d · All. Auto-refresh: polling every 
 | **Toggle**      | On / Off                                                               |
 | **Config**      | **Toll Amount**: Numeric input in Lux (SUI equivalent shown). **Treasury**: Auto-filled with connected wallet; editable (advanced). |
 | **Status**      | "Coin Toll: 5 Lux (0.5 SUI) per jump → Treasury: 0x1a2b...9f0e"     |
-| **On-Chain**    | Dynamic field `CoinTollKey → CoinTollConfig { price_in_mist, treasury }` |
+| **On-Chain**    | Dynamic field `CoinTollKey → CoinTollRule { price_mist, treasury }` |
 
 #### Allow List (Access Rule)
 

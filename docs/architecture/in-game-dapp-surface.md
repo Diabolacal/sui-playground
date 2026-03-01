@@ -138,7 +138,7 @@
 | `Crypto.subtle` | Available | Client-side hashing, signing, key derivation work |
 | Notifications | **Not available** | No push notifications |
 
-**ZK impact:** `snarkjs` WASM prover falls back to single-threaded mode without `SharedArrayBuffer`. Proof generation will be 5-10× slower. If ZK gate pass is included, verify generation time stays under the kill threshold in single-threaded mode.
+**ZK impact:** `snarkjs` WASM prover falls back to single-threaded mode without `SharedArrayBuffer`. Proof generation will be 5-10× slower. If ZK GatePass is included, verify generation time stays under the kill threshold in single-threaded mode.
 
 ---
 
