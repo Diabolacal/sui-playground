@@ -188,6 +188,7 @@ NOTES:
   - AdminCap is an owned object (fast path) — but mixed tx goes through consensus
   - Dynamic field key struct: TribeRuleKey (empty struct, used as DF key type)
   - Dynamic field value struct: TribeRule { tribe_id: u64 }
+  - Struct names shown here reflect sandbox observations and must be confirmed against the deployed extension code on the hackathon test server
   - set vs update: verify if function uses df::add (fails if exists) or df::borrow_mut/remove+add
 ```
 

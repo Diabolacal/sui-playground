@@ -156,6 +156,8 @@ For each demo proof moment:
 }
 ```
 
+> **NOTE:** `devInspectTransactionBlock` may not perfectly replicate full execution behavior. Always validate critical demo proof flows using a real execution transaction on the hackathon test server before capturing final evidence.
+
 ---
 
 ## 4. Abort Code Revalidation

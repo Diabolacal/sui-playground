@@ -43,6 +43,8 @@ Transaction {
 - Commands execute sequentially within the PTB; results are addressable by index
 - A PTB is atomic — partial execution is not possible
 
+> These limits are protocol-version dependent and may change between Sui releases. Confirm current limits against the official Sui documentation and the hackathon test server runtime before relying on them.
+
 ### Command Types
 
 | Command | Purpose | Notes |
@@ -87,7 +89,7 @@ Pattern: Merge-then-Split
 
 ### Coin Handling Pitfalls
 
-- **Never pass the gas coin directly** as a function argument — split first, or the entire gas budget is consumed
+- **Prefer splitting from the gas coin** rather than passing it directly. Passing the gas coin itself may unintentionally consume the entire gas object if not handled carefully.
 - **Coin objects are owned** — only the owner can spend them
 - **Zero-amount splits** are valid but wasteful; avoid in production
 - When using sponsored transactions, the **sponsor's coin** is the gas coin — the player's coins must be passed explicitly

@@ -149,8 +149,8 @@ SIGNER CONSTRAINTS:
   - cmd[4]: AdminACL required → may need to be a separate sponsored PTB
   - Verify whether combined or split PTBs are needed on test server
 
-NOTE: If issue_jump_permit and jump_with_permit require different signers,
-this CANNOT be a single PTB. Split into two transactions and accept
+NOTE: Verify signer requirements carefully. If different signers are required
+and cannot co-sign a single transaction, split into two PTBs and accept
 the non-atomicity risk (permit exists briefly between transactions).
 ```
 

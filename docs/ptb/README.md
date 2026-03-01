@@ -47,6 +47,58 @@ These documents capture structural patterns learned from world-contracts analysi
 
 ---
 
+## LLM Generation Guardrail Prompt (Use Before Writing Code)
+
+When generating PTB TypeScript, use the following procedure:
+
+### Step 1 — Context Bundle
+Provide the LLM with only:
+- `spec.md`
+- `march-11-reimplementation-checklist.md`
+- `docs/ptb/README.md`
+- The relevant skeleton file from `docs/ptb/`
+
+Do not overload with unrelated documents.
+
+### Step 2 — Mandatory Revalidation
+Before generating TypeScript, explicitly confirm:
+- Current world-contracts commit hash
+- Function signatures (parameter count, types, ordering)
+- Generic type arguments
+- Object ownership model (shared vs owned)
+- Capability requirements (AdminACL, OwnerCap, extension witness)
+- Abort code definitions (for denial scenarios)
+- Published package IDs
+
+If any uncertainty exists, fetch Move source and re-derive signatures.
+
+### Step 3 — No Assumptions Rule
+Never assume:
+- Package IDs
+- Struct field names
+- Abort code values
+- Auth model behavior
+- Dynamic field key/value names
+
+Always verify against deployed code.
+
+### Step 4 — Dry-Run First
+Generate TypeScript that:
+- Performs a dry-run first
+- Logs digest + effects
+- Validates expected outcome before real execution
+
+### Step 5 — Evidence Capture Discipline
+For demo flows:
+- Capture digest
+- Capture effects
+- Capture abort code (if failure)
+- Store structured evidence object
+
+> Pattern libraries accelerate implementation but do not replace live verification.
+
+---
+
 ## Assumptions & Unknowns
 
 - World-contracts may change pre-March-11 (turret branch, hotfixes, breaking changes)
