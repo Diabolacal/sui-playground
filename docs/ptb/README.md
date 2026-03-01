@@ -69,6 +69,7 @@ Before generating TypeScript, explicitly confirm:
 - Capability requirements (AdminACL, OwnerCap, extension witness)
 - Abort code definitions (for denial scenarios)
 - Published package IDs
+- Shared object versions (fetch latest on-chain versions before PTB construction)
 
 If any uncertainty exists, fetch Move source and re-derive signatures.
 
@@ -87,6 +88,7 @@ Generate TypeScript that:
 - Performs a dry-run first
 - Logs digest + effects
 - Validates expected outcome before real execution
+- For demo-critical flows, confirm with one real execution on the hackathon test server before recording evidence (dry-run may differ from full execution)
 
 ### Step 5 — Evidence Capture Discipline
 For demo flows:
@@ -96,6 +98,10 @@ For demo flows:
 - Store structured evidence object
 
 > Pattern libraries accelerate implementation but do not replace live verification.
+
+### Step 6 — Minimal Transaction Scope
+- Keep PTBs minimal; do not add commands not required for the specific action.
+- Prefer smaller PTBs to reduce failure surface area and gas variability.
 
 ---
 
