@@ -95,8 +95,8 @@ These are optional enhancements, not MVP requirements.
 
 **CivilizationControl surfaces Lux values as the primary player-facing denomination.** On-chain settlement details (`Coin<SUI>`, gas fees, transaction digests) are implementation concerns that the UI abstracts away. Where both values are relevant, the UI displays both:
 
-> *Toll: 5 Lux (0.5 SUI)*
-> *Fuel Rod: 35 Lux (3.5 SUI)*
+> *Toll: 5 Lux*
+> *Fuel Rod: 35 Lux*
 
 If/when EVE Token launches or a Lux exchange rate is established, the UI layer adapts without changing the underlying Move contracts.
 

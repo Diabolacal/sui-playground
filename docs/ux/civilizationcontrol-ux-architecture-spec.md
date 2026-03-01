@@ -116,8 +116,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 ### Currency Constraints
 
 - **EVE Token exists on Sui** — `Coin<EVE>` is published (10B supply, 9 decimals, burn-only after init) but **not yet integrated** into CivilizationControl. Day-1 settlement uses `Coin<SUI>` only.
-- **Lux has no on-chain representation** — purely in-game engine currency
-- **Lux-to-SUI exchange rate undefined** — display convenience only
+- **Lux has no on-chain representation** — purely in-game engine currency (confirmed rate: 10,000 Lux = 1 EVE token; Lux-to-SUI depends on EVE/SUI exchange)
 
 ### Hard UX Constraints
 
@@ -309,14 +308,14 @@ Or warning:
 
 | Element           | Content                                           |
 | ----------------- | ------------------------------------------------- |
-| **Toll Config**      | "Toll: 5 Lux (0.5 SUI) per jump" or "No toll"   |
+| **Toll Config**      | "Toll: 5 Lux per jump" or "No toll"              |
 | **Treasury Address** | Truncated address where toll payments route       |
-| **Total Revenue**    | "487 Lux (48.7 SUI) all-time"                    |
-| **Period Revenue**   | "42 Lux (4.2 SUI) last 24h"                      |
+| **Total Revenue**    | "487 Lux all-time"                               |
+| **Period Revenue**   | "42 Lux last 24h"                                |
 | **Jump Count**       | "94 jumps (last 24h) · 1,247 all-time"            |
 | **Configure Toll**   | → opens Rule Composer economic module             |
 
-**Currency display convention:** Primary in Lux, parenthetical in SUI. Example: "42 Lux (4.2 SUI)". **Note:** Lux-to-SUI exchange rate is a display placeholder (assumed 1 Lux = 0.1 SUI for UX examples). Actual rate is undefined and subject to game economy; Lux-denominated display is stretch goal (#31).
+**Currency display convention:** Primary in Lux. Confirmed rate: 10,000 Lux = 1 EVE token. On-chain settlement in SUI (amount derived from Lux→EVE→SUI conversion; EVE-to-SUI exchange TBD). SUI parenthetical shown only when full exchange rate chain is configured. Lux-denominated display is stretch goal (#31).
 
 ### 5d. Linking Section
 
@@ -335,7 +334,7 @@ Gate-scoped event stream. Event types:
 | ------------------- | -------------------------------------------------------- |
 | **Jump**               | "14:23 · Pilot-0x3f2a (Tribe 7) · North→South · Toll: 5 Lux" |
 | **Rule Application**   | "14:22 · Pilot-0x7b1c (Tribe 3) · Tribe Filter · BLOCKED"    |
-| **Toll Collection**    | "14:23 · 5 Lux (0.5 SUI) from Pilot-0x3f2a"                 |
+| **Toll Collection**    | "14:23 · 5 Lux from Pilot-0x3f2a"                           |
 | **Status Change**      | "09:00 · Offline → Online · You"                              |
 | **Extension Change**   | "08:55 · None → GateControl"                                  |
 | **Link Change**        | "08:50 · Linked to Gate South-1" (on-chain: `GateLinkedEvent` / `GateUnlinkedEvent`) |
@@ -382,7 +381,7 @@ Time range selector: 1h · 24h · 7d · 30d · All. Auto-refresh: polling every 
 | **Purpose**     | Require SUI payment for each gate jump                                 |
 | **Toggle**      | On / Off                                                               |
 | **Config**      | **Toll Amount**: Numeric input in Lux (SUI equivalent shown). **Treasury**: Auto-filled with connected wallet; editable (advanced). |
-| **Status**      | "Coin Toll: 5 Lux (0.5 SUI) per jump → Treasury: 0x1a2b...9f0e"     |
+| **Status**      | "Coin Toll: 5 Lux per jump → Treasury: 0x1a2b...9f0e"               |
 | **On-Chain**    | Dynamic field `CoinTollKey → CoinTollRule { price_mist, treasury }` |
 
 #### Allow List (Access Rule)
@@ -849,7 +848,7 @@ Operations requiring server computation (distance proofs for gate linking) or Ad
 
 #### 6. Lux-Denominated Clarity
 
-All economic values display in Lux (in-game currency players think in). SUI settlement is secondary/parenthetical. Format: **"Toll: 5 Lux (0.5 SUI)"** — Lux first, SUI second.
+All economic values display in Lux (in-game currency players think in). Confirmed rate: 10,000 Lux = 1 EVE token. SUI equivalent shown only when full exchange rate chain (Lux→EVE→SUI) is configured. Format: **"Toll: 5 Lux"** — Lux primary.
 
 **Why:** Players already price things in Lux. Displaying raw SUI makes the dashboard feel like a blockchain tool rather than a game management tool. Lux-first keeps the frontier metaphor intact.
 

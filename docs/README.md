@@ -80,7 +80,7 @@ Consistent naming conventions used across all active documents.
 | **SUI** | Day-1 display denomination | User-facing amounts (e.g., "Toll: 5 SUI") |
 | **MIST** | On-chain smallest unit | 1 SUI = 10⁹ MIST. Move struct fields use `u64` in MIST |
 | `Coin<SUI>` | On-chain token type | Day-1 settlement token |
-| **Lux** | In-game display currency (stretch goal) | No on-chain representation; exchange rate undefined for MVP |
+| **Lux** | In-game display currency (stretch goal) | No on-chain representation; confirmed rate: 10,000 Lux = 1 EVE token. Lux-to-SUI depends on EVE/SUI exchange (undefined for MVP) |
 | `price_mist` | Canonical field name for toll/price amounts | Not `price_in_mist` |
 
 ### Access Control
