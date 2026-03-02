@@ -2,9 +2,9 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-02-28 (submodule refresh: c2628fd/9edb532/ed238c2/09c2ec2 → 6b6fae8/6bc43a1/687d432/e508451)
+> **Last updated:** 2026-03-02 (submodule refresh: 6b6fae8/6bc43a1/687d432/e508451 → 6b6fae8/572e2ca/a409496/78854fe)
 > **Source:** https://docs.evefrontier.com/
-> **Internal review by:** AI agent (initial mapping; refreshed 2026-02-28)
+> **Internal review by:** AI agent (initial mapping; refreshed 2026-03-02)
 
 ## Purpose
 
@@ -12,7 +12,7 @@ This document maps official EVE Frontier GitBook builder documentation to intern
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
 
-> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-02-28 to commit 6b6fae8) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-02 — no change at commit 6b6fae8) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -25,7 +25,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 | Welcome | `/welcome` | 5 pages | Mostly complete |
 | Tools | `/tools` | 2 pages | Partial (GAS Faucet is TODO) |
 | Smart Contracts | `/smart-contracts` | 5 pages | Substantive content (Object Model, Ownership Model now populated); AdminCap → AdminACL rename reflected |
-| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); **Gate Build page now populated** (end-to-end guide); SSU Build still stub; Turret still TODO |
+| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); **Gate Build page now populated** (end-to-end guide); SSU Build still stub; **Turret now implemented in world-contracts v0.0.14** (docs page may still be TODO) |
 | dApps | `/dapps` | 4 pages + dapp-kit | dApp sub-pages still TODO; `@evefrontier/dapp-kit` SDK now populated (304 lines) |
 | EVE Vault | `/eve-vault` | 4 pages | Introduction done; GAS Faucet, Wallet Game Setup, Browser Extension still TODO |
 | Troubleshooting | `/troubleshooting` | 3 pages | All TODO |
@@ -183,10 +183,10 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 ### Smart Turret
 
 - **URL:** https://docs.evefrontier.com/smart-assemblies/turret
-- **Last updated:** ~4 days ago
-- **Summary:** Placeholder page (`//TODO`). No content yet.
-- **Why it matters for us:** No turret module exists in world-contracts either (noted in our capabilities doc §4.4). This is a future capability.
-- **Notable clarifications:** Both the docs and code confirm turrets are not yet implemented. Only killmails reference structures via `LossType::STRUCTURE`.
+- **Last updated:** ~4 days ago (docs page may still be TODO)
+- **Summary:** ~~Placeholder page (`//TODO`). No content yet.~~ **Updated 2026-03-02:** world-contracts v0.0.14 now includes a full `turret.move` module (677 lines) + 1097-line test suite + extension example + TS scripts. Turret is a programmable structure with target-priority logic, typed witness extension pattern (same as gate/SSU), BCS-serialized `TargetCandidate` / `ReturnTargetPriorityList` protocol, `OnlineReceipt` hot-potato, and network node energy management.
+- **Why it matters for us:** Turrets are now a **real and fully implemented assembly type**. Uses the same extension pattern as gates (typed witness `authorize_extension<Auth>`, `swap_or_fill`). The `get_target_priority_list` function is the builder-extensible entry point — game calls it with BCS-encoded target candidates, extension returns priority weights. Turret extensions MUST consume the `OnlineReceipt` hot-potato via `destroy_online_receipt(receipt, auth_witness)`.
+- **Notable clarifications:** Turret extension in `extension_examples/sources/turret.move` replaces the old gate extension example (gate.move was deleted from extension_examples). Default targeting rules: same-tribe non-aggressors excluded, `STARTED_ATTACK` adds +10000 weight, `ENTERED` adds +1000 weight.
 
 ### dApps Quick Start / Connecting / Customizing
 
@@ -244,10 +244,10 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 ### Code Is Canonical But Docs Lag
 
 - **Build pages**: ~~Assembly Build pages (restructured from Configure/Deploy) are still stubs~~ **Updated 2026-02-20:** Gate Build page is now fully populated (end-to-end guide). SSU Build page is still a stub. Our capabilities doc (§4, §8) supplements for SSU deployment flows.
-- **Turret module**: Neither docs nor code have turret implementation — docs page is `//TODO`, code has no turret module.
+- ~~**Turret module**: Neither docs nor code have turret implementation — docs page is `//TODO`, code has no turret module.~~ **RESOLVED 2026-03-02:** world-contracts v0.0.14 implements turret.move (677 lines + 1097-line test suite). Turret extension example added. Docs page may still lag.
 - **GAS Faucet**: Docs page is `//TODO` — our local devnet auto-funds; testnet faucet details unknown.
 - **dApps integration**: dApp sub-pages (Quick Start, Connecting, Customizing) are still `//TODO`. However, `@evefrontier/dapp-kit` SDK documentation is now populated (304 lines in `vendor/builder-documentation/dapp-kit/dapp-kit.md`). **Updated 2026-02-20:** `vendor/builder-scaffold/dapps/` now contains a working React dApp starter with `@evefrontier/dapp-kit` integration (queries.ts shows assembly info + wallet status components).
-- **Extension examples**: ~~The Interfacing page mentions extension registration but doesn't show the full flow.~~ **Updated 2026-02-20:** Gate Build page now documents the full extension flow end-to-end. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples. `vendor/builder-scaffold/move-contracts/smart_gate/` has 3 canonical reference implementations (config.move, tribe_permit.move, corpse_gate_bounty.move).
+- **Extension examples**: ~~The Interfacing page mentions extension registration but doesn't show the full flow.~~ **Updated 2026-02-20:** Gate Build page now documents the full extension flow end-to-end. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples (**Updated 2026-03-02:** gate.move deleted, turret.move added — still 3 examples: config.move, storage_unit.move, turret.move). `vendor/builder-scaffold/move-contracts/smart_gate/` has 3 canonical reference implementations (config.move, tribe_permit.move, corpse_gate_bounty.move).
 - **ZK proximity proofs**: The docs mention zero-knowledge proofs as a "future" alternative to server-signed proofs. Our `vendor/eve-frontier-proximity-zk-poc/` is a working Groth16 implementation — ahead of the docs.
 - **builder-scaffold branch**: ~~The Environment Setup page references a `build` branch and `localnet-setup/docker` directory~~ **Updated 2026-02-20:** Fixed — docs now reference `main` branch and correct `docker` directory. Submodule reference removed from builder-documentation repo.
 - **AdminCap → AdminACL discrepancy (2026-02-20)**: Docs now consistently use `AdminACL` (shared object with authorized sponsor addresses). World-contracts code already uses AdminACL. No functional discrepancy — naming alignment only.
@@ -257,6 +257,11 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Gate link/unlink events (NEW 2026-02-28)**: `GateLinkedEvent` and `GateUnlinkedEvent` now emitted by `link_gates`/`unlink_gates`. Useful for dashboard monitoring.
 - **Proximity proof removed from builder-scaffold (NEW 2026-02-28)**: `ts-scripts/utils/proof.ts` entirely deleted. `collect-corpse-bounty.ts` no longer takes proximity proofs. Uses AdminACL + sponsored tx instead.
 - **EVE Vault default chain (NEW 2026-02-28)**: Default chain switched from `SUI_DEVNET_CHAIN` to `SUI_TESTNET_CHAIN`. Chain order in wallet adapter: testnet first, devnet second.
+- **Turret assembly implemented (NEW 2026-03-02)**: world-contracts v0.0.14 adds full `turret.move` module (677 lines). Typed witness extension pattern identical to gate/SSU. `get_target_priority_list` is the builder-extensible entry point. BCS-serialized `TargetCandidate` / `ReturnTargetPriorityList` protocol. `OnlineReceipt` hot-potato. Default rules: same-tribe non-aggressors excluded, STARTED_ATTACK +10000 weight, ENTERED +1000 weight. Extension example replaces deleted gate.move in `extension_examples/`. anchor/unanchor require AdminACL.
+- **Gate extension example DELETED (NEW 2026-03-02)**: `contracts/extension_examples/sources/gate.move` removed. Replaced by `turret.move` extension example. Builder-scaffold `smart_gate/` remains the canonical gate extension reference.
+- **EVE Vault sponsored transaction flow (NEW 2026-03-02)**: New `sponsoredTransactionHandler.ts` (221 lines) + `SignSponsoredTransaction.tsx` popup (159 lines). Server provides `bcsDataB64Bytes` + `preparationId`; player signs with zkLogin; execution via `/transactions/sponsored/execute` API endpoint. Sponsored tx now fully functional (previously stubbed).
+- **Fuel withdraw refactor (NEW 2026-03-02)**: `fuel::withdraw` now requires `type_id: u64` parameter. Validates fuel type_id matches (was previously just `is_some` check). Supports backend fuel services.
+- **Builder-scaffold dapp-kit published (NEW 2026-03-02)**: `@evefrontier/dapp-kit` switched from local file reference to published npm `^0.1.0`. New `pnpm-workspace.yaml` for build approvals.
 
 ---
 

@@ -13,8 +13,8 @@
 
 > If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
 
-> **Date:** 2026-02-16 (updated 2026-02-28 with world-contracts v0.0.13 breaking changes; environment model to be confirmed March 11)  
-> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28)**  
+> **Date:** 2026-02-16 (updated 2026-03-02 with world-contracts v0.0.14 turret implementation + evevault sponsored tx + fuel refactor; environment model to be confirmed March 11)  
+> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
 > **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for module tests; [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) for complete 13-step gate lifecycle with transaction digests
@@ -46,6 +46,14 @@ This document captures everything needed to **reimplement CivilizationControl fr
 > 6. **New EVE token asset** (`contracts/assets/`): `Coin<EVE>`, 10B supply, 9 decimals, AdminCap + EveTreasury. Relevant for coin toll (accept EVE instead of just SUI).
 > 7. **New gate events**: `GateLinkedEvent`, `GateUnlinkedEvent` emitted by `link_gates`/`unlink_gates`.
 > 8. **EVE Vault default chain** switched from devnet to testnet. Sponsored tx API URL changed with new `assemblyType` param.
+
+> **CHANGES (2026-03-02 submodule refresh — world-contracts v0.0.14, evevault a409496, builder-scaffold 572e2ca):**
+> 1. **Turret assembly IMPLEMENTED** — full `turret.move` module (677 lines) + 1097-line test suite + new `extension_examples/sources/turret.move` + TS scripts (anchor, online, get-priority-list, authorize-turret, helper). Typed witness extension pattern identical to gate/SSU. Turret has `OnlineReceipt` hot-potato consumed by `destroy_online_receipt(receipt, auth_witness)`. Default targeting: same-tribe non-aggressors excluded, `STARTED_ATTACK` +10000 weight, `ENTERED` +1000 weight. **No impact on CivilizationControl gate/SSU patterns.**
+> 2. **Gate extension example DELETED** from `extension_examples/sources/gate.move` — replaced by turret extension example. `vendor/builder-scaffold/move-contracts/smart_gate/` remains the canonical gate extension reference. **Action:** Ensure march-11 code references builder-scaffold, not extension_examples, for gate patterns (already the case).
+> 3. **`fuel::withdraw` signature changed** — now requires `type_id: u64` parameter (added). Validates `fuel.type_id == option::some(type_id)` instead of `is_some` check. Affects any code calling `withdraw` on fuel directly. **Low impact for CivilizationControl** — we don't interact with fuel directly.
+> 4. **EVE Vault sponsored transaction flow FULLY IMPLEMENTED** — new `sponsoredTransactionHandler.ts` (221 lines), `SignSponsoredTransaction.tsx` popup (159 lines), and `/sign_sponsored_transaction/` entrypoint. Server provides `bcsDataB64Bytes` + `preparationId`; player signs with zkLogin; response returned via `/transactions/sponsored/execute`. Real dual-phase flow. **Previously stubbed — now functional.** Relevant for CivilizationControl dApp integration planning.
+> 5. **Builder-scaffold `@evefrontier/dapp-kit`** now references published npm package (`^0.1.0`) instead of local file path. dApp starter is more self-contained.
+> 6. **No pattern-breaking changes for CivilizationControl.** All validated gate/SSU extension/witness patterns remain intact. Turret implementation confirms the same typed witness pattern extends to new assembly types.
 
 ---
 

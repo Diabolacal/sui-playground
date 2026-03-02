@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-02 — Submodule Refresh (world-contracts v0.0.14, evevault a409496, builder-scaffold 572e2ca)
+- **Goal:** Refresh all submodules to latest upstream; audit changes for CivilizationControl impact.
+- **Decision:** Updated 3 of 5 submodules: world-contracts `e508451→78854fe` (v0.0.14, +2 commits: turret implementation + fuel refactor), evevault `687d432→a409496` (+2 commits: sponsored tx flow + build fix), builder-scaffold `6bc43a1→572e2ca` (+2 commits: dapp-kit published + build approvals). builder-documentation and proximity-zk-poc unchanged. **Key findings:** (1) Turret assembly fully implemented — same typed witness pattern as gate/SSU, no CC pattern impact. (2) `extension_examples/gate.move` deleted, replaced by `turret.move`. (3) EVE Vault sponsored tx now fully functional (server→sign→execute dual-phase with zkLogin). (4) `fuel::withdraw` now requires `type_id` param. (5) `@evefrontier/dapp-kit` published on npm. **No pattern-breaking changes for CivilizationControl.**
+- **Files:** vendor/ (3 submodule pointers), docs/research/evefrontier-builder-docs-map.md, docs/core/march-11-reimplementation-checklist.md, docs/strategy/_shared/hackathon-portfolio-roadmap.md
+- **Diff:** submodule pins + ~50 LoC doc updates
+- **Risk:** Low — submodule refresh + docs only
+- **Gates:** typecheck N/A build N/A smoke N/A (docs + submodule pins only)
+- **Follow-ups:** Turret docs page may still be TODO on GitBook — check when refreshing docs. Re-validate all patterns on hackathon test server March 11.
+
+---
+
 ## 2026-03-02 — Multi-Submission Rule Confirmed + Judging Criteria FAQ Reconciliation
 
 - **Goal:** Resolve multi-submission ambiguity (Assumption A-86, Risk #5) and reconcile Deep Surge FAQ judging criteria with official T&C.

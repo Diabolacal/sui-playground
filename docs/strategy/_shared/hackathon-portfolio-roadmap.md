@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-> **Date:** 2026-02-28 (refreshed; Flappy Frontier + Atomic Courier + Gate Presets added)  
+> **Date:** 2026-03-02 (refreshed; submodule refresh + Flappy Frontier + Atomic Courier + Gate Presets)  
 > **Status:** Pre-hackathon planning (code moratorium until March 11)  
 > **Inputs:** Strategy memo, V3 judging analysis, feasibility reports, validation results, rules digest, prize category reverse-engineering, fast-sprint analysis, ZK feasibility report, narrative voice guide, emotional objective, UX architecture spec, Figma structural wireframe, atomic courier experiment (validated), in-game DApp surface analysis  
 > **Mode:** Competitive strategy — bold, decisive, kill-switch-aware
@@ -137,6 +137,8 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 > **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold` now contains canonical gate extension reference implementations: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS script suite + utility library at `ts-scripts/`. Builder-documentation `gate/build.md` now provides end-to-end build guide. `deposit_item()` now merges quantities for same-type items (world-contracts commit 09c2ec2, confirmed at e508451) — simplifies TradePost re-stocking. EVE Vault Quasar sponsorship integration in progress but still stubbed *(Correction 2026-02-28: now functional — see breaking changes below)*. See [builder-docs-map](../../research/evefrontier-builder-docs-map.md) for details.
 >
 > **Breaking changes (2026-02-28 submodule refresh — world-contracts v0.0.13):** (1) Proximity proof REMOVED from all owner-path SSU functions — replaced by AdminACL `verify_sponsor`. Extension path unaffected. (2) `link_gates` now requires AdminACL param + authorized sponsored tx. (3) SDK migrated: `SuiClient` → `SuiJsonRpcClient` (`@mysten/sui/jsonRpc`). (4) `proof.ts` deleted from builder-scaffold (proximity proof generation removed). (5) New `Coin<EVE>` token (10B supply, 9 decimals) — potential coin toll currency. (6) New gate link/unlink events. (7) EVE Vault default chain switched devnet→testnet, sponsored tx API URL changed. No pattern-breaking changes for CivilizationControl — all validated extension/witness patterns remain intact. See [march-11 checklist](../../core/march-11-reimplementation-checklist.md) for updated deployment sequence.
+>
+> **Changes (2026-03-02 submodule refresh — world-contracts v0.0.14, evevault a409496, builder-scaffold 572e2ca):** (1) **Turret assembly fully implemented** — 677-line Move module + 1097-line test suite + extension example + TS scripts. Same typed witness pattern as gate/SSU. No impact on CC gate/SSU patterns. (2) Gate extension example deleted from `extension_examples/` (replaced by turret example); builder-scaffold remains canonical gate reference. (3) `fuel::withdraw` now requires `type_id` param (low CC impact). (4) **EVE Vault sponsored tx fully functional** — new `sponsoredTransactionHandler.ts` + `SignSponsoredTransaction.tsx` popup. Server→sign→execute dual-phase flow with zkLogin. Relevant for dApp integration. (5) `@evefrontier/dapp-kit` now published on npm (`^0.1.0`). **No pattern-breaking changes for CivilizationControl.**
 
 | Item | Risk | Action | Time |
 |------|------|--------|------|
