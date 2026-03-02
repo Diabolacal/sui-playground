@@ -13,11 +13,11 @@
 
 ## 1. Executive Summary
 
-Cargo Bond is a decentralized courier escrow system for EVE Frontier. A player posts a delivery job — reward locked on-chain, collateral required. A courier accepts by staking collateral. Deliver on time: courier receives reward plus collateral refund. Fail or expire: collateral is slashed to the job creator.
+Cargo Bond is the public-facing name for a decentralized courier escrow system built on EVE Frontier, implemented by the **Atomic Courier** Move package (`atomic_courier`). A player posts a delivery job — reward locked on-chain, collateral required. A courier accepts by staking collateral. Deliver on time: courier receives reward plus collateral refund. Fail or expire: collateral is slashed to the job creator.
 
 No trusted backend. No admin intervention. No reputation system. The only trust mechanism is economic: locked funds and enforced deadlines.
 
-The system runs as a shared-object state machine on Sui. The Move package (`atomic_courier`) implements the full lifecycle — post, accept, complete, expire, cancel — with deterministic settlement in every path. Five events cover the entire lifecycle for frontend indexing. Gas cost per job: under 0.01 SUI end-to-end.
+The system runs as a shared-object state machine on Sui. The Atomic Courier package implements the full lifecycle — post, accept, complete, expire, cancel — with deterministic settlement in every path. Five events cover the entire lifecycle for frontend indexing. Gas cost per job: under 0.01 SUI end-to-end.
 
 **Extended scope (conditional):** When a courier accepts a job, the system can issue a time-bounded gate transit permit through the job creator's gates — granting passage that expires automatically with the job deadline. This requires no AdminACL, no sponsorship, and no manual revocation. Gate permit issuance is validated as feasible. Turret integration is not viable (no on-chain turret assembly exists) and is deferred.
 
@@ -34,7 +34,7 @@ Cargo Bond occupies three roles in the multi-entry portfolio:
 
 2. **Primitive diversity.** Cargo Bond exercises `Balance<SUI>` escrow, `Clock` deadlines, shared-object coordination, typed receipts, and extension-witness gate permits — primitives not used by CivilizationControl (dynamic fields, typed witnesses, Groth16) or Flappy Frontier (`sui::random`, leaderboard vectors). Judges seeing the full portfolio recognize breadth.
 
-3. **Architectural impossibility argument.** The core pitch: five cross-object operations in a single PTB (withdraw item, issue gate permit, execute jump, deposit item, release payment). This is architecturally impossible on EVM chains. It validates Sui's object model for real economic coordination, not just token mechanics.
+3. **Architectural composition argument.** The core pitch: five cross-object operations in a single PTB (withdraw item, issue gate permit, execute jump, deposit item, release payment). This level of atomic multi-object coordination is impractical on account-based chains, where each operation would be a separate transaction with failure risk between steps. The full 5-step composition is demonstrable in principle; the MVP focuses on escrow + permit issuance as the proven subset. It validates Sui's object model for real economic coordination, not just token mechanics.
 
 **Build priority within portfolio:** C3 (Corpse Toll) → C1 (Fortune Gate) → E (Flappy Frontier) → C2 (Salvage) → **F (Cargo Bond)** → D (Loot Crate). Cargo Bond ranks 6th because its Move code is 90% complete from the experiment phase. Sprint risk is low.
 
@@ -172,6 +172,8 @@ The `expire_job` function is callable by **anyone** after the deadline passes. T
 
 All operations are O(1). No dynamic fields, no vectors, no loops. Gas costs do not scale with job count.
 
+> **Note:** Gas figures were measured on local devnet (Sui v1.x) and may differ on the hackathon test server or mainnet. Relative cost ordering is expected to hold; absolute values should be re-validated after deployment.
+
 ### Known Simplifications (Accepted for MVP)
 
 - **Surplus collateral is locked.** If a courier deposits more than required, the excess is locked in the job. Production fix: split exact required amount and return remainder. (~5 lines of code.)
@@ -186,6 +188,8 @@ All operations are O(1). No dynamic fields, no vectors, no loops. Gas costs do n
 ### Gate Transit Permits — Validated as Feasible
 
 When a courier accepts a job, the system can issue a time-bounded gate transit permit through the job creator's gates. This transforms "Accept Job" from a simple economic operation into a coordinated access delegation event.
+
+> **Qualification:** Gate permit feasibility is validated against current world-contracts source code (local vendor submodule). Final confirmation requires testing on the hackathon test server once available (March 11+).
 
 **How it works:**
 
@@ -396,9 +400,9 @@ Cargo Bond solves a real coordination problem in multiplayer sandbox games: trus
 
 ### For "Most Creative" Judges
 
-The architectural pitch: **five cross-object operations in a single Programmable Transaction Block** — withdraw item from source SSU, issue gate transit permit, execute jump, deposit item at destination SSU, release payment. This composition is architecturally impossible on EVM chains, where each operation would be a separate transaction with failure risk between steps. Sui's object model makes it atomic.
+The architectural pitch: **five cross-object operations in a single Programmable Transaction Block** — withdraw item from source SSU, issue gate transit permit, execute jump, deposit item at destination SSU, release payment. This level of atomic multi-object coordination is impractical on account-based chains, where each operation would require separate transactions with failure risk between steps. Sui's object model makes it atomic.
 
-Even the MVP (economic escrow + gate permit issuance) demonstrates multi-object coordination that EVM cannot match.
+The full 5-step composition is demonstrable in principle and validated at the individual-operation level. The MVP ships the proven subset: escrow settlement + gate permit issuance in a single PTB. Even this reduced scope demonstrates multi-object coordination that account-based architectures cannot cleanly replicate.
 
 ### For "Best Technical" Judges
 
