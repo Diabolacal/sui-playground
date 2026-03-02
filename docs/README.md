@@ -160,6 +160,7 @@ Strategy documents are organized by project scope:
 - `civilization-control/` — CivilizationControl flagship documentation
 - `flappy-frontier/` — Flappy Frontier sprint entry documentation
 - `cargo-bond/` — Cargo Bond / Atomic Courier sprint entry documentation
+- `fortune-gauntlet/` — Fortune Gauntlet sprint entry documentation
 
 ### Shared (Portfolio-Level)
 
@@ -167,6 +168,7 @@ Strategy documents are organized by project scope:
 |------|---------|
 | [strategy/_shared/hackathon-portfolio-roadmap.md](strategy/_shared/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 6 tracks (CC + Fortune Gate + Salvage + Corpse Toll + Flappy Frontier + Atomic Courier), prize mapping, development cadence, kill criteria |
 | [strategy/_shared/marketing-plan.md](strategy/_shared/marketing-plan.md) | **Marketing & player vote campaign plan** — 4-phase campaign (tease → launch → vote window → Stillness flex), channel playbooks, content cadence, asset checklists |
+| [strategy/_shared/fortuna-gauntlet-scoring-memo.md](strategy/_shared/fortuna-gauntlet-scoring-memo.md) | **Fortune Gauntlet scoring memo** — combined concept (Fortune Gate + Gauntlet), 8-criterion + 4-area scoring (weighted 6.72), prize target (Weirdest Idea), denial rate/checkpoint tuning, kill criteria, portfolio impact |
 
 ### CivilizationControl (Flagship)
 
@@ -183,6 +185,14 @@ Strategy documents are organized by project scope:
 | File | Purpose |
 |------|---------|
 | [strategy/flappy-frontier/flappy-frontier-product-vision.md](strategy/flappy-frontier/flappy-frontier-product-vision.md) | **Product vision** — gameplay, Sui primitives, economic model, MVP scope, risks |
+
+### Fortune Gauntlet (Sprint)
+
+Combined concept: Fortune Gate (VRF probabilistic permit) + The Gauntlet (sequential gate race).
+
+| File | Purpose |
+|------|---------|
+| [strategy/fortune-gauntlet/fortune-gauntlet-project-vision.md](strategy/fortune-gauntlet/fortune-gauntlet-project-vision.md) | **Project vision** — sequential gate race with VRF randomness, consequence model, demo plan, MVP boundaries, risks, graceful degradation path |
 
 ### Cargo Bond / Atomic Courier (Sprint)
 
@@ -244,6 +254,8 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | File | Purpose |
 |------|---------|
 | [analysis/assumption-registry-and-demo-fragility-audit.md](analysis/assumption-registry-and-demo-fragility-audit.md) | **Assumption registry + demo fragility audit** — 87 material assumptions across 16 categories, beat-by-beat determinism scoring, top 5 structural risks, pre-recording checklist, failure scenario responses |
+| [analysis/fortune-gauntlet-feasibility.md](analysis/fortune-gauntlet-feasibility.md) | **Fortune Gauntlet feasibility** — sequential multi-gate checkpoint race with probabilistic permit issuance via `sui::random`; 5-area validation against world-contracts surfaces, proxy consequence architecture, multi-gate DF config pattern |
+| [analysis/fortune-gauntlet-scoring-report.md](analysis/fortune-gauntlet-scoring-report.md) | **Fortune Gauntlet scoring report** — 8-criterion + 4-area FAQ scoring, comparative analysis vs Fortune Gate (5.38) and standalone Gauntlet (7.8), prize category fit (Weirdest Idea primary), denial rate/checkpoint tuning, kill criteria |
 
 ## Sandbox
 
