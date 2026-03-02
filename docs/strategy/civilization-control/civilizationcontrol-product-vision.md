@@ -46,7 +46,7 @@ This is a control plane for the infrastructure you already own. A way to finally
 
 ### Location Constraint — Why List-First, Not Map-First
 
-> **Confirmed constraint (2026-02-16 deep dive):** Structure coordinates are intentionally off-chain. The world-contracts Location struct stores only a 32-byte Poseidon2 hash — **not** raw (x, y, z) coordinates. The hash is irreversible. Wallet authentication does not grant access to raw coordinates. See [authenticated-user-surface-analysis.md §2](../architecture/authenticated-user-surface-analysis.md).
+> **Confirmed constraint (2026-02-16 deep dive):** Structure coordinates are intentionally off-chain. The world-contracts Location struct stores only a 32-byte Poseidon2 hash — **not** raw (x, y, z) coordinates. The hash is irreversible. Wallet authentication does not grant access to raw coordinates. See [authenticated-user-surface-analysis.md §2](../../architecture/authenticated-user-surface-analysis.md).
 
 CivilizationControl is a **control plane over owned structure IDs and on-chain state** — not a map. The gate selector is **list-first** (name/ID/status/links/extension), not map-first. All structure data visible in the Command Overview (status, fuel, extensions, link partners, inventory) is readable on-chain. Location data is not.
 
@@ -57,7 +57,7 @@ Any future map view would require one of:
 
 These are optional enhancements, not MVP requirements.
 
-> **Update 2026-02-19:** Spatial architecture resolved. Hybrid model adopted: **Strategic Network Map** (CivControl-native SVG topology from manual pins) for operational governance display + **Cosmic Context Map** (EF-Map embed iframe) for EVE Frontier universe grounding. See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md) and [UX Architecture Spec §9](../ux/civilizationcontrol-ux-architecture-spec.md).
+> **Update 2026-02-19:** Spatial architecture resolved. Hybrid model adopted: **Strategic Network Map** (CivControl-native SVG topology from manual pins) for operational governance display + **Cosmic Context Map** (EF-Map embed iframe) for EVE Frontier universe grounding. See [Spatial Embed Requirements](../../architecture/spatial-embed-requirements.md) and [UX Architecture Spec §9](../../ux/civilizationcontrol-ux-architecture-spec.md).
 
 ---
 
@@ -310,7 +310,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 - Time-window rule types for gates (interesting but not MVP)
 - Revenue analytics views (the feed provides live data; historical charts are polish)
 - Mobile/responsive layout (desktop-first is fine for demo and hackathon)
-- ZK privacy rules for gate access (validated on local devnet; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md); to re-validate on hackathon test server March 11)
+- ZK privacy rules for gate access (validated on local devnet; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../../operations/zk-gatepass-feasibility-report.md); to re-validate on hackathon test server March 11)
 - Cross-faction diplomatic exchange protocols (fascinating but scope creep)
 
 ---

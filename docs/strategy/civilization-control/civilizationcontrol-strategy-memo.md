@@ -52,7 +52,7 @@
 The 8 judging criteria each carry 12.5% weight (combined 75%), with player vote at 25%. CivilizationControl targets the multiplier effect:
 
 - **ModDesign (12.5%):** A composable system with shared auth, shared data model, and cross-module economic flow is the textbook definition of a 10/10. Single-module entries cap at ~7-8 on this criterion.
-- **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green risks across all validated components — including ZK GatePass (validated on local devnet; to re-validate on hackathon test server March 11). Full gate lifecycle (13 steps, 20 transactions) rehearsed end-to-end on local devnet (2026-02-16); see [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md).
+- **Concept & Feasibility (12.5%):** Gate access control and field-deployable commerce address real, documented pain points. The grounded analysis confirms Green risks across all validated components — including ZK GatePass (validated on local devnet; to re-validate on hackathon test server March 11). Full gate lifecycle (13 steps, 20 transactions) rehearsed end-to-end on local devnet (2026-02-16); see [gate lifecycle runbook](../../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../../core/march-11-reimplementation-checklist.md).
 - **Concept Implementation (12.5%):** Three deployed Move packages with event emission, dynamic field state, and PTB composition demonstrate tangible depth. Template code exists for GateControl's toll pattern.
 - **Frontier Vibe (12.5%):** Gate policy is access governance. Field-deployed commerce extends the economic frontier. Faction currencies create tribal identity. All three map to EVE Online's meta-game culture.
 
@@ -272,9 +272,9 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 > **Confirmed (2026-02-16 auth surface analysis):** Structure coordinates are NOT on-chain — only a Poseidon2 hash is stored. Wallet auth does not grant raw coordinates. Map display is not feasible from chain data alone.
 
-CivilizationControl's dashboard is a **list-first control plane** — structures enumerated by ID/name/status/links, not positioned on a map. Any future map layer requires a server/API coordinate feed, manual user pinning, or third-party mapping tools. The demo and UX framing should reflect this: the gate selector is a structured list with status indicators, not a spatial view. See [authenticated-user-surface-analysis.md §2.5](../architecture/authenticated-user-surface-analysis.md).
+CivilizationControl's dashboard is a **list-first control plane** — structures enumerated by ID/name/status/links, not positioned on a map. Any future map layer requires a server/API coordinate feed, manual user pinning, or third-party mapping tools. The demo and UX framing should reflect this: the gate selector is a structured list with status indicators, not a spatial view. See [authenticated-user-surface-analysis.md §2.5](../../architecture/authenticated-user-surface-analysis.md).
 
-> **Update 2026-02-19:** Spatial architecture resolved via **Hybrid model** — list-first remains primary, supplemented by a CivControl-native SVG topology (Strategic Network Map) + EF-Map embed iframe (Cosmic Context Map). See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md).
+> **Update 2026-02-19:** Spatial architecture resolved via **Hybrid model** — list-first remains primary, supplemented by a CivControl-native SVG topology (Strategic Network Map) + EF-Map embed iframe (Cosmic Context Map). See [Spatial Embed Requirements](../../architecture/spatial-embed-requirements.md).
 
 ---
 
@@ -384,7 +384,7 @@ Insert 30 seconds between Act 3 and Act 4:
 
 3. **Prize targeting.** ZK GatePass is ranked #1 for "Best Technical Implementation" and #2 for "Most Creative" in the bonus prize analysis. These are distinct prizes from "Best Entry" — a standalone ZK submission does not cannibalize CivilizationControl's primary prize target.
 
-4. **Risk containment.** All ZK primitives validated on local devnet (sandbox). Standalone `zk_gate` module published with zero world-contracts dependencies. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain. No remaining feasibility risks — only world-contracts integration remains (to re-validate on hackathon test server March 11). See [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2.
+4. **Risk containment.** All ZK primitives validated on local devnet (sandbox). Standalone `zk_gate` module published with zero world-contracts dependencies. Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and verified on-chain. No remaining feasibility risks — only world-contracts integration remains (to re-validate on hackathon test server March 11). See [ZK feasibility report](../../operations/zk-gatepass-feasibility-report.md) §2.2.
 
 5. **Demo impact.** "'Generating zero-knowledge proof...' → proof verified on-chain → gate opens → and the blockchain never learned who you were." This is a 30-second moment that lands with any audience. High variance, high reward.
 

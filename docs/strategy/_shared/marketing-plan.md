@@ -455,7 +455,7 @@ This is the nuclear option and must be used with extreme restraint:
 
 ### 6.1 Primary Demo Video — CivilizationControl (3 min)
 
-Per the [demo beat sheet](../core/civilizationcontrol-demo-beat-sheet.md):
+Per the [demo beat sheet](../../core/civilizationcontrol-demo-beat-sheet.md):
 
 - **Format:** 16:9, 1080p minimum (1440p preferred for code legibility), 30fps, MP4/WebM.
 - **Audio:** Voiceover narration (calm, authoritative, per voice guide). Subtle ambient music optional — do NOT use energetic/hype music.
@@ -494,7 +494,7 @@ One per entry, optimized for social media autoplay:
 
 ### 7.2 Hackathon Rules Compliance
 
-Per the [rules digest](../research/hackathon-event-rules-digest.md):
+Per the [rules digest](../../research/hackathon-event-rules-digest.md):
 
 - **Vote buying/fraud → disqualification.** Zero tolerance in this plan. No incentives for voting.
 - **1 vote per player via Deepsurge.** We cannot influence the voting mechanism. We can only influence awareness.

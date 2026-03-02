@@ -352,4 +352,4 @@ If TradePost UI not ready: 2-minute GateControl-only (Beats 1–5 + close). Drop
 | [../architecture/world-contracts-auth-model.md](../architecture/world-contracts-auth-model.md) | 3-tier auth model |
 | [../architecture/read-path-architecture-validation.md](../architecture/read-path-architecture-validation.md) | Browser-only read paths |
 | [../ux/civilizationcontrol-ux-architecture-spec.md](../ux/civilizationcontrol-ux-architecture-spec.md) | Full UX specification |
-| [../strategy/civilizationcontrol-strategy-memo.md](../strategy/civilizationcontrol-strategy-memo.md) | Strategy & modules |
+| [../strategy/civilization-control/civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md) | Strategy & modules |

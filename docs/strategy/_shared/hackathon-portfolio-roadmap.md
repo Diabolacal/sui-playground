@@ -132,17 +132,17 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 ### Remaining Validation (March 11 De-Risking)
 
-> **ZK Note:** All ZK GatePass primitives validated on local devnet (sandbox). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and on-chain verified. Standalone `zk_gate` module published. See [validation report](../operations/shortlist-viability-validation-report.md) and [ZK feasibility report](../operations/zk-gatepass-feasibility-report.md) §2.2. Remaining: world-contracts integration (Character, AdminACL, sponsored tx) — to re-validate on hackathon test server March 11.
+> **ZK Note:** All ZK GatePass primitives validated on local devnet (sandbox). Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and on-chain verified. Standalone `zk_gate` module published. See [validation report](../../operations/shortlist-viability-validation-report.md) and [ZK feasibility report](../../operations/zk-gatepass-feasibility-report.md) §2.2. Remaining: world-contracts integration (Character, AdminACL, sponsored tx) — to re-validate on hackathon test server March 11.
 
-> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold` now contains canonical gate extension reference implementations: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS script suite + utility library at `ts-scripts/`. Builder-documentation `gate/build.md` now provides end-to-end build guide. `deposit_item()` now merges quantities for same-type items (world-contracts commit 09c2ec2, confirmed at e508451) — simplifies TradePost re-stocking. EVE Vault Quasar sponsorship integration in progress but still stubbed *(Correction 2026-02-28: now functional — see breaking changes below)*. See [builder-docs-map](../research/evefrontier-builder-docs-map.md) for details.
+> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold` now contains canonical gate extension reference implementations: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS script suite + utility library at `ts-scripts/`. Builder-documentation `gate/build.md` now provides end-to-end build guide. `deposit_item()` now merges quantities for same-type items (world-contracts commit 09c2ec2, confirmed at e508451) — simplifies TradePost re-stocking. EVE Vault Quasar sponsorship integration in progress but still stubbed *(Correction 2026-02-28: now functional — see breaking changes below)*. See [builder-docs-map](../../research/evefrontier-builder-docs-map.md) for details.
 >
-> **Breaking changes (2026-02-28 submodule refresh — world-contracts v0.0.13):** (1) Proximity proof REMOVED from all owner-path SSU functions — replaced by AdminACL `verify_sponsor`. Extension path unaffected. (2) `link_gates` now requires AdminACL param + authorized sponsored tx. (3) SDK migrated: `SuiClient` → `SuiJsonRpcClient` (`@mysten/sui/jsonRpc`). (4) `proof.ts` deleted from builder-scaffold (proximity proof generation removed). (5) New `Coin<EVE>` token (10B supply, 9 decimals) — potential coin toll currency. (6) New gate link/unlink events. (7) EVE Vault default chain switched devnet→testnet, sponsored tx API URL changed. No pattern-breaking changes for CivilizationControl — all validated extension/witness patterns remain intact. See [march-11 checklist](../core/march-11-reimplementation-checklist.md) for updated deployment sequence.
+> **Breaking changes (2026-02-28 submodule refresh — world-contracts v0.0.13):** (1) Proximity proof REMOVED from all owner-path SSU functions — replaced by AdminACL `verify_sponsor`. Extension path unaffected. (2) `link_gates` now requires AdminACL param + authorized sponsored tx. (3) SDK migrated: `SuiClient` → `SuiJsonRpcClient` (`@mysten/sui/jsonRpc`). (4) `proof.ts` deleted from builder-scaffold (proximity proof generation removed). (5) New `Coin<EVE>` token (10B supply, 9 decimals) — potential coin toll currency. (6) New gate link/unlink events. (7) EVE Vault default chain switched devnet→testnet, sponsored tx API URL changed. No pattern-breaking changes for CivilizationControl — all validated extension/witness patterns remain intact. See [march-11 checklist](../../core/march-11-reimplementation-checklist.md) for updated deployment sequence.
 
 | Item | Risk | Action | Time |
 |------|------|--------|------|
 | TradePost cross-address PTB on full world-contracts | Low (already validated) | Re-run validation with published world package | 2 hours |
-| GateControl → `issue_jump_permit` → `jump_with_permit` integration | Low (validated) | ✅ Full 13-step gate lifecycle rehearsed on local devnet (2026-02-16). See [runbook](../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../core/march-11-reimplementation-checklist.md). | DONE |
-| Sponsored transaction setup (AdminACL) | Low (validated) | ✅ Sponsor setup + sponsored `deposit_fuel` and `jump_with_permit` validated. `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present — non-sponsored tx succeeds if sender is in AdminACL. See [runbook](../operations/gate-lifecycle-runbook.md) Steps 6b, 13. | DONE |
+| GateControl → `issue_jump_permit` → `jump_with_permit` integration | Low (validated) | ✅ Full 13-step gate lifecycle rehearsed on local devnet (2026-02-16). See [runbook](../../operations/gate-lifecycle-runbook.md) and [reimplementation checklist](../../core/march-11-reimplementation-checklist.md). | DONE |
+| Sponsored transaction setup (AdminACL) | Low (validated) | ✅ Sponsor setup + sponsored `deposit_fuel` and `jump_with_permit` validated. `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present — non-sponsored tx succeeds if sender is in AdminACL. See [runbook](../../operations/gate-lifecycle-runbook.md) Steps 6b, 13. | DONE |
 | ZK circuit → Move Groth16 verification | Low (fully validated) | ✅ Membership circuit implemented & devnet-validated (sandbox) | DONE |
 | Lux-to-SUI display conversion | Low (UX only) | Inspect game server behavior if accessible | 1 hour |
 
@@ -150,7 +150,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
-| 1 | **Full gate lifecycle setup too complex** | Low (mitigated) | Medium (mitigated) | ✅ Full 13-step lifecycle rehearsed end-to-end on local devnet (2026-02-16). Reproducible [runbook](../operations/gate-lifecycle-runbook.md) with 20 successful transactions. Setup is verbose but mechanical — no remaining unknowns. |
+| 1 | **Full gate lifecycle setup too complex** | Low (mitigated) | Medium (mitigated) | ✅ Full 13-step lifecycle rehearsed end-to-end on local devnet (2026-02-16). Reproducible [runbook](../../operations/gate-lifecycle-runbook.md) with 20 successful transactions. Setup is verbose but mechanical — no remaining unknowns. |
 | 2 | **ZK integration fails** | Very Low | Low — GateControl still works without ZK | All primitives validated on local devnet (sandbox). Membership circuit implemented. Remaining risk is world-contracts integration only — to re-validate on hackathon test server March 11. |
 | 3 | **Scope creep into TribeMint** | Medium | Medium | Hard rule: TribeMint starts only after full CC demo rehearsal passes. |
 | 4 | **Demo video quality insufficient** | Low | High | Script, storyboard, and pre-deploy all state before recording. Multiple takes. Post-production captions. Budget 1 full day for demo. |
@@ -466,9 +466,9 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 | Action | Timeline | Status | Purpose |
 |--------|----------|--------|---------|  
 | ZK circuit design | Feb 20-25 | 🔲 TO RE-VALIDATE (March 11) | Membership circuit (depth 10, Poseidon(2), 2,430 constraints) implemented and validated on local devnet (sandbox); to re-validate on hackathon test server |
-| Gate lifecycle rehearsal | Feb 15-16 | ✅ DONE (2026-02-16) | Full 13-step lifecycle, 20 txs, reproducible [runbook](../operations/gate-lifecycle-runbook.md) |
-| Narrative layer formalization | Feb 17 | ✅ DONE (2026-02-17) | [Voice & narrative guide](civilizationcontrol-voice-and-narrative.md) + [emotional objective](civilizationcontrol-hackathon-emotional-objective.md) + Narrative Impact Check |
-| UX architecture specification | Feb 16-17 | ✅ DONE (2026-02-17) | Screen hierarchy, interaction flows, data models, [Figma-ready brief](../ux/civilizationcontrol-ux-architecture-spec.md) |
+| Gate lifecycle rehearsal | Feb 15-16 | ✅ DONE (2026-02-16) | Full 13-step lifecycle, 20 txs, reproducible [runbook](../../operations/gate-lifecycle-runbook.md) |
+| Narrative layer formalization | Feb 17 | ✅ DONE (2026-02-17) | [Voice & narrative guide](../civilization-control/civilizationcontrol-voice-and-narrative.md) + [emotional objective](../civilization-control/civilizationcontrol-hackathon-emotional-objective.md) + Narrative Impact Check |
+| UX architecture specification | Feb 16-17 | ✅ DONE (2026-02-17) | Screen hierarchy, interaction flows, data models, [Figma-ready brief](../../ux/civilizationcontrol-ux-architecture-spec.md) |
 | UX wireframes (CC flagship) | Feb 17 | ✅ DONE (2026-02-17) | Figma multi-screen structural wireframe (Command Nexus layout — structural only, no implementation) |
 | Verify multi-submission rules | Before March 1 | Pending | If disallowed, restructure portfolio |
 | Pre-hackathon unknowns de-risking | Feb 17-March 5 | In Progress | Character resolution, wallet adapter, RPC discovery — see §10 |
@@ -557,7 +557,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 3. **Game server API** — rely on CCP's server to provide the mapping. Availability uncertain.
 4. **Manual fallback** — user pastes their Character ID. Functional but poor UX.
 
-**MVP mitigation:** Manual Character ID input is already designed into the [UX architecture spec](../ux/civilizationcontrol-ux-architecture-spec.md) §10b as the Day 1 path. Automatic resolution is an upgrade trigger (§12, Trigger 1).
+**MVP mitigation:** Manual Character ID input is already designed into the [UX architecture spec](../../ux/civilizationcontrol-ux-architecture-spec.md) §10b as the Day 1 path. Automatic resolution is an upgrade trigger (§12, Trigger 1).
 
 **Pre-hackathon action:** On the hackathon test server (from March 11), attempt to query `CharacterCreatedEvent` events to verify event indexing viability. Investigate ObjectRegistry discoverability. *(Previously scoped to Stillness; test server provides equivalent RPC capabilities with lower competitive visibility risk.)*
 
@@ -600,7 +600,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **Decision:** List-first control plane is confirmed as the correct approach. The "Active Network" visualization in CivilizationControl shows network topology (which structures are linked and their status), not spatial coordinates. This is already reflected in the UX architecture spec.
 
-> **Update 2026-02-19:** Spatial layer architecture resolved. Hybrid model adopted: **Strategic Network Map** (CivControl-native SVG, ~150–200 LoC, ~2–3h build budget) renders governance topology from manual pins + on-chain state. **Cosmic Context Map** (EF-Map embed, ~10 LoC) provides universe grounding. SVG representation approach deferred to build phase. See [Spatial Embed Requirements](../architecture/spatial-embed-requirements.md).
+> **Update 2026-02-19:** Spatial layer architecture resolved. Hybrid model adopted: **Strategic Network Map** (CivControl-native SVG, ~150–200 LoC, ~2–3h build budget) renders governance topology from manual pins + on-chain state. **Cosmic Context Map** (EF-Map embed, ~10 LoC) provides universe grounding. SVG representation approach deferred to build phase. See [Spatial Embed Requirements](../../architecture/spatial-embed-requirements.md).
 
 ### Risk Summary
 
@@ -632,7 +632,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 |-----|-------|-------------|
 | 1-2 | **Sponsored tx through EVE Vault** — test GasData modification with zkLogin adapter; document MaxEpoch handling | Risk assessment: sponsored tx in demo feasible or not |
 | 3 | **Multi-submission rule verification** — confirm with organizers that multiple entries from one team are allowed | Go/no-go for Track C portfolio strategy |
-| 4-5 | **Demo storyboard drafting** — script all 4 entry demos per [voice guide](civilizationcontrol-voice-and-narrative.md); apply Narrative Impact Check to each segment | Draft storyboards for CC, Fortune Gate, Salvage Protocol, Corpse Toll Road |
+| 4-5 | **Demo storyboard drafting** — script all 4 entry demos per [voice guide](../civilization-control/civilizationcontrol-voice-and-narrative.md); apply Narrative Impact Check to each segment | Draft storyboards for CC, Fortune Gate, Salvage Protocol, Corpse Toll Road |
 
 ### Week 3 (March 3-9): Demo Narrative & Track C Triage
 
@@ -760,9 +760,9 @@ Each entry exercises different Sui capabilities, preventing pattern overlap and 
 
 ### CivilizationControl (3 min)
 
-**Tone:** Confident, understated, authoritative. "We built the missing command layer." Narrative voice per [Voice & Narrative Guide](civilizationcontrol-voice-and-narrative.md). The operator governs — every structure, policy, and revenue stream is a consequence of their decisions.
+**Tone:** Confident, understated, authoritative. "We built the missing command layer." Narrative voice per [Voice & Narrative Guide](../civilization-control/civilizationcontrol-voice-and-narrative.md). The operator governs — every structure, policy, and revenue stream is a consequence of their decisions.
 
-**Framing: Active Network as Consequence Layer.** The demo shows the operator's network of structures producing real outcomes: jumps governed, tolls collected, trades settled, revenue earned. Every screen moment reinforces: this infrastructure is under the operator's authority and generating value. See [emotional objective](civilizationcontrol-hackathon-emotional-objective.md) §3.
+**Framing: Active Network as Consequence Layer.** The demo shows the operator's network of structures producing real outcomes: jumps governed, tolls collected, trades settled, revenue earned. Every screen moment reinforces: this infrastructure is under the operator's authority and generating value. See [emotional objective](../civilization-control/civilizationcontrol-hackathon-emotional-objective.md) §3.
 
 | Segment | Duration | Visual | Audio |
 |---------|----------|--------|-------|
@@ -859,4 +859,4 @@ For each Deepsurge submission:
 
 ## Appendix D: Decision Log Reference
 
-The portfolio strategy decision is recorded in [docs/decision-log.md](../decision-log.md) under entry **2026-02-16 — Hackathon Portfolio Strategy Finalized**.
+The portfolio strategy decision is recorded in [docs/decision-log.md](../../decision-log.md) under entry **2026-02-16 — Hackathon Portfolio Strategy Finalized**.

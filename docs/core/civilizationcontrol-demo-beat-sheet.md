@@ -21,7 +21,7 @@ This is one uninterrupted loop: **Control → Consequence → Revenue.** Every b
 
 ## Voice & Terminology Rules
 
-All narration and on-screen labels use canonical terminology per the [Voice & Narrative Guide](../strategy/civilizationcontrol-voice-and-narrative.md):
+All narration and on-screen labels use canonical terminology per the [Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md):
 
 | Use | Do Not Use |
 |---|---|
@@ -502,7 +502,7 @@ Before pressing record, confirm every required artifact is captured and accessib
 
 ## Narration Anti-Patterns (Avoid)
 
-Per the [Voice & Narrative Guide §7](../strategy/civilizationcontrol-voice-and-narrative.md):
+Per the [Voice & Narrative Guide §7](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md):
 
 - **No feature tourism.** Don't click through every screen. Show less. Show it well.
 - **No technical narration.** Don't say "this calls `issue_jump_permit` with a typed witness." Say "the gate enforces the policy on-chain."
@@ -549,9 +549,9 @@ Capture in this sequence for non-linear editing flexibility:
 
 ## References
 
-- [Product Vision — Demo Narrative](../strategy/civilizationcontrol-product-vision.md)
+- [Product Vision — Demo Narrative](../strategy/civilization-control/civilizationcontrol-product-vision.md)
 - [Demo Evidence Appendix](../operations/demo-evidence-appendix.md)
-- [Hackathon Emotional Objective](../strategy/civilizationcontrol-hackathon-emotional-objective.md)
+- [Hackathon Emotional Objective](../strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md)
 - [Independent Audit §6](../research/civcontrol-independent-audit.md)
-- [Voice & Narrative Guide](../strategy/civilizationcontrol-voice-and-narrative.md)
+- [Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md)
 - [Claim → Proof Matrix](civilizationcontrol-claim-proof-matrix.md)

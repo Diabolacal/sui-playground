@@ -293,4 +293,4 @@ This check is **not required** for:
 
 ---
 
-*This document is the canonical source for CivilizationControl's UI voice and narrative framing. All UI-facing work and demo material should reference it. For technical architecture, see the [UX Architecture Spec](../ux/civilizationcontrol-ux-architecture-spec.md). For strategic context, see the [Strategy Memo](civilizationcontrol-strategy-memo.md) and [Product Vision](civilizationcontrol-product-vision.md).*
+*This document is the canonical source for CivilizationControl's UI voice and narrative framing. All UI-facing work and demo material should reference it. For technical architecture, see the [UX Architecture Spec](../../ux/civilizationcontrol-ux-architecture-spec.md). For strategic context, see the [Strategy Memo](civilizationcontrol-strategy-memo.md) and [Product Vision](civilizationcontrol-product-vision.md).*

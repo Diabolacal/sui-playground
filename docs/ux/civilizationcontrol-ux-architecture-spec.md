@@ -142,7 +142,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 ## 3. Screen Hierarchy
 
-> **Display label convention:** Player-facing navigation labels follow [Voice & Narrative Guide §4, Option C](../strategy/civilizationcontrol-voice-and-narrative.md). The structural names below map to display labels as follows: Dashboard → **Command Overview**, Activity → **Signal Feed**, Settings → **Configuration**. Gates and Trade Posts retain their names. Apply the [Narrative Impact Check](../strategy/civilizationcontrol-voice-and-narrative.md) (§8) when implementing any UI surface defined here.
+> **Display label convention:** Player-facing navigation labels follow [Voice & Narrative Guide §4, Option C](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md). The structural names below map to display labels as follows: Dashboard → **Command Overview**, Activity → **Signal Feed**, Settings → **Configuration**. Gates and Trade Posts retain their names. Apply the [Narrative Impact Check](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md) (§8) when implementing any UI surface defined here.
 
 > **In-game viewport constraint (2026-02-28):** The in-game browser viewport is 787×1198 portrait. The sidebar navigation described below collapses to a hamburger drawer at ≤800px. The contextual panel becomes a full-screen overlay. All content flows single-column. See [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md) §2.
 
@@ -1045,7 +1045,7 @@ Condensed structural reference for Figma prototyping. Defines layout zones, core
 
 All UI labels, navigation items, page titles, headings, empty states, confirmations, and fault messages in CivilizationControl must follow the canonical voice and narrative guide:
 
-> **[CivilizationControl — Voice & Narrative Guide](../strategy/civilizationcontrol-voice-and-narrative.md)**
+> **[CivilizationControl — Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md)**
 
 When implementing screens defined in this specification, apply the label mapping table (§3 of the narrative guide) and run the Narrative Impact Check (§8) before finalizing copy. Preferred navigation labels are defined in the guide's §4 (Option C — Frontier Authority).
 

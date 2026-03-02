@@ -477,8 +477,8 @@ Largest single-criterion loss without ZK: **Creativity (-1.5)**, where ZK is the
 - [GateControl Feasibility Report](../architecture/gatecontrol-feasibility-report.md) — gate extension architecture, capability hierarchy
 - [Shortlist Viability Validation Report](shortlist-viability-validation-report.md) — devnet test evidence for tribe/toll/buy
 - [Shortlist Viability Validation Plan](shortlist-viability-validation-plan.md) — test matrix
-- [CivilizationControl Product Vision](../strategy/civilizationcontrol-product-vision.md)
-- [Hackathon Portfolio Roadmap](../strategy/hackathon-portfolio-roadmap.md) — ZK integration decision (§3, §4)
+- [CivilizationControl Product Vision](../strategy/civilization-control/civilizationcontrol-product-vision.md)
+- [Hackathon Portfolio Roadmap](../strategy/_shared/hackathon-portfolio-roadmap.md) — ZK integration decision (§3, §4)
 - ZK PoC: `vendor/eve-frontier-proximity-zk-poc/` (Groth16 circuits, Move contracts, integration tests)
 - World Contracts: `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` (gate extension system)
 - World Contracts: `vendor/world-contracts/contracts/extension_examples/` (tribe_permit, corpse_gate_bounty patterns)

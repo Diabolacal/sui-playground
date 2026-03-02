@@ -370,7 +370,7 @@ The following tests were not part of the original matrix but would be needed for
 
 - [hackathon-shortlist-recommendations.md](../ideas/hackathon-shortlist-recommendations.md)
 - [sui-playground.md](../architecture/sui-playground.md)
-- [civilizationcontrol-strategy-memo.md](../strategy/civilizationcontrol-strategy-memo.md)
+- [civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md)
 - `vendor/world-contracts/contracts/world/sources/assemblies/gate.move`
 - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move`
 - `vendor/world-contracts/contracts/extension_examples/sources/gate.move`

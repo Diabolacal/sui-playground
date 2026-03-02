@@ -67,11 +67,11 @@
 | All validated toll/trade flows use **`Coin<SUI>`** | Devnet validation report | [shortlist-viability-validation-report.md](../operations/shortlist-viability-validation-report.md#L62-L66): "price = 1,000,000,000 MIST (1 SUI)" and "`request_access()` with 1 SUI `Coin<SUI>` payment" |
 | TradePost buy flow uses `Coin<SUI>` for payment | Devnet validation + architecture doc | [tradepost-cross-address-ptb-validation.md](../architecture/tradepost-cross-address-ptb-validation.md#L205): `payment: Coin<SUI>` |
 | Prices are expressed in MIST (smallest SUI unit) | Validation report + architecture doc | [tradepost-cross-address-ptb-validation.md](../architecture/tradepost-cross-address-ptb-validation.md#L339): `price: u64, // price in MIST (smallest SUI unit)` |
-| Product vision describes tolls as "SUI toll" throughout | Strategy doc | [civilizationcontrol-product-vision.md](../strategy/civilizationcontrol-product-vision.md#L35): "Tribe 12: 0.5 SUI toll" |
+| Product vision describes tolls as "SUI toll" throughout | Strategy doc | [civilizationcontrol-product-vision.md](../strategy/civilization-control/civilizationcontrol-product-vision.md#L35): "Tribe 12: 0.5 SUI toll" |
 | Gate.move has **no built-in toll/payment mechanism** | Code search of gate.move | Grep for `coin\|toll\|price\|payment\|fee\|SUI` in gate.move — only `use sui::` import matches; no payment logic in the base gate module |
 | Extension examples use **item-based bounties**, not coin payments | corpse_gate_bounty.move | [corpse_gate_bounty.move](../../vendor/world-contracts/contracts/extension_examples/sources/corpse_gate_bounty.move#L8): bounty requires depositing an Item (corpse), not paying coins |
-| The `Coin<T>` pattern is generic — custom tokens (e.g., `Coin<TribeToken>`) could be used | Strategy memo + ideas docs | [civilizationcontrol-strategy-memo.md](../strategy/civilizationcontrol-strategy-memo.md#L130): "GateControl to accept ALPHA_COIN as toll, the toll rule must know the coin type at compile time" |
-| Supporting both `Coin<SUI>` and `Coin<CustomToken>` requires separate buy functions or generic `Coin<T>` parameterization | Strategy memo | [civilizationcontrol-strategy-memo.md](../strategy/civilizationcontrol-strategy-memo.md#L132) |
+| The `Coin<T>` pattern is generic — custom tokens (e.g., `Coin<TribeToken>`) could be used | Strategy memo + ideas docs | [civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md#L130): "GateControl to accept ALPHA_COIN as toll, the toll rule must know the coin type at compile time" |
+| Supporting both `Coin<SUI>` and `Coin<CustomToken>` requires separate buy functions or generic `Coin<T>` parameterization | Strategy memo | [civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md#L132) |
 
 **Assessment:** All implemented and validated toll/price mechanics use **`Coin<SUI>`** denominated in MIST. The base world-contracts gate module has no built-in payment logic — tolls are implemented at the **extension layer** by builders. The existing extension examples use item-based bounties (corpses), not coin payments. `Coin<SUI>` toll collection was successfully validated on devnet as a custom extension pattern.
 
@@ -155,8 +155,8 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 
 | Document | Currency References | Key Takeaway |
 |----------|-------------------|--------------|
-| [civilizationcontrol-product-vision.md](../strategy/civilizationcontrol-product-vision.md) | SUI tolls (0.2–0.5 SUI), SUI-priced storefronts, `Coin<TribeToken>` as stretch goal | Core product uses SUI; faction currency is stretch |
-| [civilizationcontrol-strategy-memo.md](../strategy/civilizationcontrol-strategy-memo.md) | `Coin<SUI>` default, `Coin<T>` generic for TribeMint stretch, `Coin<T>` cross-module complexity noted | SUI-denominated is the safe path; custom tokens add risk |
+| [civilizationcontrol-product-vision.md](../strategy/civilization-control/civilizationcontrol-product-vision.md) | SUI tolls (0.2–0.5 SUI), SUI-priced storefronts, `Coin<TribeToken>` as stretch goal | Core product uses SUI; faction currency is stretch |
+| [civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md) | `Coin<SUI>` default, `Coin<T>` generic for TribeMint stretch, `Coin<T>` cross-module complexity noted | SUI-denominated is the safe path; custom tokens add risk |
 | [hackathon-ideas-grounded-v3-judged.md](../ideas/hackathon-ideas-grounded-v3-judged.md) | "5 SUI" prices, "1 SUI" tolls throughout | All concrete examples use SUI |
 | [hackathon-ideas-v2-doc-enabled.md](../ideas/hackathon-ideas-v2-doc-enabled.md) | `Coin<SUI>` for V1 ideas, `Coin<TribeToken>` for Faction Mint idea | Custom tokens are a new idea on top of SUI base |
 | [shortlist-viability-validation-report.md](../operations/shortlist-viability-validation-report.md) | All tests use `Coin<SUI>`, prices in MIST | Only SUI has been validated on devnet |

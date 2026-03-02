@@ -160,6 +160,6 @@ When choosing what to implement next, evaluate against this framework:
 ## Cross-References
 
 - **Voice & Narrative Guide:** [civilizationcontrol-voice-and-narrative.md](civilizationcontrol-voice-and-narrative.md) — label mapping, microcopy, demo framing, Narrative Impact Check
-- **UX Architecture Spec:** [../ux/civilizationcontrol-ux-architecture-spec.md](../ux/civilizationcontrol-ux-architecture-spec.md) — screen hierarchy, interaction flows, data models
+- **UX Architecture Spec:** [../../ux/civilizationcontrol-ux-architecture-spec.md](../../ux/civilizationcontrol-ux-architecture-spec.md) — screen hierarchy, interaction flows, data models
 - **Product Vision:** [civilizationcontrol-product-vision.md](civilizationcontrol-product-vision.md) — problem/vision/demo narrative
 - **Strategy Memo:** [civilizationcontrol-strategy-memo.md](civilizationcontrol-strategy-memo.md) — adversarial review, reconciled recommendation

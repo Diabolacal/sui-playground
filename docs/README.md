@@ -153,15 +153,39 @@ Consistent naming conventions used across all active documents.
 
 ## Strategy
 
+Strategy documents are organized by project scope:
+
+- `_shared/` — Portfolio-level strategy and cross-project planning
+- `civilization-control/` — CivilizationControl flagship documentation
+- `flappy-frontier/` — Flappy Frontier sprint entry documentation
+- `cargo-bond/` — Cargo Bond / Atomic Courier sprint entry documentation
+
+### Shared (Portfolio-Level)
+
 | File | Purpose |
 |------|---------|
-| [strategy/civilizationcontrol-strategy-memo.md](strategy/civilizationcontrol-strategy-memo.md) | Adversarial strategy review — thesis, critique, reconciled recommendation for CivilizationControl |
-| [strategy/civilizationcontrol-product-vision.md](strategy/civilizationcontrol-product-vision.md) | Human-centered product vision pitch — problem, vision, demo narrative, judging alignment |
-| [strategy/civilizationcontrol-voice-and-narrative.md](strategy/civilizationcontrol-voice-and-narrative.md) | **Canonical UI voice & narrative guide** — positioning, label mapping, microcopy, demo framing, Narrative Impact Check |
-| [strategy/civilizationcontrol-hackathon-emotional-objective.md](strategy/civilizationcontrol-hackathon-emotional-objective.md) | **Hackathon emotional objective** — primary emotional target, Five-Pillar Narrative Lens, 3-Second Emotional Check, consequence layer, demo strategy |
-| [strategy/hackathon-portfolio-roadmap.md](strategy/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 6 tracks (CC + Fortune Gate + Salvage + Corpse Toll + Flappy Frontier + Atomic Courier), prize mapping, development cadence, kill criteria |
-| [strategy/marketing-plan.md](strategy/marketing-plan.md) | **Marketing & player vote campaign plan** — 4-phase campaign (tease → launch → vote window → Stillness flex), channel playbooks, content cadence, asset checklists |
-| [strategy/strategic-next-move-audit-2026-02-18.md](strategy/strategic-next-move-audit-2026-02-18.md) | **Strategic next-move audit** — pre-hackathon bottleneck analysis, STOP/CONTINUE/START, top-3 actions, calendar sketch |
+| [strategy/_shared/hackathon-portfolio-roadmap.md](strategy/_shared/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 6 tracks (CC + Fortune Gate + Salvage + Corpse Toll + Flappy Frontier + Atomic Courier), prize mapping, development cadence, kill criteria |
+| [strategy/_shared/marketing-plan.md](strategy/_shared/marketing-plan.md) | **Marketing & player vote campaign plan** — 4-phase campaign (tease → launch → vote window → Stillness flex), channel playbooks, content cadence, asset checklists |
+
+### CivilizationControl (Flagship)
+
+| File | Purpose |
+|------|---------|
+| [strategy/civilization-control/civilizationcontrol-strategy-memo.md](strategy/civilization-control/civilizationcontrol-strategy-memo.md) | Adversarial strategy review — thesis, critique, reconciled recommendation for CivilizationControl |
+| [strategy/civilization-control/civilizationcontrol-product-vision.md](strategy/civilization-control/civilizationcontrol-product-vision.md) | Human-centered product vision pitch — problem, vision, demo narrative, judging alignment |
+| [strategy/civilization-control/civilizationcontrol-voice-and-narrative.md](strategy/civilization-control/civilizationcontrol-voice-and-narrative.md) | **Canonical UI voice & narrative guide** — positioning, label mapping, microcopy, demo framing, Narrative Impact Check |
+| [strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md](strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md) | **Hackathon emotional objective** — primary emotional target, Five-Pillar Narrative Lens, 3-Second Emotional Check, consequence layer, demo strategy |
+| [strategy/civilization-control/strategic-next-move-audit-2026-02-18.md](strategy/civilization-control/strategic-next-move-audit-2026-02-18.md) | **Strategic next-move audit** — pre-hackathon bottleneck analysis, STOP/CONTINUE/START, top-3 actions, calendar sketch |
+
+### Flappy Frontier (Sprint)
+
+| File | Purpose |
+|------|---------|
+| [strategy/flappy-frontier/flappy-frontier-product-vision.md](strategy/flappy-frontier/flappy-frontier-product-vision.md) | **Product vision** — gameplay, Sui primitives, economic model, MVP scope, risks |
+
+### Cargo Bond / Atomic Courier (Sprint)
+
+_Documentation pending. On-chain package name: Atomic Courier. Player-facing name: Cargo Bond._
 
 ## Research (Prep Only — Not for Hackathon Repo)
 

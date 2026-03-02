@@ -51,7 +51,7 @@ ls vendor/eve-frontier-proximity-zk-poc
 | [docs/README.md](docs/README.md) | **Documentation index** — full map of all docs by category |
 | [docs/core/spec.md](docs/core/spec.md) | **CivilizationControl system spec** — boundaries, on-chain model, risk model |
 | [docs/research/hackathon-event-rules-digest.md](docs/research/hackathon-event-rules-digest.md) | **Hackathon rules digest** — dates, eligibility, judging, compliance checklist |
-| [docs/strategy/hackathon-portfolio-roadmap.md](docs/strategy/hackathon-portfolio-roadmap.md) | Portfolio strategy — multi-entry plan, prize targeting, dev cadence |
+| [docs/strategy/_shared/hackathon-portfolio-roadmap.md](docs/strategy/_shared/hackathon-portfolio-roadmap.md) | Portfolio strategy — multi-entry plan, prize targeting, dev cadence |
 | [docs/core/march-11-reimplementation-checklist.md](docs/core/march-11-reimplementation-checklist.md) | March 11 carry-forward — validated patterns, day-1 bootstrap |
 | [docs/architecture/sui-playground.md](docs/architecture/sui-playground.md) | Local devnet quickstart — start, build, publish, troubleshoot |
 | [docs/operations/gate-lifecycle-runbook.md](docs/operations/gate-lifecycle-runbook.md) | Gate lifecycle runbook — 13-step procedure with evidence |

@@ -326,7 +326,7 @@ No documented mechanism exists for how the EVE Frontier game client loads or pre
 - [Shortlist Viability Validation Report](../operations/shortlist-viability-validation-report.md)
 - [Demo Beat Sheet](../core/civilizationcontrol-demo-beat-sheet.md)
 - [March 11 Reimplementation Checklist](../core/march-11-reimplementation-checklist.md)
-- [Product Vision](../strategy/civilizationcontrol-product-vision.md)
+- [Product Vision](../strategy/civilization-control/civilizationcontrol-product-vision.md)
 - builder-documentation SSU docs: `vendor/builder-documentation/smart-assemblies/storage-unit/README.md`
 - builder-documentation dapp-kit: `vendor/builder-documentation/dapp-kit/dapp-kit.md`
 - world-contracts source: `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move`
