@@ -138,6 +138,7 @@ Consistent naming conventions used across all active documents.
 | [architecture/read-path-architecture-validation.md](architecture/read-path-architecture-validation.md) | **Read-path architecture validation** — wallet→structures discovery, event inventory (31 events / 16 types), signal feed data sources, Option A/B/C comparison, scale model, demo data sourcing, gap list |
 | [architecture/tradepost-buyer-journey-validation.md](architecture/tradepost-buyer-journey-validation.md) | **TradePost buyer journey validation** — PARTIAL PASS verdict, minimal architecture (object types, PTB shapes, events), March 11 test checklist, doc corrections |
 | [architecture/structural-risk-sweep-2026-02-18.md](architecture/structural-risk-sweep-2026-02-18.md) | **Structural Risk Sweep** — adversarial pre-mortem synthesizing 6 audit tracks: Top 5 risks ranked (#1 sponsor access reclassified CRITICAL→HIGH with probability model), system dependency graph, Day-1 validation protocol, full assumptions ledger (13 on-chain + 11 environmental + 5 strategy) |
+| [architecture/gate-turret-courier-access-feasibility.md](architecture/gate-turret-courier-access-feasibility.md) | **Gate & Turret Access Control + Cargo Bond feasibility** — permit issuance auth, time-bounding via job deadline, no turret contract exists, single-extension-slot constraint, accept-job PTB shape, natural expiry fail-safe, cross-extension risks, recommended hackathon approach |
 | [architecture/sweep-audit-artifacts-2026-02-18.md](architecture/sweep-audit-artifacts-2026-02-18.md) | **Sweep audit artifacts** — consolidated working notes from 6 parallel audit tracks (A–F): 58 findings, severity distribution, cross-reference to main report |
 | [architecture/spatial-embed-requirements.md](architecture/spatial-embed-requirements.md) | **Spatial embed requirements** — EF-Map embed capability audit, 12 visual primitives gap analysis, hybrid architecture recommendation (CivControl SVG topology + EF-Map iframe context) |
 | [architecture/in-game-dapp-surface.md](architecture/in-game-dapp-surface.md) | **In-game DApp browser surface** — confirmed runtime constraints (viewport, wallet, storage, security), DApp URL strategy, gate/SSU UI responsibilities, wallet states, deployment implications |
@@ -185,7 +186,11 @@ Strategy documents are organized by project scope:
 
 ### Cargo Bond / Atomic Courier (Sprint)
 
-_Documentation pending. On-chain package name: Atomic Courier. Player-facing name: Cargo Bond._
+On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name: **Cargo Bond**.
+
+| File | Purpose |
+|------|---------|
+| [strategy/cargo-bond/cargo-bond-product-vision.md](strategy/cargo-bond/cargo-bond-product-vision.md) | **Product vision** — escrow lifecycle, collateral model, gate access integration, Sui primitives, economic model, demo scope, MVP boundaries, risks |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 
