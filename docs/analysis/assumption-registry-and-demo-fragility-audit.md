@@ -218,7 +218,7 @@
 | A-83 | 3 funded demo accounts with distinct tribe memberships: Operator, Hostile (tribe != 7), Ally (tribe = 7) | demo-beat-sheet "Demo Account Roles" | Infrastructure | High | Yes | If tribes cannot be set on test server, denial/allow scenarios cannot be staged |
 | A-84 | Beats captured in sequence (2->3->4->5->6->7) because each beat depends on prior beat state | demo-beat-sheet "Recommended Recording Order" | Infrastructure | Medium | No | Out-of-order capture causes state inconsistencies |
 | A-85 | Demo can be re-recorded (multiple takes); not strictly live | demo-beat-sheet "capture mode notes" | Hackathon rule | Low | No | If single-take required, any tx failure forces full restart |
-| A-86 | Multiple submissions from one team/individual are permitted by hackathon rules | hackathon-portfolio-roadmap Risk #5 | Hackathon rule | High | No | If disallowed, portfolio strategy collapses to single CC entry |
+| A-86 | Multiple submissions from one team/individual are permitted by hackathon rules | hackathon-portfolio-roadmap Risk #5 | Hackathon rule | High | ✅ Yes (FAQ 2026-03-02) | ~~If disallowed, portfolio strategy collapses to single CC entry~~ Confirmed allowed; each project must be unique |
 | A-87 | Operator must own BOTH gates in a linked pair for paired authorization | implementation-plan S18, gate.move `authorize_extension` requires OwnerCap | Contract behavior | High | Yes | Cannot authorize partner-owned gates; must own both |
 
 ---

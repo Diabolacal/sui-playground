@@ -43,6 +43,7 @@
 - **Excluded:** Quebec, OFAC-sanctioned countries (Cuba, Crimea, DPRK, Iran, Syria), CCP employees/families
 - **VPN prohibition:** Must not use VPN to circumvent geographic restrictions
 - **Team size:** Max 5 members per team; no multi-team participation
+- **Multiple submissions:** A team may submit multiple projects; each must be unique (confirmed via Deep Surge FAQ, 2026-03-02)
 
 ---
 
@@ -99,6 +100,8 @@ Judged by a panel of 3 qualified judges + 25% player vote weighting:
 | **Most Creative** | Novel ideas, clever reinterpretations, bold system concepts |
 | **Weirdest Idea** | Visually striking, surprising, meme-worthy, strange directions |
 | **Best Live Frontier Integration** | Deployed and functioning in Stillness with real players |
+
+> **FAQ reconciliation (2026-03-02):** The Deep Surge FAQ summarizes judging as four areas: Utility, Technical Implementation, Creativity, Frontier Integration. This is a condensed view — it maps to the 8 official criteria above (Utility → Player Utility + Most Utility bonus; Technical Implementation → Concept Implementation + Best Technical bonus; Creativity → Creativity & Originality + Most Creative + Weirdest Idea bonuses; Frontier Integration → EVE Frontier Relevance & Vibe + Best Live Integration bonus). The FAQ also expands Concept & Feasibility, Mod Design, and Concept Implementation with editorial detail consistent with the T&C wording. **The 8-criterion framework above remains the authoritative reference for strategic planning.** The FAQ does not introduce new criteria or alter weights.
 
 ---
 
@@ -167,8 +170,9 @@ Judged by a panel of 3 qualified judges + 25% player vote weighting:
 1. **Code start date:** On or after hackathon announcement (not before)
 2. **Submission deadline:** 31 March 2026, 23:59 UTC — hard cutoff
 3. **Max team size:** 5 members, no multi-team
-4. **Submission platform:** GitHub repo + Deepsurge registration
-5. **One prize max** per eligible Entry
+4. **Multiple submissions allowed** — each project must be unique (FAQ confirmed 2026-03-02)
+5. **Submission platform:** GitHub repo + Deepsurge registration
+6. **One prize max** per eligible Entry
 6. **Player vote = 25%** of Best Entry score
 7. **Stillness deployment bonus** window: 14 days after hackathon close
 8. **Original work only** — no copied/reused hackathon code

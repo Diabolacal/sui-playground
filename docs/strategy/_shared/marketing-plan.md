@@ -501,7 +501,9 @@ Per the [rules digest](../../research/hackathon-event-rules-digest.md):
 - **Respectful conduct required (§7).** All interactions must be professional and non-harassing. Respond to criticism gracefully.
 - **No securities or financial instruments (§5).** Marketing materials must not imply Lux has real-world value or that CivilizationControl generates real revenue. Frame as in-game governance utility.
 
-### 7.3 "Multiple Submissions" Clarification Risk
+### 7.3 ~~"Multiple Submissions" Clarification Risk~~
+
+> **RESOLVED (2026-03-02):** Deep Surge FAQ confirms multiple submissions are allowed; each project must be unique. The contingency below is retained for historical context but is no longer active.
 
 If organizers rule that multiple submissions from one team are NOT allowed:
 

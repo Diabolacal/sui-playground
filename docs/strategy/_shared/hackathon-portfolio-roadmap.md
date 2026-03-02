@@ -154,7 +154,7 @@ The ZK feasibility analysis produced a clear recommendation: **integrate, don't 
 | 2 | **ZK integration fails** | Very Low | Low — GateControl still works without ZK | All primitives validated on local devnet (sandbox). Membership circuit implemented. Remaining risk is world-contracts integration only — to re-validate on hackathon test server March 11. |
 | 3 | **Scope creep into TribeMint** | Medium | Medium | Hard rule: TribeMint starts only after full CC demo rehearsal passes. |
 | 4 | **Demo video quality insufficient** | Low | High | Script, storyboard, and pre-deploy all state before recording. Multiple takes. Post-production captions. Budget 1 full day for demo. |
-| 5 | **Multiple submissions disallowed** | Low | Critical | FAQ indicates yes. Verify with organizer before March 11. If NO: Fortune Gate becomes GateControl's weird-rule-type, pivoting to single-entry strategy. |
+| 5 | **~~Multiple submissions disallowed~~** | ~~Low~~ | ~~Critical~~ | ✅ **RESOLVED (2026-03-02):** Deep Surge FAQ confirms multiple submissions are allowed; each project must be unique. Portfolio strategy validated. |
 
 ### Estimated Score
 
@@ -447,7 +447,7 @@ In the worst case, we win **1 prize** (Weirdest Idea via Fortune Gate) — which
 | Corpse Toll fails (template mismatch) | Atomic Courier absorbs Most Utility targeting | Low — covered |
 | Flappy Frontier fails (Canvas issues) | Drop to static leaderboard; player vote still viable via other entries | Low — nice-to-have |
 | Atomic Courier fails (world-contracts integration) | Pure economic demo (no SSU); or cut entirely | Very Low — backup entry |
-| Multiple submissions disallowed | Fortune Gate becomes GateControl weird-rule; only CC submitted | Medium — lose bonus category snipes |
+| Multiple submissions disallowed | ~~Fortune Gate becomes GateControl weird-rule; only CC submitted~~ | ~~Medium~~ ✅ **RESOLVED** — multi-submission confirmed |
 
 ### Worst-Case Floor
 
@@ -631,7 +631,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 | Day | Focus | Deliverable |
 |-----|-------|-------------|
 | 1-2 | **Sponsored tx through EVE Vault** — test GasData modification with zkLogin adapter; document MaxEpoch handling | Risk assessment: sponsored tx in demo feasible or not |
-| 3 | **Multi-submission rule verification** — confirm with organizers that multiple entries from one team are allowed | Go/no-go for Track C portfolio strategy |
+| 3 | ~~**Multi-submission rule verification** — confirm with organizers that multiple entries from one team are allowed~~ | ✅ **COMPLETED (2026-03-02):** Deep Surge FAQ confirms multiple submissions allowed; each must be unique. Go for Track C. |
 | 4-5 | **Demo storyboard drafting** — script all 4 entry demos per [voice guide](../civilization-control/civilizationcontrol-voice-and-narrative.md); apply Narrative Impact Check to each segment | Draft storyboards for CC, Fortune Gate, Salvage Protocol, Corpse Toll Road |
 
 ### Week 3 (March 3-9): Demo Narrative & Track C Triage

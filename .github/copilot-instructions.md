@@ -417,7 +417,8 @@ Official hackathon event rules are captured in `docs/research/hackathon-event-ru
 3. **Before submission**, cross-check repo hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
 4. **Consult the digest** when evaluating idea feasibility, judging criteria alignment, or bonus prize strategy.
 5. An eligible Entry may win **max 1 prize**. Player vote = 25% of Best Entry score. Stillness deployment bonus window = 14 days post-close.
-6. **No vote manipulation** — do not automate vote solicitation, trading, or purchasing.
+6. **Multiple submissions allowed** — each project must be unique (confirmed via Deep Surge FAQ, 2026-03-02).
+7. **No vote manipulation** — do not automate vote solicitation, trading, or purchasing.
 
 ## Official Documentation Reference Policy
 

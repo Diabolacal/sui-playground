@@ -6,6 +6,18 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-02 — Multi-Submission Rule Confirmed + Judging Criteria FAQ Reconciliation
+
+- **Goal:** Resolve multi-submission ambiguity (Assumption A-86, Risk #5) and reconcile Deep Surge FAQ judging criteria with official T&C.
+- **Decision:** (1) Deep Surge FAQ explicitly allows multiple submissions per team; each must be unique. Portfolio strategy validated — no pivot required. (2) FAQ summarizes judging as 4 areas (Utility, Technical Implementation, Creativity, Frontier Integration); this condenses the 8 official T&C criteria but does not contradict them. The 8-criterion framework remains authoritative for scoring and strategy. (3) All three portfolio entries (CivilizationControl, Flappy Frontier, Cargo Bond) map cleanly to the FAQ's 4 areas — no repositioning needed.
+- **Files:** docs/research/hackathon-event-rules-digest.md, docs/strategy/_shared/hackathon-portfolio-roadmap.md, docs/strategy/_shared/marketing-plan.md, docs/strategy/civilization-control/strategic-next-move-audit-2026-02-18.md, docs/architecture/structural-risk-sweep-2026-02-18.md, docs/architecture/sweep-audit-artifacts-2026-02-18.md, docs/analysis/assumption-registry-and-demo-fragility-audit.md, docs/decision-log.md, .github/copilot-instructions.md, AGENTS.md
+- **Diff:** ~+30 / -20 (clarifications, resolved flags, FAQ reconciliation note)
+- **Risk:** Low — documentation only
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Follow-ups:** None — ambiguity fully resolved.
+
+---
+
 ## 2026-03-01 — Atomic Courier Feasibility Confirmed (Local Devnet)
 
 - **Goal:** Determine whether `withdraw_item + deposit_item + Coin<SUI> transfer` can execute atomically in a single PTB on Sui (world contracts).
@@ -110,7 +122,7 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 - **Diff:** +320 / -0
 - **Risk:** Low — analysis only, no code changes
 - **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
-- **Follow-ups:** Send organizer message (4 questions: AdminACL access, admin tools, structure spawning, multi-entry); Day-1 sponsor test on test server; prepare local devnet fallback demo environment
+- **Follow-ups:** Send organizer message (4 questions: AdminACL access, admin tools, structure spawning, ~~multi-entry~~ ✅ confirmed); Day-1 sponsor test on test server; prepare local devnet fallback demo environment
 
 ## 2026-02-18 — TradePost Buyer Journey Validation (PARTIAL PASS)
 
@@ -262,4 +274,4 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 - **Diff:** +620 / -0
 - **Risk:** Medium — ZK integration complexity mitigated by graceful degradation to tribe+toll rules
 - **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
-- **Follow-ups:** Verify multi-submission rules pre-March 1; storyboard all demos pre-March 11; no production code until March 11
+- **Follow-ups:** ~~Verify multi-submission rules pre-March 1~~ ✅ confirmed (FAQ 2026-03-02); storyboard all demos pre-March 11; no production code until March 11

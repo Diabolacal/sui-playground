@@ -29,7 +29,7 @@ The bottleneck is **integration risk** — not documentation, not strategy, not 
 Three critical unknowns remain open from the portfolio roadmap §10:
 1. Character resolution on hackathon test server (RED blocker — previously scoped to Stillness; test server provides equivalent validation)
 2. EVE Vault adapter PTB signing (untested)
-3. Multi-submission rule (unconfirmed — entire portfolio strategy hinges on this)
+3. ~~Multi-submission rule (unconfirmed)~~ ✅ **RESOLVED (2026-03-02):** Deep Surge FAQ confirms multiple submissions allowed; each must be unique. Portfolio strategy validated.
 
 These are **not documentation gaps**. They are **empirical unknowns that only testing can resolve.**
 
@@ -67,7 +67,7 @@ These are **not documentation gaps**. They are **empirical unknowns that only te
 **Specific outcome:**
 - Confirm or refute Character event indexing on hackathon test server RPC (3-4 hours). Decision: event-based resolution vs. manual Character ID input. *(Note: test server is the primary target from March 11; Stillness testing is deferred to post-submission deployment phase.)*
 - Build a 50-line HTML page: `@mysten/dapp-kit` → connect EVE Vault → sign a trivial PTB on test server (3-4 hours). Pass/fail.
-- Email/Discord organizers: "Can one team submit multiple entries?" (30 minutes). If no, restructure portfolio before March 11.
+- ~~Email/Discord organizers: "Can one team submit multiple entries?" (30 minutes). If no, restructure portfolio before March 11.~~ ✅ **RESOLVED (2026-03-02):** Deep Surge FAQ confirms yes.
 - Compile a minimal Move package that imports `world::gate`, `world::character`, `world::storage_unit` against published world-contracts on local devnet (2-4 hours). Confirm `issue_jump_permit<TestAuth>()` is callable from a dependent package.
 
 **What to avoid:** Turning these tests into full implementations. Each is a binary pass/fail — get the answer and stop. Delete throwaway code afterward.

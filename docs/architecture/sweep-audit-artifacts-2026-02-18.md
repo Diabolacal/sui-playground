@@ -123,7 +123,7 @@
 
 | ID | Finding | Severity | Evidence Summary |
 |----|---------|----------|-----------------|
-| F-1 | Multi-submission rule ambiguous | **CRITICAL** | Rules: "no multi-team" but silent on multi-entry per team; portfolio EV hinges on this |
+| F-1 | ~~Multi-submission rule ambiguous~~ | ~~**CRITICAL**~~ ✅ **RESOLVED** | Deep Surge FAQ confirms multiple submissions allowed; each must be unique (2026-03-02) |
 | F-5 | Sponsored tx access on test server | **HIGH** | `add_sponsor_to_acl()` requires GovernorCap; *(reclassified — see §6 of main report)* |
 | F-7 | Admin-spawned structures assumption (E6) | **HIGH** | If no admin tools, 25–35 txs and 3–5 hours for infrastructure |
 | F-2 | Test server vs Stillness chain identity unknown | MEDIUM | May be same chain or separate; affects data setup |
