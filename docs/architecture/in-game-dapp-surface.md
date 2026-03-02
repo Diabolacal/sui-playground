@@ -335,11 +335,15 @@ The in-game DApp must clearly communicate sponsorship state to users:
 
 ## 12. Turrets
 
-**Status:** TBA — not fully supported in world-contracts as of v0.0.13 (commit e508451).
+(Updated 2026-03-02 after turret support confirmed in world-contracts v0.0.14.)
 
-Turrets are currently listed as smart assemblies in world-contracts but lack extension hooks comparable to Gates and SSUs. CivilizationControl does not include turret governance for Day-1.
+**Status:** Turret assembly exists (678 lines, `turret.move`). Same typed-witness extension pattern as Gate (`authorize_extension<Auth>` + `swap_or_fill`).
 
-**Future consideration:** If turret extension API stabilizes, a "Turret Control" module could follow the same pattern as GateControl (authorize extension → configure rules → enforce on-chain).
+**Key difference from Gate:** Turret extensions control **targeting priority** (not allow/deny). The extension function `get_target_priority_list` has a fixed 4-argument signature and cannot access external state (no `uid()` accessor, no DF reads). Default behavior applies tribe-based filtering: same-tribe non-aggressors excluded, different-tribe and aggressors get priority boost.
+
+**CivilizationControl relevance:** Turret governance is feasible for tribe-level targeting policies but not for identity-specific policies (bonds, permits, address-level allow/deny). The closed-world constraint means the extension cannot read ExtensionConfig DFs at targeting time. Day-1 scope: turret enrollment (authorize extension) is achievable; custom targeting logic is limited to tribe-based rules.
+
+See [turret-contract-surface.md](../architecture/turret-contract-surface.md) for full analysis.
 
 ---
 

@@ -381,7 +381,7 @@ If CC ships with LootDrop as stretch module, do NOT submit Loot Crate separately
 - Cross-extension composition in single PTB
 - `Coin<EVE>` substitution (tests use SUI)
 - Concurrent job handling
-- Turret/gate allowlisting hooks
+- ~~Turret/gate allowlisting hooks~~ Gate transit permit integration (validated feasible, not in MVP). Turrets have no allow/deny list mechanism — turret "allowlisting" is not a concept in world-contracts.
 
 **Position as separate sprint project** — not merged into CivControl. Different domain (logistics vs. governance), different Sui primitives exercised, independent demo arc.
 
@@ -394,7 +394,7 @@ If CC ships with LootDrop as stretch module, do NOT submit Loot Crate separately
 
 **Non-Goals (scope guardrails):**
 - No SSU item custody simulation (economic enforcement only)
-- No gate/turret integration (future enhancement, not MVP)
+- No gate/turret integration (out of scope — turret closed-world constraint prevents bond-state access)
 - No sponsored transactions (courier operations are direct-sign)
 - No in-game functionality (external browser only for courier dApp)
 

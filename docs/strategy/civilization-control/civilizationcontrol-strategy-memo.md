@@ -239,7 +239,18 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 1. **TribeMint does not survive critique.** Its weighted score (6.31) is the weakest of the three core modules. Its player vote (5/10) is below average. Its "connective tissue" value is real but modest — a 40-second demo payoff for a module that adds significant integration complexity (Coin<T> type parameterization across packages). The claim that it elevates the system above the sum of its parts is plausible but unproven, and the integration cost is tangible.
 
-2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (shared-listing escrow; SSU extension pattern supported by code analysis but not yet devnet-validated) spans two distinct smart assembly types with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
+2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (shared-listing escrow; SSU extension pattern supported by code analysis but not yet devnet-validated) spans two of the three smart assembly types (turrets exist as of v0.0.14 but are scoped out due to extension calling convention constraints) with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
+
+### CC Governance Preset Mapping (Turrets as Online/Offline Toggles)
+
+Turrets cannot be programmatically configured per-player or read external policy state (closed-world constraint). CivilizationControl treats turrets as **binary posture switches** — online or offline — paired with gate policy:
+
+| Posture | Gates | Turrets | Effect |
+|---------|-------|---------|--------|
+| **Trade** | Open (permit-based, toll rules active) | **Offline** | Commerce-friendly: visitors pass through gates freely (subject to toll); turrets do not engage. |
+| **Defensive** | Tribe-only (tribe filter active) | **Online** (default behavior) | Territorial lockdown: only tribe members pass; turrets engage non-tribe and aggressors automatically via default targeting (same-tribe non-aggressors excluded, different-tribe and aggressors priority-boosted). |
+
+> **Note:** A "mixed" posture (gates open to toll payers, turrets online and exempting toll payers) is **not possible** under the current turret architecture. Turrets cannot read gate permit status or toll payment state. This mismatch is documented for future evaluation if CCP/Stillness expands the turret interface. See `docs/architecture/turret-closed-world-clarified.md`.
 
 3. **Delivery confidence matters more than peak theoretical score.** A polished two-module system with robust error handling, comprehensive events, and a clean recorded demo will outscore a shaky three-module system with integration bugs. Hackathon judges penalize visible incompleteness more than missing ambition.
 

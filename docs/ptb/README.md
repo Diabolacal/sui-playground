@@ -17,7 +17,7 @@ These documents capture structural patterns learned from world-contracts analysi
 ## What This Is NOT
 
 - **Not canonical spec.** `spec.md` defines what CivilizationControl does. These docs describe how PTBs are assembled generically.
-- **Not verified contract wiring.** Function signatures may have changed since these patterns were drafted. The turret branch or other upstream merges may alter parameters, object types, or auth requirements.
+- **Not verified contract wiring.** Function signatures may have changed since these patterns were drafted. Upstream merges may alter parameters, object types, or auth requirements. Turret support confirmed in world-contracts v0.0.14; see `docs/architecture/turret-contract-surface.md` for turret function signatures.
 - **Not copy-paste production code.** No TypeScript implementation exists here. These are documentation templates only.
 - **Not execution authority.** The March-11 Reimplementation Checklist (`march-11-reimplementation-checklist.md`) remains the execution authority for all implementation decisions.
 
@@ -107,8 +107,8 @@ For demo flows:
 
 ## Assumptions & Unknowns
 
-- World-contracts may change pre-March-11 (turret branch, hotfixes, breaking changes)
-- Turret branch may alter function signatures, parameter ordering, or type arguments
+- World-contracts may change pre-March-11 (hotfixes, breaking changes)
+- Turret support confirmed in v0.0.14. See docs/architecture/turret-contract-surface.md for signatures
 - SSU withdraw/deposit may delete/recreate objects (do not assume object continuity across game boundary)
 - Package IDs used in these docs are **placeholders only** — real IDs are assigned at publish time
 - Auth model may change (AdminACL membership rules, verify_sponsor fallback behavior)

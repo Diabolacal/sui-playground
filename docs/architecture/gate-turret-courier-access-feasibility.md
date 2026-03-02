@@ -137,33 +137,25 @@ The existing `tribe_permit.move` example shows the pattern: `expires_at_timestam
 
 ## 4. Turret Integration
 
+(Updated 2026-03-02 after turret support confirmed in world-contracts v0.0.14.)
+
 ### Do turrets have extension/access control hooks?
 
-**No turret assembly exists in the current world-contracts codebase.** Confirmed findings:
-
-- No `turret.move` file exists under `vendor/world-contracts/contracts/world/sources/assemblies/` — the directory contains only `assembly.move`, `gate.move`, and `storage_unit.move`
-- No turret-related code exists anywhere in `vendor/world-contracts/contracts/` (grep returned zero results in contract code)
-- The `vendor/builder-documentation/smart-assemblies/turret/README.md` contains only `// TODO` — turret documentation is a stub
-- The `vendor/builder-documentation/smart-assemblies/turret/build.md` contains only `# Build` — empty
-- The `vendor/builder-scaffold/move-contracts/readme.md` has turret commented out: `<!-- - [Smart Turret example](./turret/) -->`
-- No `turret*.move` files exist anywhere in the workspace
-
-**Architecture reference only mentions turrets in passing:** [architecture.md L121](../../../vendor/world-contracts/docs/architechture.md) mentions "spatial entities (turrets, gates, sensors, rifts)" in the context of location obfuscation, but no turret contract implementation exists.
+**Yes.** Turret assembly exists in `turret.move` (678 lines) with the same `authorize_extension<Auth>` + `swap_or_fill` pattern as Gate. However, turrets control **targeting priority**, not allow/deny access.
 
 ### Can turret targeting rules be modified by an extension?
 
-**Cannot be determined.** No turret assembly contract exists to analyze.
+**Yes, but with a closed-world constraint.** The extension's `get_target_priority_list` function has a fixed 4-argument signature: `(turret, character, candidates_bcs, receipt)`. It cannot access external objects, ExtensionConfig, or dynamic fields (no `uid()` accessor on Turret). Extensions are pure functions over candidate data.
 
 ### What's the turret assembly's access control model?
 
-**Unknown.** If turrets follow the same pattern as `assembly.move` ([assembly.move L1-80](../../../vendor/world-contracts/contracts/world/sources/assemblies/assembly.move)), they would have `OwnerCap<T>` access and potentially an `extension: Option<TypeName>` field. But the generic `Assembly` struct at [assembly.move L40-49](../../../vendor/world-contracts/contracts/world/sources/assemblies/assembly.move) does NOT have an `extension` field — only specialized assemblies (Gate, StorageUnit) have extensions.
+`OwnerCap<Turret>` follows the same pattern as `OwnerCap<Gate>`. Authorize extension, online/offline, and unanchor require owner capability. Default targeting applies tribe-based filtering: same-tribe non-aggressors excluded, different-tribe and aggressors receive priority boost.
 
 ### Turret Integration Verdict
 
-**Not implementable.** No on-chain turret contract exists. Turret access control for the Cargo Bond system would require either:
-1. A future turret assembly with extension hooks (not available)
-2. A custom turret-like contract built from scratch (out of hackathon scope)
-3. Narrative/mock only — "turrets recognize active couriers" as a product vision statement without on-chain enforcement
+**Not feasible for bond-aware targeting.** Turret extensions exist but the closed-world constraint prevents identity-specific policies. Default tribe-based targeting operates independently and requires no courier integration. ~~Previously labeled "Partially feasible" and recommended framing turret safe-passage as a "product vision statement backed by events" — since corrected: do not frame turret safe-passage as a product feature; it is architecturally blocked.~~
+
+See [turret-contract-surface.md](turret-contract-surface.md) for full analysis.
 
 ---
 
@@ -307,7 +299,7 @@ A package can only operate on assemblies where its own `XAuth` type has been aut
 
 ### Fully viable in hackathon scope (1-2 days)?
 
-**Partially.** Gate access integration via permit issuance is viable. Turret integration is not possible. The single-extension-slot constraint creates UX friction but is not a blocker for a demo.
+**Partially.** Gate access integration via permit issuance is viable. Turret integration is out of scope (closed-world constraint). The single-extension-slot constraint creates UX friction but is not a blocker for a demo.
 
 ### What's viable?
 
@@ -317,13 +309,13 @@ A package can only operate on assemblies where its own `XAuth` type has been aut
 | Time-bound permits to job deadline | **Yes** | ~1h | Pass `job.deadline_ms` as `expires_at_timestamp_ms` |
 | Single-hop route permits | **Yes** | ~2h | One gate pair per job |
 | Multi-hop route permits | **Stretch** | ~4h | Multiple `issue_jump_permit` calls in one PTB |
-| Turret whitelist integration | **No** | N/A | No turret contract exists |
+| Turret whitelist integration | **Not feasible** (bond-aware) / **Default** (tribe-based) | 0h | Tribe-based targeting is default behavior; no integration needed. ~~Previously "Partially feasible, ~4h" — since corrected.~~ |
 | Per-courier ACL management | **No** | N/A | No `remove_sponsor_from_acl`; GovernorCap-only add |
 | Active permit revocation | **No** | N/A | No mechanism in world-contracts |
 
 ### What should be deferred to Phase 2?
 
-1. **Turret integration** — blocked on turret assembly contract availability
+1. **Turret integration** — turret extensions exist (v0.0.14) but closed-world constraint prevents bond-aware targeting. Default tribe-based targeting operates independently; no integration work needed or possible. ~~Previously listed as deferred to Phase 2 — since corrected: out of scope, not deferred.~~
 2. **Multi-hop routing** — viable but adds complexity; single-hop demo is sufficient
 3. **Active revocation** — time-bound expiry is sufficient; true revocation would require world-contracts changes or a custom permit wrapper
 4. **Cross-player gate authorization** — coordinating extension authorization across gates owned by different players is a UX/governance problem, not a technical blocker
@@ -331,7 +323,7 @@ A package can only operate on assemblies where its own `XAuth` type has been aut
 
 ### What can be credibly mocked?
 
-1. **Turret "safe passage"** — Show the job acceptance event and claim turrets would respect it. Since no turret contract exists, this is purely narrative. In the product vision / demo, describe: "Active courier bonds automatically whitelist the courier through the client's defensive perimeter."
+1. ~~**Turret "safe passage"**~~ — **Out of scope.** ~~Previously recommended product vision copy: "Active courier bonds influence turret targeting via tribe-aligned priority rules." This is factually incorrect — courier bonds have zero influence on turret targeting. Tribe membership affects targeting independently of bond status.~~ Note that tribe-based turret targeting is the default behavior in EVE Frontier's world-contracts. Couriers who share the gate owner's tribe benefit from this automatically — no bond dependency or integration is involved.
 2. **Multi-hop routing** — Demo with single-hop but describe multi-hop in the product vision. The PTB structure scales naturally.
 3. **Active revocation** — Describe as "future enhancement: instant revocation via permit burn" but note that time-bound expiry provides the primary fail-safe today.
 4. **Cross-player gate federation** — Describe a governance model where allied gate owners pre-authorize the courier extension, enabling a shared transit network. This is technically possible today (each owner calls `authorize_extension`) but the coordination UX doesn't exist.
@@ -345,11 +337,13 @@ A package can only operate on assemblies where its own `XAuth` type has been aut
 - Demo flow: Post job → Courier accepts (gets receipt + jump permit) → Courier uses permit to jump → Courier completes delivery → Economic settlement
 
 **Describe (in product vision, not implemented):**
-- Turret safe-passage during active jobs
 - Multi-hop route permit bundles
 - Cross-player gate federation / transit treaties
 - Active permit revocation for early termination
 - Meta-extension pattern for composing courier rules with other gate logic
+
+**Explicit Non-Goals:**
+- Turret safe-passage for non-tribe couriers — not feasible with current turret calling convention (see `turret-closed-world-clarified.md`)
 
 **Key architectural claim to make in docs:**
 > The Cargo Bond system leverages EVE Frontier's typed-witness extension pattern to programmatically issue time-bounded gate transit permits on job acceptance. Permits naturally expire at the job deadline, providing fail-safe access revocation without requiring active cleanup. The single-use permit model ensures couriers cannot stockpile transit rights beyond their active contract.

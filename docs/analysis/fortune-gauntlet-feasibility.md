@@ -12,13 +12,13 @@ Feasibility validation for a "Fortune Gauntlet" concept: sequential multi-gate c
 
 ## Executive Summary
 
-The Fortune Gauntlet concept is **largely feasible** using current world-contracts surfaces. The core race mechanic (sequential gate traversal with time pressure) maps cleanly to existing primitives. Probabilistic permit issuance requires Sui's `Random` module, which imposes an `entry` function constraint that is compatible with the extension architecture. The main gap is consequence mechanics — turrets do not exist, but credible proxies (cooldown, deny list, denial events) are achievable via dynamic fields.
+The Fortune Gauntlet concept is **largely feasible** using current world-contracts surfaces. The core race mechanic (sequential gate traversal with time pressure) maps cleanly to existing primitives. Probabilistic permit issuance requires Sui's `Random` module, which imposes an `entry` function constraint that is compatible with the extension architecture. The main gap is consequence mechanics: turrets exist (v0.0.14) but their closed-world extension constraint prevents gauntlet state from reaching targeting logic. Credible proxies (cooldown, deny list, denial events) remain the correct approach.
 
 | Capability | Verdict | Notes |
 |---|---|---|
 | Probabilistic permit issuance | ⚠️ Feasible with workaround | `entry` function constraint; compatible |
 | Checkpoint progress tracking | ✅ Feasible now | Events + DFs for on-chain state |
-| Consequence mechanics (turrets) | 🔮 Future | No turret/combat assemblies exist |
+| Consequence mechanics (turrets) | ❌ Not feasible (gauntlet-aware) | Turret extensions exist (v0.0.14) but closed-world constraint prevents gauntlet state access. Tribe-based targeting is the default — no FG-specific integration possible. ~~Previously "Partially feasible" — since corrected.~~ (Updated 2026-03-02.) |
 | Consequence mechanics (proxy) | ⚠️ Feasible with workaround | DF-based cooldown + deny list |
 | Multi-gate configuration | ✅ Feasible now | Per-package ExtensionConfig + per-gate DF keys |
 | Time pressure via permit expiry | ✅ Feasible now | `expires_at_timestamp_ms` + `Clock` |
@@ -224,16 +224,19 @@ assert!(progress.last_checkpoint == expected_checkpoint - 1, EOutOfSequence);
 
 ### Turret Availability
 
-**❌ No turret/weapon/combat assemblies exist.**
+**⚠️ Turret assembly exists but with closed-world constraint.** (Updated 2026-03-02 after turret support confirmed in world-contracts v0.0.14.)
 
-World-contracts has exactly three assembly modules ([assemblies/ directory](../../../vendor/world-contracts/contracts/world/sources/assemblies/)):
-1. `world::assembly` — base assembly type
-2. `world::gate` — gate travel
-3. `world::storage_unit` — item storage
+World-contracts now has four assembly modules ([assemblies/ directory](../../../vendor/world-contracts/contracts/world/sources/assemblies/)):
+1. `world::assembly` -- base assembly type
+2. `world::gate` -- gate travel
+3. `world::storage_unit` -- item storage
+4. `world::turret` -- defensive targeting (678 lines)
 
-A grep for `turret|weapon|combat|hostile|attack|shoot|aggress` across all world-contracts Move files returns zero relevant matches (only `target` hits relate to location proof target structures, not combat).
+Turret extensions follow the same `authorize_extension<Auth>` + `swap_or_fill` pattern as Gate. However, the extension's `get_target_priority_list` function has a fixed 4-argument signature and **cannot access external state** (no `uid()` accessor, no DF reads). Default targeting applies tribe-based filtering.
 
-**Verdict: 🔮 Future** — turrets are not available in the current world-contracts. Any combat/aggression mechanic requires an unreleased system.
+**Consequence for Fortune Gauntlet:** Gauntlet denial state (cooldown, denial count) stored in ExtensionConfig DFs cannot be read by turret extensions at targeting time. The `GauntletDenialEvent` approach (emit events for off-chain indexing) remains the correct audit trail.
+
+**Verdict: ❌ Not feasible (gauntlet-aware)** — turret extensions exist but the closed-world constraint prevents gauntlet state from reaching them. Default tribe-based targeting operates independently and requires no integration. ~~Previously "⚠️ Partially feasible" — since corrected.~~
 
 ### Proxy Consequence Mechanisms
 
@@ -309,7 +312,9 @@ if (roll <= success_threshold) {
 
 **Verdict: ❌ Time penalty via permit expiry does not work** (no `valid_from` field). Use cooldown DF instead.
 
-#### D. "Mark" Event for Future Turret Consumption — ✅ Feasible
+#### D. "Mark" Event (Off-Chain Signal) -- ✅ Feasible
+
+(Updated 2026-03-02: Turrets now exist but the closed-world constraint means extensions cannot read external state. Events remain the correct integration path.)
 
 ```move
 public struct GauntletDenialEvent has copy, drop {
@@ -317,15 +322,15 @@ public struct GauntletDenialEvent has copy, drop {
     character_key: TenantItemId,
     gate_id: ID,
     checkpoint_number: u8,
-    denial_type: u8,        // 0=cooldown, 1=deny_list, 2=turret_mark
+    denial_type: u8,        // 0=cooldown, 1=deny_list, 2=turret_mark (off-chain signal only; turrets cannot consume on-chain state)
     roll: u8,
     timestamp_ms: u64,
 }
 ```
 
-Events are emitted on-chain and indexable. A future turret system (or off-chain game server) could consume these events to trigger aggression toward "marked" players.
+Events are emitted on-chain and indexable. The turret extension's closed-world constraint (fixed 4-arg signature, no DF access) means turret targeting cannot directly consume gauntlet state. However, an off-chain indexer or game server could consume `GauntletDenialEvent` to influence turret behavior outside the extension's scope.
 
-**Verdict: ✅ Feasible now** — events are emittable from any extension module and are permanent on-chain records.
+**Verdict: ✅ Feasible now** -- events are emittable from any extension module and are permanent on-chain records. This is the recommended integration path given the turret closed-world constraint.
 
 ### Recommended Consequence Architecture
 
@@ -337,19 +342,16 @@ public struct PlayerProgress has store, drop {
     last_checkpoint_ms: u64,
     denial_count: u8,
     cooldown_until_ms: u64,
-    marked_for_turrets: bool,   // future consumption
 }
 ```
 
 On denial:
 1. Increment `denial_count`
 2. Set `cooldown_until_ms = now + base_cooldown * denial_count` (escalating)
-3. If `denial_count >= 3`: set `marked_for_turrets = true`
-4. Emit `GauntletDenialEvent`
+3. Emit `GauntletDenialEvent` (with `denial_type = 2` for off-chain indexing if `denial_count >= 3`)
 
 On next attempt:
 1. Check `cooldown_until_ms` — reject if still active
-2. Check `marked_for_turrets` — optionally block or impose permanent penalty
 
 ---
 
@@ -541,7 +543,7 @@ let expires_at = now + checkpoint_cfg.permit_expiry_ms;
 |---|---|---|
 | `Random` requires `entry` — limits PTB composability | Low | Permit issuance is self-contained; no downstream PTB commands needed |
 | Shared ExtensionConfig contention with many concurrent players | Medium | Acceptable for demo (<100 players). At scale, partition state across multiple objects |
-| No turret system for real consequences | Medium | Proxy consequences (cooldown, deny, events) are credible for demo. Events future-proof for turret integration |
+| No turret system for real consequences | Low | Turrets exist (v0.0.14) but closed-world constraint prevents gauntlet state access. Proxy consequences (cooldown, deny, events) remain the correct approach. Events provide audit trail. Turret-aware consequences require turret calling convention changes, not off-chain integration. (Updated 2026-03-02.) |
 | `jump_with_permit` requires AdminACL sponsor + dual-sign | High | Same constraint as all gate jumps. Not specific to Fortune Gauntlet. Requires sponsor infrastructure |
 | Permit has no `valid_from` — cannot enforce "wait period" via permit alone | Low | Use DF cooldown timestamp instead. Architecture already accounts for this |
 | Race state on single shared object = consensus bound | Medium | All shared-object interactions on Sui go through consensus (~2-3s). Sequential checkpoints are naturally paced |
@@ -559,6 +561,6 @@ let expires_at = now + checkpoint_cfg.permit_expiry_ms;
 
 ## Conclusion
 
-The Fortune Gauntlet concept is **feasible as a hackathon entry** using current world-contracts and Sui primitives. The only non-trivial adaptation is the `entry` function requirement for `sui::random`, which is a standard Sui pattern. The absence of turrets is compensated by credible proxy consequences that double as future-proof event streams. The most complex engineering challenge is the per-player on-chain state management via dynamic fields, which is well within Move's capabilities but requires careful DF key design.
+The Fortune Gauntlet concept is **feasible as a hackathon entry** using current world-contracts and Sui primitives. The only non-trivial adaptation is the `entry` function requirement for `sui::random`, which is a standard Sui pattern. The turret closed-world constraint is compensated by credible proxy consequences (cooldown, deny list, events). Turrets are out of scope for MVP — see `turret-closed-world-clarified.md`. The most complex engineering challenge is the per-player on-chain state management via dynamic fields, which is well within Move's capabilities but requires careful DF key design.
 
 **Estimated complexity:** Medium — single Move package (~200-300 LoC), admin config scripts, moderate PTB composition for setup.

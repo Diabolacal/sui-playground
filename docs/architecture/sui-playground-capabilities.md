@@ -248,7 +248,53 @@ This is the core "builder" mechanism:
 
 ### 4.4 Smart Turret / Defense
 
-**Not present.** No dedicated turret module exists in the world-contracts codebase. The `Killmail` module tracks PvP kills with a `LossType` enum (`SHIP`, `STRUCTURE`), but turret-specific logic is absent. The architecture docs mention turrets only in the context of future location obfuscation benefits.
+(Updated 2026-03-02 after turret support confirmed in world-contracts v0.0.14.)
+
+**Module:** [vendor/world-contracts/contracts/world/sources/assemblies/turret.move](../vendor/world-contracts/contracts/world/sources/assemblies/turret.move) (678 lines)
+**On-chain object:** `Turret` (shared) -- fields: `id`, `key`, `owner_cap_id`, `type_id`, `status`, `location`, `fuel`, `energy_source`, `extension`
+
+**Role:** Defensive assembly. Controls targeting priority for turret engagement. Same typed-witness extension pattern as Gate.
+
+#### Ownership
+
+`OwnerCap<Turret>` -- owned capability issued on creation. Required for online/offline, authorize_extension, and unanchor.
+
+#### Operations
+
+| Operation | Function | Who Can Call | Prerequisites |
+|-----------|----------|-------------|---------------|
+| Create (anchor) | `anchor()` | Admin | Character + ObjectRegistry |
+| Share | `share_turret()` | Admin | -- |
+| Go online | `online()` | Owner | Returns `OnlineReceipt` hot-potato |
+| Go offline | `offline()` | Owner | -- |
+| Authorize extension | `authorize_extension<Auth>()` | Owner | Auth type with `drop` ability |
+| Verify online | `verify_online()` | Anyone | Returns read-only status check |
+| Get target priority | `get_target_priority_list<Auth>()` | Extension | Auth witness + OnlineReceipt |
+| Destroy online receipt | `destroy_online_receipt()` | Anyone | Consumes hot-potato |
+| Destroy (unanchor) | `unanchor()` | Admin | -- |
+
+#### Extension Pattern
+
+Same `authorize_extension<Auth>` + `swap_or_fill` mechanism as Gate, but the extension controls **targeting priority** rather than permit issuance. The extension's `get_target_priority_list` function receives a fixed 4-argument signature: `(turret, character, candidates_bcs, receipt)`. No external objects (ExtensionConfig, DFs) can be accessed from within the extension function.
+
+**Closed-world constraint:** No `uid()` accessor on `Turret`, so extensions cannot read dynamic fields. Extensions are pure functions over the candidate data provided in BCS-encoded arguments.
+
+#### Default Targeting Rules
+
+The default `get_target_priority_list` (no extension) applies tribe-based filtering:
+- Same-tribe non-aggressors: excluded from targeting
+- Different-tribe characters and aggressors: receive priority weight boost
+- Weight increments derive from tribe membership and aggressor status
+
+#### Events
+
+`TurretCreatedEvent`, `PriorityListUpdatedEvent`
+
+#### Hot-Potato
+
+`OnlineReceipt` -- must be consumed via `destroy_online_receipt()` in the same transaction. Enforces single-use targeting evaluation per online check.
+
+See [turret-contract-surface.md](turret-contract-surface.md) for full analysis.
 
 ### 4.5 Generic Assembly
 

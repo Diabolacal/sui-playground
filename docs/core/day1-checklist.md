@@ -105,6 +105,17 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 
 **Result:** ☐ A1 PASS ☐ A2 PASS ☐ A3 PASS ☐ A4 PASS — Any FAIL = HARD STOP
 
+### A_T1 (Optional): Turret extension pattern verification
+
+| Field | Value |
+|-------|-------|
+| **Check** | Verify `turret::authorize_extension<Auth>` follows same swap_or_fill pattern as gate. Confirm default turret targeting excludes same-tribe non-aggressors. |
+| **Command** | `grep -n "authorize_extension" vendor/world-contracts/contracts/world/sources/assemblies/turret.move` |
+| **Expected Output** | Same `swap_or_fill` pattern as gate. Default `get_target_priority_list` filters by tribe + aggression status. |
+| **Note** | Source review only; runtime validation requires game-engine objects (Character, Turret online state). Not blocking for Day-1 MVP. See [Turret Contract Surface](../architecture/turret-contract-surface.md). |
+
+**Result:** ☐ A_T1 CONFIRMED (optional)
+
 ---
 
 ## Check 4: Connect to Hackathon Test Server

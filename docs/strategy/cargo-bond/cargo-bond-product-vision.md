@@ -19,7 +19,7 @@ No trusted backend. No admin intervention. No reputation system. The only trust 
 
 The system runs as a shared-object state machine on Sui. The Atomic Courier package implements the full lifecycle — post, accept, complete, expire, cancel — with deterministic settlement in every path. Five events cover the entire lifecycle for frontend indexing. Gas cost per job: under 0.01 SUI end-to-end.
 
-**Extended scope (conditional):** When a courier accepts a job, the system can issue a time-bounded gate transit permit through the job creator's gates — granting passage that expires automatically with the job deadline. This requires no AdminACL, no sponsorship, and no manual revocation. Gate permit issuance is validated as feasible. Turret integration is not viable (no on-chain turret assembly exists) and is deferred.
+**Extended scope (conditional):** When a courier accepts a job, the system can issue a time-bounded gate transit permit through the job creator's gates — granting passage that expires automatically with the job deadline. This requires no AdminACL, no sponsorship, and no manual revocation. Gate permit issuance is validated as feasible. Turret integration is out of scope. Turret assemblies exist (v0.0.14) but the extension calling convention prevents access to bond state. See turret-contract-surface.md and turret-closed-world-clarified.md.
 
 **Build budget:** 8–14 hours LLM-assisted.
 **Kill criteria:** Abandon if world-contracts SSU integration blocks clean escrow within 4 hours. Fallback: pure economic demo (SUI escrow only, no SSU hooks).
@@ -183,7 +183,7 @@ All operations are O(1). No dynamic fields, no vectors, no loops. Gas costs do n
 
 ---
 
-## 7. Access Control Integration (Gates & Turrets)
+## 7. Access Control Integration (Gate Transit Permits)
 
 ### Gate Transit Permits — Validated as Feasible
 
@@ -217,11 +217,13 @@ It does **not** require AdminACL, OwnerCap, or sponsorship for the permit issuan
 
 **MVP scope:** Single-hop routes (one gate pair) with creator-owned gates. Multi-hop and cross-player federation are Phase 2.
 
-### Turret Integration — Deferred (Phase 2)
+### Turret Integration — Out of Scope
 
-No turret assembly contract exists in the current world-contracts codebase. Turret-related documentation pages are `// TODO` stubs. There is no on-chain mechanism to whitelist a courier for defensive turrets.
+Turret assemblies exist in world-contracts v0.0.14, but turret extensions use a closed-world calling convention: the fixed 4-argument signature (`turret, character, candidates_bcs, receipt`) cannot access external objects such as `ExtensionConfig` or `CourierJob`. Bond-state lookups during targeting are architecturally blocked by this constraint.
 
-**Recommendation:** Describe turret integration in the product narrative as a natural extension of the gate permit model. Do not promise implementation. If a turret assembly surfaces before hackathon close, evaluate opportunistically.
+**Recommendation:** Turret behavior is default (tribe-based filtering) and operates independently of the courier system. ~~Previously recommended framing turret integration as a "natural extension of the gate permit model" — since corrected: bond-aware turret targeting is not a natural extension of the gate pattern and requires turret calling convention changes.~~ Do not frame turret safe-passage as a product feature. See `docs/architecture/turret-closed-world-clarified.md` and `docs/architecture/turret-contract-surface.md` for full analysis.
+
+> **Future:** If CCP/Stillness expands the turret interface to allow external state access, bond-aware turret targeting could be evaluated opportunistically.
 
 ### Automatic Revocation
 
@@ -356,7 +358,7 @@ Minimal web interface with wallet integration:
 
 ### Out of Scope (Explicit Non-Goals)
 
-- Turret integration (no on-chain assembly exists)
+- Turret integration (assemblies exist but extension calling convention blocks bond-state access)
 - Multi-hop route permits (Phase 2)
 - Cross-player gate federation (Phase 2)
 - Dispute resolution / arbitration

@@ -195,9 +195,11 @@ The extension type is shared — any gate can call `authorize_extension<GateAuth
 - **Disable rules:** Remove all dynamic field entries → extension still active but issues permits to everyone (no rules = allow all)
 - **Effect of "no rules":** The extension's `issue_jump_permit` function should be designed to allow passage when no rules are configured (graceful default)
 
-### 7. Future: Turret Extensions
+### 7. Turret Extensions (Verified)
 
-Turret documentation is a `//TODO` stub. The `turret.move` file (if it exists) likely follows the same `extension: Option<TypeName>` pattern. The CivilizationControl extension package should be designed with turret extensibility in mind (shared config object, separate turret rule types), but turret validation is deferred to Day-1.
+(Updated 2026-03-02 after turret support confirmed in world-contracts v0.0.14.)
+
+Turret extensions follow the same `extension: Option<TypeName>` and `authorize_extension<Auth>` + `swap_or_fill` pattern as Gate. Confirmed in `turret.move` (678 lines). Key difference: turret extensions control **targeting priority**, not allow/deny permit issuance. The extension function `get_target_priority_list` has a fixed 4-argument signature (`turret`, `character`, `candidates_bcs`, `receipt`) and cannot access external objects or DFs (no `uid()` accessor on Turret). Default targeting: tribe-based filtering with aggressor priority boost. See [turret-contract-surface.md](turret-contract-surface.md) for full details.
 
 ---
 
@@ -254,7 +256,7 @@ These items are architecturally sound but unexercised. Validate on Day-1:
 | V2 | `OwnerCap<Gate>` can be used as auth in extension config functions | Add `&OwnerCap<Gate>` param to a config-update function, verify `owner_cap_id` match | LOW — standard capability pattern |
 | V3 | Single PTB: `authorize_extension` + `set_rule` in one transaction | Construct PTB with both calls sequenced | LOW — standard PTB composition |
 | V4 | Config DFs are readable from TypeScript SDK for UI display | Query object DFs via `@mysten/sui` SDK `getDynamicFields()` | LOW — documented SDK feature |
-| V5 | Turret extension field exists and follows same pattern | Read `turret.move` for `extension: Option<TypeName>` | UNKNOWN — turret docs are //TODO stub |
+| V5 | Turret extension field exists and follows same pattern | Read `turret.move` for `extension: Option<TypeName>` | **VERIFIED** -- turret.move (678 lines) confirms `extension: Option<TypeName>` + `authorize_extension<Auth>`. See turret-contract-surface.md. (Updated 2026-03-02.) |
 
 ---
 
@@ -276,7 +278,7 @@ These items are architecturally sound but unexercised. Validate on Day-1:
 | NEW | Per-gate DF keys with compound key structs work as expected | V1 above |
 | NEW | OwnerCap<Gate> can gate config updates (self-service) | V2 above |
 | NEW | Single-PTB "Deploy Policy" flow works end-to-end | V3 above |
-| NEW | Turret extensions follow the same pattern as gate extensions | V5 above |
+| NEW | Turret extensions follow the same pattern as gate extensions | **VERIFIED** -- confirmed in turret.move v0.0.14. Same authorize_extension + swap_or_fill. Controls targeting priority, not allow/deny. (Updated 2026-03-02.) |
 
 ---
 

@@ -89,16 +89,15 @@ The extension checks `clock.timestamp_ms() >= cooldown_until_ms` before allowing
 
 ### Secondary: Denial Events (future-proof)
 
-Every denial emits a `GauntletDenialEvent` containing `character_id`, `gate_id`, `checkpoint_number`, `roll`, and `timestamp_ms`. These events are permanent on-chain records consumable by future systems (turret targeting, reputation scoring, leaderboards).
+Every denial emits a `GauntletDenialEvent` containing `character_id`, `gate_id`, `checkpoint_number`, `roll`, and `timestamp_ms`. These events are permanent on-chain records consumable by future off-chain systems (reputation scoring, leaderboards).
 
-### Stretch: Turret Integration (conditional — 🔮 future)
+### Turret Integration (Out of Scope)
 
-If turret assemblies become available in world-contracts:
-- A `marked_for_turrets: bool` field in `PlayerProgress` activates after N denials
-- Turret systems consume the mark to target the player temporarily
-- Game-knowledge note: turrets take ~30 seconds to lock small ships, creating a "run the gauntlet" skill check on top of the RNG
+Turret-aware consequences are structurally infeasible under the closed-world constraint (fixed 4-arg signature, no external state access). Turret extensions cannot read `PlayerProgress` DFs, `GateCheckpoint` data, or any gauntlet state. If the calling convention is relaxed in a future world-contracts release, evaluate opportunistically. See `docs/architecture/turret-closed-world-clarified.md`.
 
-**Turrets are NOT a dependency.** The cooldown model stands alone. Turret integration is framed as a future extension, not a current feature.
+~~Previously this section described `marked_for_turrets: bool`, turret consumption of marks, and gameplay timing (~30s lock) — since corrected: these designs are structurally impossible under the current turret calling convention.~~
+
+**Turrets are NOT a dependency.** The cooldown model stands alone.
 
 ### Tuning Knobs
 
@@ -156,7 +155,7 @@ If `sui::random` is unavailable: run as deterministic Gauntlet (sequential race 
 
 ### Explicit Non-Goals
 
-- **No turret integration** — proxy cooldown only; turret events are emitted but not consumed
+- **No turret integration** — proxy cooldown only; denial events are future-proof but no turret-specific data structures are included
 - **No frontend UI** — CLI/script-driven; no web app, no CSS slot-machine animation
 - **No leaderboard** — events support one, but building an indexer + UI is out of scope
 - **No prize escrow** — the original Gauntlet concept included `Coin<EVE>` escrow for winners; MVP omits this to reduce complexity

@@ -42,6 +42,8 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | **GateControl** | Policy authoring (tribe filter + coin toll) on Smart Gates, enforced on-chain via typed witness extension | `gate.move`: `authorize_extension`, `issue_jump_permit`, `jump_with_permit` |
 | **TradePost** | SSU-backed storefronts with cross-address atomic buy settlement using `Coin<SUI>` | `storage_unit.move`: `authorize_extension`, `withdraw_item<Auth>`, `deposit_item<Auth>` |
 
+> **Note:** Turret assembly exists in world-contracts v0.0.14 (`turret.move`) using the same extension pattern. Excluded from MVP scope; default turret targeting already matches tribe_only policy. See [Turret Contract Surface](../architecture/turret-contract-surface.md).
+
 **Architecture model:** Publish-once, configure-via-data. One extension package is published by the CivControl team. Players configure pre-built rule types via PTBs that write dynamic fields to a shared `ExtensionConfig` object. No end user writes Move code.
 
 **Runtime:** Single-page React application served from static hosting (Cloudflare Pages). All chain interaction via direct Sui RPC from the browser.
@@ -70,6 +72,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | No drag-and-drop rule ordering | Fixed evaluation order enforced in Move module |
 | No server-side analytics | No backend |
 | No in-game write operations for Day-1 | In-game browser lacks Sui wallet. Read-only in-game surface; external browser for writes. EVE Vault relay is stretch. |
+| No turret extension for Day-1 | Turret assembly exists (v0.0.14) but targeting-priority enforcement is architecturally different from gate permit issuance; default turret behavior already matches tribe_only policy; deferred to post-hackathon if needed |
 
 ### 1.3 External Dependencies
 

@@ -87,14 +87,14 @@ Fortune Gauntlet is +1.34 over Fortune Gate alone (dramatic improvement on Demo 
 |---|---|---|
 | Probabilistic permit issuance via `sui::random` | ⚠️ Workaround | `entry` function constraint; compatible with extension pattern since `issue_jump_permit` has no return value |
 | Checkpoint progress tracking | ✅ Now | Per-player `PlayerProgress` DF on ExtensionConfig + custom events (`CheckpointPassedEvent`, `CheckpointDeniedEvent`) |
-| Consequence — turrets | 🔮 Future | Zero turret/combat code in world-contracts |
+| Consequence — turrets | 🔮 Blocked | Turret assemblies exist (v0.0.14) but extensions use a closed-world calling convention that cannot access gauntlet state. See turret-contract-surface.md |
 | Consequence — proxy (cooldown + deny list) | ⚠️ Workaround | DF-based `cooldown_until_ms` with escalating multiplier by `denial_count` |
 | Multi-gate config | ✅ Now | Per-gate `GateCheckpointKey → GateCheckpoint` DFs. Setup: 4N+1 PTB commands |
 | Time pressure via permit expiry | ✅ Now | `expires_at_timestamp_ms` + `Clock.timestamp_ms()` |
 
 ### Turrets Dependency — Truthfulness Statement
 
-Turrets **do not exist** in current world-contracts. The consequence model uses DF-based cooldowns as a credible proxy. Events (`GauntletDenialEvent`) are emitted as a future-proof integration surface that turret systems could consume. The demo and vision doc frame turret integration as a stretch goal, not a dependency. No claims about turret availability should appear in the hackathon submission.
+Turret assemblies exist in world-contracts v0.0.14, but the extension calling convention (fixed 4-argument signature, no external state access) prevents turret extensions from reading gauntlet state (`PlayerProgress`, `GateCheckpoint` DFs). The consequence model uses DF-based cooldowns as a credible proxy. Events (`GauntletDenialEvent`) are emitted as a future-proof integration surface that turret systems could consume if the calling convention is relaxed. The demo and vision doc frame turret integration as out of scope (structurally infeasible under the current calling convention), not a dependency.
 
 ---
 

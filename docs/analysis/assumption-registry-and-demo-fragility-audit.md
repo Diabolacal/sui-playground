@@ -146,7 +146,7 @@
 | A-46 | Extension package published ONCE — redeployment changes TypeName and requires re-authorization on all gates | march-11-checklist Known Pitfalls | Contract behavior | High | No | Thorough testing before first publish; compatible upgrades preserve TypeName |
 | A-47 | Compatible package upgrades preserve defining package ID (TypeName stable) | march-11-checklist GateControl validation #7 | Contract behavior | Medium | No | If unstable, every fix = full redeploy + re-authorize |
 | A-48 | Extension `Pub.local.toml` must reference correct world-contracts package ID, chain-id, and upgrade-capability | gate-lifecycle-runbook Step 11a | Infrastructure | Medium | Yes | Delete stale Pub.local.toml and recreate after genesis |
-| A-49 | No turret module exists in world-contracts — only Gate and StorageUnit assemblies | world-contracts source audit (no turret source found) | Contract behavior | High | No | Scope demo strictly to gate + SSU operations |
+| A-49 | ~~No turret module exists~~ Turret module exists (v0.0.14, 678 lines). Three assembly types: Gate, StorageUnit, Turret. Same extension pattern (authorize_extension + swap_or_fill). Extension has closed-world constraint (fixed 4-arg signature, no external state). (Updated 2026-03-02.) | world-contracts turret.move, turret-contract-surface.md | Contract behavior | Low | No | Turret extension feasible for tribe-based targeting; not for identity-specific policies |
 
 ### 1.10 Infrastructure and Environment
 

@@ -34,7 +34,8 @@ applyTo: "**/*.move"
 - **Sponsor fallback:** Verify whether `verify_sponsor` falls back to `ctx.sender()` when no sponsor is present — if so, self-sponsorship may work without dual-sign when the sender is in AdminACL.
 - **Permit issuance auth:** Verify what auth `issue_jump_permit` requires (extension witness only? AdminACL? OwnerCap?). Do not add auth dependencies beyond what the function signature demands.
 - **Jump auth:** Verify whether `jump_with_permit` requires AdminACL sponsorship and dual-sign.
-- **Extension replacement:** Verify whether `authorize_extension` silently replaces an existing extension (swap_or_fill) and whether any event is emitted.
+- **Extension replacement:** All three assembly types (Gate, SSU, Turret) use the same `authorize_extension<Auth>/swap_or_fill` pattern. Verify whether `authorize_extension` silently replaces an existing extension and whether any event is emitted.
+- **Turret closed-world constraint:** Turret extension `get_target_priority_list` has a fixed signature (`turret, character, candidates_bcs, receipt`). Extensions cannot access external objects (e.g., ExtensionConfig, dynamic fields). All targeting logic must derive from candidate BCS data alone. Default turret behavior already excludes same-tribe non-aggressors.
 
 ## Minimal Surface Area
 

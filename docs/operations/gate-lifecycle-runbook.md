@@ -76,11 +76,11 @@ These are critical findings from the rehearsal. **Read before executing.**
 - `deposit_fuel` requires sponsored transaction
 
 ### Single Extension Constraint
-- Each gate and SSU supports **exactly one** extension type at a time (`extension: Option<TypeName>`)
+- Each gate, SSU, and turret supports **exactly one** extension type at a time (`extension: Option<TypeName>`)
 - Calling `authorize_extension<NewAuth>()` **replaces** any previously authorized extension (via `swap_or_fill`) — there is no `deauthorize_extension` function
 - Extension identity uses `type_name::with_defining_ids<Auth>()` — includes the **defining package ID**, making it stable across upgrades but package-specific
-- **Design consequence:** All rule types (tribe filter, coin toll, ZK proof, time window) must be composed within a single extension package sharing one `Auth` witness type. Multiple extensions on the same gate/SSU are not possible.
-- Verified in source: `gate.move` L73 (`extension: Option<TypeName>`), `storage_unit.move` L67, `gate.move` L117 (`swap_or_fill`)
+- **Design consequence:** All rule types (tribe filter, coin toll, ZK proof, time window) must be composed within a single extension package sharing one `Auth` witness type. Multiple extensions on the same gate/SSU/turret are not possible.
+- Verified in source: `gate.move` L73 (`extension: Option<TypeName>`), `storage_unit.move` L67, `turret.move` (same pattern), `gate.move` L117 (`swap_or_fill`)
 
 ---
 
