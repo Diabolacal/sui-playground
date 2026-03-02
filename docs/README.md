@@ -168,7 +168,6 @@ Strategy documents are organized by project scope:
 |------|---------|
 | [strategy/_shared/hackathon-portfolio-roadmap.md](strategy/_shared/hackathon-portfolio-roadmap.md) | **Multi-entry portfolio strategy** — 6 tracks (CC + Fortune Gate + Salvage + Corpse Toll + Flappy Frontier + Atomic Courier), prize mapping, development cadence, kill criteria |
 | [strategy/_shared/marketing-plan.md](strategy/_shared/marketing-plan.md) | **Marketing & player vote campaign plan** — 4-phase campaign (tease → launch → vote window → Stillness flex), channel playbooks, content cadence, asset checklists |
-| [strategy/_shared/fortuna-gauntlet-scoring-memo.md](strategy/_shared/fortuna-gauntlet-scoring-memo.md) | **Fortune Gauntlet scoring memo** — combined concept (Fortune Gate + Gauntlet), 8-criterion + 4-area scoring (weighted 6.72), prize target (Weirdest Idea), denial rate/checkpoint tuning, kill criteria, portfolio impact |
 
 ### CivilizationControl (Flagship)
 
@@ -193,6 +192,7 @@ Combined concept: Fortune Gate (VRF probabilistic permit) + The Gauntlet (sequen
 | File | Purpose |
 |------|---------|
 | [strategy/fortune-gauntlet/fortune-gauntlet-project-vision.md](strategy/fortune-gauntlet/fortune-gauntlet-project-vision.md) | **Project vision** — sequential gate race with VRF randomness, consequence model, demo plan, MVP boundaries, risks, graceful degradation path |
+| [strategy/fortune-gauntlet/fortune-gauntlet-scoring-memo.md](strategy/fortune-gauntlet/fortune-gauntlet-scoring-memo.md) | **Scoring memo** — 8-criterion + 4-area scoring (weighted 6.72), prize target (Weirdest Idea), denial rate/checkpoint tuning, kill criteria, portfolio impact |
 
 ### Cargo Bond / Atomic Courier (Sprint)
 
