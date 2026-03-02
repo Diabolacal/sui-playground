@@ -16,7 +16,7 @@ Before any idea, acknowledge hard boundaries:
 
 | Constraint | Detail |
 |------------|--------|
-| **No turret module** | No dedicated turret/defense structure in world-contracts. `Killmail` tracks kills but turret logic is absent. |
+| **~~No turret module~~** | ~~No dedicated turret/defense structure in world-contracts.~~ **Corrected (v0.0.14):** Turret module exists. Extension calling convention is closed-world (fixed 4-arg signature). See [turret-closed-world-clarified.md](../../architecture/turret-closed-world-clarified.md). |
 | **No Carbon client rendering** | On-chain objects exist but have no in-game 3D representation without the game server sandbox. |
 | **No entity spawning** | `anchor()` creates on-chain objects; the game server instantiates them in-world. We assume sandbox provides this. |
 | **No FusionAuth/Enoki** | zkLogin requires external credentials. Frame as "optional integration" only. |

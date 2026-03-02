@@ -143,6 +143,8 @@ Consistent naming conventions used across all active documents.
 | [architecture/spatial-embed-requirements.md](architecture/spatial-embed-requirements.md) | **Spatial embed requirements** — EF-Map embed capability audit, 12 visual primitives gap analysis, hybrid architecture recommendation (CivControl SVG topology + EF-Map iframe context) |
 | [architecture/in-game-dapp-surface.md](architecture/in-game-dapp-surface.md) | **In-game DApp browser surface** — confirmed runtime constraints (viewport, wallet, storage, security), DApp URL strategy, gate/SSU UI responsibilities, wallet states, deployment implications |
 | [architecture/policy-authoring-model-validation.md](architecture/policy-authoring-model-validation.md) | **Policy authoring model validation** — VERIFIED: data-driven policies via dynamic fields, users never write Move, publish-once/configure-forever model, policy lifecycle, Day-1 validation steps |
+| [architecture/turret-contract-surface.md](architecture/turret-contract-surface.md) | **Turret contract surface** — full API reference (v0.0.14): types, entry functions, events, error codes, extension pattern, default targeting rules, project applicability |
+| [architecture/turret-closed-world-clarified.md](architecture/turret-closed-world-clarified.md) | **Turret closed-world constraint (canonical)** — code-proven evidence: fixed 4-arg PTB, no uid() accessor, default targeting matrix, CC alignment verdict, per-project feasibility, toll payer mismatch |
 
 ## Ideas
 
@@ -230,6 +232,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [operations/gate-lifecycle-runbook.md](operations/gate-lifecycle-runbook.md) | **Full gate lifecycle runbook** — 13-step procedure from publish to jump_with_permit, with evidence (object IDs, tx digests). Carry-forward. |
 | [operations/demo-evidence-appendix.md](operations/demo-evidence-appendix.md) | **Demo evidence mapping** — maps every beat sheet artifact to its executable script, expected output, and capture method. Gap analysis included. Carry-forward. |
 | [operations/submodule-refresh-prompt.md](operations/submodule-refresh-prompt.md) | **Reusable submodule refresh procedure** — step-by-step commands, audit focus areas, doc update checklist, agent prompt template |
+| [operations/turret-localnet-validation-checklist.md](operations/turret-localnet-validation-checklist.md) | **Turret localnet validation checklist** — 45 test cases (8 executable, 36 environment-blocked, 1 structurally impossible), BCS encoding reference, object dependency matrix |
 
 ## UX
 
@@ -256,6 +259,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [analysis/assumption-registry-and-demo-fragility-audit.md](analysis/assumption-registry-and-demo-fragility-audit.md) | **Assumption registry + demo fragility audit** — 87 material assumptions across 16 categories, beat-by-beat determinism scoring, top 5 structural risks, pre-recording checklist, failure scenario responses |
 | [analysis/fortune-gauntlet-feasibility.md](analysis/fortune-gauntlet-feasibility.md) | **Fortune Gauntlet feasibility** — sequential multi-gate checkpoint race with probabilistic permit issuance via `sui::random`; 5-area validation against world-contracts surfaces, proxy consequence architecture, multi-gate DF config pattern |
 | [analysis/fortune-gauntlet-scoring-report.md](analysis/fortune-gauntlet-scoring-report.md) | **Fortune Gauntlet scoring report** — 8-criterion + 4-area FAQ scoring, comparative analysis vs Fortune Gate (5.38) and standalone Gauntlet (7.8), prize category fit (Weirdest Idea primary), denial rate/checkpoint tuning, kill criteria |
+| [analysis/turret-project-semantics-and-mismatches.md](analysis/turret-project-semantics-and-mismatches.md) | **Turret project semantics and mismatches** — per-project (CC/CB/FG) translation of turret capabilities, 8 classified mismatches, closed-world constraint analysis, workaround assessment |
 
 ## Sandbox
 

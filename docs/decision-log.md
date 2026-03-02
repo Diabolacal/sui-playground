@@ -6,6 +6,26 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-02 — Turret Closed-World Constraint Clarification + Doc Reconciliation
+- **Goal:** Convert first-pass turret architectural conclusions into code-backed, evidence-level reference. Reconcile all docs with clarified facts. Fix known inconsistencies (BehaviourChangeReason values, validation count).
+- **Decision:** (1) Created canonical clarification doc with code-proven evidence: fixed 4-arg PTB signature, no uid() accessor, default targeting matrix (12 rows), CC alignment verdict, toll payer mismatch note, per-project feasibility (CC unnecessary, CB/FG structurally impossible). (2) Corrected validation checklist count from 38 to 45 across all references. (3) Marked historical quotes in turret-project-semantics-and-mismatches.md as "since corrected." (4) Added 3 new docs + 1 canonical reference to README index. (5) Corrected archived doc (hackathon-ideas-grounded.md) with strikethrough. (6) BehaviourChangeReason values confirmed correct in all live docs (UNSPECIFIED=0, ENTERED=1, STARTED_ATTACK=2, STOPPED_ATTACK=3).
+- **Files:** docs/architecture/turret-closed-world-clarified.md (new canonical), docs/architecture/turret-contract-surface.md, docs/decision-log.md, docs/README.md, docs/analysis/turret-project-semantics-and-mismatches.md, docs/archive/ideas/hackathon-ideas-grounded.md
+- **Diff:** +210 LoC (new doc) / ~30 LoC edits across 5 existing docs
+- **Risk:** Low (documentation only)
+- **Gates:** N/A (docs only)
+- **Follow-ups:** Runtime-unverified items require March 11 test server: end-to-end targeting (D-01..D-09), event emission (O-01..O-02), lifecycle (L-01..L-06), extension auth (E-01..E-04).
+
+## 2026-03-02 — Turret Documentation Propagation Across Hackathon Planning Docs
+- **Goal:** Propagate turret API surface (world-contracts v0.0.14) across all planning docs. Verify contract behavior against prior assumptions. Produce validation checklist.
+- **Decision:** (1) Created turret contract surface summary doc with full API reference. (2) Updated 15+ docs with false "no turret exists" claims. (3) Identified closed-world constraint: turret extensions receive fixed 4-arg signature from game engine, cannot access external state (no uid() accessor, no shared object params). (4) Default turret targeting matches CC tribe_only policy (same-tribe non-aggressors excluded). No custom turret extension needed for CC MVP. (5) CargoBond and Fortune Gauntlet turret integration blocked by closed-world constraint; deferral rationale updated from "absent" to "architecturally constrained." (6) Created validation checklist (45 test cases: 8 CLI-testable, 36 environment-blocked, 1 structurally impossible).
+- **Files:** docs/architecture/turret-contract-surface.md (new), docs/operations/turret-localnet-validation-checklist.md (new), docs/analysis/turret-project-semantics-and-mismatches.md (new), docs/architecture/sui-playground-capabilities.md, docs/architecture/gate-turret-courier-access-feasibility.md, docs/architecture/policy-authoring-model-validation.md, docs/architecture/in-game-dapp-surface.md, docs/analysis/assumption-registry-and-demo-fragility-audit.md, docs/analysis/fortune-gauntlet-feasibility.md, docs/strategy/cargo-bond/cargo-bond-product-vision.md, docs/strategy/fortune-gauntlet/fortune-gauntlet-scoring-memo.md, docs/strategy/fortune-gauntlet/fortune-gauntlet-project-vision.md, docs/strategy/civilization-control/civilizationcontrol-strategy-memo.md, docs/core/spec.md, docs/core/day1-checklist.md, docs/operations/gate-lifecycle-runbook.md, docs/ptb/ (5 files), .github/instructions/move.instructions.md, docs/README.md
+- **Diff:** ~+600 LoC new docs / ~+150 LoC edits across existing docs
+- **Risk:** Low (documentation only, no code changes)
+- **Gates:** N/A (docs only)
+- **Follow-ups:** Execute validation checklist items P-01 through P-04 and A-01 through A-03 on localnet. Revalidate turret patterns on hackathon test server March 11.
+
+---
+
 ## 2026-03-02 — Submodule Refresh (world-contracts v0.0.14, evevault a409496, builder-scaffold 572e2ca)
 - **Goal:** Refresh all submodules to latest upstream; audit changes for CivilizationControl impact.
 - **Decision:** Updated 3 of 5 submodules: world-contracts `e508451→78854fe` (v0.0.14, +2 commits: turret implementation + fuel refactor), evevault `687d432→a409496` (+2 commits: sponsored tx flow + build fix), builder-scaffold `6bc43a1→572e2ca` (+2 commits: dapp-kit published + build approvals). builder-documentation and proximity-zk-poc unchanged. **Key findings:** (1) Turret assembly fully implemented — same typed witness pattern as gate/SSU, no CC pattern impact. (2) `extension_examples/gate.move` deleted, replaced by `turret.move`. (3) EVE Vault sponsored tx now fully functional (server→sign→execute dual-phase with zkLogin). (4) `fuel::withdraw` now requires `type_id` param. (5) `@evefrontier/dapp-kit` published on npm. **No pattern-breaking changes for CivilizationControl.**
