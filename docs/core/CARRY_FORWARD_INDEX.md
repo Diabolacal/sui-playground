@@ -24,7 +24,7 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 | `docs/core/validation.md` | Validation procedures — build gates, runtime expectations, proof moments |
 | `docs/core/civilizationcontrol-implementation-plan.md` | Expanded implementation plan — all phases |
 | `docs/core/day1-checklist.md` | Day-1 validation checklist |
-| `docs/core/civilizationcontrol-demo-beat-sheet.md` | Demo beat sheet — narrative flow for submission video |
+| `docs/core/civilizationcontrol-demo-beat-sheet.md` | Demo beat sheet (v2) — ~2:56 competitive arc, Defense Mode climax, proof registry, failure fallbacks |
 | `docs/core/civilizationcontrol-claim-proof-matrix.md` | Claim-proof matrix — maps claims to evidence |
 | `docs/core/memory.md` | Working memory template (CivilizationControl extended) |
 | `docs/core/CARRY_FORWARD_INDEX.md` | This index |

@@ -115,7 +115,7 @@ Consistent naming conventions used across all active documents.
 | [core/COPILOT_MEMORY_GUIDELINES.md](core/COPILOT_MEMORY_GUIDELINES.md) | What to store in Copilot persistent memory |
 | [core/march-11-reimplementation-checklist.md](core/march-11-reimplementation-checklist.md) | **March 11 carry-forward** — validated patterns, day-1 checklist, pitfalls, DO NOT COPY notice |
 | [core/civilizationcontrol-claim-proof-matrix.md](core/civilizationcontrol-claim-proof-matrix.md) | **Evidence ledger** — every demo claim mapped to tx digest, object ID, overlay format; utility metrics targets |
-| [core/civilizationcontrol-demo-beat-sheet.md](core/civilizationcontrol-demo-beat-sheet.md) | **Demo beat sheet** — 3-min primary loop (Control→Consequence→Revenue), 2-min fallback variant, evidence capture checklist |
+| [core/civilizationcontrol-demo-beat-sheet.md](core/civilizationcontrol-demo-beat-sheet.md) | **Demo beat sheet (v2)** — ~2:56 primary loop (Pain→Power→Policy→Denial→Revenue→Defense Mode→Commerce→Command), 2-min fallback variant, proof registry, pre-flight checklist |
 | [core/civilizationcontrol-implementation-plan.md](core/civilizationcontrol-implementation-plan.md) | **Atomic implementation plan** — 45 steps across 7 phases (~68h), Day-1 validation first, ZK kill criteria, demo capture |
 | [core/spec.md](core/spec.md) | **System specification** — boundaries, on-chain model, module architecture, UX hierarchy, demo architecture, risk model, embargo assumptions |
 | [core/memory.md](core/memory.md) | **Working memory template** — structured hackathon sprint tracking, recovery procedure, proof moment evidence slots |
