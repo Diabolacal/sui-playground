@@ -6,6 +6,14 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-03 — SVG Topology Spec: Intra-System Multi-Node Rules
+- **Goal:** Extend SVG topology spec to support multiple Network Nodes per Solar System (typical demo: 2 NWNs × 2 Solar Systems), with explicit gate link routing, boundary behavior, and demo layout constraints.
+- **Decision:** Added §6.8–§6.13 to svg-topology-layer-spec.md. Deterministic N=1/2/3+ cluster placement, implicit Solar System boundary (rounded rect, hover-visible), cross-system vs intra-system link routing with visual weight distinction, link scaling doctrine (diagrammatic not astronomical), and fixed demo layout for 2-system × 2-NWN topology. Defense Mode cascade updated for cross-system wave propagation.
+- **Files:** `docs/ux/svg-topology-layer-spec.md` (rev 2)
+- **Diff:** +196 LoC (new sections); ~30 LoC modified (§5.3, §6.2, §6.6, §6.7, §7.3, §10)
+- **Risk:** low (docs only)
+- **Gates:** N/A (docs-only change)
+
 ## 2026-03-13 — SSU Extension E2E Validation (TP-05): Cross-Package withdraw_item Against Real World-Contracts
 - **Goal:** Validate that a cross-package extension witness (`TradeAuth has drop`) can call `withdraw_item<TradeAuth>()` on a real world-contracts `StorageUnit`, closing the last structural gap for TradePost.
 - **Decision:** All 7 Move unit tests PASS against real world-contracts v0.0.15. Extension withdrawal, cross-player delivery, partial quantity, authorization enforcement, and full trade flow all confirmed.

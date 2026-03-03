@@ -5,7 +5,7 @@
 > Canonical design specification for the Strategic Network Map symbol grammar, state system, color doctrine, motion protocol, and layout rules.
 > Sources: UX Architecture Spec §9, Spatial Embed Requirements, Demo Beat Sheet v2, Product Vision, Voice & Narrative Guide, Hackathon Emotional Objective.
 > Validated against: ISA-101 HMI design principles, IEC 60073 color coding, MIL-STD-2525D/APP-6(D) symbology, EEMUA 191 alarm management, High Performance HMI (Hollifield/Habibi), Gestalt perceptual principles.
-> Last updated: 2026-03-03
+> Last updated: 2026-03-03 (rev 2 — intra-system multi-node topology rules)
 
 ---
 
@@ -17,12 +17,19 @@
 4. [Color Semantics Doctrine](#4-color-semantics-doctrine)
 5. [Motion Doctrine & Demo Timing](#5-motion-doctrine--demo-timing)
 6. [Layout & Stacking Rules](#6-layout--stacking-rules)
+   - 6.8 [Intra-System Multi-Cluster Rules](#68-intra-system-multi-cluster-rules-multiple-network-nodes-per-solar-system)
+   - 6.9 [Solar System Boundary Behavior](#69-solar-system-boundary-behavior)
+   - 6.10 [Gate Link Routing Rules](#610-gate-link-routing-rules)
+   - 6.11 [Link Scaling Doctrine](#611-link-scaling-doctrine)
+   - 6.12 [Demo Mode Layout Constraints](#612-demo-mode-layout-constraints)
+   - 6.13 [Topology Is Diagrammatic, Not Astronomical](#613-topology-is-diagrammatic-not-astronomical)
 7. [Export & Naming Conventions](#7-export--naming-conventions)
 8. [Why This Is Not Arbitrary](#8-why-this-is-not-arbitrary)
 9. [Do Not List](#9-do-not-list)
 10. [Demo Beat Alignment Matrix](#10-demo-beat-alignment-matrix)
 11. [Accessibility](#11-accessibility)
-12. [References](#12-references)
+12. [Changelog](#12-changelog)
+13. [References](#13-references)
 
 ---
 
@@ -258,15 +265,15 @@ The Defense Mode posture switch is the **climax visual event** of the demo (Beat
 **Sequence:**
 
 1. **Posture indicator** changes first (0ms): "Open for Business" → "Defense Mode" label transition in the UI (outside the SVG topology, handled by the shell).
-2. **Gate link lines** transition (0–300ms): All gate pair links shift from `--link-healthy` (teal) to `--link-defense` (amber). Staggered by network distance from the "origin" node (the node nearest to the operator's last interaction), 80ms per hop. This creates a **wave propagation** effect — the amber spreads across the network like a signal traveling through corridors.
+2. **Gate link lines** transition (0–300ms): All gate pair links shift from `--link-healthy` (teal) to `--link-defense` (amber). Staggered by network distance from the "origin" node (the node nearest to the operator's last interaction), 80ms per hop. This creates a **wave propagation** effect — the amber spreads across the network like a signal traveling through corridors. In a multi-Solar-System topology, the wave propagates: **origin cluster → intra-system links → cross-system links → destination cluster** (see §6.12 for demo-specific traversal order).
 3. **Turret glyphs** transition (200–500ms): Each turret's stroke shifts to `--state-armed` (amber) and the outer halo appears. Staggered to follow the link wave — a turret transitions 80ms after its parent node's links have transitioned. Animation: stroke color fade (200ms) + halo fade-in (200ms, overlapping).
 4. **Gate glyphs** transition (200–500ms): Gate strokes shift to `--state-restricted` (amber), concurrent with turret transitions.
-5. **Total cascade duration:** 400–600ms from first visual change to last element settled. The entire network should be in Defense Mode visual state within 600ms.
+5. **Total cascade duration:** 400–600ms from first visual change to last element settled. The entire network — across all Solar Systems — should be in Defense Mode visual state within 600ms.
 
 **Justification for 400–600ms:**
 - Below 400ms: transitions blur together, losing the "wave" readability. The cascade is indistinguishable from a simultaneous snap.
 - Above 600ms: feels sluggish for a "one click" action. The demo requires 2 seconds of silence after the click (Beat Sheet v2); the visual must dominate within the first 600ms so the remaining 1.4s is the operator absorbing the result.
-- The 80ms per-hop stagger creates 3–5 distinguishable wave frames at typical network sizes (3–6 nodes), which is within the visual system's temporal resolution for group motion (~10Hz = 100ms per frame perception).
+- The 80ms per-hop stagger creates 3–5 distinguishable wave frames at typical network sizes (2–4 Solar Systems, 2–8 Network Nodes), which is within the visual system's temporal resolution for group motion (~10Hz = 100ms per frame perception). Cross-system links count as one hop in the stagger calculation — the distance between Solar Systems on the canvas is visual, not temporal.
 
 **Reverse cascade (Defense → Business):** Same wave pattern, reversed colors (amber → teal/neutral). Same timing. Same origin-outward propagation.
 
@@ -293,18 +300,22 @@ The Strategic Network Map renders an **abstract governance topology**. Positions
 
 ### 6.2 Network Node as Anchor
 
-The Network Node is the gravitational center of each cluster. All other structures are positioned relative to their parent Network Node.
+The Network Node is the gravitational center of each cluster. All other structures are positioned relative to their parent Network Node. A Solar System may contain **one or more Network Nodes**, each forming its own cluster (see §6.8).
 
 ```
 Layout hierarchy:
-  System Region (from spatial pin — e.g., "Jita")
-    └── Network Node (hexagon, center of cluster)
-         ├── Gate (ring, positioned on cluster perimeter)
-         ├── Gate (ring, positioned on cluster perimeter)
-         ├── Turret (triangle, positioned radially outward)
-         ├── Turret (triangle, positioned radially outward)
-         └── Trade Post (square, positioned on cluster perimeter)
+  Solar System (from spatial pin — e.g., "Jita")
+    ├── Network Node A (hexagon, cluster center)
+    │    ├── Gate (ring, cluster perimeter)
+    │    ├── Turret ×3 (triangle, radial outer ring)
+    │    └── Trade Post (square, cluster perimeter)
+    └── Network Node B (hexagon, cluster center)
+         ├── Gate (ring, cluster perimeter)
+         ├── Turret ×3 (triangle, radial outer ring)
+         └── Trade Post (square, cluster perimeter)
 ```
+
+The single-NWN case is a degenerate form of this hierarchy (Solar System with one cluster). All layout rules in §6.3–§6.7 apply per-cluster; §6.8–§6.9 govern how multiple clusters coexist within a Solar System.
 
 ### 6.3 Cluster Layout Algorithm
 
@@ -336,28 +347,205 @@ Links between gate pairs connect two gates that may be in different clusters (di
 - **Cross-cluster:** Straight line from gate center to gate center, routed behind all clusters (z-order: lowest).
 - **Overlap avoidance:** If a link line passes behind a cluster it doesn't belong to, apply a subtle offset curve (quadratic bezier with control point offset perpendicular to the line). This prevents links from visually crossing unrelated nodes.
 
-### 6.6 Multi-System Layout
+### 6.6 Multi-Solar-System Layout
 
-When an operator owns structures in multiple solar systems:
+When an operator owns structures in multiple Solar Systems:
 
-- Each system is a **region** on the canvas, positioned according to a simple force-directed or grid layout (derived from pin data or auto-arranged).
-- Region labels appear above each cluster: system name in `--glyph-neutral` color, small caps, 10px equivalent.
-- Minimum spacing between region centers: 200 display units (ensures clusters don't overlap at standard zoom).
+- Each Solar System is a **layout region** on the canvas, positioned according to a simple force-directed or grid layout (derived from pin data or auto-arranged). Positions prioritize diagrammatic clarity, not astronomical accuracy (see §6.13).
+- Solar System labels appear above the system boundary: system name in `--glyph-neutral` color, small caps, 10px equivalent.
+- Minimum spacing between Solar System boundary centers: 200 display units (ensures systems don't overlap at standard zoom).
 - "User-curated placement" disclosure visible in the canvas footer (per UX Spec §9a).
+- Gate pair links between Solar Systems route as cross-system lines (see §6.10 for routing rules).
 
 ### 6.7 Z-Order Stack
 
 From bottom (farthest) to top (nearest):
 
 1. Canvas background (`--bg`)
-2. Region labels (system names)
-3. Cross-cluster link lines
-4. Intra-cluster anchor lines (dotted, structure-to-NWN)
-5. Structure glyphs (all types)
-6. State halos (behind their glyph, but above other glyphs')
-7. Event pulses
-8. Badges
-9. Tooltip / hover card (topmost)
+2. Solar System boundary indicators (hover-only, §6.9)
+3. Solar System labels (system names)
+4. Cross-system link lines (§6.10)
+5. Intra-system link lines (§6.10 — above cross-system, below anchors)
+6. Intra-cluster anchor lines (dotted, structure-to-NWN)
+7. Structure glyphs (all types)
+8. State halos (behind their glyph, but above other glyphs')
+9. Event pulses
+10. Badges
+11. Tooltip / hover card (topmost)
+
+### 6.8 Intra-System Multi-Cluster Rules (Multiple Network Nodes per Solar System)
+
+A Solar System may contain multiple Network Nodes. Each Network Node anchors its own cluster (per §6.3). This section defines how multiple clusters coexist within one Solar System.
+
+#### Cluster Placement by Count
+
+| NWN Count | Placement Rule | Geometry |
+|---|---|---|
+| **N = 1** | Single cluster, centered within the Solar System boundary | Cluster center = Solar System center |
+| **N = 2** | Horizontal offset: clusters placed side-by-side at ±30% of the Solar System boundary radius along the horizontal axis | Left cluster center = `(cx − 0.3 × R_sys, cy)`, right = `(cx + 0.3 × R_sys, cy)`. Deterministic: the cluster with the lower Network Node object ID occupies the left position. |
+| **N = 3** | Equilateral triangle arrangement within the boundary, apex at 12 o'clock | Centers at 120° intervals on a circle of radius `0.35 × R_sys` centered on the Solar System center. Ordered clockwise by Network Node object ID starting from 12 o'clock. |
+| **N = 4+** | Grid arrangement: 2-wide, rows added as needed | Row-major left-to-right, top-to-bottom. Spacing: `0.5 × R_sys` horizontal, `0.5 × R_sys` vertical. Centered within boundary. |
+
+`R_sys` = Solar System boundary radius (see §6.9). `cx, cy` = Solar System center coordinates.
+
+#### Minimum Spacing
+
+- **Between cluster centers within a Solar System:** ≥ `2.5 × R_cluster` where `R_cluster` is the cluster's radial extent (NWN center to outermost turret glyph edge). This prevents turret rings from two clusters from overlapping.
+- **Glyph-to-glyph minimum:** 24 display units (1× base glyph size). If cluster radial extent would violate this, the Solar System boundary `R_sys` must grow to accommodate.
+- At typical demo scale (2 NWNs, each with 1 Gate + 1 SSU + 3 Turrets), the N=2 horizontal offset provides clear visual separation with no overlap.
+
+#### Visual Grouping
+
+Multiple clusters within the same Solar System are grouped by the Gestalt principle of **common region** — they share a Solar System boundary container (§6.9). This container is the primary cue that these clusters are co-located in the same physical space, even though they are structurally independent.
+
+No explicit connector line is drawn between Network Nodes within the same Solar System. Their spatial proximity inside the shared boundary is sufficient. (An intra-system gate link between clusters is a different element — see §6.10.)
+
+### 6.9 Solar System Boundary Behavior
+
+Each Solar System has an implicit layout boundary that defines the spatial extent of all clusters within it.
+
+#### Boundary Geometry
+
+- **Shape:** Rounded rectangle with large corner radius (`R_corner = 16 display units`), or stadium shape. Not a circle — a rounded rectangle accommodates the N=2 horizontal layout without excessive empty space.
+- **Size:** Dynamically computed. `Width = max(2.5 × R_cluster × N_cols + padding, min_width)`. `Height = max(2.5 × R_cluster × N_rows + padding, min_height)`. Minimum: 160 × 120 display units.
+- **Rendering:** The boundary is **not rendered as a visible border** by default. It is an invisible layout container. However, two optional rendering modes exist:
+  - **Hover mode:** When the operator hovers over any structure within the system, a subtle boundary indicator fades in (`--sys-boundary`, 8% opacity, `--glyph-neutral` stroke, 1px dashed, 200ms fade-in). This reinforces "these structures are in the same Solar System."
+  - **Debug mode:** Solid boundary visible at all times (developer/demo-prep tool only).
+
+#### Containment Rules
+
+- All Network Node cluster centers must remain within the Solar System boundary.
+- Turret outer ring glyphs may extend up to `R_cluster × 0.1` beyond the boundary edge (hard structures stay inside; radial turrets are allowed slight bleed to avoid cramped layout).
+- Badges and halos may extend beyond the boundary (they are overlays, not structural elements).
+- The Solar System label (§6.6) positions above the top edge of the boundary, horizontally centered.
+
+### 6.10 Gate Link Routing Rules
+
+This section refines §6.5 with explicit rules for intra-system and cross-system gate links.
+
+#### Classification
+
+Gate links fall into two categories based on whether the linked gates are in the same or different Solar Systems:
+
+| Link Type | Definition | Frequency |
+|---|---|---|
+| **Cross-system link** | Source and destination gates are in different Solar Systems | Primary case. Represents a jump corridor (~55 LY). |
+| **Intra-system link** | Source and destination gates are in the same Solar System (possibly different clusters) | Rare but valid. Short-range corridor within a single system. |
+
+#### Cross-System Link Routing
+
+Cross-system links are the dominant visual element connecting Solar Systems. They represent jump corridors.
+
+- **Path:** Straight line from source gate center to destination gate center, routed behind all Solar System boundaries (z-order: layer 3 per §6.7).
+- **Curvature for overlap:** When two or more cross-system links share a similar route (angle between link vectors < 15°), apply symmetric lane offsets: offset each link ±8 display units perpendicular to the midpoint vector. This prevents links from stacking into a single indistinguishable line.
+- **Midpoint clearance:** If a cross-system link passes through an intervening Solar System boundary, apply a quadratic Bézier curve with the control point offset perpendicular to the straight-line path. The offset magnitude = `0.3 × distance to boundary center`. This routes the link around the obstacle.
+- **Defense Mode visual dominance:** During Defense Mode, cross-system links shift to `--link-defense` (amber, 3px) and visually dominate the canvas. The thickened stroke (3px vs. 2px neutral) ensures the cross-system network structure reads clearly during the cascade.
+
+#### Intra-System Link Routing
+
+Intra-system links connect two gates within the same Solar System (possibly in different clusters).
+
+- **Path:** Curved arc (quadratic Bézier) contained within the Solar System boundary. The curve bows away from the system center to avoid crossing Network Node glyphs.
+- **Visual weight:** Thinner than cross-system links (1.5px vs. 2px neutral) and lower saturation (`--link-intra`, a mid-tone between `--link-neutral` and `--link-healthy`). This visually subordinates intra-system connections to cross-system ones.
+- **Avoidance:** The arc must maintain ≥12 display units clearance from any turret glyph within the system to prevent visual confusion between radial anchor lines and gate links.
+- **Defense Mode:** Intra-system links follow the same state color rules as cross-system links but retain the thinner 1.5px stroke. The distinction in weight helps the operator distinguish local corridors from jump corridors even when both are amber.
+
+#### Link Disambiguation Summary
+
+| Property | Cross-System Link | Intra-System Link |
+|---|---|---|
+| Stroke width (neutral) | 2px | 1.5px |
+| Stroke width (Defense Mode) | 3px | 1.5px |
+| Path | Straight line (Bézier if obstructed) | Curved arc within system boundary |
+| Z-order | Layer 3 (behind all system boundaries) | Layer 3.5 (above cross-system links, below intra-cluster anchors) |
+| Visual role | Primary network structure | Local detail |
+
+### 6.11 Link Scaling Doctrine
+
+The Topology View is a 2D diagrammatic projection of a 3D spatial reality. Distances are not literal.
+
+#### Governing Rules
+
+1. **Jump distance is not rendered to scale.** A gate link representing ~55 light years and a gate link representing ~10 light years are drawn at the same visual length — whatever spacing produces the clearest diagram. Attempting literal scale would make distant systems invisible or adjacent systems overlap.
+2. **Solar System internal scale is not literal.** Structures within a Solar System are separated by the layout algorithm (§6.8), not by in-game coordinate distances. The internal scale is governed by legibility requirements (minimum spacing, turret ring clearance).
+3. **Visual spacing prioritizes clarity.** Solar Systems are positioned for diagrammatic readability: minimize link crossings, provide even spacing, keep the overall topology compact enough to fit the viewport without scrolling. This follows the same principle used in power-grid one-line diagrams and metro maps — topology over geography.
+4. **No distance labels on links.** Links do not display light-year or coordinate distances. The operator cares about connectivity and state, not spatial measurement.
+5. **Consistent link length within a diagram.** While absolute scale is not literal, the diagram should maintain roughly proportional spacing — two Solar Systems connected by a single hop should appear at roughly the same distance as any other single-hop pair. Wildly varying link lengths for the same hop count create misleading proximity cues.
+
+### 6.12 Demo Mode Layout Constraints
+
+For the hackathon demo, the topology is pre-arranged with deterministic positions (no force-directed layout, no auto-arrangement). This ensures consistent visuals across demo runs.
+
+#### Demo Topology
+
+The reference demo topology consists of:
+
+```
+Solar System Alpha                    Solar System Beta
+┌─────────────────────┐              ┌─────────────────────┐
+│  NWN-A1     NWN-A2  │              │  NWN-B1     NWN-B2  │
+│  ┌───┐      ┌───┐   │   Link 1    │  ┌───┐      ┌───┐   │
+│  │ ⬡ │──G1════════════════G3──│ ⬡ │  │  │ ⬡ │      │ ⬡ │  │
+│  └───┘      └───┘   │              │  └───┘      └───┘   │
+│  T×3  SSU   T×3 SSU │   Link 2    │  T×3  SSU   T×3 SSU │
+│        G2════════════════════G4────│                      │
+└─────────────────────┘              └─────────────────────┘
+```
+
+**Structure inventory:**
+- 2 Solar Systems × 2 Network Nodes = 4 Network Nodes
+- 4 Gates (G1↔G3 cross-system, G2↔G4 cross-system)
+- 4 Trade Posts (1 per NWN)
+- Up to 6 Turrets per NWN = 24 turrets maximum (demo likely uses 3 per NWN = 12 total)
+
+**Fixed positions (MVP):**
+- Solar System Alpha: canvas left-center. Solar System Beta: canvas right-center.
+- Horizontal separation: 300–400 display units between system boundary centers.
+- Within each system: N=2 horizontal offset per §6.8.
+- Gate links route as horizontal cross-system lines between the two systems.
+
+#### Defense Mode Cascade Traversal Order
+
+For the demo, the cascade wave propagates in this deterministic order:
+
+1. **Origin cluster** (NWN the operator last interacted with — e.g., NWN-A1)
+2. **Origin cluster turrets + gate** (80ms stagger per element)
+3. **Intra-system sibling cluster** (NWN-A2 — 80ms after origin cluster completes)
+4. **Sibling cluster turrets + gate** (80ms stagger)
+5. **Cross-system link lines** (80ms after origin system completes)
+6. **Destination system clusters** (NWN-B1, NWN-B2 — 80ms stagger, same intra-system order)
+7. **Destination turrets + gates** (80ms stagger)
+
+Total hops: ~6–8, total cascade: 480–640ms. Within the 400–600ms target specified in §5.3 (the upper bound stretches slightly for 4-NWN topologies; this is acceptable — the wave remains perceptually continuous).
+
+The traversal reads as: **"One command, rippling from where I stand, across my territory, across the void, into my distant outpost."** This is the "one transaction across the network" visual thesis.
+
+### 6.13 Topology Is Diagrammatic, Not Astronomical
+
+The Strategic Network Map is a **governance control schematic** in the tradition of electrical one-line diagrams, SCADA process schematics, and metro transit maps. It is not an astronomical chart, a star map, or a spatial simulation.
+
+#### What this means concretely
+
+| Property | Astronomical Map | This Topology View |
+|---|---|---|
+| **Distances** | To scale (or declination-projected) | Diagrammatic — optimized for legibility, not measurement |
+| **Positions** | Derived from celestial coordinates | Operator-curated pins or demo-fixed positions |
+| **Orientation** | Galactic/ecliptic reference frame | No fixed orientation — layout algorithm arranges for clarity |
+| **Background** | Starfield, nebulae, galactic plane | Solid dark canvas (`--bg`). No decorative elements. |
+| **Purpose** | Navigation, observation, science | Governance: monitor state, deploy policy, assess posture |
+
+#### Why this matters for the demo
+
+A common failure mode for "space game" tools is drifting toward sci-fi cartography — adding starfields, constellations, distance scales, compass roses, and grid overlays. These elements are aesthetically appealing but informationally empty in a governance context. They compete for visual bandwidth with state overlays and link lines, and they misframe the tool as a navigation aid rather than a command surface.
+
+The demo must pass the **3-Second Check** (per Hackathon Emotional Objective): a judge glancing at the screen for 3 seconds should read "governance infrastructure control" — not "space game map screen." The diagrammatic register — dark background, gray-line topology, colored-exception state overlays — is what produces that read.
+
+This principle is reinforced by every reference standard cited in §8:
+- ISA-101 Level 1 displays are process schematics (P&IDs), not plant aerial photos.
+- MIL-STD-2525D symbols are placed on tactical overlays and operational graphics, not satellite imagery (unless explicitly composited).
+- NUREG-0700 control room displays are mimic diagrams, not reactor cross-sections.
+
+The topology is a mimic diagram of frontier infrastructure. It shows connectivity, state, and policy — not location, distance, or appearance.
 
 ---
 
@@ -387,10 +575,11 @@ From bottom (farthest) to top (nearest):
 | SVG Element | React Component | Props |
 |---|---|---|
 | Structure glyph + overlays | `<StructureNode>` | `type`, `state`, `position`, `onClick` |
-| Link line | `<LinkLine>` | `sourceId`, `targetId`, `state` |
+| Link line | `<LinkLine>` | `sourceId`, `targetId`, `state`, `linkType` (`cross-system` \| `intra-system`) |
 | Badge | `<StatusBadge>` | `type`, `value`, `position` |
 | Cluster | `<NodeCluster>` | `networkNodeId`, `children`, `position` |
-| Canvas | `<TopologyCanvas>` | `regions`, `links`, `onNodeClick` |
+| Solar System | `<SolarSystemRegion>` | `systemId`, `clusters`, `position`, `boundaryVisible` |
+| Canvas | `<TopologyCanvas>` | `systems`, `links`, `onNodeClick` |
 
 ---
 
@@ -478,7 +667,7 @@ This matrix verifies that every demo beat's visual requirements are satisfiable 
 | 3 | Policy | Gate highlighted during policy deploy, Signal Feed update | Hover highlight (120ms), post-deploy state transition to "configured" | ✓ |
 | 4 | Denial | Red pulse on the gate where hostile was denied, "✕" badge | `Pulse/Denied` (300ms red) + `Badge/Denied` (2s hold) | ✓ |
 | 5 | Revenue | Green pulse on the gate where toll collected, "$" badge | `Pulse/Revenue` (200ms green) + `Badge/Revenue` (1.5s hold) | ✓ |
-| 6 | Defense Mode | **Full cascade:** posture indicator → link lines amber → turrets armed (halo) → gates restricted. Wave propagation 400–600ms. | Defense Mode cascade protocol (§5.3). All state transitions, link color shifts, turret halos, gate restriction strokes. | ✓ |
+| 6 | Defense Mode | **Full cascade across 2 Solar Systems:** posture indicator → link lines amber → turrets armed (halo) → gates restricted. Wave propagation 400–600ms, traversing origin system → cross-system links → destination system (§6.12). | Defense Mode cascade protocol (§5.3). Multi-system wave per §6.12. All state transitions, link color shifts, turret halos, gate restriction strokes. | ✓ |
 | 7 | Commerce | Green pulse on Trade Post where trade settled | `Pulse/Revenue` on Trade Post glyph + `Badge/Revenue` | ✓ |
 | 8 | Command | Full topology visible, all states settled post-Defense Mode, revenue aggregates | Stable topology in Defense Mode state. All amber. Revenue badges cleared (or persistent count badge). | ✓ |
 | 9 | Close | Title card overlays topology (or topology fades to black) | Opacity transition on `<TopologyCanvas>` (300ms fade-out) | ✓ |
@@ -530,7 +719,16 @@ The SVG topology is a visual control surface and is not the primary interaction 
 
 ---
 
-## 12. References
+## 12. Changelog
+
+| Date | Rev | Change | Sections Affected |
+|---|---|---|---|
+| 2026-03-03 | 1 | Initial specification: symbol grammar, state system, color/motion doctrine, layout rules, demo alignment, accessibility | All |
+| 2026-03-03 | 2 | **Intra-system multi-node topology rules.** Added: multi-NWN-per-Solar-System cluster placement (§6.8), Solar System boundary behavior (§6.9), refined gate link routing with cross-system/intra-system distinction (§6.10), link scaling doctrine (§6.11), demo mode fixed layout for 2-system × 2-NWN topology (§6.12), "Topology Is Diagrammatic" framing (§6.13). Updated: §6.2 hierarchy example for multi-NWN, §6.6 terminology alignment, §5.3 cascade wave cross-system propagation, §7.3 React component mapping. | §5.3, §6.2, §6.6, §6.8–§6.13, §7.3 |
+
+---
+
+## 13. References
 
 ### Standards & Guidelines
 
