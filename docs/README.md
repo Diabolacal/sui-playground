@@ -218,6 +218,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [research/capabilities.json](research/capabilities.json) | **In-game browser capabilities** — raw probe data from EVE Frontier embedded WebView (Chromium 122 CEF), captured 2026-02-28 |
 | [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
 | [research/location-proof-independent-audit.md](research/location-proof-independent-audit.md) | **Location proof independent audit** — distance proof observability, trilateration analysis, risk classification |
+| [research/world-contracts-event-surface.md](research/world-contracts-event-surface.md) | **World-contracts event surface audit** — 28 event types, field index, spatial linkage, consumption paths (RPC/GraphQL/gRPC), Ethereum assumption mismatches, polling architecture |
 
 ## Operations
 
