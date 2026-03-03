@@ -13,6 +13,7 @@ Structured documentation for the SUI Playground workspace. Documents are organiz
 - `ux/` — UX architecture specs and interaction design
 - `analysis/` — Cross-cutting analytical artifacts (assumption registries, fragility audits)
 - `audits/` — Reconciliation and consistency audit reports
+- `demo/` — Demo production assets (narration specs, recording guides)
 - `sandbox/` — Temporary or experimental documents
 - `archive/` — Deprecated but retained documents
 
@@ -145,6 +146,8 @@ Consistent naming conventions used across all active documents.
 | [architecture/policy-authoring-model-validation.md](architecture/policy-authoring-model-validation.md) | **Policy authoring model validation** — VERIFIED: data-driven policies via dynamic fields, users never write Move, publish-once/configure-forever model, policy lifecycle, Day-1 validation steps |
 | [architecture/turret-contract-surface.md](architecture/turret-contract-surface.md) | **Turret contract surface** — full API reference (v0.0.14, now v0.0.15): types, entry functions, events, error codes, extension pattern, default targeting rules, project applicability |
 | [architecture/turret-closed-world-clarified.md](architecture/turret-closed-world-clarified.md) | **Turret closed-world constraint (canonical)** — code-proven evidence: fixed 4-arg PTB, no uid() accessor, default targeting matrix, CC alignment verdict, per-project feasibility, toll payer mismatch |
+| [architecture/world-contracts-event-layer-audit.md](architecture/world-contracts-event-layer-audit.md) | **Event layer & observability audit** — complete inventory of 20 event types / 34 emit sites across world-contracts, gap analysis for CC proof moments, indexer vs. pollable classification, demo observability recommendations |
+| [architecture/world-contracts-strategic-review.md](architecture/world-contracts-strategic-review.md) | **Strategic review** — full API surface, governance model, event layer, builder experience audit of world-contracts v0.0.15. 4 SIMPLE + 3 EASY + 5 HARD recommendations. Demo impact analysis for CC proof moments. |
 
 ## Ideas
 
@@ -265,6 +268,12 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [analysis/fortune-gauntlet-scoring-report.md](analysis/fortune-gauntlet-scoring-report.md) | **Fortune Gauntlet scoring report** — 8-criterion + 4-area FAQ scoring, comparative analysis vs Fortune Gate (5.38) and standalone Gauntlet (7.8), prize category fit (Weirdest Idea primary), denial rate/checkpoint tuning, kill criteria |
 | [analysis/turret-project-semantics-and-mismatches.md](analysis/turret-project-semantics-and-mismatches.md) | **Turret project semantics and mismatches** — per-project (CC/CB/FG) translation of turret capabilities, 8 classified mismatches, closed-world constraint analysis, workaround assessment |
 | [analysis/must-work-claim-registry.md](analysis/must-work-claim-registry.md) | **Must-work claim registry** — 148 testable claims extracted from 10 source docs + atomic courier experiment, grouped by project (CC GateControl/TradePost/Posture/UI/Demo, ZK GatePass, Fortune Gauntlet, Atomic Courier, Infrastructure), with demo-critical flags and validation status |
+
+## Demo
+
+| File | Purpose |
+|------|---------|
+| [demo/narration-direction-spec.md](demo/narration-direction-spec.md) | **Narration direction spec (ElevenLabs v3)** — annotated script, delivery control table, Defense Mode moment spec, TTS settings, voice selection procedure, recording checklist |
 
 ## Sandbox
 
