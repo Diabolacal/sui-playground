@@ -1,597 +1,516 @@
-# CivilizationControl — Demo Beat Sheet
+# CivilizationControl — Demo Beat Sheet v2
 
 **Retention:** Carry-forward
 
-> Structured beat-by-beat demo plan for the CivilizationControl hackathon submission video.
-> Structure: Control → Consequence → Revenue (single continuous loop)
-> Sources: civilizationcontrol-product-vision.md, civilizationcontrol-hackathon-emotional-objective.md, civcontrol-independent-audit.md §6, civilizationcontrol-voice-and-narrative.md
-> Last updated: 2026-03-03
+> Competitive demo blueprint for the CivilizationControl hackathon submission video.
+> Arc: Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command
+> Target duration: **~2:55** (hard ceiling 3:05)
+> Sources: v1 beat sheet, product vision, emotional objective, voice guide, claim-proof matrix, posture-switch validation, judging criteria digest
+> Last updated: 2026-03-03 (competitive refinement pass)
 
 ---
 
 ## Narrative Spine
 
-One pilot's journey through the operator's frontier:
+> A frontier operator wakes up to chaos. By the end of this demo, every gate, turret, and trade post is under sovereign command — policy enforced, hostiles denied, revenue flowing, and the entire network locked down in one click.
 
-> **Set gate policy → Hostile denied → Ally tolled → Defense Mode (posture shift) → Ally buys at TradePost → Revenue from both flows visible in Signal Feed**
+**Arc:** Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command
 
-This is one uninterrupted loop: **Control → Consequence → Posture → Revenue.** Every beat flows into the next. No feature tourism. No screen-hopping. One operator, one frontier, one governance story.
+This is not a feature tour. It is three minutes of escalating authority. Each beat raises the stakes. The climax is Defense Mode — one action, infrastructure-wide state change, chain-enforced. Everything that follows proves the system pays for itself.
 
 ---
 
-## Voice & Terminology Rules
+## Voice Rules
 
-All narration and on-screen labels use canonical terminology per the [Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md):
-
-| Use | Do Not Use |
+| Use | Never Use |
 |---|---|
 | Command Overview | Dashboard |
-| Signal Feed | Activity / Notifications / Log |
-| Structures / Gates / Trade Posts | Objects / Items / Smart Assemblies |
-| Configuration | Settings |
+| Signal Feed | Notifications / Activity Log |
+| Structures | Objects / Smart Assemblies |
 | Operator | User / Admin |
-| Deploy | Submit / Save |
-| Fault | Error |
-| Online / Offline | Active / Inactive |
-| Signals | Notifications |
+| Deploy | Save / Submit |
+| Posture | Mode / Setting |
+| Denied | Rejected / Failed |
 
-**Narration tone:** Steady, unhurried, measured. The narrator describes governance decisions and outcomes — not button clicks and UI features. Present what exists with full confidence. No hedging, no apology, no celebration.
-
-### If We Only Show Five Overlays…
-
-These are the five non-negotiable proof moments. If time or stability forces cuts, every other overlay is expendable — these are not. Each maps to a ★ Tier A row in the [Claim → Proof Matrix](civilizationcontrol-claim-proof-matrix.md):
-
-1. **Policy deploy tx** (Beat 3) — proves governance was written on-chain.
-2. **Hostile denied tx** (Beat 4) — proves the policy enforced denial.
-3. **Ally tolled tx + balance delta** (Beat 5) — proves revenue flowed to operator.
-4. **Posture shift txs** (Beat 5b) — proves turrets came online and gates restricted in one operator action.
-5. **Trade buy tx + balance deltas** (Beat 6) — proves atomic commerce settlement.
-6. **Aggregate revenue in Command Overview** (Beat 7) — proves the system produces visible value.
+**Tone:** Mission control. Measured confidence. No hedging, no celebration, no jargon. The narrator describes outcomes, not mechanics. Every sentence earns its time.
 
 ---
 
-## Transaction Latency Handling
+## Five Non-Negotiable Proof Moments
 
-- **Confirmation >5 seconds:** Continue narration over the wait. Never pause mid-sentence. If confirmation hasn't arrived by the end of the current narration line, hold on the UI (the spinner or pending state is acceptable for 2–3 seconds of dead air max).
-- **Proof overlays:** Only insert after tx confirmation is visible on-screen. Never overlay a digest that hasn't resolved.
-- **Dead air prevention:** If a tx is slow during a live capture, cut to a pre-recorded proof overlay or hold on the Signal Feed (which always has prior entries to show). Re-take the beat if the gap is >5 seconds.
-- **Narration pacing:** The narrator should be ~2 seconds ahead of the UI action. Describe intent ("Policy deployed on-chain") as the tx is confirming, not after.
+If stability forces cuts, protect these five. Everything else is expendable.
 
----
-
-## Primary Demo Variant: 3 Minutes (Full Loop)
-
-### Beat 1 — The Problem (0:00–0:25)
-
-**Timing:** 25 seconds
-
-**Narration:**
-> "This is what managing gates on EVE Frontier looks like today."
-
-*[Screen: terminal with raw `sui client ptb` commands scrolling — the 13-step gate lifecycle. Dense, technical, unreadable.]*
-
-> "Twenty commands to configure one gate policy. No visibility. No monitoring. No way to see who's jumping through your territory or what they're paying."
-
-*[Quick cut: error message from a failed PTB. Discord screenshot: "is the gate down?" message.]*
-
-> "The on-chain primitives are powerful. The operator experience doesn't exist."
-
-**On-screen action:** Raw CLI footage, error messages, Discord coordination screenshots.
-
-**Evidence overlay:** None (this is the "before" state).
-
-**Purpose:** Establish pain. Make the viewer feel the gap between what the chain can do and what an operator can actually do.
-
-**Preconditions:**
-- Pre-recorded terminal session with `gate_lifecycle_rehearsal.sh` output (or raw `step*.sh` commands)
-- Discord screenshot prepared ("is the gate down?" message)
-- Failed PTB error screenshot prepared
-
-**Capture mode:** Pre-recorded CLI insert + static screenshot overlays.
+| # | Proof Moment | Beat | What It Proves |
+|---|---|---|---|
+| 1 | Policy deploy tx digest | Beat 3 | Governance written on-chain in one action |
+| 2 | Hostile denied — MoveAbort visible | Beat 4 | Chain enforcement. No appeal. |
+| 3 | Toll collected — balance delta | Beat 5 | Revenue flows to operator atomically |
+| 4 | Defense Mode — single tx digest containing posture + turrets | Beat 6 | Infrastructure-wide state change, one click |
+| 5 | Trade settlement — buyer/seller balances | Beat 7 | Atomic commerce, no trust required |
 
 ---
 
-### Beat 2 — The Reveal: Command Overview (0:25–0:50)
+## Transaction Latency Protocol
 
-**Timing:** 25 seconds
-
-**Narration:**
-> "CivilizationControl changes that."
-
-*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, turrets, NWNs. Status indicators resolve to green. Turret indicators show offline (grey). Posture indicator reads "Open for Business." *(If Strategic Network Map is implemented:)* Strategic Network Map renders — system nodes with structure badges, gate link lines connecting them.]*
-
-> "Every structure you own. Gates. Turrets. Trade Posts. Status. Links. Revenue. One view."
-
-*[Camera slowly pans across the Command Overview: structure registry on the left, aggregate stats (total structures, total revenue, active policies), Signal Feed scrolling on the right. *(If Strategic Network Map ready:)* Strategic Network Map showing gate link topology (top). *(If EF-Map Cosmic Context ready:)* EF-Map panel shows territory in the universe.]*
-
-*[Hold for 2 seconds on the full view. Let it breathe.]*
-
-**On-screen action:** Command Overview fully populated with operator's structures. *(If Strategic Network Map available:)* Strategic Network Map shows governance topology — system nodes, link lines, status colors. *(If EF-Map panel available:)* EF-Map panel shows territory in the universe. *(Minimum:)* Structure list with status indicators and aggregate metrics.
-
-**Evidence overlay:** Package ID badge in corner: `[submission-package-ID]`
-
-**Purpose:** Emotional pivot. The "before" was pain; the "after" is calm authority. The operator's frontier is under command.
-
-**Three-Second Check (per emotional objective §5):**
-- What am I governing? — Policies visible in structure cards ✓
-- What is under my authority? — Structure registry with ownership ✓
-- What is producing value? — Revenue counter ✓
-- What is at risk? — Fuel/status indicators ✓
-- What am I building? — Structure count ✓
-
-**Preconditions:** Frontend running + connected to submission chain. Operator wallet connected. ≥3 structures online (2 gates + 1 trade post). Package ID known for overlay.
-
-**Capture mode:** Live UI recording.
+- Narrator stays ~2 seconds ahead of UI. Describe intent as the tx confirms, not after.
+- If confirmation >3 seconds: continue narration. Never pause mid-sentence.
+- If confirmation >5 seconds: hold on Signal Feed (always has prior entries). Retake the beat.
+- Proof overlays appear ONLY after confirmation resolves on-screen. Never overlay an unresolved digest.
 
 ---
 
-### Beat 3 — Control: Set Gate Policy (0:50–1:20)
+## Beats
 
-**Timing:** 30 seconds
+### Beat 1 — Pain (0:00–0:18)
 
-**Narration:**
-> "You decide who passes through your gates and what they pay."
+**Duration:** 18 seconds
 
-*[Click into a gate. Policy panel opens. Two rule types visible: Tribe Filter and Toll.]*
+**Spoken narration:**
+> "You run twelve gates across three systems on EVE Frontier. Last night, two went offline. Nobody told you. Hostiles used the gap. Your pilots died hauling fuel through territory you thought you controlled."
 
-> "Tribe filter: only Tribe 7 pilots pass. Toll: 5 SUI per jump. Both rules, composing on the same gate."
+*[Screen: black background. White text fades in, one line at a time, matching narration cadence. No terminal. No UI. Just the words.]*
 
-*[Operator selects Tribe 7 from dropdown. Sets toll to 5 SUI. Clicks "Deploy Policy."]*
+> "Configuring one gate takes thirteen commands. You have twelve gates."
 
-> "One action. Policy deployed on-chain."
+*[Beat. Text: "No visibility. No alerts. No control."]*
 
-*[Confirmation appears: "Policy deployed. 2 rules active on Gate North-3."]*
+**On-screen:** Stark text-on-black. Optionally: a single raw CLI error screenshot flashes for 1 second before cutting to black again.
 
-*[Hold for 2 seconds.]*
+**Evidence:** None. This is the "before."
 
-**On-screen action:** Rule configuration UI → Deploy Policy → confirmation message.
-
-**Evidence overlay required:**
-- Tx digest of policy deployment: `[TBD-digest]`
-- Gate object showing `extension: Some(TypeName)` after deployment
-- Before/after: gate had no rules → gate now has TribeRule + TollRule dynamic fields
-
-**Purpose:** Demonstrate the core value proposition — governance through UI, not CLI. One click replaces 8+ commands.
-
-**Preconditions:** Gate online + linked, NO current extension (clean state). Operator has gas for publish + authorize. Extension package ready. Tribe 7 configured in dropdown.
-
-**Capture mode:** Live UI recording. Proof overlay (tx digest + gate object diff) in post.
+**Purpose:** Visceral, specific pain. Not abstract ("20 commands") — personal ("your pilots died"). The viewer must feel the gap before seeing the solution.
 
 ---
 
-### Beat 4 — Consequence A: Hostile Denied (1:20–1:45)
+### Beat 2 — Power Reveal (0:18–0:38)
 
-**Timing:** 25 seconds
+**Duration:** 20 seconds
 
-**Narration:**
-> "A hostile pilot — wrong tribe — attempts to jump."
+**Spoken narration:**
+> "CivilizationControl."
 
-*[Signal Feed updates: new entry appears. Red indicator. "Jump denied. Tribe mismatch. Pilot [address]. Gate North-3."]*
+*[Hard cut from black to the Command Overview, fully loaded. Structures resolve — gates, turrets, trade posts, network nodes. Status indicators light green. Posture reads "Open for Business." Signal Feed scrolls with recent events.]*
 
-> "Blocked. No passage. No appeal. On-chain enforcement."
+*[Hold 2 seconds. Let the interface breathe.]*
 
-*[Hold on the denied entry for 2 seconds.]*
+> "Every structure you own. Gates, turrets, trade posts, network nodes. Status, policy, revenue — one view."
 
-**On-screen action:** Signal Feed shows denied jump event with red status badge.
+*[Camera moves slowly across the Command Overview: structure registry left, aggregate metrics center, Signal Feed right.]*
 
-**Evidence overlay required:**
-- Tx digest of the denied attempt: `[TBD-digest]` — failed tx IS stored on-chain and verifiable on any Sui explorer
-- MoveAbort code: `(extension_module::tribe_permit, 0)` = ETribeMismatch — deterministic, distinguishable from other abort reasons
-- Pilot address visible (shortened)
-- **Mechanism:** Wallet adapter returns failure response synchronously — `effects.status: "failure"`, `effects.status.error` contains module + abort code. Dashboard parses this to display "Jump denied. Tribe mismatch." No indexer or event subscription needed. **Note:** MoveAbort reverts ALL effects including events — no on-chain events from denied jumps. Detection relies entirely on the wallet adapter failure response or explorer tx status.
+**On-screen:** Command Overview, fully populated. Package ID badge in corner.
 
-**Purpose:** First consequence of the policy. The operator set a rule; the chain enforced it. Governance → denial.
+**Evidence:** Package ID overlay: `[submission-package-ID]`
 
-**Preconditions:** Gate has tribe filter active (Beat 3). Hostile pilot funded with gas, character exists with tribe ≠ 7, no valid JumpPermit.
+**Purpose:** Emotional pivot. Black despair → calm authority. The operator's frontier is under command. This is not a tool reveal — it is a power reveal.
 
-**Capture mode:** Live UI recording (Signal Feed). Proof overlay (tx digest + MoveAbort) in post.
-
----
-
-### Beat 5 — Consequence B: Ally Tolled (1:45–2:10)
-
-**Timing:** 25 seconds
-
-**Narration:**
-> "An ally — matching tribe — jumps through. Toll paid: 5 SUI."
-
-*[Signal Feed updates: new entry. Green indicator. "Jump completed. Toll: 5 SUI. Pilot [address]. Gate North-3."]*
-
-> "Tribe matches. Payment transfers to the operator's address. Passage granted. One atomic transaction."
-
-*[Revenue counter in the Command Overview ticks up by 5 SUI.]*
-
-**On-screen action:** Signal Feed shows permitted jump + toll payment. Revenue counter increments.
-
-**Evidence overlay required:**
-- Tx digest of the tolled jump: `[TBD-digest]`
-- Custom `TollCollectedEvent` from extension (NOT `AccessGrant` — that is a sandbox mock, not a world-contracts event; see [read-path validation](../architecture/read-path-architecture-validation.md) §2.4)
-- Balance delta: operator address +5 SUI
-- `TollCollectedEvent` (our extension event — NOT a world-contracts event)
-- `JumpEvent` confirmation (world-contracts)
-
-**Purpose:** Second consequence. Same policy, different outcome. The gate discriminates by tribe and collects revenue. Control → Consequence → Revenue in one beat.
-
-**Preconditions:** Gate has tribe filter + toll active (Beat 3). Ally pilot funded ≥10 SUI, character tribe = 7. Operator balance noted before jump. **Sponsorship:** `jump_with_permit` requires AdminACL-authorized sponsor co-signature (or sender in AdminACL). Ensure sponsor address is enrolled before this beat.
-
-**Capture mode:** Live UI recording (Signal Feed + revenue counter). Proof overlay (tx digest + balance delta + events) in post.
+**Three-Second Check:**
+- What am I governing? Policies visible ✓
+- What is under my authority? Structure registry ✓
+- What is producing value? Revenue counter ✓
+- What is at risk? Status indicators ✓
 
 ---
 
-### Beat 5b — Posture Shift: Defense Mode (2:10–2:25)
+### Beat 3 — Policy (0:38–1:00)
 
-**Timing:** 15 seconds
+**Duration:** 22 seconds
 
-**Narration:**
-> "Threat reported. One click — Defense Mode."
+**Spoken narration:**
+> "You decide who crosses and what they pay."
 
-*[Operator clicks "Defense Mode" button in Command Overview. Gate link indicators shift from green to amber. Turret icons flip from grey (offline) to active (online).]*
+*[Click into a gate. Policy panel opens. Two rule slots: Tribe Filter and Toll.]*
 
-> "Gates restrict to tribe-only. Turrets come online."
+> "Tribe filter: only Tribe 7. Toll: five SUI per jump."
 
-*[Signal Feed updates: posture change entries — "Posture: Defense Mode," turret `StatusChangedEvent` entries showing ONLINE, gate rule update confirmations.]*
+*[Operator selects Tribe 7. Sets toll to 5 SUI. Clicks "Deploy Policy."]*
 
-*[Hold 2 seconds on the updated Command Overview showing the new posture state.]*
+> "One action. Two rules. Deployed on-chain."
 
-**On-screen action:** Posture button click → gate indicators change → turret indicators change → Signal Feed reflects posture shift.
+*[Confirmation: "Policy deployed. 2 rules active." Signal Feed updates.]*
 
-**Evidence overlay required:**
-- Single tx digest containing all posture changes: `[TBD-digest]`
-- `PostureChangedEvent` (CC extension): old_mode → new_mode
-- Turret `StatusChangedEvent` tx digest(s): action: ONLINE (one per turret)
-- Gate rule update confirmation (tribe filter set, toll removed)
-- Before/after: turret status OFFLINE → ONLINE, gate policy "Open for Business" → "Defense Mode"
+**On-screen:** Gate detail → policy configuration → deploy → confirmation.
 
-**Purpose:** Demonstrate infrastructure-level governance. One operator action orchestrates multiple on-chain state changes across gates and turrets. This is the "command layer" moment — not individual toggles, but posture-level control.
+**Evidence overlay (post-production):**
+- Tx digest of policy deployment
+- Gate object showing `extension: Some(TypeName)` + 2 dynamic field rules
 
-**Preconditions:** ≥1 turret anchored + offline, connected to an online NetworkNode. Gates currently in "Open for Business" (tribe+toll). OwnerCap<Turret> accessible via character borrow. Turret's energy_source_id matches provided NetworkNode.
-
-**Capture mode:** Live UI recording (Command Overview + Signal Feed). Proof overlay (turret StatusChangedEvent tx + gate update) in post.
-
-> **Implementation note:** "One click" triggers the UI to construct a **single PTB** containing all turret toggles + gate rule updates. This was validated on local devnet (Strategy A — single PTB confirmed for both BUSINESS→DEFENSE and DEFENSE→BUSINESS). The overlay shows a single tx digest. Proof events: `PostureChangedEvent` (CC extension) + N × `StatusChangedEvent` (world-contracts `status.move`). See [posture-switch localnet validation](../sandbox/posture-switch-localnet-validation.md).
->
-> **Pre-recording prerequisite:** Ensure the NetworkNode is fueled and online before recording this beat. `turret::online()` aborts with `ENotProducingEnergy` if the NWN is not producing energy. Pre-check turret statuses to avoid no-op abort (calling `online()` on an already-online turret also aborts).
+**Purpose:** Core value — governance through interface, not CLI. One click replaces 8+ commands. No jargon about typed witnesses or dynamic fields.
 
 ---
 
-### Beat 6 — Commerce: Ally Buys at TradePost (2:25–2:50)
+### Beat 4 — Denial (1:00–1:18)
 
-**Timing:** 25 seconds
+**Duration:** 18 seconds
 
-**Narration:**
-> "The same pilot lands at a Trade Post on the other side of the gate."
+**Spoken narration:**
+> "A hostile pilot — wrong tribe — tries to jump."
 
-*[Switch to Trade Post view. SSU storefront: fuel rods, ammo, repair paste — each with prices.]*
+*[Signal Feed: new entry, red badge. "Jump denied. Tribe mismatch. Gate North-3."]*
 
-> "Fuel rod. 30 SUI. One click."
+*[Hold on the red entry for 2 seconds.]*
 
-*[Buyer selects fuel rod listing. Clicks Buy. Transaction confirmation: "Trade settled. Fuel Rod acquired for 30 SUI."]*
+> "Denied. The chain enforced it. No override. No appeal."
 
-> "Atomic settlement. Payment to the seller. Item to the buyer. No counterparty risk. No coordination."
+**On-screen:** Signal Feed with denied entry. Red indicator.
 
-*[Signal Feed updates: "Trade settled. Fuel Rod. 30 SUI. Buyer: [address]."]*
+**Evidence overlay (post-production):**
+- Failed tx digest (stored on-chain, verifiable on any Sui explorer)
+- MoveAbort code: `(tribe_permit, 0)` — ETribeMismatch
+- Shortened pilot address
 
-*[Revenue counter ticks up again.]*
+**Purpose:** First consequence. Policy → enforcement. The viewer sees that governance has teeth. The word "denied" lands with finality.
 
-**On-screen action:** TradePost browse → Buy → confirmation → Signal Feed update → revenue increment.
-
-**Evidence overlay required:**
-- Tx digest of the buy: `[TBD-digest]` (or sandbox reference: `3GtyTmJmLZxLQ3sqcuGTwoEm566Ts87c8Kedqjfh1NJ2`)
-- `TradeSettledEvent` (our extension event — NOT a world-contracts event; replaces sandbox mock `ItemPurchased`)
-- Balance deltas: buyer −30 SUI, seller +30 SUI
-- Listing state: `is_active: true` → `is_active: false`
-
-**Purpose:** Complete the economic loop. Gate toll drove foot traffic. Commerce captured the demand. The operator profits from both sides.
-
-**Preconditions:** SSU Trade Post deployed + authorized + online. ≥1 item listed (e.g., Fuel Rod at 30 SUI). Buyer funded ≥35 SUI. Seller balance noted.
-
-**Capture mode:** Live UI recording (TradePost + Signal Feed). Proof overlay (tx digest + balance deltas + listing state) in post.
+**Technical note:** MoveAbort reverts all effects including events. Detection is via wallet adapter failure response (`effects.status: "failure"`). No indexer needed.
 
 ---
 
-### Beat 7 — The System: Revenue Visible (2:50–3:10)
+### Beat 5 — Revenue (1:18–1:36)
 
-**Timing:** 20 seconds
+**Duration:** 18 seconds
 
-**Narration:**
-> "Toll revenue from the gate. Trade revenue from the storefront. Turrets standing watch. All visible. All on-chain. All under your command."
+**Spoken narration:**
+> "An ally — right tribe — jumps through. Five SUI collected."
 
-*[Pull back to Command Overview. Full view: Signal Feed scrolling with jumps and transactions. *(If Strategic Network Map ready:)* Strategic Network Map showing gate topology with green link lines and active status nodes. Trade posts with active listings. *(If EF-Map ready:)* EF-Map cosmic context expanded — operator's territory highlighted in the starfield, colored link lines drawn between linked systems.]*
+*[Signal Feed: new entry, green badge. "Jump completed. Toll: 5 SUI. Gate North-3."]*
 
-> "Your gates. Your rules. Your revenue."
+> "Revenue to the operator."
 
-*[Hold for 3 seconds on the full Command Overview with topology and cosmic context visible. Let the system speak.]*
+*[Revenue counter in Command Overview ticks up.]*
 
-*[Title card: "CivilizationControl — The Frontier Control Room"]*
+> "The gate pays for itself."
 
-**On-screen action:** Full Command Overview showing complete infrastructure state.
+**On-screen:** Signal Feed with toll entry. Revenue counter increments visibly.
 
-**Evidence overlay required:**
-- Aggregate revenue total visible in Command Overview
-- Structure count badge
-- Signal Feed showing mixed jump + trade events
-
-**Purpose:** Close the loop. Pull back from the individual beats to the system view. The operator's frontier is under command. Governance produced consequence. Consequence produced revenue. The system works.
-
-**Preconditions:** All prior beats completed (Beats 3–6 txs confirmed). Command Overview reflects current state. Signal Feed populated.
-
-**Capture mode:** Live UI recording (static hold). Title card in post.
-
----
-
-## Fallback Demo Variant: GateControl-Only (2 Minutes)
-
-Use this variant if TradePost UI is not ready at demo recording time. Covers GateControl end-to-end with the same Control → Consequence → Revenue structure, omitting commerce.
-
-### Fallback Trigger Conditions
-
-Switch from primary to fallback if: TradePost tx fails repeatedly on submission chain, explorer cannot render tx within 30s, wallet adapter disconnects (>2 retries), or primary variant exceeds 3:15 after two takes. Record Beats 1–2 first (reusable across variants).
-
-### Fallback Beat 1 — The Problem (0:00–0:20)
-
-**Timing:** 20 seconds
-
-**Narration:**
-> "Managing gate policy on EVE Frontier today requires raw CLI commands. No visibility. No monitoring."
-
-*[Screen: raw `sui client ptb` output, error messages.]*
-
-> "The primitives exist. The control layer doesn't."
-
-**Evidence overlay:** None.
-
----
-
-### Fallback Beat 2 — The Reveal (0:20–0:40)
-
-**Timing:** 20 seconds
-
-**Narration:**
-> "CivilizationControl is the command layer."
-
-*[Command Overview loads. Gates visible with status indicators.]*
-
-> "Every gate. Status. Policy. Revenue. One view."
-
-**Evidence overlay:** Package ID badge.
-
----
-
-### Fallback Beat 3 — Set Gate Policy (0:40–1:05)
-
-**Timing:** 25 seconds
-
-**Narration:**
-> "Two rules on one gate: tribe filter and toll. Deploy."
-
-*[Operator configures tribe filter + toll → "Deploy Policy" → confirmation.]*
-
-**Evidence overlay required:**
-- Tx digest: `[TBD-digest]`
-- Gate object with extension + dynamic field rules
-
----
-
-### Fallback Beat 4 — Hostile Denied (1:05–1:25)
-
-**Timing:** 20 seconds
-
-**Narration:**
-> "Hostile pilot. Wrong tribe. Blocked on-chain."
-
-*[Signal Feed: denied jump, red indicator.]*
-
-**Evidence overlay required:**
-- Tx digest: `[TBD-digest]`
-- MoveAbort ETribeMismatch code (from wallet failure response)
-
----
-
-### Fallback Beat 5 — Ally Tolled + Revenue (1:25–1:50)
-
-**Timing:** 25 seconds
-
-**Narration:**
-> "Ally pilot. Tribe matches. Toll paid: 5 SUI. Passage granted."
-
-*[Signal Feed: permitted jump, green indicator. Revenue counter increments.]*
-
-> "Revenue flows to the operator. On-chain settlement. Real-time visibility."
-
-**Evidence overlay required:**
-- Tx digest: `[TBD-digest]`
+**Evidence overlay (post-production):**
+- Tx digest of tolled jump
+- `TollCollectedEvent` (CC extension event)
+- `JumpEvent` (world-contracts event)
 - Balance delta: operator +5 SUI
-- `TollCollectedEvent` (extension event)
+
+**Purpose:** Same policy, opposite outcome. The gate discriminates and generates revenue. "The gate pays for itself" — six words that reframe infrastructure as an asset, not a cost.
+
+**Precondition note:** `jump_with_permit` requires AdminACL-authorized sponsor co-signature (or sender in AdminACL). Ensure sponsor address enrolled before this beat.
 
 ---
 
-### Fallback Beat 6 — Close (1:50–2:00)
+### Beat 6 — Defense Mode (1:36–2:06)
 
-**Timing:** 10 seconds
+**Duration:** 30 seconds. This is the climax. Give it room.
 
-**Narration:**
-> "Your gates. Your rules. Your revenue. CivilizationControl."
+**Spoken narration:**
+> "Threat inbound."
 
-*[Full Command Overview. Hold 3 seconds.]*
+*[Pause. 1 second.]*
 
-*[Title card.]*
+> "One click."
 
-**Evidence overlay required:**
-- Revenue total in Command Overview
-- Signal Feed with mixed deny + toll events
+*[Operator clicks "Defense Mode."]*
 
----
+*[2 seconds of silence. Let the visual dominate.]*
 
-## In-Game Demo Variant (Supplementary)
+*[Posture indicator shifts: "Open for Business" → "Defense Mode." Gate link lines shift green → amber. Turret icons flip grey → active. All indicators update in a wave across the Command Overview.]*
 
-**Purpose:** Demonstrate live Frontier integration for "Best Live Frontier Integration" bonus (Stillness deployment).
+> "Gates locked. Turrets online. One transaction."
 
-**Context:** The in-game embedded browser provides a read-only view (no Sui wallet). This variant supplements the primary demo video with in-game footage showing CivilizationControl operating live within EVE Frontier.
+*[Signal Feed floods with posture events: "Posture: Defense Mode." "Turret Alpha: ONLINE." "Turret Bravo: ONLINE." Gate status updates.]*
 
-### Capture Strategy
+*[Hold 3 seconds on the transformed Command Overview. Let the state change settle visually.]*
 
-The in-game variant is NOT a standalone demo — it supplements the primary 3-minute loop captured in an external browser. In-game footage serves as evidence of live deployment.
+**On-screen:** The full Command Overview transforming — posture indicator, gate colors, turret states, Signal Feed cascade. This must feel like flipping a switch on an entire network.
 
-| Capture Order | Content | What It Proves |
-|--------------|---------|---------------|
-| 1 | Navigate to a gate structure in-game → DApp loads in embedded browser | Live Frontier integration works |
-| 2 | Command Overview visible in portrait format (~787×1198) | UI renders correctly in-game |
-| 3 | Signal Feed shows recent gate events (from external browser demo beats) | Real-time data flows to in-game view |
-| 4 | "Viewing Mode" badge visible | Context-appropriate UX (read-only acknowledged) |
-| 5 | Navigate to Trade Post SSU → listings visible | SSU storefront accessible in-game |
+**Evidence overlay (post-production):**
+- **Single tx digest** containing all posture changes (validated: single PTB, ~2.3s latency)
+- `PostureChangedEvent`: `old_mode: BUSINESS → new_mode: DEFENSE`
+- Turret `StatusChangedEvent` × N (one per turret): `action: ONLINE`
+- Before/after state summary: turrets OFFLINE→ONLINE, gates open→tribe-locked, toll removed
 
-### In-Game Viewport Note
+**Purpose:** The hammer moment. Everything the demo has built — policy, enforcement, revenue — now escalates to infrastructure-wide command. One human decision, one on-chain transaction, every structure responds. This is the "command layer" claim made undeniable.
 
-The in-game browser renders at approximately 787×1198 portrait. Demo captures should ensure:
-- Text is readable at this resolution
-- Card layouts stack correctly (no table overflow)
-- "Viewing Mode" badge is clearly visible
-- "Open in Browser" link is prominent for write operations
+**Technical reality (validated):** Single PTB contains 7–9 Move calls: `set_posture` + `set_tribe_config` + `clear_toll_config` + N × (`borrow_owner_cap<Turret>` → `turret::online` → `return_owner_cap`). Confirmed on localnet: both BUSINESS→DEFENSE and DEFENSE→BUSINESS pass. ~250ms on-chain execution. See [posture-switch validation](../sandbox/posture-switch-localnet-validation.md).
 
-### When to Include
-
-Include in-game footage only if:
-1. DApp is deployed to Cloudflare Pages (HTTPS)
-2. Structure DApp URLs are configured in-game
-3. Portrait layout validates at 787×1198 (Check 11 passed)
-4. Stillness deployment has been live for ≥48 hours before submission
-
-If any prerequisite fails, omit in-game footage entirely — the primary demo stands alone.
+**Preconditions:** ≥1 turret anchored + offline, connected to online/fueled NetworkNode. Gates in "Open for Business" (tribe+toll). OwnerCap<Turret> accessible via character borrow. Energy reservation available.
 
 ---
 
-## Optional ZK Accent Segment (30 seconds, insert before closing beat if stable)
+### Beat 7 — Commerce (2:06–2:28)
 
-If ZK GatePass is integrated and stable, insert this 30-second segment before the closing beat in the primary variant (between Beat 6 and Beat 7, adjusting timing to stay within 3:30 max):
+**Duration:** 22 seconds
 
-**Narration:**
-> "And for private passage — zero-knowledge gate access. The pilot proves membership without revealing identity. The proof verifies on-chain. The gate opens."
+**Spoken narration:**
 
-*[Signal Feed: "ZK pass verified. Proof valid. Gate North-5." Green indicator with a distinctive ZK badge.]*
+*[Cut to Trade Post view. Storefront: fuel rods, ammo, repair paste. Prices listed.]*
 
-> "Groth16 verification on Sui. About a thousand MIST in gas. Privacy-preserving governance."
+> "A trade post on the far side of the gate. Fuel rod. Thirty SUI."
 
-**Evidence overlay required:**
-- Tx digest: `AkEBgfdpGxHDNXVJ6HBAKFooWnD6F47gcYAzPnCbahQq` (or submission equivalent)
-- VerificationResult event: `is_valid: true`
-- Gas callout: ~1,009,880 MIST
-- Circuit stats badge: "Merkle depth 10, 2,430 constraints, 128-byte proof"
+*[Buyer clicks. Transaction confirms: "Trade settled. Fuel rod acquired."]*
 
----
+> "Payment to the seller. Item to the buyer. One transaction."
 
-## Optional Gate Preset Switching Accent (10 seconds, insert after Beat 3 if stable)
+*[Signal Feed: "Trade settled. Fuel Rod. 30 SUI." Revenue counter ticks up again.]*
 
-If Gate Preset Switching (S46) is implemented and stable, insert this 5–10 second accent after Beat 3 (Set Gate Policy) and before Beat 4 (Hostile Denied). Does NOT extend the critical arc — purely a "bonus flex."
+**On-screen:** Trade Post storefront → Buy → confirmation → Signal Feed + revenue update.
 
-**Narration:**
-> "And when strategy shifts — switch the entire network topology in one click."
+**Evidence overlay (post-production):**
+- Tx digest of buy
+- `TradeSettledEvent` (CC extension event)
+- Balance deltas: buyer −30 SUI, seller +30 SUI
+- Listing state: `is_active: true → false`
 
-*[Strategic Network Map visible. Operator clicks "Ring" preset → links visually reconfigure → event feed shows link/unlink confirmations.]*
-
-> "Three routes dropped. Two new routes opened. The network adapts."
-
-**On-screen action:** Preset button click → SVG map edges animate to new topology → 2-3 events appear in Signal Feed.
-
-**Evidence overlay required:**
-- Tx digest(s) of unlink/link operations: `[TBD-digest]`
-- Before/after topology diff visible on SVG map
-
-**Purpose:** Demonstrate infrastructure-level governance — not just per-gate policy, but network-wide topology control. Reinforces "command layer" narrative without requiring extended explanation.
-
-**Preconditions:** S45 (Strategic Network Map) and S46 (Preset Switching) both complete. At least 3 gates pinned and initially linked. Preset definitions loaded.
-
-**Non-goals:** No explanation of how link/unlink works. No dive into distance proofs. Pure visual payoff.
+**Purpose:** Close the economic loop. Gate toll drove traffic. Commerce captured demand. The operator profits from both sides. Infrastructure → governance → revenue.
 
 ---
 
-## Evidence Capture Checklist (Pre-Recording)
+### Beat 8 — Command (2:28–2:43)
 
-Before pressing record, confirm every required artifact is captured and accessible for overlay:
+**Duration:** 15 seconds
 
-| Beat | Required Artifact | Captured? |
-|---|---|---|
-| Beat 3 | Policy deployment tx digest | ☐ |
-| Beat 3 | Gate object state (before/after extension + dynamic fields) | ☐ |
-| Beat 4 | Denied jump tx digest + MoveAbort code (from wallet failure response, not events) | ☐ |
-| Beat 5 | Tolled jump tx digest + `TollCollectedEvent` (extension event) | ☐ |
-| Beat 5 | Operator balance delta (+toll amount) | ☐ |
-| Beat 5b | Turret `StatusChangedEvent` tx digest(s) — action: ONLINE | ☐ |
-| Beat 5b | Gate rule update confirmation (tribe filter set, toll removed) | ☐ |
-| Beat 5b | Before/after: turret OFFLINE → ONLINE, gate policy change | ☐ |
-| Beat 6 | Buy tx digest + `TradeSettledEvent` (extension event) | ☐ |
-| Beat 6 | Buyer/seller balance deltas | ☐ |
-| Beat 6 | Listing state before/after (is_active) | ☐ |
-| Beat 7 | Aggregate revenue total screenshot | ☐ |
-| ZK (opt) | ZK verify tx digest + VerificationResult event | ☐ |
-| All | Package ID(s) for submission chain | ☐ |
-| All | Account addresses (operator, hostile pilot, ally pilot) | ☐ |
+**Spoken narration:**
+> "Toll revenue. Trade revenue. Turrets armed. Every structure reporting."
+
+*[Pull back to full Command Overview. Signal Feed scrolling. Revenue totals visible. Posture: Defense Mode. Turrets: ONLINE. Gates: tribe-locked.]*
+
+*[Hold 3 seconds on the full system view.]*
+
+> "Your infrastructure. Under your command."
+
+**On-screen:** Complete Command Overview — the operator's entire infrastructure under command.
+
+**Evidence overlay (post-production):**
+- Aggregate revenue total visible in UI
+- Structure count + status summary
+- Signal Feed showing mixed events (deny, toll, trade, posture)
+
+---
+
+### Beat 9 — Close (2:43–2:56)
+
+**Duration:** 13 seconds
+
+*[Title card fades in over the Command Overview:]*
+
+> **CivilizationControl**
+
+*[Hold. No narration. No subtitle. The demo defined what it is.]*
+
+**On-screen:** Name only. Clean. Final.
 
 ---
 
 ## Timing Summary
 
-| Variant | Duration | Beats | Features Covered |
+| Beat | Name | Start | End | Duration |
+|---|---|---|---|---|
+| 1 | Pain | 0:00 | 0:18 | 18s |
+| 2 | Power Reveal | 0:18 | 0:38 | 20s |
+| 3 | Policy | 0:38 | 1:00 | 22s |
+| 4 | Denial | 1:00 | 1:18 | 18s |
+| 5 | Revenue | 1:18 | 1:36 | 18s |
+| 6 | Defense Mode | 1:36 | 2:06 | 30s |
+| 7 | Commerce | 2:06 | 2:28 | 22s |
+| 8 | Command | 2:28 | 2:43 | 15s |
+| 9 | Close | 2:43 | 2:56 | 13s |
+| **Total** | | | | **2:56** |
+
+---
+
+## Proof Moments Registry
+
+Every major claim has a corresponding on-chain evidence moment.
+
+| Beat | Claim | Evidence Artifact | Overlay Format |
 |---|---|---|---|
-| **Primary** | 3:10 | 8 (incl. 5b) | GateControl + TurretControl + Posture Presets + TradePost |
-| **Primary + Preset Switching** | 3:20 | 8 + accent | GateControl + TurretControl + Posture Presets + TradePost + Preset Switching |
-| **Primary + ZK** | 3:40 | 9 | GateControl + TurretControl + Posture Presets + TradePost + ZK accent |
-| **Primary + Presets + ZK** | 3:50 | 9 + accent | Full suite (maximum flex) |
-| **Fallback (GateControl-only)** | 2:00 | 6 | GateControl only |
+| 3 — Policy | Governance deployed in one action | Tx digest + gate object with extension + 2 DF rules | Digest badge + before/after state |
+| 4 — Denial | Hostile blocked by chain enforcement | Failed tx digest + MoveAbort `(tribe_permit, 0)` | Red overlay: digest + abort code |
+| 5 — Revenue | Toll revenue flows to operator atomically | Tx digest + `TollCollectedEvent` + balance delta (+5 SUI) | Green overlay: digest + balance |
+| 6 — Defense Mode | Infrastructure-wide state change, single tx | Single tx digest + `PostureChangedEvent` + N × `StatusChangedEvent` | Digest badge + before/after state matrix |
+| 7 — Commerce | Atomic settlement, no counterparty risk | Tx digest + `TradeSettledEvent` + buyer/seller balance deltas | Digest badge + balance comparison |
+| 8 — Command | System produces visible, aggregate value | Revenue totals in Command Overview + Signal Feed | UI screenshot (live) |
 
 ---
 
-## Narration Anti-Patterns (Avoid)
+## Pre-Flight Checklist
 
-Per the [Voice & Narrative Guide §7](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md):
+Complete every item before pressing record. Incomplete items = retake risk.
 
-- **No feature tourism.** Don't click through every screen. Show less. Show it well.
-- **No technical narration.** Don't say "this calls `issue_jump_permit` with a typed witness." Say "the gate enforces the policy on-chain."
-- **No apology.** Don't say "this is just a prototype." Present what exists with full confidence.
-- **No speed.** If the demo feels rushed, cut scope. Never speed up narration to fit features.
-- **No celebration.** No "Congratulations!" or "Success!" Confirmations are stated with finality: "Policy deployed."
-- **No hedging.** No "something may have gone wrong." Faults are facts.
+### Environment
 
----
-
-## Demo Account Roles
-
-Role placeholders — populate with real addresses during pre-recording setup.
-
-| Role | Description | Address |
+| # | Check | Status |
 |---|---|---|
-| **Operator** | Owns structures. Receives toll + trade revenue. Signs policy txs. | `[TBD]` |
-| **Hostile Pilot** | Wrong tribe (≠ filter value). Must be denied. | `[TBD]` |
-| **Ally Pilot / Buyer** | Matching tribe. Jumps gate (tolled), buys at trade post. | `[TBD]` |
-| **Trade Seller** | Stocks SSU. May be Operator or separate address. | `[TBD]` |
-| **Sponsor** | Game server co-signer for sponsored txs. | `[TBD]` |
+| 1 | Sui CLI connected to submission chain (or local devnet) | ☐ |
+| 2 | `sui client active-env` returns expected environment | ☐ |
+| 3 | World-contracts package ID recorded | ☐ |
+| 4 | CC extension package published and package ID recorded | ☐ |
+| 5 | Operator wallet connected to frontend | ☐ |
+
+### Structures & State
+
+| # | Check | Status |
+|---|---|---|
+| 6 | ≥2 gates online, linked, NO current extension (clean baseline) | ☐ |
+| 7 | ≥1 trade post (SSU) online, authorized, ≥1 item listed | ☐ |
+| 8 | ≥2 turrets anchored, connected to NetworkNode, status: OFFLINE | ☐ |
+| 9 | ≥1 NetworkNode online, fueled, producing energy | ☐ |
+| 10 | Fuel efficiency set for turret fuel type (AdminACL) | ☐ |
+| 11 | Posture baseline: "Open for Business" (tribe+toll active on gates) | ☐ |
+
+### Accounts
+
+| # | Check | Status |
+|---|---|---|
+| 12 | Operator address funded (gas for all demo txs) | ☐ |
+| 13 | Hostile pilot: character exists, tribe ≠ filter value, funded | ☐ |
+| 14 | Ally pilot: character exists, tribe = filter value, funded ≥40 SUI | ☐ |
+| 15 | Sponsor address enrolled in AdminACL (for jump txs) | ☐ |
+| 16 | All account addresses shortened for overlay display | ☐ |
+
+### Recording
+
+| # | Check | Status |
+|---|---|---|
+| 17 | Browser: no bookmarks, history, autofill, other tabs visible | ☐ |
+| 18 | Terminal history cleared (no unrelated commands visible) | ☐ |
+| 19 | Beat 1 text-on-black assets prepared | ☐ |
+| 20 | Post-production overlay templates ready (digest badge, balance delta, event) | ☐ |
+| 21 | Narration script printed / teleprompter ready | ☐ |
+| 22 | Screen resolution set (1920×1080 recommended for video) | ☐ |
 
 ---
 
-## Recommended Recording Order
+## Failure Fallbacks
 
-Capture in this sequence for non-linear editing flexibility:
+If a proof moment fails during recording, do NOT derail. Use these alternatives.
 
-1. Pre-recording CLI terminal session (Beat 1 footage) + all proof overlay captures (run txs, screenshot digests/events/balances)
-2. Live UI: Beat 2 (reveal) → Beat 3 (deploy) → Beat 4 (denied) → Beat 5 (tolled) → Beat 6 (buy) → Beat 7 (hold)
-3. Title card + ZK accent (optional) captured separately
+| Beat | Failure | Fallback |
+|---|---|---|
+| 3 — Policy | Deploy tx doesn't confirm in 5s | Retake. If persistent: pre-record the deploy, stitch in post. Signal Feed entry is fallback evidence. |
+| 4 — Denial | Hostile jump doesn't produce clean MoveAbort | Show wallet error response ("transaction failed") + describe abort code verbally. Overlay can use a pre-captured digest from rehearsal. |
+| 5 — Revenue | Revenue counter doesn't visibly tick | Narrate the toll collection. Show Signal Feed entry as primary evidence. Balance delta overlay in post-production using explorer data. |
+| 6 — Defense Mode | Single PTB fails (gas budget / contention) | Fall back to Strategy B: separate policy tx + per-turret txs (~3 seconds total). Still fast, still impressive. Note: "orchestrated in under 3 seconds." Overlay shows multiple digests grouped. |
+| 6 — Defense Mode | Turret `online()` aborts (already online or NWN not producing) | Pre-check all turret states + NWN energy before recording. If abort during take, restart from Beat 6 with corrected state. |
+| 7 — Commerce | Trade tx fails | Pre-record a trade tx and stitch. Signal Feed entry for the recorded tx is fallback evidence. |
+| Any | Explorer/wallet unresponsive | All proof overlays can be added in post-production from pre-captured data. Continue narration. |
+
+---
+
+## Fallback Variant: GateControl-Only (2:00)
+
+If Trade Post UI is not ready, compress to this variant. Same emotional arc, no commerce beat.
+
+| Beat | Name | Time | Duration |
+|---|---|---|---|
+| 1 | Pain | 0:00–0:15 | 15s |
+| 2 | Power Reveal | 0:15–0:30 | 15s |
+| 3 | Policy | 0:30–0:50 | 20s |
+| 4 | Denial | 0:50–1:05 | 15s |
+| 5 | Revenue | 1:05–1:25 | 20s |
+| 6 | Defense Mode | 1:25–1:45 | 20s |
+| 7 | Command + Close | 1:45–2:00 | 15s |
+
+**Trigger:** Switch to fallback if Trade Post tx fails repeatedly, or TradePost UI is not stable at recording time. Record Beats 1–2 first (reusable across variants).
+
+---
+
+## Appendix A: What Changed vs v1
+
+- **Opening rewritten:** Replaced generic "20 commands" + terminal scroll with specific human scenario (pilots dying, fuel haulers lost, 13×12=156 commands math). Text-on-black instead of terminal footage — forces emotional engagement, not technical recognition.
+- **Beat structure compressed:** 8 named beats + close (v1: 7 beats + variants + optional accents). Tighter flow, no feature tourism.
+- **Defense Mode elevated to climax:** Moved from Beat 5b (a sub-beat, half-hidden) to Beat 6 — the peak of the arc. Given 27 seconds (was 15). Now the single loudest moment.
+- **Revenue beat verbalized:** Added "The gate pays for itself" — a one-line reframe of infrastructure as asset. v1 showed revenue updating silently.
+- **Denial language hardened:** "Denied. The chain enforced it. No override. No appeal." replaces softer "Blocked. No passage. No appeal. On-chain enforcement."
+- **Timing tightened:** 3:00 flat (v1: 3:10). Cut optional ZK accent and preset switching accent from the primary flow — these can supplement but don't compete for the main 3 minutes.
+- **Failure fallbacks formalized:** Full table mapping each beat to a concrete fallback action. v1 had a general "fallback variant" but no per-beat failure protocol.
+- **Pre-flight checklist expanded:** 22 items covering environment, structure state, accounts, and recording setup. v1 had a partial evidence capture checklist.
+- **Tagline sharpened:** "The command layer for frontier infrastructure" replaces "The Frontier Control Room."
+- **Beat 1 removes Discord screenshot:** The text-on-black format is more emotionally controlled than mixing terminal footage + Discord screenshots + error messages.
+
+## Appendix B: Why This Improves Judging Outcomes
+
+- **Concept & Feasibility:** Opening pain is now a concrete scenario judges can feel ("your pilots died"), not an abstract complaint about CLI complexity. The feasibility claim lands harder because the problem is visceral.
+- **Visual Presentation & Demo:** Defense Mode as a dedicated climax beat (27s, full visual transformation) gives judges one unforgettable moment instead of spreading impact across sub-beats. Text-on-black opening is a deliberate cinematic choice that signals production quality.
+- **Player Utility:** "The gate pays for itself" reframes CivilizationControl from a convenience tool to an economic engine. Judges evaluating player utility will hear a revenue argument, not just a UX argument.
+- **Mod Design:** Single PTB posture switch (validated, with tx digest) proves system-level design, not feature-level. Judges see architecture thinking.
+- **Proof discipline:** Five non-negotiable proof moments mapped to specific on-chain artifacts. Judges never have to wonder "is this real?" — every claim has a deterministic evidence anchor.
+- **Compression at 3:00:** Respects judges' time. Every second is earned. No padding, no optional accents diluting the core arc. The fallback variant ensures delivery even under instability.
+- **EVE Frontier Relevance & Vibe:** The narrative is explicitly frontier governance — tribes, territory, hostiles, turrets. Not generic blockchain UX. Judges evaluating "vibe" hear the right language throughout.
+- **UX & Usability:** "One click" appears three times organically (deploy policy, buy item, Defense Mode) — each proving a different facet of usability without ever explicitly saying "our UX is good."
 
 ---
 
 ## Do Not Show During Recording
 
 - Private keys, seed phrases, mnemonics, `.env` files, keystore contents
-- Full wallet addresses (use shortened: `0x1a2b…3c4d`), mainnet balances
-- Browser bookmarks, history, autofill, other tabs (email/chat/social)
+- Full wallet addresses (use shortened: `0x1a2b…3c4d`)
+- Browser bookmarks, history, autofill, other tabs
 - Local file paths, terminal history from unrelated sessions
 - Devnet reset warnings, chain genesis messages
+- Move function names, PTB details, dynamic field terminology — in narration or visible UI
+
+---
+
+## Demo Account Roles
+
+| Role | Description | Address |
+|---|---|---|
+| **Operator** | Owns structures. Receives all revenue. Signs policy + posture txs. | `[TBD]` |
+| **Hostile Pilot** | Character with tribe ≠ filter value. Must be denied at gate. | `[TBD]` |
+| **Ally Pilot / Buyer** | Character with tribe = filter value. Jumps gate (tolled), buys at trade post. | `[TBD]` |
+| **Sponsor** | AdminACL-authorized co-signer for jump txs (if sponsored tx path). | `[TBD]` |
+
+---
+
+## Recommended Recording Order
+
+1. Prepare all overlay templates + Beat 1 text assets
+2. Run full tx rehearsal: capture all proof digests, balances, events for overlays
+3. Record live UI: Beat 2 → 3 → 4 → 5 → 6 → 7 → 8 (continuous if possible)
+4. Record Beat 1 (text-on-black, separate)
+5. Record Beat 9 (title card, separate)
+6. Assemble in editor: Beat 1 → 2–8 (live) → 9. Add proof overlays in post.
+
+---
+
+## Appendix C: Competitive Refinement Pass (2026-03-03)
+
+### What Changed
+
+- **Beat 1 — Removed "156 commands" stat.** The narrator says "thirteen commands" and "twelve gates" — the judge multiplies. Spoon-feeding the arithmetic felt like a pitch deck stat. Letting the viewer compute it is engagement, not exposition.
+- **Beat 2 — Cut second "Every" and "sovereign."** "Gates, turrets, trade posts, network nodes" is more percussive than repeating "Every." Removed "sovereign" from narration — the concept is saved for Beat 8 where it's structurally load-bearing. Overuse dilutes authority.
+- **Beat 5 — Cut "Atomic. Irrevocable." → replaced with "Revenue to the operator."** Three words, no jargon. "Atomic" pings as chain-speak to non-crypto judges. The proof overlay shows the delta — no need to assert irrevocability verbally. Duration 20→18s.
+- **Beat 6 — Added 2 seconds of deliberate silence after the click.** The visual transformation must dominate before the narrator speaks. Post-click narration compressed from four sentences to three: "Gates locked. Turrets online. One transaction." Past tense = fait accompli, not description. Duration 27→30s.
+- **Beat 7 — Compressed from 25s to 22s.** Cut "no trust required" (crypto-speak). Merged opening scene-setting with product line. Commerce is now clearly subordinate to Defense Mode in weight.
+- **Beat 8 — Replaced "Your frontier. Your rules. Your revenue." with "Your infrastructure. Under your command."** Closes the loop from Beat 1 ("no control" → "under your command"). The possessive triad was catchy but didn't complete the narrative arc. Cut "All on-chain. All sovereign." — listing chain attributes at the end is crypto-pride, not authority. Duration 20→15s.
+- **Beat 9 — Title card reduced to name only.** "CivilizationControl" — no subtitle. Three minutes defined what it is. Adding a descriptor undercuts the confidence. Duration 10→13s for a longer hold.
+- **Total duration tightened from 3:00 to ~2:56.** Four fewer seconds of judge attention spent. Every surviving second is functional.
+
+### Why Each Improves Judge Impact
+
+- **Removing "156"** → Judge feels smart (they computed it), not sold to. Engagement > exposition.
+- **Silence after Defense Mode click** → First thing judges process after the click is the transformed state, not a narrator explaining it. The moment imprints visually before it's verbalized.
+- **Past-tense narration ("Gates locked")** → Authority. The change already happened. The narrator reports fact, not process.
+- **"Under your command" close** → Completes the pain→power arc explicitly. A judge who skimmed Beats 2–7 still gets the thesis from Beat 1 + Beat 8.
+- **Name-only title card** → Signals maximum confidence. No explanation needed. The demo was the explanation.
+- **Cutting crypto-speak ("atomic," "no trust required")** → Non-crypto judges (game design, UX) hear governance language, not chain language. CivilizationControl wins on player utility, not technical novelty.
+- **2:56 vs 3:00** → Judges watching 30+ demos notice the entry that didn't pad. Tight runtime = respect for their time = implicit competence signal.
+
+### What Was Intentionally NOT Changed (and Why)
+
+- **Beat 1 storytelling ("Your pilots died")** — Verified against EVE Frontier reality: killmails happen, fuel hauling is real, offline gates have consequences. Authentic frontier pain, not manufactured drama.
+- **Beat 3 policy flow** — "You decide who crosses and what they pay" is the most efficient framing possible. Already at maximum compression.
+- **Beat 4 denial language ("No override. No appeal.")** — Already at maximum compression and impact. Changing it would reduce, not improve.
+- **"The gate pays for itself" (Beat 5)** — The single most memorable non-climax line. Reframes infrastructure as revenue engine. Untouched.
+- **"Threat inbound." / "One click." (Beat 6 setup)** — Two words + two words. Maximum tension compression. Not melodramatic in Frontier context where hostile incursions are gameplay.
+- **Five non-negotiable proof moments** — Evidence structure is correct and complete. No proof type added or removed.
+- **Pre-flight checklist and failure fallbacks** — Operational content, not narrative. Already comprehensive.
+- **Fallback variant** — Insurance policy. Independent of primary narrative changes.
 
 ---
 
 ## References
 
-- [Product Vision — Demo Narrative](../strategy/civilization-control/civilizationcontrol-product-vision.md)
-- [Demo Evidence Appendix](../operations/demo-evidence-appendix.md)
-- [Hackathon Emotional Objective](../strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md)
-- [Independent Audit §6](../research/civcontrol-independent-audit.md)
-- [Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md)
+- [Demo Beat Sheet v1](../archive/civilizationcontrol-demo-beat-sheet.v1.md)
 - [Claim → Proof Matrix](civilizationcontrol-claim-proof-matrix.md)
+- [Posture-Switch Localnet Validation](../sandbox/posture-switch-localnet-validation.md)
+- [Product Vision](../strategy/civilization-control/civilizationcontrol-product-vision.md)
+- [Hackathon Emotional Objective](../strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md)
+- [Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md)
+- [Hackathon Rules Digest](../research/hackathon-event-rules-digest.md)
