@@ -1,0 +1,21 @@
+{
+  "name": "posture-switch-validation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "npx tsx src/setup.ts",
+    "switch-defense": "npx tsx src/posture-switch.ts DEFENSE",
+    "switch-business": "npx tsx src/posture-switch.ts BUSINESS",
+    "full-test": "npx tsx src/full-test.ts"
+  },
+  "dependencies": {
+    "@mysten/sui": "^1.24.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  }
+}

@@ -6,6 +6,41 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Posture-Switch Single-PTB Validation (Localnet)
+- **Goal:** Validate that CivilizationControl Posture Presets (Open for Business ↔ Defense Mode) can be switched in a single PTB on Sui localnet, confirming the "one click" hypothesis.
+- **Decision:** Strategy A (single PTB) confirmed working for both directions. Single PTB composes: `set_posture` + config DF mutations + per-turret borrow/toggle/return cycles. No need for Strategy B (multi-tx fallback). Documented prerequisites (fuel/energy chain, NetworkNode online, extension authorization) and BCS encoding constraints.
+- **Files:** `sandbox/posture-switch-validation/` (Move + TS harness), `docs/sandbox/posture-switch-localnet-validation.md` (report), `docs/README.md` (index)
+- **Diff:** +1600 / -0 (new files only)
+- **Risk:** Low (sandbox validation, no production code)
+- **Gates:** typecheck N/A  build ✅ (Move compiled)  smoke ✅ (localnet full-test ALL PASS)
+- **Key findings:**
+  - BUSINESS→DEFENSE: 1 tx, ~2.3s latency. DEFENSE→BUSINESS: 1 tx, ~2.8s latency.
+  - Energy prerequisite chain required: `set_fuel_efficiency` → `deposit_fuel` → `network_node::online` → turret `online()`.
+  - BCS encoding: `tx.pure.vector('u8', Array.from(...))` required for `vector<u8>` params.
+  - `status::online()`/`offline()` abort if already in target state — pre-check mandatory.
+  - OwnerCap→assembly mapping requires reading `authorized_object_id` field; discovery order unreliable.
+- **Follow-ups:** Port to hackathon submission repo on March 11. Build UI wiring for posture toggle. Validate toll collection in extension.
+
+## 2026-03-03 — TurretControl + Posture Presets Integrated into Product Vision & Demo
+- **Goal:** Add turrets and posture presets (Open for Business / Defense Mode) to CivilizationControl planning docs. Audit turret state mechanics and toll implementation reality.
+- **Context:** Turret audit confirmed `turret::online()`/`turret::offline()` are player-callable via OwnerCap<Turret>, no AdminACL needed. Batch toggle in single PTB is feasible. Toll audit confirmed: NO native toll/fee mechanism exists in world-contracts or builder-scaffold — toll is entirely CC extension code (~30-50 LoC, pending March 11 validation). Tribe filter exists and works. Two posture presets defined: "Open for Business" (broad access + toll, turrets offline) and "Defense Mode" (tribe-only, turrets online).
+- **Decision:** (1) Added TurretControl subsection + Posture Presets subsection to product vision. (2) Inserted Beat 5b (Defense Mode posture shift) into demo beat sheet — 15 seconds, new proof moment (turret StatusChangedEvent). (3) Updated spec.md system boundaries table to include TurretControl module. (4) Updated MVP table: added TurretControl UI + Posture Presets as core deliverables. (5) Added Terminology section to product vision (TurretControl, Posture Preset, Online/Offline/Anchored). (6) Corrected toll claims: toll is CC extension capability, not native world-contracts. (7) Updated non-goals: explicit exclusions for custom turret targeting, anchor/unanchor, additional presets, scheduling.
+- **Files:** docs/strategy/civilization-control/civilizationcontrol-product-vision.md, docs/core/civilizationcontrol-demo-beat-sheet.md, docs/core/spec.md, docs/decision-log.md
+- **Diff:** +150 / -30 (across 3 docs)
+- **Risk:** Low (docs only, no production code)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs only)
+- **Key findings:**
+  - `turret::online()` / `turret::offline()`: OwnerCap<Turret> only, no AdminACL. Borrow/return pattern. State guards strict (abort if already in target state).
+  - Multiple turrets batchable in single PTB (separate borrow/return per turret, shared NWN/EnergyConfig refs reused).
+  - Events: `StatusChangedEvent` from `status.move` (shared primitive), action: ONLINE or OFFLINE. No turret-specific event.
+  - Toll: NOT a world-contracts primitive. CC extension implements toll in `request_jump_permit` via `CoinTollRule` DF + `Coin<SUI>` transfer.
+  - Tribe filter: exact match (`character.tribe() == tribe_cfg.tribe`). Single extension per gate. Multiple DFs on shared ExtensionConfig.
+- **Assumptions pending March 11 sandbox validation:**
+  - Single PTB for full posture switch (turret toggles + gate rule updates) — needs validation under real shared-object contention.
+  - Toll implementation (Coin<SUI> transfer in CC extension) — functional design confirmed, code not yet written.
+  - NetworkNode must be online before turret toggle — verify NWN state on test server.
+- **Follow-ups:** Implement CC toll module (~30-50 LoC). Build posture preset UI wiring. Validate batch PTB on hackathon test server.
+
 ## 2026-03-02 — Turret Closed-World Constraint Clarification + Doc Reconciliation
 - **Goal:** Convert first-pass turret architectural conclusions into code-backed, evidence-level reference. Reconcile all docs with clarified facts. Fix known inconsistencies (BehaviourChangeReason values, validation count).
 - **Decision:** (1) Created canonical clarification doc with code-proven evidence: fixed 4-arg PTB signature, no uid() accessor, default targeting matrix (12 rows), CC alignment verdict, toll payer mismatch note, per-project feasibility (CC unnecessary, CB/FG structurally impossible). (2) Corrected validation checklist count from 38 to 45 across all references. (3) Marked historical quotes in turret-project-semantics-and-mismatches.md as "since corrected." (4) Added 3 new docs + 1 canonical reference to README index. (5) Corrected archived doc (hackathon-ideas-grounded.md) with strikethrough. (6) BehaviourChangeReason values confirmed correct in all live docs (UNSPECIFIED=0, ENTERED=1, STARTED_ATTACK=2, STOPPED_ATTACK=3).

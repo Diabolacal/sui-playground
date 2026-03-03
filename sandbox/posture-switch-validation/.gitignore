@@ -1,0 +1,12 @@
+# Move build artifacts
+contracts/*/build/
+contracts/*/Move.lock
+
+# Node artifacts
+ts/node_modules/
+ts/package-lock.json
+
+# Transient test outputs (localnet-specific)
+ts/topology.json
+ts/results.json
+ts/.env

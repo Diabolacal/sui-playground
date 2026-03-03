@@ -1,0 +1,9 @@
+[package]
+name = "cc_posture"
+edition = "2024.beta"
+
+[dependencies]
+world = { local = "../../../../vendor/world-contracts/contracts/world" }
+
+[addresses]
+cc_posture = "0x0"

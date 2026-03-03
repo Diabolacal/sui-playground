@@ -264,7 +264,9 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 
 ## Sandbox
 
-_Empty — use for temporary or experimental documents._
+| File | Purpose |
+|------|---------|
+| [sandbox/posture-switch-localnet-validation.md](sandbox/posture-switch-localnet-validation.md) | **Posture-switch localnet validation** — Strategy A (single PTB) confirmed for both BUSINESS→DEFENSE and DEFENSE→BUSINESS directions; PTB composition, prerequisites, constraints, and reproducibility notes |
 
 ## Archive
 
