@@ -41,8 +41,9 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 |--------|---------|------------------------|
 | **GateControl** | Policy authoring (tribe filter + coin toll) on Smart Gates, enforced on-chain via typed witness extension | `gate.move`: `authorize_extension`, `issue_jump_permit`, `jump_with_permit` |
 | **TradePost** | SSU-backed storefronts with cross-address atomic buy settlement using `Coin<SUI>` | `storage_unit.move`: `authorize_extension`, `withdraw_item<Auth>`, `deposit_item<Auth>` |
+| **TurretControl** | Binary state toggle (online/offline) for owned turrets. No custom extension — native targeting only. Orchestrated via Posture Presets. | `turret.move`: `online`, `offline` (player-callable via `OwnerCap<Turret>`) |
 
-> **Note:** Turret assembly exists in world-contracts v0.0.14 (`turret.move`) using the same extension pattern. Excluded from MVP scope; default turret targeting already matches tribe_only policy. See [Turret Contract Surface](../architecture/turret-contract-surface.md).
+> **Note:** Turret assembly exists in world-contracts v0.0.14 (`turret.move`) using the same extension pattern. CivilizationControl uses turrets at the state-toggle level only (`online`/`offline` via `OwnerCap<Turret>`) — no custom turret extension is deployed. Default turret targeting already matches tribe_only policy. See [Turret Contract Surface](../architecture/turret-contract-surface.md). Turret state is orchestrated alongside gate policy via **Posture Presets** (Open for Business / Defense Mode).
 
 **Architecture model:** Publish-once, configure-via-data. One extension package is published by the CivControl team. Players configure pre-built rule types via PTBs that write dynamic fields to a shared `ExtensionConfig` object. No end user writes Move code.
 
@@ -72,7 +73,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | No drag-and-drop rule ordering | Fixed evaluation order enforced in Move module |
 | No server-side analytics | No backend |
 | No in-game write operations for Day-1 | In-game browser lacks Sui wallet. Read-only in-game surface; external browser for writes. EVE Vault relay is stretch. |
-| No turret extension for Day-1 | Turret assembly exists (v0.0.14) but targeting-priority enforcement is architecturally different from gate permit issuance; default turret behavior already matches tribe_only policy; deferred to post-hackathon if needed |
+| No turret extension for Day-1 | Turret assembly exists (v0.0.14). CivilizationControl toggles turret online/offline state only — no custom turret extension deployed. Default turret targeting already matches tribe_only policy. Turret extensions cannot access external state (closed-world constraint). |
 
 ### 1.3 External Dependencies
 
@@ -267,9 +268,9 @@ All UI labels follow canonical mapping. Banned terms: Dashboard, Admin, Settings
 
 ### 5.1 Narrative Spine
 
-> "Set gate policy → Hostile denied → Ally tolled → Ally buys at TradePost → Revenue visible."
+> "Set gate policy → Hostile denied → Ally tolled → Defense Mode → Ally buys at TradePost → Revenue visible."
 
-### 5.2 Primary Variant (3 minutes, 7 beats)
+### 5.2 Primary Variant (3:10, 8 beats)
 
 | Beat | Content | Duration | Non-Negotiable Proof |
 |------|---------|----------|---------------------|
@@ -278,10 +279,11 @@ All UI labels follow canonical mapping. Banned terms: Dashboard, Admin, Settings
 | 3 | Control — set tribe+toll via Rule Composer | 30s | ★ Policy deploy tx digest |
 | 4 | Hostile denied | 25s | ★ Denied tx digest + MoveAbort |
 | 5 | Ally tolled | 25s | ★ Toll tx + balance delta |
-| 6 | Commerce — TradePost buy | 30s | ★ Buy tx + balance deltas |
+| 5b | Posture shift — Defense Mode | 15s | ★ Turret StatusChangedEvent + gate update |
+| 6 | Commerce — TradePost buy | 25s | ★ Buy tx + balance deltas |
 | 7 | System — revenue visible | 20s | ★ Aggregate in Command Overview |
 
-★ = Non-negotiable proof moment (5 total)
+★ = Non-negotiable proof moment (6 total)
 
 ### 5.3 Fallback Variant
 

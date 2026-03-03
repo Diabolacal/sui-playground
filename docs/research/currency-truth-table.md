@@ -2,8 +2,8 @@
 
 **Retention:** Prep-only
 
-> **Date:** 2026-02-16
-> **Sources:** world-contracts Move code, EVE Frontier GitBook (via reference map), Sui docs reference map, internal strategy/ideas docs, validation reports
+> **Date:** 2026-03-03 (revalidated; originally 2026-02-16, interim update 2026-02-28)
+> **Sources:** world-contracts Move code, EVE Frontier GitBook (via reference map), Sui docs reference map, builder-documentation submodule, internal strategy/ideas docs, validation reports
 > **Purpose:** Single source of truth for the currency/token model as understood from this workspace
 
 ---
@@ -13,12 +13,12 @@
 | Question | Answer | Confidence |
 |----------|--------|------------|
 | What players earn in-game | **LUX** (in-game currency) | Medium — mentioned in GitBook EVE Vault page only; no on-chain implementation found |
-| What on-chain token exists | **EVE Token** (ecosystem token) | Medium — exists in live Ethereum cycle; **no `Coin<T>` module exists in Sui world-contracts** (TODO noted) |
+| What on-chain token exists | **EVE Token** (`Coin<EVE>`) | High — implemented in world-contracts v0.0.13 (`contracts/assets/sources/EVE.move`): 10B supply, 9 decimals, OTW via `coin_registry` |
 | Tolls/prices use which token | **`Coin<SUI>`** in all builder code and validated examples | High — devnet-validated; all existing toll/trade code uses `Coin<SUI>` |
 | Sponsored transactions supported | **Yes** — documented and implemented in Move code | High — `verify_sponsor()` in `access_control.move`, `AdminACL` with `authorized_sponsors` |
 | Exchange rate (LUX ↔ EVE Token) | **10,000 Lux = 1 EVE token** | Medium — observed in live Ethereum cycle UI; not in builder docs; requires sandbox confirmation |
 | Fixed or variable rate | **Not documented** | N/A |
-| Move module/struct for EVE Token | **Does not exist** in world-contracts; only a TODO comment | High — confirmed by code search |
+| Move module/struct for EVE Token | **`Coin<EVE>`** in `contracts/assets/sources/EVE.move` | High — separate `AdminCap` + `EveTreasury` (deployer-owned); burn-only supply after init |
 
 ---
 
@@ -47,7 +47,9 @@
 | Builder scaffold has an empty tokens template | `tokens.move` | [tokens.move](../../vendor/builder-scaffold/move-contracts/tokens/sources/tokens.move#L4): `public fun template() {}` (empty stub; `// TODO: Implement` comment removed as of 2026-02-18 sync) |
 | Internal analysis confirms no coin/token module exists | Multiple internal docs | [hackathon-ideas-v2-doc-enabled.md](../ideas/hackathon-ideas-v2-doc-enabled.md#L61): "world-contracts has no coin/token module" |
 
-**Assessment:** ~~Previously unimplemented.~~ As of world-contracts v0.0.13 (commit e508451), `Coin<EVE>` is implemented in `contracts/assets/sources/EVE.move`. It uses the OTW pattern via `coin_registry` with 10B supply and 9 decimals. It has a separate `AdminCap` (distinct from the world `AdminACL`) and an `EveTreasury` object owned by the deployer. Functions include `transfer_from_treasury` and `burn_from_treasury`, with a 10M initial deployer allocation and burn-only supply after init. In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion.
+**Assessment:** ~~Previously unimplemented.~~ As of world-contracts v0.0.13 (commit e508451), `Coin<EVE>` is implemented in `contracts/assets/sources/EVE.move`. It uses the OTW pattern via `coin_registry` with 10B supply and 9 decimals. It has a separate `AdminCap` (distinct from the world `AdminACL`) and an `EveTreasury` object owned by the deployer. Functions include `transfer_from_treasury`, `burn_from_treasury`, `complete_registration`, `treasury_balance`, `update_description`, and `update_icon_url`, with a 10M initial deployer allocation and burn-only supply after init. In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion.
+
+**TS Tooling (Updated 2026-03-03):** Two CCP-internal scripts exist in `world-contracts/ts-scripts/assets/`: `transfer-eve.ts` (transfers EVE from deployer treasury) and `finalize-eve-currency.ts` (registers `Currency<EVE>` in Sui's `CoinRegistry` at 0xc). Both require `ASSETS_PACKAGE_ID` and `GOVERNOR_PRIVATE_KEY` env vars. These are deployment scripts, not builder-facing. The coin type string is `${ASSETS_PACKAGE_ID}::EVE::EVE`. No builder-scaffold scripts reference `Coin<EVE>`.
 
 ### Implementation State Clarification
 
@@ -70,6 +72,8 @@
 | Product vision describes tolls as "SUI toll" throughout | Strategy doc | [civilizationcontrol-product-vision.md](../strategy/civilization-control/civilizationcontrol-product-vision.md#L35): "Tribe 12: 0.5 SUI toll" |
 | Gate.move has **no built-in toll/payment mechanism** | Code search of gate.move | Grep for `coin\|toll\|price\|payment\|fee\|SUI` in gate.move — only `use sui::` import matches; no payment logic in the base gate module |
 | Extension examples use **item-based bounties**, not coin payments | corpse_gate_bounty.move | [corpse_gate_bounty.move](../../vendor/world-contracts/contracts/extension_examples/sources/corpse_gate_bounty.move#L8): bounty requires depositing an Item (corpse), not paying coins |
+| Builder docs gate extension example uses **generic `Coin<T>`** for toll payment | Builder documentation submodule | [gate/build.md](../../vendor/builder-documentation/smart-assemblies/gate/build.md#L140): `payment: Coin<T>,` with comment "verify payment amount, token type, allowlist, etc." (Updated 2026-03-03) |
+| Builder docs SSU vending machine example uses **`Coin<SUI>`** explicitly | Builder documentation submodule | [storage-unit/README.md](../../vendor/builder-documentation/smart-assemblies/storage-unit/README.md#L95): `payment: Coin<SUI>,` |
 | The `Coin<T>` pattern is generic — custom tokens (e.g., `Coin<TribeToken>`) could be used | Strategy memo + ideas docs | [civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md#L130): "GateControl to accept ALPHA_COIN as toll, the toll rule must know the coin type at compile time" |
 | Supporting both `Coin<SUI>` and `Coin<CustomToken>` requires separate buy functions or generic `Coin<T>` parameterization | Strategy memo | [civilizationcontrol-strategy-memo.md](../strategy/civilization-control/civilizationcontrol-strategy-memo.md#L132) |
 
@@ -97,6 +101,8 @@
 2. **EVE Frontier game level:** `verify_sponsor()` additionally checks that the gas sponsor address is whitelisted in the `AdminACL.authorized_sponsors` table
 
 All world-contract admin operations (gate creation, SSU creation, network node operations) require sponsored transactions via `verify_sponsor()`.
+
+**dapp-kit Integration (Updated 2026-03-03):** The builder documentation now documents a `useSponsoredTransaction()` React hook in `@evefrontier/dapp-kit` with a `SponsoredTransactionActions` enum covering: `BRING_ONLINE`, `BRING_OFFLINE`, `EDIT_UNIT`, `LINK_SMART_GATE`, `UNLINK_SMART_GATE`. This provides a higher-level abstraction over the `setSender()` + `setGasOwner()` pattern for common assembly operations.
 
 ---
 
@@ -147,7 +153,7 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 | File | Line | Comment |
 |------|------|---------|
 | [world.move](../../vendor/world-contracts/contracts/world/sources/world.move#L8) | 8 | `// TODO: mint initial supply of eve tokens` |
-| [inventory.move](../../vendor/world-contracts/contracts/world/sources/primitives/inventory.move#L42) | 42 | `// TODO: Use Sui's Coin<T> and Balance<T> for stackability` |
+| [inventory.move](../../vendor/world-contracts/contracts/world/sources/primitives/inventory.move#L44) | 44 | `// TODO: Use Sui's Coin<T> and Balance<T> for stackability` (Updated 2026-03-03: line shifted from 42→44) |
 
 ---
 
@@ -170,13 +176,13 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 
 1. **LUX is a game-server currency**, not an on-chain token. It is mentioned only in the EVE Frontier GitBook and has no Move implementation.
 
-2. **EVE Token is now implemented.** As of world-contracts v0.0.13, `Coin<EVE>` exists in `contracts/assets/sources/EVE.move` (10B supply, 9 decimals, separate AdminCap + EveTreasury, burn-only after init with 10M deployer allocation). ~~The previous `// TODO` in `world.move` has been superseded.~~
+2. **EVE Token is now implemented.** As of world-contracts v0.0.13, `Coin<EVE>` exists in `contracts/assets/sources/EVE.move` (10B supply, 9 decimals, separate AdminCap + EveTreasury, burn-only after init with 10M deployer allocation). The `// TODO: mint initial supply of eve tokens` comment remains in `world.move` line 8, but token creation is handled in the separate `assets` package via `EVE.move`'s `init()`. CCP-internal TS scripts exist for treasury operations (`transfer-eve.ts`, `finalize-eve-currency.ts`). (Updated 2026-03-03)
 
 3. **All builder-accessible currency operations currently use `Coin<SUI>`** (native Sui token). Tolls, trades, and prices are denominated in SUI/MIST. This is the only validated on-chain payment mechanism.
 
 4. **Sponsored transactions are fully implemented** via `AdminACL.authorized_sponsors` + `verify_sponsor()` in `access_control.move`. All admin operations require sponsored transactions.
 
-5. **No LUX ↔ EVE Token exchange rate exists** in any documentation or code in this workspace. The "10 Lux = 1 EVE" ratio is unsubstantiated.
+5. **No LUX ↔ EVE Token exchange rate exists** in any documentation or code in this workspace. The observed "10,000 Lux = 1 EVE" ratio from the live Ethereum cycle UI remains unsubstantiated in builder documentation or Move code.
 
 6. **Custom tokens are possible via Sui's `Coin<T>` standard** but would need to be built from scratch. The builder-scaffold provides only an empty `tokens.move` stub. The TribeMint/Faction Mint concept (custom `Coin<TribeToken>`) is documented as a hackathon idea but has not been implemented.
 

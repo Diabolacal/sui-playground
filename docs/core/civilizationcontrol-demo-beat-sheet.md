@@ -5,7 +5,7 @@
 > Structured beat-by-beat demo plan for the CivilizationControl hackathon submission video.
 > Structure: Control → Consequence → Revenue (single continuous loop)
 > Sources: civilizationcontrol-product-vision.md, civilizationcontrol-hackathon-emotional-objective.md, civcontrol-independent-audit.md §6, civilizationcontrol-voice-and-narrative.md
-> Last updated: 2026-02-19
+> Last updated: 2026-03-03
 
 ---
 
@@ -13,9 +13,9 @@
 
 One pilot's journey through the operator's frontier:
 
-> **Set gate policy → Hostile denied → Ally tolled → Ally buys at TradePost → Revenue from both flows visible in Signal Feed**
+> **Set gate policy → Hostile denied → Ally tolled → Defense Mode (posture shift) → Ally buys at TradePost → Revenue from both flows visible in Signal Feed**
 
-This is one uninterrupted loop: **Control → Consequence → Revenue.** Every beat flows into the next. No feature tourism. No screen-hopping. One operator, one frontier, one governance story.
+This is one uninterrupted loop: **Control → Consequence → Posture → Revenue.** Every beat flows into the next. No feature tourism. No screen-hopping. One operator, one frontier, one governance story.
 
 ---
 
@@ -44,8 +44,9 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 1. **Policy deploy tx** (Beat 3) — proves governance was written on-chain.
 2. **Hostile denied tx** (Beat 4) — proves the policy enforced denial.
 3. **Ally tolled tx + balance delta** (Beat 5) — proves revenue flowed to operator.
-4. **Trade buy tx + balance deltas** (Beat 6) — proves atomic commerce settlement.
-5. **Aggregate revenue in Command Overview** (Beat 7) — proves the system produces visible value.
+4. **Posture shift txs** (Beat 5b) — proves turrets came online and gates restricted in one operator action.
+5. **Trade buy tx + balance deltas** (Beat 6) — proves atomic commerce settlement.
+6. **Aggregate revenue in Command Overview** (Beat 7) — proves the system produces visible value.
 
 ---
 
@@ -97,9 +98,9 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **Narration:**
 > "CivilizationControl changes that."
 
-*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, NWNs. Status indicators resolve to green. *(If Strategic Network Map is implemented:)* Strategic Network Map renders — system nodes with structure badges, gate link lines connecting them.]*
+*[Cut to: Command Overview loading. Clean UI. Structure sidebar populates — gates, trade posts, turrets, NWNs. Status indicators resolve to green. Turret indicators show offline (grey). Posture indicator reads "Open for Business." *(If Strategic Network Map is implemented:)* Strategic Network Map renders — system nodes with structure badges, gate link lines connecting them.]*
 
-> "Every structure you own. Status. Links. Revenue. One view."
+> "Every structure you own. Gates. Turrets. Trade Posts. Status. Links. Revenue. One view."
 
 *[Camera slowly pans across the Command Overview: structure registry on the left, aggregate stats (total structures, total revenue, active policies), Signal Feed scrolling on the right. *(If Strategic Network Map ready:)* Strategic Network Map showing gate link topology (top). *(If EF-Map Cosmic Context ready:)* EF-Map panel shows territory in the universe.]*
 
@@ -217,9 +218,41 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 ---
 
-### Beat 6 — Commerce: Ally Buys at TradePost (2:10–2:40)
+### Beat 5b — Posture Shift: Defense Mode (2:10–2:25)
 
-**Timing:** 30 seconds
+**Timing:** 15 seconds
+
+**Narration:**
+> "Threat reported. One click — Defense Mode."
+
+*[Operator clicks "Defense Mode" button in Command Overview. Gate link indicators shift from green to amber. Turret icons flip from grey (offline) to active (online).]*
+
+> "Gates restrict to tribe-only. Turrets come online."
+
+*[Signal Feed updates: posture change entries — "Posture: Defense Mode," turret `StatusChangedEvent` entries showing ONLINE, gate rule update confirmations.]*
+
+*[Hold 2 seconds on the updated Command Overview showing the new posture state.]*
+
+**On-screen action:** Posture button click → gate indicators change → turret indicators change → Signal Feed reflects posture shift.
+
+**Evidence overlay required:**
+- Turret `StatusChangedEvent` tx digest(s): `[TBD-digest]` — action: ONLINE
+- Gate rule update confirmation (tribe filter set, toll removed)
+- Before/after: turret status OFFLINE → ONLINE, gate policy "Open for Business" → "Defense Mode"
+
+**Purpose:** Demonstrate infrastructure-level governance. One operator action orchestrates multiple on-chain state changes across gates and turrets. This is the "command layer" moment — not individual toggles, but posture-level control.
+
+**Preconditions:** ≥1 turret anchored + offline, connected to an online NetworkNode. Gates currently in "Open for Business" (tribe+toll). OwnerCap<Turret> accessible via character borrow. Turret's energy_source_id matches provided NetworkNode.
+
+**Capture mode:** Live UI recording (Command Overview + Signal Feed). Proof overlay (turret StatusChangedEvent tx + gate update) in post.
+
+> **Implementation note:** "One click" triggers the UI to construct the necessary transactions. On-chain, this may be a single PTB containing multiple turret toggles + gate rule updates, or a deterministic sequence of transactions. The demo shows the operator experience (one action), not the transaction mechanics. If batching is validated on March 11, the overlay can show a single tx digest. If not, the overlay shows the sequence.
+
+---
+
+### Beat 6 — Commerce: Ally Buys at TradePost (2:25–2:50)
+
+**Timing:** 25 seconds
 
 **Narration:**
 > "The same pilot lands at a Trade Post on the other side of the gate."
@@ -252,12 +285,12 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 ---
 
-### Beat 7 — The System: Revenue Visible (2:40–3:00)
+### Beat 7 — The System: Revenue Visible (2:50–3:10)
 
 **Timing:** 20 seconds
 
 **Narration:**
-> "Toll revenue from the gate. Trade revenue from the storefront. Both visible. Both on-chain. Both under your command."
+> "Toll revenue from the gate. Trade revenue from the storefront. Turrets standing watch. All visible. All on-chain. All under your command."
 
 *[Pull back to Command Overview. Full view: Signal Feed scrolling with jumps and transactions. *(If Strategic Network Map ready:)* Strategic Network Map showing gate topology with green link lines and active status nodes. Trade posts with active listings. *(If EF-Map ready:)* EF-Map cosmic context expanded — operator's territory highlighted in the starfield, colored link lines drawn between linked systems.]*
 
@@ -478,6 +511,9 @@ Before pressing record, confirm every required artifact is captured and accessib
 | Beat 4 | Denied jump tx digest + MoveAbort code (from wallet failure response, not events) | ☐ |
 | Beat 5 | Tolled jump tx digest + `TollCollectedEvent` (extension event) | ☐ |
 | Beat 5 | Operator balance delta (+toll amount) | ☐ |
+| Beat 5b | Turret `StatusChangedEvent` tx digest(s) — action: ONLINE | ☐ |
+| Beat 5b | Gate rule update confirmation (tribe filter set, toll removed) | ☐ |
+| Beat 5b | Before/after: turret OFFLINE → ONLINE, gate policy change | ☐ |
 | Beat 6 | Buy tx digest + `TradeSettledEvent` (extension event) | ☐ |
 | Beat 6 | Buyer/seller balance deltas | ☐ |
 | Beat 6 | Listing state before/after (is_active) | ☐ |
@@ -492,10 +528,10 @@ Before pressing record, confirm every required artifact is captured and accessib
 
 | Variant | Duration | Beats | Features Covered |
 |---|---|---|---|
-| **Primary** | 3:00 | 7 | GateControl + TradePost |
-| **Primary + Preset Switching** | 3:10 | 7 + accent | GateControl + TradePost + Preset Switching |
-| **Primary + ZK** | 3:30 | 8 | GateControl + TradePost + ZK accent |
-| **Primary + Presets + ZK** | 3:40 | 8 + accent | Full suite (maximum flex) |
+| **Primary** | 3:10 | 8 (incl. 5b) | GateControl + TurretControl + Posture Presets + TradePost |
+| **Primary + Preset Switching** | 3:20 | 8 + accent | GateControl + TurretControl + Posture Presets + TradePost + Preset Switching |
+| **Primary + ZK** | 3:40 | 9 | GateControl + TurretControl + Posture Presets + TradePost + ZK accent |
+| **Primary + Presets + ZK** | 3:50 | 9 + accent | Full suite (maximum flex) |
 | **Fallback (GateControl-only)** | 2:00 | 6 | GateControl only |
 
 ---

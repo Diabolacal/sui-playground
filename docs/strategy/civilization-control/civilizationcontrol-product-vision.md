@@ -32,13 +32,13 @@ The gap between "what the blockchain can do" and "what a tribe leader can actual
 
 **CivilizationControl is the control room that the frontier doesn't have yet.**
 
-Imagine a single screen where you see your entire infrastructure at a glance. Every gate you own, every storage unit, every network node — listed by name, status, and link state. Green indicators for gates passing traffic. Amber for fuel running low. Red for offline.
+Imagine a single screen where you see your entire infrastructure at a glance. Every gate you own, every storage unit, every turret, every network node — listed by name, status, and link state. Green indicators for gates passing traffic. Amber for fuel running low. Red for offline. Turret indicators showing online or powered down.
 
 On one side, your gate policies: who gets in, what they pay, and when. Not as raw contract calls — as toggles, dropdowns, and clear language. *Tribe 7: free passage. Tribe 12: toll required. Everyone else: blocked.* Apply to one gate, or select a group and apply to all.
 
 On the other side, your storefronts. Items stocked in your SSUs, listed with prices, browsable by anyone in range. A buyer clicks. Payment flows. The item transfers. One atomic transaction, no trust required, no coordination in Discord.
 
-In the center, a live Signal Feed. Gate jumps. Purchases. Toll revenue. Who's coming through your territory, how much they're paying, and what they're buying. Not raw blockchain events — readable, filterable, human information.
+In the center, a live Signal Feed. Gate jumps. Purchases. Toll revenue. Turret state changes. Who's coming through your territory, how much they're paying, and what they're buying. Not raw blockchain events — readable, filterable, human information.
 
 **CivilizationControl doesn't add new primitives to EVE Frontier. It takes the primitives that already exist — the extension system, the shared objects, the PTB composition layer — and makes them usable by the people who actually run civilizations.**
 
@@ -114,11 +114,15 @@ You click into Gate North-3. The policy panel shows your current rules: **Tribe 
 
 You toggle the toll from 2 to 5 Lux. One click. The policy updates on-chain. No Move code, no CLI, no deploy step.
 
+Then you notice the posture indicator at the top of the Command Overview: **Open for Business**. Gates are broadly accessible. Toll is active. Turrets are offline — stood down, conserving energy, no defensive posture. Your forward logistics corridor is generating revenue.
+
+A Discord ping from your scout: hostile fleet spotted two jumps out. You click **Defense Mode**. Gate link colors shift from green to amber. Turret icons flip from grey to active. The Signal Feed reflects the change: "Posture: Defense Mode. Gates restricted. Turrets online." Your gates now admit only Tribe 7. Your turrets are powered up, running native targeting — same-tribe non-aggressors excluded, active attackers prioritized. One click. The frontier locked down.
+
 Then you switch to TradePost. Your forward supply depot — SSU Echo-2 — is listed as a storefront. Four items stocked: fuel rods, repair paste, ammo cells, and a rare lens module. Each has a price in Lux. You see that two fuel rod listings sold overnight. Revenue: 60 Lux. The buyer history shows two different pilots — one from an allied tribe, one unaffiliated. Both paid, both received their items, both transactions settled atomically on-chain.
 
 You stock five more fuel rods and list them at 35 Lux each.
 
-The Signal Feed scrolls quietly in the sidebar. A jump signal from Gate North-1: pilot from Tribe 12, toll paid 5 Lux. A purchase signal from SSU Echo-2: pilot bought repair paste, 20 Lux. A fuel warning from NWN-South: estimated 8 hours remaining.
+The Signal Feed scrolls quietly in the sidebar. A jump signal from Gate North-1: pilot from Tribe 12, toll paid 5 Lux. A purchase signal from SSU Echo-2: pilot bought repair paste, 20 Lux. A turret status change: Turret South-1 back online after the posture switch. A fuel warning from NWN-South: estimated 8 hours remaining.
 
 For the first time, you can see your toll and trade revenue in real time — in Lux, the currency you actually think in. Not in a spreadsheet. Not in Discord messages. On a control surface that shows you what's happening, right now, across every structure you own.
 
@@ -136,9 +140,11 @@ GateControl is not about access lists. It's about **governance** — the ability
 
 What's validated and real:
 - Tribe-based filtering: matching tribe passes, non-matching tribe is blocked atomically.
-- Toll collection: payment transfers to the gate operator's address on jump (settled on-chain via `Coin<SUI>`).
-- Rule composition: tribe filter AND toll as independent, stackable layers on the same gate.
-- All tested and passing on devnet. None of this is theoretical.
+- Toll collection: CivilizationControl extension code that transfers payment to the gate operator's address on jump (settled on-chain via `Coin<SUI>`). Toll is implemented in the CC extension's `request_jump_permit`, not in world-contracts — no native toll primitive exists.
+- Rule composition: tribe filter AND toll as independent, stackable layers on the same gate, evaluated sequentially by the CC extension.
+- Tribe filter tested and passing on devnet. Toll implementation is CC extension code (~30-50 LoC), pending March 11 sandbox validation.
+
+> **Toll implementation note:** World-contracts provides no native toll/fee mechanism for gates. Toll collection is entirely a CivilizationControl extension capability — the CC `request_jump_permit` function accepts a `Coin<SUI>`, validates the amount against a `CoinTollRule` dynamic field, transfers payment to the configured treasury address, and then issues the jump permit via the typed witness. This means toll semantics (who pays, how much, exemptions) are fully under CC's control.
 
 ### TradePost — Frontier Commerce
 
@@ -151,6 +157,48 @@ What's validated and real:
 - Cross-address item transfer: the extension's typed witness authorizes withdrawal from the seller's SSU without the seller being online.
 - SSU-backed storefront: full lifecycle tested — publish, setup, authorize, stock, list, buy.
 - Three successful cross-address buys at different prices, each with verifiable on-chain events.
+
+### TurretControl — Territorial Defense Posture
+
+Turrets are the defensive infrastructure of the frontier. They anchor to network nodes, draw energy, and engage threats using the world-contracts native targeting logic. CivilizationControl does not program turrets. It controls their power state.
+
+TurretControl is binary: online or offline. A turret that is online uses its native world-contracts targeting behavior — same-tribe non-aggressors excluded, active attackers prioritized. A turret that is offline is powered down but still anchored to its network node. It can be brought back online with a single command.
+
+What TurretControl does:
+- Toggle turret state between online and offline.
+- Orchestrate multiple turrets in a single action via Posture Presets.
+- Display turret state in the Command Overview alongside gates and trade posts.
+
+What TurretControl does NOT do:
+- No custom targeting logic. No priority overrides. No engagement rules.
+- No turret extension deployment. CC uses native turret behavior only.
+- No anchor/unanchor operations. Those are admin-level world-contracts functions.
+
+Technical basis:
+- `turret::online()` and `turret::offline()` are player-callable via `OwnerCap<Turret>`. No AdminACL required.
+- Each toggle requires a borrow/return cycle on the OwnerCap (same hot-potato pattern as gate operations).
+- Multiple turrets can be toggled in a single PTB — each turret needs its own borrow/return cycle, but the `NetworkNode` and `EnergyConfig` references are reused.
+- State guards are strict: calling `online()` on an already-online turret aborts the transaction. CC must check state off-chain before constructing the PTB.
+- Events: `StatusChangedEvent` with `action: ONLINE` or `action: OFFLINE` (shared primitive from `status.move`).
+
+> **Constraint:** Turrets sharing the same NetworkNode contend on `&mut NetworkNode` within the PTB. All turrets on the same NWN can be toggled in one PTB, but cross-NWN turret toggles in the same PTB are also possible since different NWN objects don't contend.
+
+### Posture Presets — Governance at the Infrastructure Level
+
+Individual toggles are useful. But a tribe leader managing a dozen gates and half a dozen turrets doesn't want to flip switches one at a time. They want to say: *we're under threat — lock everything down* or *threat's passed — open for business.*
+
+Posture Presets are named configurations that orchestrate gates and turrets together. Two presets ship with MVP:
+
+| Preset | Gates | Turrets | Intent |
+|--------|-------|---------|--------|
+| **Open for Business** | Broad access — toll active, all paying pilots permitted | Offline | Commerce posture. Maximize traffic and revenue. Defenses stood down. |
+| **Defense Mode** | Tribe-only — only matching tribe permitted, no toll needed | Online | Territorial posture. Lock gates to friendlies. Turrets engage threats using native targeting. |
+
+One click applies the preset across all structures in the operator's infrastructure. The frontend constructs the necessary transactions — gate rule updates and turret state toggles — and executes them.
+
+> **Implementation note:** "One click" means one operator action in the UI. On-chain, this may execute as a single PTB (if all structures can be batched) or as a deterministic sequence of transactions. Turret toggles and gate rule updates are independent operations that can be composed in a PTB. CC does not claim "single PTB" unless validated — it claims "one click orchestrates multiple on-chain state changes." Assumption pending March 11 sandbox validation.
+
+> **Toll in "Open for Business":** The toll is a CC extension rule, not a world-contracts primitive. The CC extension's `request_jump_permit` evaluates a `CoinTollRule` dynamic field: if present, the jumper must provide sufficient `Coin<SUI>`. In "Open for Business" mode, the tribe filter is removed (or set to allow-all) and only the toll rule remains — any pilot who pays can pass. In "Defense Mode," the tribe filter is set to the operator's tribe and the toll rule is removed — only tribe members pass, free of charge.
 
 ### Why They're a System, Not Standalone Instruments
 
@@ -173,11 +221,12 @@ Smart assemblies already exist. Gate extensions already exist. The EVE Frontier 
 The primitives are Move modules, typed witnesses, dynamic field dispatch, and PTB composition. They're powerful, elegant, and completely inaccessible to the 98% of tribe leaders who don't write smart contracts.
 
 What doesn't exist yet:
-- **No command layer.** No way to see all your structures, their status, their activity, in one place.
+- **No command layer.** No way to see all your structures — gates, turrets, SSUs — their status, their activity, in one place.
 - **No policy builder.** No way to configure gate rules without writing Move code.
+- **No posture control.** No way to shift an entire infrastructure between commerce and defense in one action.
 - **No marketplace.** No way to list items for sale, discover prices, or buy trustlessly.
-- **No monitoring.** No way to see toll revenue, gate traffic, fuel levels, or trade history.
-- **No integration.** No way to see how gates, SSUs, and economy interact as a connected system.
+- **No monitoring.** No way to see toll revenue, gate traffic, turret state, fuel levels, or trade history.
+- **No integration.** No way to see how gates, turrets, SSUs, and economy interact as a connected system.
 
 CivilizationControl is not another Move contract demo. It's the missing layer between on-chain infrastructure and the people who operate it. Smart assemblies are already powerful — CivilizationControl makes that power accessible to tribe leaders who shouldn't need to be developers.
 
@@ -211,7 +260,7 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 *[Click into a gate. Policy panel opens. Tribe filter toggle set to Tribe 7. Toll slider set to 5 Lux.]*
 
-**Voiceover:** *"GateControl lets you set the rules on your gates — who passes through, and what they pay. Tribe filter. Toll. Both active on the same gate, composing as layers within the existing extension model."*
+**Voiceover:** *"GateControl lets you set the rules on your gates — who passes through, and what they pay. Tribe filter. Toll. Both active on the same gate, composing as layers within the CC extension."*
 
 *[A jump event appears in the Signal Feed: Pilot from Tribe 7, toll paid: 5 Lux. Green checkmark.]*
 
@@ -220,6 +269,16 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 *[A second jump attempt: Pilot from Tribe 3. Red X. Access denied.]*
 
 **Voiceover:** *"A hostile pilot tries the same gate. Tribe mismatch. Blocked. No passage, no appeal, no workaround. On-chain enforcement."*
+
+### Posture Shift — Defense Mode (1:50–2:05)
+
+*[Operator clicks "Defense Mode" at the top of the Command Overview. Gate link indicators shift from green to amber. Turret icons flip from grey to active.]*
+
+**Voiceover:** *"Threat incoming. One click — Defense Mode. Gates restrict to tribe-only. Turrets come online."*
+
+*[Signal Feed updates: "Posture: Defense Mode. Gates restricted. Turrets online." Turret status indicators in the sidebar update to show active state.]*
+
+**Voiceover:** *"The frontier responds. Every gate, every turret — one command."*
 
 ### Economy — TradePost in Action (1:50–2:30)
 
@@ -293,8 +352,10 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 | **GateControl web UI** — toggle-based policy builder for gate rules | Without the UI, GateControl is just another Move contract. The control surface IS the product. |
 | **TradePost Move module** — listing CRUD + atomic PTB buy flow | Commerce anchors the economy narrative. Gate tolls without a marketplace is half a story. |
 | **TradePost web UI** — browse listings, one-click buy | Same principle: the UI surfaces the value. A contract without a frontend is a demo, not a product. |
+| **TurretControl UI** — online/offline toggle for owned turrets | Turrets complete the infrastructure surface. Binary state control via existing world-contracts primitives (`turret::online`, `turret::offline`). No custom extension — native targeting only. |
+| **Posture Presets** — Open for Business / Defense Mode | Orchestrates gates + turrets in one operator action. Transforms individual structure management into infrastructure-level governance. |
 | **Command shell** — structure sidebar, module switching, connected layout | The "control room" framing requires a unified view. Individual screens don't tell the system story. |
-| **Live Signal Feed** — gate jumps, trade completions, toll revenue | Real-time activity turns a static command view into a living control room. This is the "wow" moment. |
+| **Live Signal Feed** — gate jumps, trade completions, toll revenue, turret state changes | Real-time activity turns a static command view into a living control room. This is the "wow" moment. |
 | **Recorded demo video** (2–3 minutes) | Required for submission. The demo IS the presentation for judges and voters. |
 
 ### Would Be Amazing (Stretch — In Priority Order)
@@ -312,6 +373,27 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 - Mobile/responsive layout (desktop-first is fine for demo and hackathon)
 - ZK privacy rules for gate access (validated on local devnet; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../../operations/zk-gatepass-feasibility-report.md); to re-validate on hackathon test server March 11)
 - Cross-faction diplomatic exchange protocols (fascinating but scope creep)
+- Custom turret targeting logic or turret extensions (native behavior suffices; see TurretControl constraints)
+- Turret anchor/unanchor operations (admin-level, not player governance)
+- Additional posture presets beyond Open for Business and Defense Mode
+- Scheduled or automated posture switching (manual operator action only)
+- Turret analytics or engagement history
+
+---
+
+## Terminology
+
+| Term | Definition |
+|------|-----------|
+| **GateControl** | The gate access governance module. Manages tribe filters and toll rules on gates via the CC extension. |
+| **TradePost** | The commerce module. Turns SSUs into storefronts with atomic buy settlement. |
+| **TurretControl** | Binary state management for turrets: online or offline. Uses native world-contracts `turret::online()` / `turret::offline()`. No custom targeting logic. No turret extension. |
+| **Posture Preset** | A named configuration that orchestrates gates and turrets together in one operator action. Two presets ship with MVP: Open for Business and Defense Mode. |
+| **Online** (turret) | Active. Drawing energy from network node. Native targeting engaged — same-tribe non-aggressors excluded, active attackers prioritized. |
+| **Offline** (turret) | Powered down. Still anchored to network node. Can be brought online with a single toggle. Not destroyed or removed. |
+| **Anchored** (turret) | Placed in the world and attached to a network node. Anchoring and unanchoring are admin-level operations outside CC scope. All CC turret operations assume turrets are already anchored. |
+| **Open for Business** | Posture preset: gates broadly accessible with toll active, turrets offline. Commerce posture. |
+| **Defense Mode** | Posture preset: gates restricted to tribe-only, turrets online. Territorial posture. |
 
 ---
 
