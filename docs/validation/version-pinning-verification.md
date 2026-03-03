@@ -4,6 +4,8 @@
 **Date:** 2026-03-03
 **Environment:** Sui CLI v1.66.1
 
+> **⚠️ SUPERSEDED (v0.0.15, 2026-03-03):** This document verified signatures at v0.0.14 (78854fe). world-contracts is now at v0.0.15 (74d30c8). A3 (`withdraw_item`) signature has changed — now includes `quantity: u32` + `ctx: &mut TxContext`. A1, A2, A4 remain valid. Gate/turret/access modules are unchanged.
+
 ## World-Contracts Pin
 
 | Field | Value |

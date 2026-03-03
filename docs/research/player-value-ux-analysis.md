@@ -35,6 +35,8 @@
 | **Item types are opaque** | Items have `type_id` (u64) but no on-chain name/description mapping. The game server knows what type_id=42 means; the chain doesn't. | Item type registry: shared object mapping `type_id → name/icon/category`. Can be populated by admin at publish time. |
 | **No item transfer between SSUs** | To move items between SSUs you must: withdraw from SSU_A (requires proximity proof) → hold item in tx → deposit to SSU_B (requires same-tx proximity to both). Practically impossible without being at both locations simultaneously. | Logistics contract: intermediate "cargo manifest" object that encapsulates items in transit. Withdraw from SSU_A with a `CargoManifestAuth`, travel, deposit to SSU_B with the same manifest. |
 
+> **v0.0.15 update:** `deposit_to_owned<Auth>` now enables extension-authorized cross-SSU item delivery to an owned-object inventory. Additionally, `deposit_item<Auth>` now validates `parent_id` — items can only return to their origin SSU, so the old deposit-to-different-SSU workaround no longer works.
+
 ### 3. Fuel / Energy Management Pain Points
 
 | Pain Point | Root Cause (from contracts) | Opportunity |
@@ -235,6 +237,8 @@
 | **Key Screens / UX Elements** | • **Create trade**: specify offered items (type_id, quantity) and wanted payment (SUI amount or other items). Published as a `TradeOffer` shared object. • **Accept trade**: counterparty reviews offer, deposits their side into escrow. • **Execute**: when both sides are funded, atomic swap executes — items move to buyer's SSU, SUI moves to seller's address. • **Cancel/expire**: either party can cancel before both sides are filled. Timeout auto-refunds. • **Trade history**: all completed/cancelled/expired trades with details. |
 | **Structures Touched** | `StorageUnit` (source/destination for items), custom `TradeEscrow` shared object (holds items + SUI), `Character` (identity for counterparties) |
 | **Extension Pattern** | `EscrowAuth` witness on SSUs. `TradeEscrow` shared object: `seller_items: VecMap<u64, Item>`, `buyer_payment: Balance<SUI>`, `status: enum(Open, Funded, Completed, Cancelled)`, `expires_at: u64`. On creation: seller calls `withdraw_item<EscrowAuth>()` → items stored in escrow. On accept: buyer sends `Coin<SUI>`. On execute: items transferred to buyer's SSU via `deposit_item<EscrowAuth>()`, SUI sent to seller. |
+
+> **v0.0.15 update:** Cross-SSU `deposit_item<Auth>` is now blocked by `parent_id` validation (items can only return to origin SSU). Use `deposit_to_owned<Auth>` to deliver items to the buyer's SSU.
 | **Feasibility** | Medium — requires careful handling of `Item` lifecycle (items must be unwrapped from SSU inventory, held in escrow object, then deposited into buyer's inventory). The `Item` struct has `key + store` abilities, so it can be held in a shared object. |
 
 ---

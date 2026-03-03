@@ -71,6 +71,8 @@ World-contracts emits **28 unique event types** from **37 call sites** across 11
 
 ### Module: `world::inventory` — inventory.move
 
+> **v0.0.15 update:** Inventory module has significant changes: `Item`/`ItemEntry` struct split, `parent_id` validation on deposit, new `deposit_to_owned` function, `EItemVolumeMismatch` error removed. Event fields and emission points may have changed.
+
 | Event | Emitted By | Fields | Location Linkage | Notes |
 |-------|-----------|--------|-----------------|-------|
 | `ItemMintedEvent` | `mint_items()`, `increase_item_quantity()` | `assembly_id: ID`, `assembly_key: TenantItemId`, `character_id: ID`, `character_key: TenantItemId`, `item_id: u64`, `type_id: u64`, `quantity: u32` | assembly_id linkage; **character_id** present | |
@@ -290,6 +292,8 @@ Ranked by relevance to governance, commerce, and operational awareness:
 - `vendor/world-contracts/contracts/world/sources/primitives/metadata.move` — MetadataChangedEvent
 - `vendor/world-contracts/contracts/world/sources/primitives/status.move` — StatusChangedEvent
 - `vendor/world-contracts/contracts/world/sources/primitives/inventory.move` — ItemMinted/Burned/Deposited/Withdrawn/DestroyedEvent
+
+> **v0.0.15 update:** Inventory events may include new fields or new event types related to `deposit_to_owned` and the `Item`/`ItemEntry` split. Re-verify event schemas against v0.0.15 source.
 - `vendor/world-contracts/contracts/world/sources/primitives/fuel.move` — FuelEvent, FuelEfficiencySet/RemovedEvent
 - `vendor/world-contracts/contracts/world/sources/primitives/energy.move` — Start/StopEnergyProductionEvent, EnergyReserved/ReleasedEvent
 - `vendor/world-contracts/contracts/world/sources/network_node/network_node.move` — NetworkNodeCreatedEvent

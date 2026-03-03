@@ -708,7 +708,9 @@ Inventory reading: Use `suix_getDynamicFields` on the SSU's inventory UID to enu
 Create Listing form: select item from inventory → set price → submits PTB calling `create_listing()`.
 Cancel Listing: button on each active listing → submits PTB calling `cancel_listing()`.
 
-Per constraint: listing sells FULL item (no partial quantity split). UI displays "Full quantity" note.
+~~Per constraint: listing sells FULL item (no partial quantity split). UI displays "Full quantity" note.~~
+
+> **RESOLVED (v0.0.15):** `withdraw_item<Auth>` now accepts `quantity: u32`, enabling partial-quantity listings natively. Full-stack-only constraint is lifted.
 
 **Files:**
 - `frontend/src/pages/TradePostDetailPage.tsx`
@@ -723,7 +725,7 @@ Per constraint: listing sells FULL item (no partial quantity split). UI displays
 - Create Listing form submits valid PTB
 - After signing, Listing shared object created
 - Cancel Listing marks listing inactive
-- "Full quantity" note visible on create form
+- ~~"Full quantity" note visible on create form~~ (v0.0.15: partial quantities now supported)
 - `npm run build` passes
 
 **Assumption to verify:** SSU inventory structure (dynamic fields under `owner_cap_id` key) is readable via RPC. Item field layout matches `Item { id, key, type_id, quantity, volume, name }`.

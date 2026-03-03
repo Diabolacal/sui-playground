@@ -14,6 +14,8 @@ Validation of CivilizationControl "one-click" posture switching on Sui local dev
 | World contracts | `vendor/world-contracts` v0.0.14 (combined publish with CC extension) |
 | CC Extension | `cc_posture` (config.move + posture.move) — ExtensionConfig + posture DFs |
 
+> **v0.0.15 update (2026-03-03):** world-contracts updated to v0.0.15. Gate/turret/access modules unchanged — posture-switch validation results remain valid. Key inventory changes: `withdraw_item` now takes `quantity: u32` + `ctx`, `deposit_item` validates `parent_id`, new `deposit_to_owned`. See decision-log 2026-03-03.
+
 ## Topology
 
 Single-operator setup provisioned by `setup.ts`:

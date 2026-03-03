@@ -24,6 +24,7 @@ Two new knowledge sources — the EVE Frontier GitBook reference map and the Sui
 - **Killmail fields are inaccessible from external Move modules.** `Killmail` has no public getter functions; `OwnerCap<T>` lacks `store` ability. This kills Ideas 10 (Insurance) and 19 (Corp Treasury) as designed, and downgrades Idea 12 (Bounty Board) to Yellow.
 - **Gate `extension` is singular** (`Option<TypeName>`) — confirmed only ONE extension per gate. Multi-extension stacking is impossible; composition must happen inside a single module using dynamic fields. This was a v1 unknown that is now resolved in favor of the Gate Policy Engine design.
 - **SSU extension-mediated access (`deposit_item<Auth>`, `withdraw_item<Auth>`) does NOT require proximity proofs** — only `deposit_by_owner`/`withdraw_by_owner` do. This simplifies Storefront and Dead Drop designs.
+  > **Outdated (v0.0.15):** Owner-path SSU functions no longer require proximity proofs or AdminACL — just OwnerCap + sender address match.
 - **Events are ephemeral** (not stored on-chain, subject to node pruning). All analytics/indexer ideas must use off-chain storage.
 - **JSON-RPC is deprecated** → use GraphQL/gRPC for all off-chain reads (Sui docs canonical).
 - **Sui-level features unlock new ideas:** `sui::random` (loot drops), Kiosk standard (structured marketplace), `Coin<T>` (custom faction currencies), `sui::display` (NFT rendering), and storage rebates (incentivized cleanup).

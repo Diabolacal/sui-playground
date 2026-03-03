@@ -216,6 +216,8 @@ This is the core "builder" mechanism:
 
 **Inventory model:** Dynamic fields keyed by `OwnerCap ID`. Each inventory uses `VecMap<u64, Item>`. Ephemeral inventories are created per-character on first `game_item_to_chain` call.
 
+> **v0.0.15 update:** `Item` has been split into `Item` (on-chain object, key+store) and `ItemEntry` (in-inventory entry). `Item` now carries `parent_id` linking it to the origin SSU. `VecMap<u64, Item>` may now be `VecMap<u64, ItemEntry>`.
+
 **Item struct:** `Item { id, tenant, type_id, item_id, volume, quantity, location }` — has `key` + `store` abilities.
 
 **Events:** `StorageUnitCreatedEvent`, `ItemMintedEvent`, `ItemBurnedEvent`, `ItemDepositedEvent`, `ItemWithdrawnEvent`, `StatusChangedEvent`

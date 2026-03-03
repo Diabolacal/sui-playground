@@ -100,6 +100,8 @@ public enum BehaviourChangeReason has copy, drop, store {
 | `anchor` | `(registry, network_node, character, admin_acl, item_id, type_id, location_hash, ctx) -> Turret` | AdminACL (no verify_sponsor) | Creates Turret + OwnerCap; emits TurretCreatedEvent |
 | `share_turret` | `(turret, admin_acl, ctx)` | AdminACL + verify_sponsor | Makes Turret a shared object |
 | `update_energy_source` | `(turret, network_node, admin_acl, ctx)` | AdminACL + verify_sponsor | Turret must be offline |
+
+> **v0.0.15 update:** `update_energy_source` no longer requires AdminACL parameter — now callable with OwnerCap only.
 | `unanchor` | `(turret, network_node, energy_config, admin_acl, ctx)` | AdminACL + verify_sponsor | Destroys turret |
 | `unanchor_orphan` | `(turret, admin_acl, ctx)` | AdminACL + verify_sponsor | Turret must be offline + no energy source |
 

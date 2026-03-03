@@ -384,6 +384,8 @@ The extension pattern in world-contracts is designed for a specific builder work
 **How it works:** 
 1. Depositor: `deposit_item<DeadDropAuth>()` with `Poseidon(secret)` stored as metadata
 2. Recipient: `withdraw_item<DeadDropAuth>()` by providing `secret` — module computes `Poseidon(secret)` and checks match
+
+> **v0.0.15 update:** `deposit_item<Auth>` now validates `parent_id` — items can only return to their origin SSU. Cross-SSU dead drops must use `deposit_to_owned<Auth>` instead.
 3. For full anonymity: use ZK proof of preimage instead of revealing `secret` directly
 
 **Feasibility:** Medium — Poseidon hashing available via `sui::poseidon`. Simple preimage version is ~100 LoC. Full ZK anonymity version requires a custom circuit. Creative combination of game mechanics + privacy tech.

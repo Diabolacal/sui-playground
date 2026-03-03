@@ -130,6 +130,8 @@ module gate_toll::gate_toll {
 **Evidence from world-contracts:**
 
 1. **`withdraw_item<Auth>` signature** (storage_unit.move L162):
+
+   > **v0.0.15 update:** `withdraw_item<Auth>` signature has changed — now takes `quantity: u32` + `ctx` params. Line numbers may have shifted. Re-verify against v0.0.15 source.
    ```move
    public fun withdraw_item<Auth: drop>(
        storage_unit: &mut StorageUnit,
@@ -218,6 +220,8 @@ module gate_toll::gate_toll {
 **Evidence:** `withdraw_by_owner` requires:
 - `owner_cap: &OwnerCap<T>` — owned by seller, buyer cannot provide in their PTB
 - `proximity_proof` — server-signed, buyer would need server authorization
+
+> **v0.0.15 update:** `deposit_by_owner` and `withdraw_by_owner` no longer require AdminACL. Owner-path SSU functions are now pure player-wallet + proximity proof ops.
 - Sender check: `ctx.sender() == character.character_address()` — buyer's character, not seller's
 
 **Conclusion:** Direct owner withdrawal by buyer is impossible by design. Extension pattern is the correct (and only) approach.

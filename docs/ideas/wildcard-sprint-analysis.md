@@ -212,6 +212,9 @@ Nobody will think to use Killmail as a gate condition. It crosses two completely
 - `issue_jump_permit<Auth>` → permit to travel the route  
 - `jump_with_permit` → jump through gate
 - `deposit_item<Auth>` → deliver to destination SSU
+
+> **v0.0.15 update:** `deposit_item<Auth>` now validates `parent_id` — items can only return to their origin SSU. Cross-SSU delivery must use `deposit_to_owned<Auth>` instead.
+
 - Coin<EVE> → escrow and payment
 - ExtensionConfig DF → delivery contracts (source, dest, item type, reward)
 
@@ -245,6 +248,9 @@ Everyone builds access control or marketplaces. Nobody builds logistics. This cr
 
 **World-Contract Hooks:**
 - `deposit_item<Auth>` → seal items into escrow SSU
+
+> **v0.0.15 update:** `deposit_item<Auth>` now validates `parent_id` — items can only return to origin SSU. Use `deposit_to_owned<Auth>` for cross-SSU escrow deposits.
+
 - `withdraw_item<Auth>` → release items when conditions met
 - ExtensionConfig DF → escrow conditions (recipient address, unlock time, required payment, required killmail)
 - Character → validate recipient identity
@@ -425,6 +431,8 @@ Nobody thinks of gates as race checkpoints. It turns infrastructure into sport a
 - [ ] `complete_delivery()` — THE big function
   - Takes: `&mut ExtensionConfig, &mut StorageUnit (source), &mut StorageUnit (dest), &mut Gate (source), &mut Gate (dest), &mut Character, contract_id, admin_acl, clock, ctx`
   - Atomically: withdraw_item from source SSU → issue_jump_permit → jump_with_permit → deposit_item to dest SSU → release Coin<EVE> payment
+
+  > **v0.0.15 update:** `deposit_item` `parent_id` validation blocks cross-SSU deposit. `complete_delivery()` must use `deposit_to_owned<Auth>` for destination SSU.
   - Emits: DeliveryCompletedEvent
 
 **Evening — Testing & Iteration:**
@@ -482,6 +490,8 @@ Nobody thinks of gates as race checkpoints. It turns infrastructure into sport a
 |------|----------|-----------|-------------|
 | **5-operation PTB may exceed gas budget** | High | Test early on devnet. Worst case: split into 2 PTBs (deliver + jump separate) | Day 1 evening |
 | **SSU extension `deposit_item`/`withdraw_item` may require objects we can't access in test** | High | Use builder-scaffold test resources to create SSUs. If blocked: mock with simpler DF storage | Day 1 morning |
+
+> **v0.0.15 update:** `deposit_item<Auth>` `parent_id` validation blocks cross-SSU deposit. Courier delivery must use `deposit_to_owned<Auth>` to deposit items into destination SSU.
 | **Gate + SSU must both have matching extension type** | Medium | Deploy same `XAuth` type on both gate and SSU. Validate `authorize_extension` on both | Day 1 afternoon |
 | **Coin<EVE> escrow requires holding balance in extension** | Medium | Use Coin<EVE> in a DF on ExtensionConfig, or use `Balance<EVE>` as DF value | Day 1 morning |
 | **jump_with_permit requires AdminACL sponsorship** | Medium | Already understood. Use dual-sign pattern from scaffold. May need to separate jump from delivery PTB | Day 1 afternoon |

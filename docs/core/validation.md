@@ -74,6 +74,8 @@ All four must pass. Any failure blocks commit.
 | S01 | `git log --oneline` | Exactly 1 commit, dated ≥ March 11 |
 | S02 | `git submodule status` | Both submodules at latest commit |
 | S03 | `grep -n "authorize_extension\|issue_jump_permit\|withdraw_item\|struct Item" vendor/world-contracts/...` | Signatures match documented (A1-A4) |
+
+> **UPDATED (v0.0.15):** `withdraw_item<Auth>` signature has changed — now takes `quantity: u32` + `ctx: &mut TxContext`. `deposit_item<Auth>` validates `parent_id`. S03 grep must verify against v0.0.15 signatures, not v0.0.13.
 | S04 | `sui client active-env` | Returns target environment name |
 | S05 | Sponsored tx dry run passes | No `ENotAuthorizedSponsor` abort |
 | S06 | Read two DFs with different gate_id keys | Independent values returned |

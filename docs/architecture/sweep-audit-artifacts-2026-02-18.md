@@ -14,8 +14,10 @@
 
 | ID | Finding | Severity | Evidence Summary |
 |----|---------|----------|-----------------|
-| A-4.1a | `withdraw_item` returns FULL quantity (no partial) | **CRITICAL** | `inventory.items.remove(&type_id)` removes entire Item; no quantity parameter |
-| A-4.1b | No `split_item` or `partial_withdraw` exists | **CRITICAL** | Grep returns zero results; `Item` constructor is `public(package)` only |
+| A-4.1a | ~~`withdraw_item` returns FULL quantity (no partial)~~ | ~~**CRITICAL**~~ **RESOLVED** | ~~`inventory.items.remove(&type_id)` removes entire Item; no quantity parameter~~ |
+| A-4.1b | ~~No `split_item` or `partial_withdraw` exists~~ | ~~**CRITICAL**~~ **RESOLVED** | ~~Grep returns zero results; `Item` constructor is `public(package)` only~~ |
+
+> **RESOLVED (v0.0.15):** `withdraw_item<Auth>` now accepts `quantity: u32`, enabling partial withdrawals. A-4.1a and A-4.1b are no longer valid constraints.
 | A-2.2a | No `deauthorize_extension` function exists | MEDIUM | Owner can only replace extension by authorizing a new type |
 | A-2.2b | Owner can replace extension at any time | MEDIUM | `authorize_extension` overwrites `Option<TypeName>` |
 | A-6.3a | Both gates must have same extension type for permits | MEDIUM | `issue_jump_permit` checks `TypeName` equality on source/target |
@@ -40,7 +42,7 @@
 | B-4 | `Coin<SUI>` may not match game economy token | **HIGH** | `world.move` L8: `// TODO: mint initial supply of eve tokens`; `init()` only creates GovernorCap |
 | B-1 | Overpayment not handled in primary design doc | MEDIUM | No `coin::split` / refund logic designed for buy() |
 | B-6b | Duplicate listings for same `type_id` not guarded | MEDIUM | No uniqueness constraint on listing creation |
-| B-7 | No partial-quantity withdraw (design constraint) | MEDIUM | Same root as A-4.1a; affects listing granularity |
+| B-7 | ~~No partial-quantity withdraw (design constraint)~~ | ~~MEDIUM~~ **RESOLVED** | ~~Same root as A-4.1a; affects listing granularity~~ — resolved in v0.0.15 via `quantity: u32` param |
 | B-2 | No fee mechanism; 100% to seller | LOW | Acceptable for MVP; fee can be added post-hack |
 | B-3 | Extension functions don't require sponsorship | LOW (favorable) | Confirmed: TradePost is fully sponsor-free |
 | B-6a/c/d/e | Listing cancel race / seller drains / stocking / offline | LOW | Edge cases manageable by extension design |
@@ -154,13 +156,13 @@
 | Main Report Section | Source Findings |
 |---------------------|---------------|
 | Risk #1 (AdminACL sponsor) | F-5, A-1.3a, D-1 |
-| Risk #2 (Partial withdraw) | A-4.1a, A-4.1b, B-7 |
+| Risk #2 (Partial withdraw) | A-4.1a, A-4.1b, B-7 | **RESOLVED (v0.0.15)** |
 | Risk #3 (EVE Vault stub) | D-1, D-2 |
 | Risk #4 (Character resolution) | C-1 |
 | Risk #5 (Multi-entry) | F-1 |
 | Executive Summary §4 (custom events) | C-3 |
 | Assumption A9 (sponsor-free extensions) | A-1.3b, B-3 |
-| Assumption A10 (full-stack withdraw) | A-4.1a |
+| Assumption A10 (full-stack withdraw) | A-4.1a | **RESOLVED (v0.0.15)** |
 | Assumption A12 (no online check) | A-6.1a |
 | Assumption A13 (no deadline on verify_distance) | E-5.1 |
 | Assumption E8 (AdminACL access) | F-5, E-3.1, E-6.4 |

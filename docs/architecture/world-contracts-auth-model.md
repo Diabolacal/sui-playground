@@ -110,6 +110,9 @@ Typically the **server/admin address** designated by the deployer. Multiple Admi
 | `anchor` | gate | gate.move:L396 | Anchor a new gate |
 | `share_gate` | gate | gate.move:L451 | Share a gate object |
 | `update_energy_source` | gate | gate.move:L455 | Update gate energy source |
+
+> **v0.0.15 update:** `update_energy_source` for gate, storage_unit, assembly, and turret no longer requires AdminACL — removed from signature.
+
 | `unanchor` | gate | gate.move:L462 | Unanchor a gate |
 | `unanchor_orphan` | gate | gate.move:L502 | Unanchor orphaned gate |
 | `set_max_distance` | gate | gate.move:L519 | Set max link distance by type |
@@ -124,6 +127,8 @@ Typically the **server/admin address** designated by the deployer. Multiple Admi
 | `share_storage_unit` | storage_unit | storage_unit.move:L401 | Share a storage unit |
 | `update_energy_source` | storage_unit | storage_unit.move:L405 | Update SU energy source |
 | `update_energy_source_connected_storage_unit` | storage_unit | storage_unit.move:L419 | Update via hot potato |
+
+> **v0.0.15 update:** `update_energy_source_connected_storage_unit` and `update_energy_source_connected_assembly` no longer require AdminACL.
 | `unanchor` | storage_unit | storage_unit.move:L495 | Unanchor a storage unit |
 | `unanchor_orphan` | storage_unit | storage_unit.move:L542 | Unanchor orphaned SU |
 | `anchor` | assembly | assembly.move:L97 | Anchor a generic assembly |
@@ -332,6 +337,9 @@ These functions require the `AdminCap` owned object as a parameter. Only the ser
 | 21 | `share_storage_unit` | L401 | Share a storage unit |
 | 22 | `update_energy_source` | L405 | Update SU energy source NWN |
 | 23 | `update_energy_source_connected_storage_unit` | L419 | Update via hot potato |
+
+> **v0.0.15 update:** Rows 22-23 and 28-29 below: AdminACL removed from `update_energy_source` and `update_energy_source_connected_*` signatures.
+
 | 24 | `unanchor` | L495 | Unanchor and destroy a storage unit |
 | 25 | `unanchor_orphan` | L542 | Unanchor orphaned SU |
 
@@ -452,6 +460,8 @@ These functions require an `Auth: drop` witness — only the extension package t
 | 2 | `deposit_item<Auth>` | L164 | `extension.contains(&type_name::with_defining_ids<Auth>())` | Extension-controlled deposit |
 | 3 | `withdraw_item<Auth>` | L182 | `extension.contains(&type_name::with_defining_ids<Auth>())` | Extension-controlled withdraw |
 
+> **v0.0.15 update:** `deposit_item<Auth>` now validates `parent_id` (items only return to origin SSU). New `deposit_to_owned<Auth>` added for cross-player delivery. `withdraw_item<Auth>` now takes `quantity: u32` + `ctx`. Line numbers may have shifted.
+
 ---
 
 ### 7E. PLAYER + SERVER PROOF (requires ctx.sender() + ServerAddressRegistry proof)
@@ -464,6 +474,8 @@ These functions check `character_address == ctx.sender()` AND require a server-s
 | 1 | `chain_item_to_game_inventory` | L140 | sender check + OwnerCap inventory auth + location proof | Bridge chain items to game |
 | 2 | `deposit_by_owner` | L225 | sender check + OwnerCap inventory auth + proximity proof + location match | Owner deposit with proof |
 | 3 | `withdraw_by_owner` | L270 | sender check + OwnerCap inventory auth + proximity proof | Owner withdraw with proof |
+
+> **v0.0.15 update:** `deposit_by_owner` and `withdraw_by_owner` no longer require AdminACL — pure player-wallet + proximity proof operations now.
 
 ---
 

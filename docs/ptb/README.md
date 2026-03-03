@@ -21,6 +21,8 @@ These documents capture structural patterns learned from world-contracts analysi
 - **Not copy-paste production code.** No TypeScript implementation exists here. These are documentation templates only.
 - **Not execution authority.** The March-11 Reimplementation Checklist (`march-11-reimplementation-checklist.md`) remains the execution authority for all implementation decisions.
 
+> **Note:** Patterns validated against world-contracts v0.0.14. Upstream now at v0.0.15 — inventory functions changed (withdraw_item, deposit_item). Gate/turret patterns unchanged. Verify signatures before use.
+
 ## How to Use on March 11
 
 1. **Read spec + March-11 checklist first.** These establish intent, boundaries, and execution order.
@@ -108,7 +110,7 @@ For demo flows:
 ## Assumptions & Unknowns
 
 - World-contracts may change pre-March-11 (hotfixes, breaking changes)
-- Turret support confirmed in v0.0.14. See docs/architecture/turret-contract-surface.md for signatures
+- Turret support confirmed in v0.0.14 (now v0.0.15). See docs/architecture/turret-contract-surface.md for signatures
 - SSU withdraw/deposit may delete/recreate objects (do not assume object continuity across game boundary)
 - Package IDs used in these docs are **placeholders only** — real IDs are assigned at publish time
 - Auth model may change (AdminACL membership rules, verify_sponsor fallback behavior)

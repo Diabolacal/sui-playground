@@ -31,6 +31,8 @@ sui client publish -e local --gas-budget 100000000 --json
 - SSU extension-based `withdraw_item<Auth>` (requires world-contracts dependency)
 - `issue_jump_permit` / `jump_with_permit` on actual Gate objects
 - AdminACL sponsored transactions
+
+> **v0.0.15 update:** AdminACL removed from owner-path SSU operations (`deposit_by_owner`, `withdraw_by_owner`, `update_energy_source_connected_*`). AdminACL sponsorship still required for `jump`, `jump_with_permit`, `deposit_fuel`, `game_item_to_chain_inventory`.
 - Character/tribe mechanics from world-contracts
 - NetworkNode / energy / fuel infrastructure chain
 

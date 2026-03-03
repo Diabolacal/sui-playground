@@ -390,6 +390,8 @@ No V3 recommendation violates a known constraint from V2. Key checks:
 | **Sui 8 Groth16 public inputs** | Confirmed. ZK circuits use 3 inputs — within limit. | ID 5 |
 | **`deposit_item` does NOT require proximity proof** | Confirmed (extension-mediated). Extension controls deposit, not proximity server. | ID 11, ID 3 (TradePost) |
 
+> **v0.0.15 update:** While no proximity proof is needed, `deposit_item<Auth>` now validates `parent_id` — items can only be re-deposited into their origin SSU. Cross-SSU deposits must use `deposit_to_owned<Auth>`.
+
 ---
 
 ## G) Web Research Heuristics Applied

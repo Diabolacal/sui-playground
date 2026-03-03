@@ -57,6 +57,8 @@ Key facts:
 
 ### Two Access Modes
 
+> **v0.0.15 update:** A THIRD access mode now exists: `deposit_to_owned<Auth>` — extension-authorized deposit into an owned-object inventory (e.g., cross-player delivery). SSU now has three access modes: extension, extension-to-owned, and owner-direct.
+
 | Mode | Functions | Auth Required | Inventory Accessed | Who Can Call |
 |------|-----------|---------------|-------------------|-------------|
 | **Extension-based** | `deposit_item<Auth>`, `withdraw_item<Auth>` | `Auth` witness (drop) | Main inventory (`owner_cap_id` key) | Anyone, IF the module defining `Auth` exposes a public function that creates `Auth {}` |
@@ -310,6 +312,8 @@ CLAIM (buyer, PTB):
 **Rationale:**
 
 1. **Most Sui-native:** Uses the typed witness extension pattern, which is the designed mechanism for cross-address SSU interactions. The world-contracts team explicitly built this for player-to-player interactions (see storage_unit.move header comment: "Storage Units support two access modes to enable player-to-player interactions").
+
+   > **v0.0.15 update:** Now THREE access modes — `deposit_to_owned<Auth>` adds extension-authorized cross-player delivery.
 
 2. **Least code:** No need to manage Item objects outside of inventories. Items stay in the SSU until purchased. The TradePost module only needs `create_listing`, `cancel_listing`, `buy`, and `update_price`.
 
@@ -626,6 +630,8 @@ The TradePost module should also emit its own:
 ### 3. Item `transfer::public_transfer` Viability
 
 `Item` has `key, store` abilities — `transfer::public_transfer` is valid. However, the `inventory.move` comment says "Item should always have a parent eg: Inventory, ship etc." This is a design guideline, not an enforcement. For TradePost, items leave the SSU and arrive at the buyer's address as standalone objects. The buyer can later deposit them into their own SSU.
+
+> **v0.0.15 update:** `deposit_item<Auth>` now validates `parent_id` — items can only be re-deposited into their origin SSU. Cross-SSU item transfer via `deposit_item` is blocked. Use `deposit_to_owned<Auth>` for delivering items to a different player's SSU.
 
 ### 4. Tenant Mismatch Guard
 

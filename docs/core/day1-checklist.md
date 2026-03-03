@@ -101,6 +101,8 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 | **Check** | `Item` struct has `key, store` abilities — `transfer::public_transfer` is valid |
 | **Command** | `grep -n "struct Item" vendor/world-contracts/contracts/world/sources/primitives/inventory.move` |
 | **Expected Output** | `public struct Item has key, store { ... }` |
+
+> **v0.0.15 update:** `Item` struct has been split into `Item` (on-chain, key+store) and `ItemEntry` (in-inventory representation). `Item` now includes a `parent_id` field that ties it to its origin SSU. Verify both structs when checking abilities.
 | **Fallback** | If only `key` (no `store`), cannot transfer items to buyer. TradePost unviable. Pivot to GateControl-only. |
 
 **Result:** ☐ A1 PASS ☐ A2 PASS ☐ A3 PASS ☐ A4 PASS — Any FAIL = HARD STOP

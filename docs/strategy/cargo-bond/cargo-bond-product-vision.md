@@ -19,7 +19,7 @@ No trusted backend. No admin intervention. No reputation system. The only trust 
 
 The system runs as a shared-object state machine on Sui. The Atomic Courier package implements the full lifecycle — post, accept, complete, expire, cancel — with deterministic settlement in every path. Five events cover the entire lifecycle for frontend indexing. Gas cost per job: under 0.01 SUI end-to-end.
 
-**Extended scope (conditional):** When a courier accepts a job, the system can issue a time-bounded gate transit permit through the job creator's gates — granting passage that expires automatically with the job deadline. This requires no AdminACL, no sponsorship, and no manual revocation. Gate permit issuance is validated as feasible. Turret integration is out of scope. Turret assemblies exist (v0.0.14) but the extension calling convention prevents access to bond state. See turret-contract-surface.md and turret-closed-world-clarified.md.
+**Extended scope (conditional):** When a courier accepts a job, the system can issue a time-bounded gate transit permit through the job creator's gates — granting passage that expires automatically with the job deadline. This requires no AdminACL, no sponsorship, and no manual revocation. Gate permit issuance is validated as feasible. Turret integration is out of scope. Turret assemblies exist (v0.0.14, now v0.0.15) but the extension calling convention prevents access to bond state. See turret-contract-surface.md and turret-closed-world-clarified.md.
 
 **Build budget:** 8–14 hours LLM-assisted.
 **Kill criteria:** Abandon if world-contracts SSU integration blocks clean escrow within 4 hours. Fallback: pure economic demo (SUI escrow only, no SSU hooks).
@@ -219,7 +219,9 @@ It does **not** require AdminACL, OwnerCap, or sponsorship for the permit issuan
 
 ### Turret Integration — Out of Scope
 
-Turret assemblies exist in world-contracts v0.0.14, but turret extensions use a closed-world calling convention: the fixed 4-argument signature (`turret, character, candidates_bcs, receipt`) cannot access external objects such as `ExtensionConfig` or `CourierJob`. Bond-state lookups during targeting are architecturally blocked by this constraint.
+Turret assemblies exist in world-contracts v0.0.14 (now v0.0.15), but turret extensions use a closed-world calling convention: the fixed 4-argument signature (`turret, character, candidates_bcs, receipt`) cannot access external objects such as `ExtensionConfig` or `CourierJob`. Bond-state lookups during targeting are architecturally blocked by this constraint.
+
+> **v0.0.15 update (2026-03-03):** world-contracts updated to v0.0.15. Gate/turret modules unchanged. Key inventory changes: `withdraw_item` now takes `quantity: u32` + `ctx`, `deposit_item` validates `parent_id`, new `deposit_to_owned`. SSU-related courier operations should verify updated inventory signatures. See decision-log 2026-03-03.
 
 **Recommendation:** Turret behavior is default (tribe-based filtering) and operates independently of the courier system. ~~Previously recommended framing turret integration as a "natural extension of the gate permit model" — since corrected: bond-aware turret targeting is not a natural extension of the gate pattern and requires turret calling convention changes.~~ Do not frame turret safe-passage as a product feature. See `docs/architecture/turret-closed-world-clarified.md` and `docs/architecture/turret-contract-surface.md` for full analysis.
 

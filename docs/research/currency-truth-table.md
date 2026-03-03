@@ -104,6 +104,8 @@ All world-contract admin operations (gate creation, SSU creation, network node o
 
 **dapp-kit Integration (Updated 2026-03-03):** The builder documentation now documents a `useSponsoredTransaction()` React hook in `@evefrontier/dapp-kit` with a `SponsoredTransactionActions` enum covering: `BRING_ONLINE`, `BRING_OFFLINE`, `EDIT_UNIT`, `LINK_SMART_GATE`, `UNLINK_SMART_GATE`. This provides a higher-level abstraction over the `setSender()` + `setGasOwner()` pattern for common assembly operations.
 
+> **v0.0.15 update:** `useSponsoredTransaction()` hook has been removed from dapp-kit. Sponsored transaction pattern is now via `useDAppKit()` directly.
+
 ---
 
 ## 5. Exchange Rate Details (LUX ↔ EVE Token)

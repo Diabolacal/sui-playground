@@ -20,7 +20,7 @@
 | 8 | **Gate Lifecycle Scripts** | `sandbox/validation/step*.sh` | Shell | Full 13-step gate lifecycle reproducible on localnet | YES (reference) | Partial evidence captured |
 | 9 | **EVE Vault Signing Smoke** | `sandbox/evevault-signing-smoke/` | React | Wallet adapter connects and signs | NO | Built, not validated |
 | 10 | **Minimal Extension Test** | `sandbox/minimal-extension-test/` | Move | World-contracts dependency compiles | YES (infra) | Probe only |
-| 11 | **World Contracts** | `vendor/world-contracts/` | Move (vendor) | Gate/SSU/Turret assembly + extension system | YES (upstream) | Read-only reference, v0.0.14 |
+| 11 | **World Contracts** | `vendor/world-contracts/` | Move (vendor) | Gate/SSU/Turret assembly + extension system | YES (upstream) | Read-only reference, v0.0.15 (was v0.0.14) |
 | 12 | **Builder Scaffold** | `vendor/builder-scaffold/` | Move + Docker + TS (vendor) | Localnet devnet + reference extensions | YES (infra) | Read-only reference |
 | 13 | **EVE Vault** | `vendor/evevault/` | TS monorepo (vendor) | Sponsored tx flow + zkLogin | NO (reference) | Read-only reference |
 
@@ -45,6 +45,8 @@
 | GC-11 | `issue_jump_permit` works from our extension package against world-contracts Gate | YES | NOT VALIDATED (mock only) |
 | GC-12 | AdminACL sponsor enrollment | HIGH | NOT VALIDATED (requires GovernorCap) |
 | GC-13 | Sponsored transaction with AdminACL passes `verify_sponsor` | HIGH | NOT VALIDATED |
+
+> **v0.0.15 update:** AdminACL removed from owner-path SSU operations (`deposit_by_owner`, `withdraw_by_owner`) and `update_energy_source_connected_*`. GC-12/GC-13 remain relevant for `jump`, `jump_with_permit`, `deposit_fuel`, and other sponsored-path functions.
 | GC-14 | Distance proof / `link_gates` succeeds | HIGH | NOT VALIDATED (requires server key) |
 
 ### CivilizationControl — TradePost

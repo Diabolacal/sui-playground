@@ -63,6 +63,8 @@ The world-contracts gate system uses a typed witness pattern for custom gate log
 
 **Evidence:** [gate.move](../../../vendor/world-contracts/contracts/world/sources/assemblies/gate.move) L105 (`authorize_extension`), L199 (`issue_jump_permit`). Tests in [gate_tests.move](../../../vendor/world-contracts/contracts/world/tests/assemblies/gate_tests.move) validate full lifecycle.
 
+> **v0.0.15 note:** Underlying SSU calls changed — AdminACL removed from `deposit_by_owner`/`withdraw_by_owner`, `withdraw_item<Auth>` now takes `quantity:u32` + ctx params. `corpse_gate_bounty` pattern references may need signature updates.
+
 ### 1.3 Individual Validation (Proven — HIGH confidence, from prior devnet work)
 
 - **Tribe filter:** Devnet GREEN — tribe-1 passes, tribe-2 blocked atomically (ETribeMismatch)

@@ -57,6 +57,8 @@ Known `link_gates` plaintext distance exposure was treated as already understood
 | `inventory::transfer` | PoC | distance proof bytes/public inputs | object IDs + zk artifacts | delegates to distance attestation verify ([primitives/inventory.move](vendor/eve-frontier-proximity-zk-poc/move/world/sources/primitives/inventory.move#L12-L28)) |
 | `verify_distance_attestation` | PoC | `public_inputs_bytes` decodes max ts, roots, coord hashes, distance² | all decoded public outputs | checks against stored location data and may persist distance ([distance_attestation.move](vendor/eve-frontier-proximity-zk-poc/move/world/sources/attestations/distance_attestation.move#L147-L233)) |
 
+> **Outdated (v0.0.15):** `deposit_by_owner` and `withdraw_by_owner` no longer require proximity proofs or AdminACL — just OwnerCap + sender address match.
+
 ---
 
 ## 3. Observability Matrix

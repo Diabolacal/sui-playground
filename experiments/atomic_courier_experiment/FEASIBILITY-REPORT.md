@@ -143,6 +143,8 @@ This experiment models "cargo custody" as an **on-chain job receipt / claim toke
 
 2. **SSU ↔ in-game inventory bridge.** Real `withdraw_item` and `deposit_item` require game-server coordination. Our Phase 1 test uses the raw on-chain SSU calls, which work on localnet but don't model the game-server handshake.
 
+> **v0.0.15 update:** `withdraw_item<Auth>` now takes `quantity: u32` + `ctx` params. `deposit_item<Auth>` validates `parent_id` — items can only return to their origin SSU. Cross-SSU delivery must use `deposit_to_owned<Auth>`. AdminACL removed from `deposit_by_owner`/`withdraw_by_owner`.
+
 3. **Cross-extension composition.** Combining courier escrow with gate extension (toll + jump) in a single PTB requires the deployed game world with all assemblies configured.
 
 4. **EVE coin (Coin<EVE>).** The real game uses EVE tokens for tolls and payments. Localnet only has SUI.

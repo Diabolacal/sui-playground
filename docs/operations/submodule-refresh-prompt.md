@@ -84,18 +84,57 @@ cd ../..
 
 ### Step 5: Update Local Documentation
 
-Documents to update (if impacts found):
+#### 5a. Always-update targets
 
-1. **`docs/research/evefrontier-builder-docs-map.md`** — Update review date, submodule commit, section summaries, gaps
-2. **`docs/core/march-11-reimplementation-checklist.md`** — Add findings that affect validated patterns
-3. **`docs/strategy/hackathon-portfolio-roadmap.md`** — Update track status if upstream changes affect feasibility
+These files are structurally coupled to submodule state and must always be checked:
+
+1. **`docs/research/evefrontier-builder-docs-map.md`** — Update review date, submodule commit SHAs, section summaries, gaps
+2. **`docs/core/march-11-reimplementation-checklist.md`** — Add findings that affect validated patterns, update version refs and call-site signatures
+3. **`docs/strategy/_shared/hackathon-portfolio-roadmap.md`** — Update track status if upstream changes affect feasibility
 4. **`docs/decision-log.md`** — Add entry for the refresh
+
+#### 5b. Autonomous drift sweep (REQUIRED)
+
+Do **not** stop at the four files above. Use subagents or `grep_search` to find **all** documents in the repository that reference patterns changed in the new version.
+
+**Procedure:**
+1. From the audit in Step 4, extract a list of **changed symbols** — function names, struct names, error codes, removed parameters, new functions, version strings, commit SHAs.
+2. For each changed symbol, run `grep_search` across `docs/`, `sandbox/`, `experiments/`, `.github/`, and root `.md` files.
+3. Consult `docs/README.md` (the documentation index) to identify thematic clusters likely affected (e.g., an inventory change affects TradePost, SSU, and Cargo Bond docs).
+4. For each file with outdated references, add a brief `> **v0.0.15 update:**` callout annotation near the stale text. **Do not rewrite entire sections** — prefer addenda over rewrites.
+5. For files that assert something now false (e.g., "no partial withdrawal" when partial withdrawal was added), use `> **RESOLVED (vX.Y.Z):**` annotations.
+6. For archive docs, add a one-line `> **Outdated (vX.Y.Z):**` note — do not invest in full corrections.
+
+**Typical search patterns (adapt to actual changes):**
+```
+# Function signature changes
+grep_search: withdraw_item|deposit_item|deposit_to_owned
+
+# Removed/renamed errors
+grep_search: EItemVolumeMismatch|ETypeIdMismatch
+
+# Auth model changes
+grep_search: AdminACL.*(deposit|withdraw|energy)
+
+# Version/SHA pins
+grep_search: v0\.0\.14|78854fe   (replace with actual old version/SHA)
+
+# SDK/tooling changes
+grep_search: useSponsoredTransaction|useDAppKit
+
+# Structural model changes
+grep_search: ItemEntry|two access mode|VecMap.*Item
+```
+
+**Exclusion rule:** Skip files already updated in Step 5a. Skip `vendor/` (read-only).
 
 ### Step 6: Commit + Push
 
 ```bash
 git add vendor/
-git add docs/
+git add docs/ sandbox/ experiments/ .github/
+# Review staged changes — confirm no secrets, no vendor-internal files
+git diff --cached --stat
 git commit -m "chore: refresh submodules + docs (YYYY-MM-DD)"
 git push -u origin chore/submodule-refresh-YYYYMMDD
 ```
@@ -149,8 +188,17 @@ git branch -d chore/submodule-refresh-YYYYMMDD
 
 If `-d` refuses (thinks branch is unmerged), **stop and investigate** — do not force-delete.
 
+## Lessons Learned (2026-03-03)
+
+From the v0.0.14→v0.0.15 refresh:
+- The original prompt only listed 3 docs to update. The autonomous drift sweep (Step 5b) found **~30 additional files** with outdated references.
+- Most impactful change patterns: function signature changes (withdraw_item), removed errors (EItemVolumeMismatch), new functions (deposit_to_owned), auth model changes (AdminACL removal from owner-path).
+- `docs/README.md` is the best starting point for identifying thematic clusters of affected docs.
+- Archive docs still need annotations ("Outdated") to prevent future agents from treating stale claims as current.
+- Correct roadmap path is `docs/strategy/_shared/hackathon-portfolio-roadmap.md` (not `docs/strategy/`).
+
 ## Agent Prompt (Copy-Paste)
 
 When asking an AI agent to perform this refresh, use:
 
-> Update all git submodules to their latest upstream commits. For each submodule that changed: (1) record old→new SHA, (2) audit what changed in Move modules/docs/scripts/APIs, (3) assess impact on CivilizationControl architecture. Then update docs/research/evefrontier-builder-docs-map.md, docs/core/march-11-reimplementation-checklist.md, and docs/strategy/hackathon-portfolio-roadmap.md with any findings. Add a decision-log entry. Commit on a `chore/submodule-refresh-YYYYMMDD` branch and push.
+> Update all git submodules to their latest upstream commits. For each submodule that changed: (1) record old→new SHA, (2) audit what changed in Move modules/docs/scripts/APIs, (3) assess impact on CivilizationControl architecture. Then update the always-update targets in Step 5a. After that, run the autonomous drift sweep (Step 5b) — search the ENTIRE repo for all docs referencing changed symbols and annotate them. Consult `docs/README.md` to identify thematic doc clusters. Add a decision-log entry. Commit on a `chore/submodule-refresh-YYYYMMDD` branch and push.

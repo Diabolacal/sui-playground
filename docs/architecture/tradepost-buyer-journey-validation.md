@@ -31,7 +31,9 @@
 | **In-game dApp interaction model** | **HIGH** | How does the EVE Frontier game client present a builder's dApp when a player interacts with an SSU? All builder-docs "Connecting In-Game" pages are `//TODO`. |
 | **dApp URL source** | **HIGH** | Does the game client read `Metadata.url` to load an iframe? Is there a default SSU UI? Is the URL configured elsewhere? Undocumented. |
 | **Testnet world-contracts deployment** | **MEDIUM** | All validation was on local devnet. The hackathon test server may have different world-contracts version, gas costs, or object limits. |
-| **Partial-quantity withdraw** | **LOW** | `withdraw_item` takes the ENTIRE `Item` for a `type_id` (full quantity). No partial withdraw exists. Workaround: listings represent the full item, or use quantity-1 items. |
+| **~~Partial-quantity withdraw~~** | **~~LOW~~** **RESOLVED** | ~~`withdraw_item` takes the ENTIRE `Item` for a `type_id` (full quantity). No partial withdraw exists.~~ |
+
+> **RESOLVED (v0.0.15):** `withdraw_item<Auth>` now accepts `quantity: u32`, enabling partial withdrawals. Full-stack workaround no longer needed.
 
 ### What FAILS
 
@@ -247,7 +249,9 @@ These sandbox mock event names were already flagged in [read-path-architecture-v
 
 ### 2. Partial-Quantity Withdraw Constraint
 
-Not documented anywhere. `withdraw_item` returns the FULL `Item` object for a given `type_id` (entire quantity). There is no partial-quantity withdrawal. Design implication: listings should represent the full item quantity, or the extension must implement quantity splitting logic (split item → withdraw → deposit remainder).
+~~Not documented anywhere. `withdraw_item` returns the FULL `Item` object for a given `type_id` (entire quantity). There is no partial-quantity withdrawal. Design implication: listings should represent the full item quantity, or the extension must implement quantity splitting logic (split item → withdraw → deposit remainder).~~
+
+> **RESOLVED (v0.0.15):** `withdraw_item<Auth>` now accepts `quantity: u32`, enabling partial withdrawals. Quantity splitting workarounds are no longer required.
 
 ### 3. SSU dApp Interaction Model
 
@@ -277,7 +281,9 @@ No documented mechanism exists for how the EVE Frontier game client loads or pre
 | Live GitBook `docs.evefrontier.com/dapps/connecting-in-game` | Fetched 2026-02-19, "updated 7 days ago" | Content: `//TODO` only — matches local |
 | Live GitBook `docs.evefrontier.com/dapps/dapps-quick-start` | Fetched 2026-02-19, "updated 7 days ago" | Content: `//TODO` only — matches local |
 | Live GitBook `docs.evefrontier.com/dapp-kit-sdk/dapp-kit` | Fetched 2026-02-19 | Fully populated (304 lines). Describes **external browser** dApp SDK only. No in-game loading. Matches local. |
-| `vendor/builder-documentation/dapp-kit/dapp-kit.md` | 185d7a8 | React SDK: `useSmartObject()`, `useConnection()`, `useSponsoredTransaction()`. Assembly ID via `?assemblyId=0x...` URL param. No in-game rendering API. |
+| `vendor/builder-documentation/dapp-kit/dapp-kit.md` | 185d7a8 | React SDK: `useSmartObject()`, `useConnection()`, ~~`useSponsoredTransaction()`~~. Assembly ID via `?assemblyId=0x...` URL param. No in-game rendering API. |
+
+> **UPDATED (v0.0.15):** `useSponsoredTransaction()` hook is removed from dapp-kit. The pattern is now `useDAppKit()` for sponsored transaction flows.
 | `vendor/builder-documentation/smart-assemblies/storage-unit/README.md` | 185d7a8 (unchanged) | 131 lines. Covers inventory + extensions. Zero mention of embedded browser, iframe, dApp URL, in-game UI. |
 | `vendor/builder-documentation/SUMMARY.md` | 185d7a8 | TOC unchanged — same 4 //TODO dApp pages. No new pages added. |
 | `vendor/world-contracts/.../metadata.move` | v0.0.13 @ e508451 | `Metadata { name, description, url }`. `update_url()` is owner-callable. No on-chain loading mechanism. |
@@ -299,9 +305,11 @@ No documented mechanism exists for how the EVE Frontier game client loads or pre
 
 ### world-contracts v0.0.13 Changes (relevant to TradePost)
 
-- `inventory.move`: New validation `EItemVolumeMismatch` (error code 5) — `deposit_item` now rejects items whose `volume` field differs from existing items with the same `type_id`. No impact on `withdraw_item` (still full-quantity only).
+- `inventory.move`: New validation `EItemVolumeMismatch` (error code 5) — `deposit_item` now rejects items whose `volume` field differs from existing items with the same `type_id`. ~~No impact on `withdraw_item` (still full-quantity only).~~
 - No new trade/payment/marketplace primitives added.
-- No partial-quantity withdraw added.
+- ~~No partial-quantity withdraw added.~~
+
+> **RESOLVED (v0.0.15):** `withdraw_item<Auth>` now accepts `quantity: u32` for partial withdrawals. `EItemVolumeMismatch` error is removed in v0.0.15. `deposit_item<Auth>` now validates `parent_id` (items only return to origin SSU). New `deposit_to_owned<Auth>` enables cross-player delivery.
 
 ---
 

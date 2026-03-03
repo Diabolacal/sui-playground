@@ -189,7 +189,9 @@
 | A-69 | Coordinates are NOT on-chain — only Poseidon(2) hashes; manual spatial pinning required | spec.md S1.2 | Game client | Medium | No | No spatial visualization without manual configuration |
 | A-70 | In-game embedded browser (CEF 122) provides NO Sui Wallet Standard provider | spec.md S1.1, implementation-plan S08 | Game client | Medium | No | Write operations impossible in-game; read-only surface |
 | A-71 | SSU must be online for `withdraw_item` / `deposit_item` to succeed | march-11-checklist Known Pitfalls, Pattern 4 | Contract behavior | Medium | Yes | Seller must maintain SSU uptime for marketplace |
-| A-72 | Owner-direct SSU functions (`deposit_by_owner`, `withdraw_by_owner`) are explicitly temporary — ship inventory will replace them | storage_unit.move L21 comment | Contract behavior | Medium | No | Use extension-based paths (`deposit_item<Auth>`, `withdraw_item<Auth>`) as stable API |
+| A-72 | ~~Owner-direct SSU functions (`deposit_by_owner`, `withdraw_by_owner`) are explicitly temporary — ship inventory will replace them~~ | storage_unit.move L21 comment | Contract behavior | Medium | No | ~~Use extension-based paths (`deposit_item<Auth>`, `withdraw_item<Auth>`) as stable API~~ |
+
+> **RESOLVED (v0.0.15):** A-72: `AdminACL` removed from `deposit_by_owner`/`withdraw_by_owner`. Owner-direct paths remain but are simplified. Extension-based paths (`deposit_item<Auth>`, `withdraw_item<Auth>`) are still the stable API and now accept `quantity: u32` + `ctx` parameters.
 
 ### 1.14 TradePost-Specific
 
@@ -197,7 +199,9 @@
 |----|------------|-----------|-----------------|------|----------|----------|
 | A-73 | `withdraw_item<Auth>` does NOT require OwnerCap — only TradeAuth witness + shared object refs | march-11-checklist TradePost validation #1, A3, storage_unit.move | Contract behavior | High | Yes | If OwnerCap required, cross-address atomic buy is impossible; must pivot to escrow |
 | A-74 | `withdraw_item<Auth>` accesses MAIN inventory keyed by `owner_cap_id`, not per-caller inventory | march-11-checklist TradePost validation #2 | Contract behavior | High | Yes | If keying changed, buyer PTB cannot access seller inventory |
-| A-75 | Listing sells FULL item quantity (no `split_item` in world-contracts) | implementation-plan S19 | Contract behavior | Low | No | UI must display "Full quantity" constraint |
+| A-75 | ~~Listing sells FULL item quantity (no `split_item` in world-contracts)~~ | implementation-plan S19 | Contract behavior | ~~Low~~ **RESOLVED** | No | ~~UI must display "Full quantity" constraint~~ |
+
+> **RESOLVED (v0.0.15):** `withdraw_item<Auth>` now accepts `quantity: u32`, enabling partial-quantity listings. "Full quantity" constraint no longer applies.
 | A-76 | `deposit_item()` merges quantities for same-type items (volume match required) | march-11-checklist TradePost validation #8 | Contract behavior | Low | No | Simplifies restocking |
 
 ### 1.15 ZK Proof Dependencies
@@ -311,7 +315,7 @@
 
 | Attribute | Value |
 |-----------|-------|
-| **On-chain actions** | 1. `withdraw_item<TradeAuth>` from seller SSU. 2. `transfer::public_transfer` item to buyer. 3. `splitCoins` + transfer toll to seller. All in one atomic PTB. |
+| **On-chain actions** | 1. `withdraw_item<TradeAuth>` from seller SSU (now with `quantity: u32` in v0.0.15). 2. `transfer::public_transfer` item to buyer. 3. `splitCoins` + transfer toll to seller. All in one atomic PTB. |
 | **Transaction count** | 1 (atomic settlement PTB) |
 | **Shared objects touched** | StorageUnit (mutable for withdraw), CivControlConfig (read for listing), Listing object (shared, read + state update) |
 | **Event dependencies** | `TradeSettledEvent` (extension), `ItemWithdrawnEvent` (world-contracts) |

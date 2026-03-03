@@ -239,7 +239,7 @@ Note: Thesis weighted total uses the ensemble average from the V3 scoring. Strat
 
 1. **TribeMint does not survive critique.** Its weighted score (6.31) is the weakest of the three core modules. Its player vote (5/10) is below average. Its "connective tissue" value is real but modest — a 40-second demo payoff for a module that adds significant integration complexity (Coin<T> type parameterization across packages). The claim that it elevates the system above the sum of its parts is plausible but unproven, and the integration cost is tangible.
 
-2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (shared-listing escrow; SSU extension pattern supported by code analysis but not yet devnet-validated) spans two of the three smart assembly types (turrets exist as of v0.0.14 but are scoped out due to extension calling convention constraints) with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
+2. **Two modules still earns the system narrative.** GateControl (gate extension) + TradePost (shared-listing escrow; SSU extension pattern supported by code analysis but not yet devnet-validated) spans two of the three smart assembly types (turrets exist as of v0.0.14 — now v0.0.15, but are scoped out due to extension calling convention constraints) with shared auth and a natural economic connection (gate tolls → nearby storefront). Judges will recognize this as system design. The ModDesign drop from 10 to 9 is ~0.125 points of weighted composite — less than the delivery risk of adding a third module.
 
 ### CC Governance Preset Mapping (Turrets as Online/Offline Toggles)
 
@@ -376,6 +376,8 @@ Insert 30 seconds between Act 3 and Act 4:
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|------|-----------|--------|------------|
 | 1 | **TradePost cross-address PTB transfer fails** — `deposit_item<Auth>()` may not support buyer-to-SSU item transfer in the way the storefront model assumes | Medium | Critical — TradePost is unusable | Day-1 de-risk on local devnet. If it fails, pivot to Strategy A (solo GateControl). The `deposit_item` function is extension-mediated and doesn't require proximity proof — but the item transfer path needs validation. |
+
+> **v0.0.15 update:** Risk CONFIRMED. `deposit_item<Auth>` now validates `parent_id` — items can only return to origin SSU. Cross-player delivery must use `deposit_to_owned<Auth>` instead.
 | 2 | **Demo recording discipline** — a poorly structured or unclear recorded demo undermines the system narrative just as much as a live failure would | Medium | High — judges see a confusing video, not a polished system | Storyboard the full flow before recording. Script each segment. Pre-deploy all state on devnet. Record multiple takes and select the best. Add captions and annotations in post-production. |
 | 3 | **Scope creep into TribeMint** — "just one more day" pulls effort from core polish | Medium | Medium — degrades GateControl/TradePost quality | Hard rule: TribeMint starts only after both core modules pass a complete demo rehearsal. No exceptions. |
 | 4 | **`sui::random` calling convention blocks LootDrop** — `entry` function constraint prevents PTB composition with storefront flow | Low | Low — LootDrop is S2 stretch | Test calling convention early. If blocked, LootDrop uses hash-based pseudo-random fallback or is cut entirely. |

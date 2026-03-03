@@ -216,7 +216,7 @@ These are observed during sandbox testing and **may not be valid on the hackatho
 ## Assumptions & Unknowns
 
 - World-contracts may change pre-March-11
-- Turret support confirmed in v0.0.14. See docs/architecture/turret-contract-surface.md for signatures
+- Turret support confirmed in v0.0.14 (now v0.0.15; inventory sigs changed — verify before use). See docs/architecture/turret-contract-surface.md for signatures
 - SSU withdraw/deposit may delete/recreate objects
 - Do not assume object continuity across game boundary
 - Package IDs are placeholders

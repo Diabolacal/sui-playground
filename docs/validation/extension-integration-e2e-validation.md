@@ -6,6 +6,8 @@
 
 **All 4 E2E claims PASS on localnet** — the cross-package extension witness pattern is fully functional with world-contracts v0.0.14.
 
+> **v0.0.15 update (2026-03-03):** world-contracts updated to v0.0.15. Gate/turret/access modules unchanged. Key inventory changes: `withdraw_item` now takes `quantity: u32` + `ctx`, `deposit_item` validates `parent_id`, new `deposit_to_owned`. Original validation results below remain valid for gate extension claims. See decision-log 2026-03-03.
+
 ## Claims Validated
 
 | Claim | Status | Evidence |
