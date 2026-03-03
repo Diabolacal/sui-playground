@@ -95,6 +95,10 @@ Both centered at (12, 12). All corners are right angles (no rx/ry). Inner square
 
 Rect is inset 1 unit on all sides (½ stroke-width) to keep the full stroke within viewBox bounds.
 
+**Interior padding (for UI composition):** The safe interior area for labels and mini glyph count rows starts 3 units inside the rect edge (1 unit rect inset + 2 unit visual padding). This gives a usable content area of approximately 24 × 16 centered within the viewBox.
+
+**Note:** This SVG is the container only. Structure counts, labels, and miniature glyph rows are composed by the React component at runtime, not baked into the SVG. See the [mini glyph set](mini/README.md) for the 10×10 count row glyphs.
+
 ---
 
 ## Rendering Doctrine
