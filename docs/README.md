@@ -219,6 +219,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
 | [research/location-proof-independent-audit.md](research/location-proof-independent-audit.md) | **Location proof independent audit** — distance proof observability, trilateration analysis, risk classification |
 | [research/world-contracts-event-surface.md](research/world-contracts-event-surface.md) | **World-contracts event surface audit** — 28 event types, field index, spatial linkage, consumption paths (RPC/GraphQL/gRPC), Ethereum assumption mismatches, polling architecture |
+| [research/visualization-conventions-reference-report.md](research/visualization-conventions-reference-report.md) | **Visualization conventions research** — ISA-101, NUREG-0700, HP-HMI, IEC 60073, ISA-18.2, EEMUA 191, MIL-STD-2525, Gestalt principles; cross-reference matrix and universal design principles |
 
 ## Operations
 
@@ -240,6 +241,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | File | Purpose |
 |------|---------|
 | [ux/civilizationcontrol-ux-architecture-spec.md](ux/civilizationcontrol-ux-architecture-spec.md) | **UX Architecture Specification** — screen hierarchy, gate list/detail, rule composer, linking flow, manual pinning, spatial layer, MVP vs stretch, design principles & upgrade path |
+| [ux/svg-topology-layer-spec.md](ux/svg-topology-layer-spec.md) | **SVG Topology Layer Spec** — symbol grammar (4 structure glyphs), state system (6 overlay channels), color semantics doctrine, motion doctrine & demo timing, layout/stacking rules, export conventions, standards grounding (ISA-101, MIL-STD-2525D, IEC 60073) |
 
 ## PTB Pattern Library
 
