@@ -236,7 +236,9 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 **On-screen action:** Posture button click → gate indicators change → turret indicators change → Signal Feed reflects posture shift.
 
 **Evidence overlay required:**
-- Turret `StatusChangedEvent` tx digest(s): `[TBD-digest]` — action: ONLINE
+- Single tx digest containing all posture changes: `[TBD-digest]`
+- `PostureChangedEvent` (CC extension): old_mode → new_mode
+- Turret `StatusChangedEvent` tx digest(s): action: ONLINE (one per turret)
 - Gate rule update confirmation (tribe filter set, toll removed)
 - Before/after: turret status OFFLINE → ONLINE, gate policy "Open for Business" → "Defense Mode"
 
@@ -246,7 +248,9 @@ These are the five non-negotiable proof moments. If time or stability forces cut
 
 **Capture mode:** Live UI recording (Command Overview + Signal Feed). Proof overlay (turret StatusChangedEvent tx + gate update) in post.
 
-> **Implementation note:** "One click" triggers the UI to construct the necessary transactions. On-chain, this may be a single PTB containing multiple turret toggles + gate rule updates, or a deterministic sequence of transactions. The demo shows the operator experience (one action), not the transaction mechanics. If batching is validated on March 11, the overlay can show a single tx digest. If not, the overlay shows the sequence.
+> **Implementation note:** "One click" triggers the UI to construct a **single PTB** containing all turret toggles + gate rule updates. This was validated on local devnet (Strategy A — single PTB confirmed for both BUSINESS→DEFENSE and DEFENSE→BUSINESS). The overlay shows a single tx digest. Proof events: `PostureChangedEvent` (CC extension) + N × `StatusChangedEvent` (world-contracts `status.move`). See [posture-switch localnet validation](../sandbox/posture-switch-localnet-validation.md).
+>
+> **Pre-recording prerequisite:** Ensure the NetworkNode is fueled and online before recording this beat. `turret::online()` aborts with `ENotProducingEnergy` if the NWN is not producing energy. Pre-check turret statuses to avoid no-op abort (calling `online()` on an already-online turret also aborts).
 
 ---
 

@@ -180,6 +180,7 @@ Technical basis:
 - Multiple turrets can be toggled in a single PTB — each turret needs its own borrow/return cycle, but the `NetworkNode` and `EnergyConfig` references are reused.
 - State guards are strict: calling `online()` on an already-online turret aborts the transaction. CC must check state off-chain before constructing the PTB.
 - Events: `StatusChangedEvent` with `action: ONLINE` or `action: OFFLINE` (shared primitive from `status.move`).
+- **Operational prerequisite:** Turrets require a fueled, online NetworkNode producing energy. The energy chain is: `set_fuel_efficiency` → `deposit_fuel` → `network_node::online` → turrets can call `reserve_energy`. Without this, `turret::online()` aborts with `ENotProducingEnergy`.
 
 > **Constraint:** Turrets sharing the same NetworkNode contend on `&mut NetworkNode` within the PTB. All turrets on the same NWN can be toggled in one PTB, but cross-NWN turret toggles in the same PTB are also possible since different NWN objects don't contend.
 
@@ -196,7 +197,7 @@ Posture Presets are named configurations that orchestrate gates and turrets toge
 
 One click applies the preset across all structures in the operator's infrastructure. The frontend constructs the necessary transactions — gate rule updates and turret state toggles — and executes them.
 
-> **Implementation note:** "One click" means one operator action in the UI. On-chain, this may execute as a single PTB (if all structures can be batched) or as a deterministic sequence of transactions. Turret toggles and gate rule updates are independent operations that can be composed in a PTB. CC does not claim "single PTB" unless validated — it claims "one click orchestrates multiple on-chain state changes." Assumption pending March 11 sandbox validation.
+> **Implementation note:** "One click" means one operator action in the UI. On-chain, this executes as a **single PTB** — validated on local devnet with two gates and two turrets (Strategy A). Turret toggles and gate rule updates compose cleanly: `set_posture` + config DF mutations + per-turret borrow/toggle/return cycles, all in one transaction. Latency: ~2–3 seconds per direction. **Operational prerequisite:** Defense Mode requires the NetworkNode to be fueled and online before turrets can come online; `turret::online()` aborts with `ENotProducingEnergy` otherwise. See [posture-switch localnet validation](../../sandbox/posture-switch-localnet-validation.md) for full evidence.
 
 > **Toll in "Open for Business":** The toll is a CC extension rule, not a world-contracts primitive. The CC extension's `request_jump_permit` evaluates a `CoinTollRule` dynamic field: if present, the jumper must provide sufficient `Coin<SUI>`. In "Open for Business" mode, the tribe filter is removed (or set to allow-all) and only the toll rule remains — any pilot who pays can pass. In "Defense Mode," the tribe filter is set to the operator's tribe and the toll rule is removed — only tribe members pass, free of charge.
 
