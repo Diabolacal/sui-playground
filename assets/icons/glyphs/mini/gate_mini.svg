@@ -6,28 +6,29 @@
 
     Notch angle: 20° (increased from 24×24 set's 15°).
     At r=3/10px, a 15° notch produces a chord gap of only 0.79 units
-    (~0.8px at 10px) which collapses visually. 20° yields a 1-unit gap
-    (~1px at 10px, ~1.2px at 12px) — the minimum for legibility.
+    (~0.8px at 10px) which collapses visually. 20° yields a 1.04-unit
+    gap (~1px at 10px, ~1.2px at 12px) — the minimum for legibility.
 
     Arc endpoint table (20° notch = ±10° from horizontal):
-      A (right, above):  exact (7.95, 4.48) → snapped (8,   4.5)
-      B (left,  above):  exact (2.05, 4.48) → snapped (2,   4.5)
-      C (left,  below):  exact (2.05, 5.52) → snapped (2,   5.5)
-      D (right, below):  exact (7.95, 5.52) → snapped (8,   5.5)
+      Computed with exact trig, NOT snapped to .5 grid.
+      A (right, above):  5 + 3·cos(10°), 5 − 3·sin(10°) = (7.95, 4.48)
+      B (left,  above):  5 − 3·cos(10°), 5 − 3·sin(10°) = (2.05, 4.48)
+      C (left,  below):  5 − 3·cos(10°), 5 + 3·sin(10°) = (2.05, 5.52)
+      D (right, below):  5 + 3·cos(10°), 5 + 3·sin(10°) = (7.95, 5.52)
+
+      All four points lie exactly on the r=3 circle (no snapping).
 
     Arc 1 (upper): A → B through 12 o'clock  (160°, sweep=0, large-arc=0)
     Arc 2 (lower): C → D through  6 o'clock  (160°, sweep=0, large-arc=0)
 
-    Pixel-alignment note: snapped endpoints sit ~0.04 units off the
-    r=3 circle (distance ≈ 3.04). SVG arc renderer compensates by
-    micro-shifting the effective center — invisible at ≤16px.
+    Linecap: butt — matches 24×24 gate's crisp notch edges.
   -->
   <path
-    d="M 8,4.5 A 3,3 0 0,0 2,4.5
-       M 2,5.5 A 3,3 0 0,0 8,5.5"
+    d="M 7.95,4.48 A 3,3 0 0,0 2.05,4.48
+       M 2.05,5.52 A 3,3 0 0,0 7.95,5.52"
     stroke="currentColor"
     fill="none"
     stroke-width="1"
-    stroke-linecap="round"
+    stroke-linecap="butt"
   />
 </svg>

@@ -46,19 +46,22 @@ Visually indistinguishable from a regular hexagon at ≤ 16px.
 - **Radius:** 3
 - **Notch angle:** 20° (see adjustment rationale below)
 
-| Point | Role | Exact (20° notch) | Snapped | Off-circle |
-|-------|------|--------------------|---------|------------|
-| A | Right, above | (7.95, 4.48) | (8, 4.5) | +0.04 |
-| B | Left, above | (2.05, 4.48) | (2, 4.5) | +0.04 |
-| C | Left, below | (2.05, 5.52) | (2, 5.5) | +0.04 |
-| D | Right, below | (7.95, 5.52) | (8, 5.5) | +0.04 |
+| Point | Role | x = 5 ± 3·cos(10°) | y = 5 ∓ 3·sin(10°) | On-circle? |
+|-------|------|---------------------|---------------------|------------|
+| A | Right, above | 7.95 | 4.48 | ✅ exact |
+| B | Left, above | 2.05 | 4.48 | ✅ exact |
+| C | Left, below | 2.05 | 5.52 | ✅ exact |
+| D | Right, below | 7.95 | 5.52 | ✅ exact |
 
 | Arc | From → To | Route | Span | large-arc | sweep |
 |-----|-----------|-------|------|-----------|-------|
 | 1 | A → B | Through 12 o'clock | 160° | 0 | 0 |
 | 2 | C → D | Through 6 o'clock | 160° | 0 | 0 |
 
-Notch gap (vertical, at 3/9 o'clock): 1.0 unit = 1.0 px at 10px render.
+Notch gap (vertical, at 3/9 o'clock): 1.04 units ≈ 1.0 px at 10px render.
+
+Endpoints use exact trig values (not snapped to .5 grid) to keep the ring perfectly circular.
+Linecap is `butt` (matching the 24×24 gate) for crisp, sharp notch edges.
 
 ### Mini Turret
 
@@ -93,7 +96,7 @@ Both centered at (5, 5). Inner stroke-width = 0.5 to preserve the 2:1 outer/inne
 | `fill` | `none` | Outline-only (except Network Node core dot) |
 | `stroke-width` | `1` (outer), `0.5` (Trade Post inner only) | See justification below |
 | `stroke-linejoin` | `round` | Avoids miter spikes at small render sizes |
-| `stroke-linecap` | `round` (gate only) | Softens arc endpoints at notch edges |
+| `stroke-linecap` | `butt` (gate only) | Crisp notch edges matching 24×24 gate |
 | Gradients / shadows | Prohibited | Flat monochrome per §2.4 |
 
 ### Why `stroke-width="1"` (Not Fractional)
@@ -117,7 +120,7 @@ Proportional scaling: 2 × (10/24) = 0.833.
 | Glyph | 24×24 | Mini | Rationale |
 |-------|-------|------|-----------|
 | **Network Node** | R=9, miter join | R≈3.5, round join | Miter spikes at 60° exterior would extend ~0.5px beyond the stroke at 10px — round join eliminates this |
-| **Gate notch** | 15° (2.09-unit gap) | 20° (1.0-unit gap) | 15° at r=3 gives 0.79-unit gap (< 1px at 10px) — visually collapses. 20° gives 1.0-unit gap (1px at 10px, 1.2px at 12px) |
+| **Gate notch** | 15° (2.09-unit gap) | 20° (1.04-unit gap) | 15° at r=3 gives 0.79-unit gap (< 1px at 10px) — visually collapses. 20° gives 1.04-unit gap (≈1px at 10px, 1.2px at 12px) |
 | **Turret** | Centroid at (12, 12) exact | Centroid at (5, 5.17) | √3 factor makes exact centering impossible on .5 grid; 0.17-unit shift invisible at target sizes |
 | **Trade Post inner** | stroke-width=1 | stroke-width=0.5 | Proportional: 1/2 = 0.5/1. At 10px, inner renders as 0.5px anti-aliased line |
 | **All glyphs** | `stroke-linejoin="miter"` | `stroke-linejoin="round"` | At 10px, miter points on polygon vertices create aliasing artifacts; round join produces cleaner rendering |
@@ -132,6 +135,10 @@ Proportional scaling to r=3:
 - 20° notch: gap = 2 × 3 × sin(10°) = 1.04 units → 1.04px at 10px (**minimum legible**)
 
 20° was selected as the smallest angle that produces a ≥ 1px gap at the minimum 10px render size. The notch remains recognizable as the gate's diagnostic feature without dominating the glyph.
+
+**Linecap:** `butt` (not `round`). Round linecap adds a half-stroke-width semicircle to each arc endpoint, which at 10px visually softens the notch edges and can partially close the gap. Butt linecap produces clean, square-cut endpoints matching the 24×24 gate's feel.
+
+**Endpoint precision:** Arc endpoints use exact trigonometric values (7.95, 4.48 etc.) rather than snapping to the .5 grid. Snapped coordinates (8, 4.5) sit 0.04 units off the r=3 circle, which the SVG renderer compensates for by micro-shifting the effective arc center — producing a subtly elliptical ring. Exact values keep the ring perfectly circular.
 
 ---
 
