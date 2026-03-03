@@ -5,7 +5,7 @@
 > Canonical design specification for the Strategic Network Map symbol grammar, state system, color doctrine, motion protocol, and layout rules.
 > Sources: UX Architecture Spec §9, Spatial Embed Requirements, Demo Beat Sheet v2, Product Vision, Voice & Narrative Guide, Hackathon Emotional Objective.
 > Validated against: ISA-101 HMI design principles, IEC 60073 color coding, MIL-STD-2525D/APP-6(D) symbology, EEMUA 191 alarm management, High Performance HMI (Hollifield/Habibi), Gestalt perceptual principles.
-> Last updated: 2026-03-03 (rev 2 — intra-system multi-node topology rules)
+> Last updated: 2026-03-03 (rev 3 — semantic zoom and solar system aggregation)
 
 ---
 
@@ -23,6 +23,7 @@
    - 6.11 [Link Scaling Doctrine](#611-link-scaling-doctrine)
    - 6.12 [Demo Mode Layout Constraints](#612-demo-mode-layout-constraints)
    - 6.13 [Topology Is Diagrammatic, Not Astronomical](#613-topology-is-diagrammatic-not-astronomical)
+   - 6.14 [Semantic Zoom & Solar System Aggregation](#614-semantic-zoom--solar-system-aggregation)
 7. [Export & Naming Conventions](#7-export--naming-conventions)
 8. [Why This Is Not Arbitrary](#8-why-this-is-not-arbitrary)
 9. [Do Not List](#9-do-not-list)
@@ -547,6 +548,115 @@ This principle is reinforced by every reference standard cited in §8:
 
 The topology is a mimic diagram of frontier infrastructure. It shows connectivity, state, and policy — not location, distance, or appearance.
 
+### 6.14 Semantic Zoom & Solar System Aggregation
+
+The topology supports two display modes that trade detail for overview. This follows the ISA-101 display hierarchy: Level 1 (overview / area summary) and Level 2 (unit detail). The operator navigates between them to shift from network-wide situational awareness to intra-system operational detail.
+
+#### Display Modes
+
+| Mode | ISA-101 Level | What Is Visible | When Used |
+|---|---|---|---|
+| **Network View** (aggregated) | Level 1 — Area Overview | Each Solar System rendered as a single **aggregate glyph**. Cross-system gate links shown between aggregate glyphs. No individual structures visible. | Default view. Operator is surveying the entire network. |
+| **System View** (expanded) | Level 2 — Unit Detail | One Solar System expanded to show all clusters, structures, and intra-system links per §6.8–§6.10. Other Solar Systems remain aggregated. | Operator has focused on a specific Solar System for policy, inspection, or event investigation. |
+
+#### Solar System Aggregate Glyph
+
+In Network View, each Solar System collapses to a single composite glyph. This glyph must communicate: (a) this is a Solar System containing infrastructure, (b) the worst-case state of anything inside, and (c) a summary of what it contains.
+
+**Shape:** Rounded rectangle outline, 32×24 units on the base grid (wider than tall to accommodate count badges). Corner radius: 4 units. This shape is distinct from all four structure glyphs (hexagon, ring, triangle, square) — it reads as a container, not a structure. The rounded rectangle echoes the Solar System boundary shape (§6.9), reinforcing visual continuity when transitioning between views.
+
+**Stroke rules:** Same as structure glyphs — `--glyph-neutral` baseline, 2-unit stroke width. State overlay follows the same channel rules as §3.2 (stroke color override for highest-priority state, no halo or pulse on the aggregate — those are structure-level signals).
+
+**Interior elements (always visible):**
+
+| Element | Position | Content | Example |
+|---|---|---|---|
+| **System label** | Centered, upper third | Solar System name, 8px equivalent, `--glyph-neutral` | "Jita" |
+| **Structure count row** | Centered, lower third | Miniature glyph icons (10×10) + count, separated by 6-unit gaps | ⬡2  ◎2  ▲6  ▪2 |
+
+The structure count row uses **miniature versions** of the four structure glyphs (hexagon, ring, triangle, square) at 10×10 units, each followed by a count in `--glyph-neutral` text. This provides at-a-glance inventory without requiring expansion. The miniature glyphs reuse the same geometry as the full-size glyphs, scaled down — no new shapes introduced.
+
+**What is NOT shown on the aggregate glyph:**
+- Individual structure states (only the roll-up state is shown via stroke color)
+- Turret armed/disarmed breakdown
+- Extension or policy configuration details
+- Fuel levels (these are NWN-level detail, not system-level)
+
+These are intentionally omitted: the aggregate is for situational awareness, not operational detail. The operator expands the system to see structure-level state.
+
+#### State Roll-Up Rule
+
+The aggregate glyph's stroke color reflects the **highest-priority state** among all structures contained in that Solar System, using the same priority hierarchy as §4.2:
+
+1. **Red** (`--state-offline`) — any structure offline or denied event active → aggregate stroke turns red
+2. **Amber** (`--state-warning` / `--state-armed`) — any turret armed, gate restricted, or fuel low → aggregate stroke turns amber
+3. **Muted teal** (`--state-online`) — all structures online, no warnings → aggregate stroke turns teal
+4. **Gray** (`--glyph-neutral`) — no structures reporting state (all idle/unconfigured) → aggregate remains gray
+
+This ensures the operator can scan the Network View and immediately identify which Solar Systems need attention — the same "gray infrastructure, colored exceptions" principle applied at the system level.
+
+**Redundancy (no color-only encoding):** The state roll-up is supplemented by a **status pip** (4-unit filled circle) at the aggregate glyph's 5 o'clock position (same channel as §3.2 structure-level pips). The pip fill matches the roll-up color. Additionally, if the aggregate is in red or amber state, a small badge appears at the NE corner: `"!"` for amber, `"✕"` for red. This satisfies the Do-Not rule §9.9 (no color-only encoding).
+
+#### Cross-System Links in Network View
+
+In Network View, cross-system gate links connect aggregate glyphs (not individual gate glyphs, which are hidden).
+
+- **Single link:** One line from aggregate center to aggregate center, styled per §6.10 cross-system rules (2px, state color).
+- **Multiple links between the same pair of Solar Systems:** If N gate pairs connect two systems, render a single line with a **link count badge** at the midpoint: small rounded-rect badge containing the count (e.g., "×2"). This avoids visual clutter from parallel lines.
+- **Link count is a secondary cue.** The count badge supplements — but does not replace — the structure count row on the aggregate glyph. An operator should not need to count link lines to know how many gates a system has. The aggregate glyph's structure count row is the canonical inventory.
+- **State:** The link uses the highest-priority state among all gate pair links it represents (same roll-up principle as the aggregate glyph).
+
+#### Expansion Trigger
+
+**MVP (click-to-focus):**
+
+1. Operator clicks an aggregate Solar System glyph in Network View.
+2. The clicked system expands in-place: the aggregate glyph dissolves (200ms fade-out), and the full cluster layout (per §6.8–§6.9) fades in (200ms fade-in) at the same canvas position. The system boundary becomes the hover-visible rounded rectangle per §6.9.
+3. All other Solar Systems remain aggregated. Cross-system links re-route from the expanded system's individual gate glyphs to the neighboring aggregated system glyphs.
+4. Clicking the canvas background (outside any system) or pressing Escape collapses the expanded system back to its aggregate glyph (reverse animation: 200ms fade-out clusters, 200ms fade-in aggregate).
+5. Clicking a different aggregate system while one is expanded: the currently expanded system collapses (200ms) and the newly clicked system expands (200ms). These transitions may overlap (cross-fade) to avoid a 400ms dead state.
+
+**Optional (zoom threshold — stretch goal):**
+
+If scroll-zoom is implemented, a zoom threshold may serve as an automatic expansion trigger:
+- Zoom in past `1.5×` on a Solar System → auto-expand.
+- Zoom out past `1.0×` → auto-collapse.
+- Click-to-focus remains available at any zoom level as an override.
+
+This is a P2 stretch feature. Click-to-focus alone is sufficient for the hackathon demo.
+
+#### Transition Animation Rules
+
+| Transition | Duration | Easing | Visual |
+|---|---|---|---|
+| Aggregate → Expanded | 200ms | ease-out | Aggregate glyph opacity 1→0 while cluster elements opacity 0→1. No spatial movement — elements appear at their final layout positions. |
+| Expanded → Aggregate | 200ms | ease-out | Reverse of above. |
+| Cross-system link re-route | 200ms | ease-out | Link endpoint slides from aggregate glyph center to individual gate position (or reverse). Smooth interpolation, not snap. |
+
+All transitions comply with the motion doctrine (§5): ease-out only, no elastic/bounce, total duration within one visual fixation.
+
+#### Defense Mode Cascade in Network View
+
+If Defense Mode is triggered while the topology is in Network View (all systems aggregated), the cascade still produces a visible wave:
+
+1. Origin system's aggregate glyph stroke transitions to amber (200ms).
+2. Cross-system link lines transition to `--link-defense` amber (80ms stagger per link, same as §5.3).
+3. Destination system aggregate glyphs transition to amber stroke (200ms each, staggered 80ms after their link arrives).
+4. Aggregate status pips and badges update to reflect the rolled-up armed state.
+
+The wave reads at a coarser grain — system-level rather than structure-level — but the "one command, rippling across the network" thesis holds. The operator can then click any system to expand it and inspect the per-structure state.
+
+If the operator has one system expanded when Defense Mode fires, that system shows the full structure-level cascade (§5.3 + §6.12). Other systems show the aggregate-level cascade above.
+
+#### Demo Beat Implications
+
+For the hackathon demo, the likely interaction is:
+
+- **Beat 2 (Power Reveal):** Topology opens in **Network View** — two aggregate Solar Systems connected by cross-system links. Immediate read: "I govern two systems." Narrator speaks, then operator clicks one system to expand into System View, revealing the full cluster layout.
+- **Beat 3–5 (Policy, Denial, Revenue):** Topology is in **System View** on the active system where policy is deployed and events occur. Individual gates, turrets, and trade posts are visible for event pulses and badges.
+- **Beat 6 (Defense Mode):** Operator is in **System View** on the origin system. Defense Mode click triggers structure-level cascade in the expanded system + aggregate-level cascade on the distant system (amber stroke transition on the far aggregate). This creates a powerful visual: detailed wave locally, distant system summary turning amber in solidarity. The operator may optionally click the far system post-cascade to inspect it.
+- **Beat 7–8 (Commerce, Command):** System View or Network View — either works. Network View with two amber aggregates (Defense Mode) reads cleanly for the "full command" closing shot.
+
 ---
 
 ## 7. Export & Naming Conventions
@@ -578,8 +688,9 @@ The topology is a mimic diagram of frontier infrastructure. It shows connectivit
 | Link line | `<LinkLine>` | `sourceId`, `targetId`, `state`, `linkType` (`cross-system` \| `intra-system`) |
 | Badge | `<StatusBadge>` | `type`, `value`, `position` |
 | Cluster | `<NodeCluster>` | `networkNodeId`, `children`, `position` |
-| Solar System | `<SolarSystemRegion>` | `systemId`, `clusters`, `position`, `boundaryVisible` |
-| Canvas | `<TopologyCanvas>` | `systems`, `links`, `onNodeClick` |
+| Solar System (expanded) | `<SolarSystemRegion>` | `systemId`, `clusters`, `position`, `boundaryVisible` |
+| Solar System (aggregated) | `<SolarSystemAggregate>` | `systemId`, `state`, `structureCounts`, `position`, `onClick` |
+| Canvas | `<TopologyCanvas>` | `systems`, `links`, `expandedSystemId`, `onNodeClick`, `onSystemClick` |
 
 ---
 
@@ -663,11 +774,11 @@ This matrix verifies that every demo beat's visual requirements are satisfiable 
 | Beat | Name | Topology Visual Requirement | Spec Primitive | Satisfied |
 |---|---|---|---|---|
 | 1 | Pain | None (text-on-black) | n/a | ✓ (no topology visible) |
-| 2 | Power Reveal | Full topology visible, structures resolved, status online, posture "Open for Business" | All glyphs in online/neutral state, links in healthy state, posture label (outside SVG) | ✓ |
+| 2 | Power Reveal | Topology opens in **Network View** (aggregated Solar Systems, cross-system links). Operator clicks to expand one system into **System View** showing full cluster layout. Structures resolved, status online, posture "Open for Business" | Aggregate glyphs (§6.14) with teal stroke (all online) + structure counts. Click-to-expand transition (200ms). Expanded view shows all glyphs per §6.8. Posture label (outside SVG). | ✓ |
 | 3 | Policy | Gate highlighted during policy deploy, Signal Feed update | Hover highlight (120ms), post-deploy state transition to "configured" | ✓ |
 | 4 | Denial | Red pulse on the gate where hostile was denied, "✕" badge | `Pulse/Denied` (300ms red) + `Badge/Denied` (2s hold) | ✓ |
 | 5 | Revenue | Green pulse on the gate where toll collected, "$" badge | `Pulse/Revenue` (200ms green) + `Badge/Revenue` (1.5s hold) | ✓ |
-| 6 | Defense Mode | **Full cascade across 2 Solar Systems:** posture indicator → link lines amber → turrets armed (halo) → gates restricted. Wave propagation 400–600ms, traversing origin system → cross-system links → destination system (§6.12). | Defense Mode cascade protocol (§5.3). Multi-system wave per §6.12. All state transitions, link color shifts, turret halos, gate restriction strokes. | ✓ |
+| 6 | Defense Mode | **Mixed-mode cascade:** expanded origin system shows full structure-level cascade (§5.3 + §6.12). Aggregated destination system shows aggregate-level cascade (stroke → amber, §6.14). Cross-system links turn amber. Wave propagation 400–600ms. | Defense Mode cascade protocol (§5.3). Multi-system wave per §6.12. Aggregate cascade per §6.14. | ✓ |
 | 7 | Commerce | Green pulse on Trade Post where trade settled | `Pulse/Revenue` on Trade Post glyph + `Badge/Revenue` | ✓ |
 | 8 | Command | Full topology visible, all states settled post-Defense Mode, revenue aggregates | Stable topology in Defense Mode state. All amber. Revenue badges cleared (or persistent count badge). | ✓ |
 | 9 | Close | Title card overlays topology (or topology fades to black) | Opacity transition on `<TopologyCanvas>` (300ms fade-out) | ✓ |
@@ -725,6 +836,7 @@ The SVG topology is a visual control surface and is not the primary interaction 
 |---|---|---|---|
 | 2026-03-03 | 1 | Initial specification: symbol grammar, state system, color/motion doctrine, layout rules, demo alignment, accessibility | All |
 | 2026-03-03 | 2 | **Intra-system multi-node topology rules.** Added: multi-NWN-per-Solar-System cluster placement (§6.8), Solar System boundary behavior (§6.9), refined gate link routing with cross-system/intra-system distinction (§6.10), link scaling doctrine (§6.11), demo mode fixed layout for 2-system × 2-NWN topology (§6.12), "Topology Is Diagrammatic" framing (§6.13). Updated: §6.2 hierarchy example for multi-NWN, §6.6 terminology alignment, §5.3 cascade wave cross-system propagation, §7.3 React component mapping. | §5.3, §6.2, §6.6, §6.8–§6.13, §7.3 |
+| 2026-03-03 | 3 | **Semantic zoom and Solar System aggregation.** Added: Network View / System View display modes (§6.14), aggregate Solar System glyph (rounded rectangle + counts + state roll-up), expansion trigger (click-to-focus), aggregate-level Defense Mode cascade, demo beat implications for aggregated view. Updated: §7.3 React component mapping (`SolarSystemAggregate`, `expandedSystemId`), §10 Demo Beat Matrix (beats 2 and 6 updated for mixed-mode view). | §6.14, §7.3, §10 |
 
 ---
 

@@ -6,6 +6,14 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-03 — SVG Topology Spec: Semantic Zoom & Solar System Aggregation
+- **Goal:** Define two-level display model (Network View / System View) so operators see aggregated Solar Systems at network scale and expand into cluster detail on focus.
+- **Decision:** Added §6.14 to svg-topology-layer-spec.md. Aggregate glyph (rounded rectangle, 32×24, structure count row with mini-glyphs, state roll-up via §4.2 priority). Click-to-focus expansion (200ms cross-fade). Aggregate-level Defense Mode cascade. Demo beats 2 and 6 updated for mixed-mode view. Zoom-threshold expansion is a P2 stretch.
+- **Files:** `docs/ux/svg-topology-layer-spec.md` (rev 3)
+- **Diff:** +100 LoC (new §6.14); ~15 LoC modified (§7.3, §10, §12)
+- **Risk:** low (docs only)
+- **Gates:** N/A (docs-only change)
+
 ## 2026-03-03 — SVG Topology Spec: Intra-System Multi-Node Rules
 - **Goal:** Extend SVG topology spec to support multiple Network Nodes per Solar System (typical demo: 2 NWNs × 2 Solar Systems), with explicit gate link routing, boundary behavior, and demo layout constraints.
 - **Decision:** Added §6.8–§6.13 to svg-topology-layer-spec.md. Deterministic N=1/2/3+ cluster placement, implicit Solar System boundary (rounded rect, hover-visible), cross-system vs intra-system link routing with visual weight distinction, link scaling doctrine (diagrammatic not astronomical), and fixed demo layout for 2-system × 2-NWN topology. Defense Mode cascade updated for cross-system wave propagation.
