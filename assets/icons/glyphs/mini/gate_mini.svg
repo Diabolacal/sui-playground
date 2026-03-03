@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width="10" height="10">
+  <!--
+    Mini Gate — Ring (r=3) with dual 20° aperture notches at 3 and 9 o'clock
+    Grid: 10×10, center (5,5)
+    Radius: 3 (outer stroke edge at 3.5 from center → 0.5 margin)
+
+    Notch angle: 20° (increased from 24×24 set's 15°).
+    At r=3/10px, a 15° notch produces a chord gap of only 0.79 units
+    (~0.8px at 10px) which collapses visually. 20° yields a 1-unit gap
+    (~1px at 10px, ~1.2px at 12px) — the minimum for legibility.
+
+    Arc endpoint table (20° notch = ±10° from horizontal):
+      A (right, above):  exact (7.95, 4.48) → snapped (8,   4.5)
+      B (left,  above):  exact (2.05, 4.48) → snapped (2,   4.5)
+      C (left,  below):  exact (2.05, 5.52) → snapped (2,   5.5)
+      D (right, below):  exact (7.95, 5.52) → snapped (8,   5.5)
+
+    Arc 1 (upper): A → B through 12 o'clock  (160°, sweep=0, large-arc=0)
+    Arc 2 (lower): C → D through  6 o'clock  (160°, sweep=0, large-arc=0)
+
+    Pixel-alignment note: snapped endpoints sit ~0.04 units off the
+    r=3 circle (distance ≈ 3.04). SVG arc renderer compensates by
+    micro-shifting the effective center — invisible at ≤16px.
+  -->
+  <path
+    d="M 8,4.5 A 3,3 0 0,0 2,4.5
+       M 2,5.5 A 3,3 0 0,0 8,5.5"
+    stroke="currentColor"
+    fill="none"
+    stroke-width="1"
+    stroke-linecap="round"
+  />
+</svg>
