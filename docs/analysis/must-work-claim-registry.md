@@ -42,8 +42,8 @@
 | CC-GC-15 | `gate::authorize_extension<Auth>` function signature matches world-contracts (HARD STOP) | day1-checklist.md §A1; implementation-plan.md S03 | NO | YES |
 | CC-GC-16 | `gate::issue_jump_permit<Auth>` function signature matches world-contracts (HARD STOP) | day1-checklist.md §A2; implementation-plan.md S03 | NO | YES |
 | CC-GC-17 | `gate::jump_with_permit` function signature matches world-contracts (HARD STOP) | day1-checklist.md §A4; implementation-plan.md S03 | NO | YES |
-| CC-GC-18 | Per-gate dynamic field keys work — compound keys index rules to specific gates | day1-checklist.md §Check 6; implementation-plan.md S06 | NO | PARTIAL |
-| CC-GC-19 | Extension authorization works on both gates in a linked pair | implementation-plan.md S18; demo-beat-sheet.md Beat 3 | **YES** | PARTIAL |
+| CC-GC-18 | Per-gate dynamic field keys work — compound keys index rules to specific gates | day1-checklist.md §Check 6; implementation-plan.md S06 | NO | YES (compound-df-key-validation.md, 6/6 tests PASS) |
+| CC-GC-19 | Extension authorization works on both gates in a linked pair | implementation-plan.md S18; demo-beat-sheet.md Beat 3 | **YES** | YES (extension-integration-e2e-validation.md, 2 gates authorized) |
 | CC-GC-20 | Rule evaluation order: read tribe DF → tribe match check → read toll DF → transfer toll | spec.md §Rule Evaluation; implementation-plan.md S13 | NO | PARTIAL |
 | CC-GC-21 | Hostile pilot jump produces wallet failure response with extractable abort code | demo-beat-sheet.md Beat 4; validation.md §Proof Moment 2 | **YES** (Proof Moment 2) | NO |
 | CC-GC-22 | Toll revenue appears as balance delta on operator/collector address | demo-beat-sheet.md Beat 5; validation.md §Proof Moment 3 | **YES** (Proof Moment 3) | YES |
@@ -58,7 +58,7 @@
 | CC-TP-02 | Seller receives payment without being online or signing | claim-proof-matrix.md §TradePost row 2 | **YES** (Proof Moment 4) | YES |
 | CC-TP-03 | Listing deactivated (`is_active: false`) after purchase | claim-proof-matrix.md §TradePost row 3 | NO | YES |
 | CC-TP-04 | SSU-backed storefront — item withdrawn via extension witness, no OwnerCap sharing | claim-proof-matrix.md §TradePost row 4 | NO | YES |
-| CC-TP-05 | Extension witness pattern enables cross-address withdrawal (`withdraw_item<TradeAuth>()`) | claim-proof-matrix.md §TradePost row 5 | NO | YES |
+| CC-TP-05 | Extension witness pattern enables cross-address withdrawal (`withdraw_item<TradeAuth>()`) | claim-proof-matrix.md §TradePost row 5 | NO | YES (ssu-extension-e2e-validation.md, 7/7 against real world-contracts v0.0.15) |
 | CC-TP-06 | Atomic PTB composition: `splitCoins` + buy call in one tx | claim-proof-matrix.md §TradePost row 6 | NO | YES |
 | CC-TP-07 | Seller balance increases and buyer balance decreases by correct amounts | claim-proof-matrix.md §TradePost row 7; validation.md §Proof Moment 4 | **YES** (Proof Moment 4) | YES |
 | CC-TP-08 | Full storefront lifecycle: publish → setup → authorize → stock → list → buy | claim-proof-matrix.md §TradePost row 8 | NO | YES |
@@ -90,7 +90,7 @@
 
 | ID | Claim | Source | Demo-Critical | Validated |
 |----|-------|--------|:---:|:---:|
-| CC-SP-01 | AdminACL `verify_sponsor(ctx)` checks `tx_context::sponsor()` first, falls back to `sender()` | spec.md §Sponsored Transaction Model | NO | NO |
+| CC-SP-01 | AdminACL `verify_sponsor(ctx)` checks `tx_context::sponsor()` first, falls back to `sender()` | spec.md §Sponsored Transaction Model | NO | YES (admin-acl-enrollment-validation.md, sender fallback confirmed) |
 | CC-SP-02 | AdminACL enrollment accessible on hackathon test server (Branch A) | day1-checklist.md §Check 5 (CRITICAL PATH); assumption-registry.md DR-1 | NO | BLOCKED |
 | CC-SP-03 | Sponsored tx shows sponsor ≠ sender in tx metadata | claim-proof-matrix.md §Evidence Gaps; spec.md §Branch A | NO | BLOCKED |
 | CC-SP-04 | If AdminACL inaccessible, fallback to local devnet demo is viable (Branch C) | day1-checklist.md §Branch C; implementation-plan.md Hard Stop Conditions | NO | YES |

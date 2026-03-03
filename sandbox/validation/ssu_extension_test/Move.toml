@@ -1,0 +1,12 @@
+[package]
+name = "ssu_extension_test"
+edition = "2024"
+
+[dependencies]
+world = { local = "../../../vendor/world-contracts/contracts/world" }
+
+[addresses]
+ssu_extension_test = "0x0"
+
+[environments]
+local = "0x0"

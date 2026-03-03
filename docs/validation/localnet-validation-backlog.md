@@ -40,10 +40,10 @@
 | GC-06 | `jump_with_permit` consumes permit and emits JumpEvent | YES | YES (devnet, lifecycle step 13) |
 | GC-07 | Default jump blocked when extension is set | YES | YES (code analysis + tests) |
 | GC-08 | Policy change is a single PTB (set tribe + toll DFs) | YES | YES (pattern proven) |
-| GC-09 | Per-gate compound DF keys produce independent DFs on shared config | MEDIUM | NOT VALIDATED |
-| GC-10 | Extension wire against real `world` Gate objects (not mocks) | YES | NOT VALIDATED |
-| GC-11 | `issue_jump_permit` works from our extension package against world-contracts Gate | YES | NOT VALIDATED (mock only) |
-| GC-12 | AdminACL sponsor enrollment | HIGH | NOT VALIDATED (requires GovernorCap) |
+| GC-09 | Per-gate compound DF keys produce independent DFs on shared config | MEDIUM | YES (localnet, 6/6 tests pass — `compound-df-key-validation.md`) |
+| GC-10 | Extension wire against real `world` Gate objects (not mocks) | YES | YES (localnet, 4/4 E2E pass — `extension-integration-e2e-validation.md`) |
+| GC-11 | `issue_jump_permit` works from our extension package against world-contracts Gate | YES | YES (localnet, JumpPermit issued cross-package — `extension-integration-e2e-validation.md`) |
+| GC-12 | AdminACL sponsor enrollment | HIGH | PARTIAL — GC-12a (self-enrollment) validated on localnet (`admin-acl-enrollment-validation.md`) |
 | GC-13 | Sponsored transaction with AdminACL passes `verify_sponsor` | HIGH | NOT VALIDATED |
 
 > **v0.0.15 update:** AdminACL removed from owner-path SSU operations (`deposit_by_owner`, `withdraw_by_owner`) and `update_energy_source_connected_*`. GC-12/GC-13 remain relevant for `jump`, `jump_with_permit`, `deposit_fuel`, and other sponsored-path functions.
@@ -57,7 +57,7 @@
 | TP-02 | Seller receives payment without being online | YES | YES (devnet) |
 | TP-03 | Listing deactivated after purchase | YES | YES (devnet) |
 | TP-04 | SSU-backed storefront: `withdraw_item<TradeAuth>` without OwnerCap | YES | YES (mock SSU, devnet) |
-| TP-05 | Extension witness enables cross-address withdrawal from real world-contracts SSU | YES | NOT VALIDATED (uses mock) |
+| TP-05 | Extension witness enables cross-address withdrawal from real world-contracts SSU | YES | YES (localnet, 7/7 tests pass — `ssu-extension-e2e-validation.md`) |
 | TP-06 | Split-coins + buy compose in single PTB | YES | YES (devnet) |
 | TP-07 | Balance deltas verified (seller +, buyer -) | YES | YES (devnet) |
 
@@ -105,7 +105,7 @@
 | INF-07 | `@mysten/sui` TS SDK connects to localnet | YES | YES (posture-switch scripts) |
 | INF-08 | BCS encoding for `vector<u8>` uses `tx.pure.vector('u8', Array.from(...))` | MEDIUM | YES (discovered via debugging) |
 | INF-09 | `waitForTransaction` needed after `signAndExecuteTransaction` | MEDIUM | YES (discovered via debugging) |
-| INF-10 | World-contracts version is stable for March 11 | HIGH | UNVERIFIABLE (depends on upstream) |
+| INF-10 | World-contracts version is stable for March 11 | HIGH | YES — v0.0.15 pinned, signatures verified (`version-pinning-verification.md`) |
 
 ---
 
@@ -130,17 +130,17 @@
 | GC-06 | jump_with_permit consumes | ⭐ DONE | 13-step lifecycle |
 | GC-07 | Default jump blocked | ⭐ DONE | Code analysis |
 | GC-08 | Policy change = single PTB | ⭐ DONE | Pattern proven |
-| **GC-09** | **Per-gate compound DF keys** | **✅ NOW** | Testable with standalone Move module |
-| **GC-10** | **Extension against real Gate objects** | **✅ NOW** | Publish world + our ext on localnet |
-| **GC-11** | **issue_jump_permit from our package** | **✅ NOW** | End-to-end on localnet with world-contracts |
-| GC-12 | AdminACL enrollment | 🔒 BLOCKED | Requires GovernorCap (we own it on localnet) → ✅ NOW for self-owned |
+| **GC-09** | **Per-gate compound DF keys** | **⭐ DONE** | 6/6 tests pass — compound-df-key-validation.md |
+| **GC-10** | **Extension against real Gate objects** | **⭐ DONE** | 4/4 E2E pass — extension-integration-e2e-validation.md |
+| **GC-11** | **issue_jump_permit from our package** | **⭐ DONE** | JumpPermit issued cross-package — extension-integration-e2e-validation.md |
+| GC-12 | AdminACL enrollment | ⭐ DONE (12a) | GC-12a self-enrollment validated — admin-acl-enrollment-validation.md |
 | GC-13 | Sponsored tx with AdminACL | ⏳ MAR11 | Dual-sign flow needs external sponsor infra |
 | GC-14 | Distance proof / link_gates | 🔒 BLOCKED | Requires server-signed proof (game server key) |
 | TP-01 | Cross-address atomic buy | ⭐ DONE | 3 buys validated |
 | TP-02 | Seller offline payment | ⭐ DONE | Devnet validated |
 | TP-03 | Listing deactivated | ⭐ DONE | Devnet validated |
 | TP-04 | SSU-backed buy with mock | ⭐ DONE | 6-tx chain validated |
-| **TP-05** | **withdraw_item from real world SSU** | **✅ NOW** | Need world-contracts SSU on localnet |
+| **TP-05** | **withdraw_item from real world SSU** | **⭐ DONE** | 7/7 tests pass — ssu-extension-e2e-validation.md |
 | TP-06 | Split-coins + buy PTB | ⭐ DONE | Devnet validated |
 | TP-07 | Balance deltas | ⭐ DONE | Devnet validated |
 | PS-01 | Single PTB posture switch | ⭐ DONE | Localnet validated |
@@ -153,8 +153,8 @@
 | ZK-01..05 | ZK Groth16 flows | ⭐ DONE | Devnet validated |
 | ZK-06 | Browser WASM prover | ⏳ MAR11 | Requires frontend build |
 | INF-01..09 | Infrastructure baseline | ⭐ DONE | Multiple localnet runs |
-| **INF-10** | **World-contracts version stability** | **✅ NOW** | Can verify current commit matches expectations |
-| **GC-12a** | **AdminACL self-enrollment on localnet** | **✅ NOW** | We own GovernorCap on localnet |
+| **INF-10** | **World-contracts version stability** | **⭐ DONE** | v0.0.15 pinned, signatures verified — version-pinning-verification.md |
+| **GC-12a** | **AdminACL self-enrollment on localnet** | **⭐ DONE** | Self-enrollment validated — admin-acl-enrollment-validation.md |
 
 ---
 
