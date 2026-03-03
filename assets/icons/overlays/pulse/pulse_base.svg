@@ -15,7 +15,7 @@
       Initial radius: 6 (visible pulse starts just inside glyph boundary)
       Stroke width: 2 (matches glyph stroke weight for visual consistency)
       Fill: none (ring only, not disc)
-      Stroke: currentColor (runtime sets --event-denied or --event-revenue)
+      Stroke: currentColor (runtime sets event-denied or event-revenue token)
 
     The React layer will animate the <circle> r attribute from 6 → 16
     while fading opacity from 1 → 0. At r=16, the pulse ring extends
