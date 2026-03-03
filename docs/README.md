@@ -242,6 +242,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 |------|---------|
 | [ux/civilizationcontrol-ux-architecture-spec.md](ux/civilizationcontrol-ux-architecture-spec.md) | **UX Architecture Specification** — screen hierarchy, gate list/detail, rule composer, linking flow, manual pinning, spatial layer, MVP vs stretch, design principles & upgrade path |
 | [ux/svg-topology-layer-spec.md](ux/svg-topology-layer-spec.md) | **SVG Topology Layer Spec** — symbol grammar (4 structure glyphs), state system (6 overlay channels), color semantics doctrine, motion doctrine & demo timing, layout/stacking rules, export conventions, standards grounding (ISA-101, MIL-STD-2525D, IEC 60073) |
+| [ux/svg-asset-audit.md](ux/svg-asset-audit.md) | **SVG Asset Audit** — strict audit of 19 SVG primitives against spec (viewBox, stroke doctrine, caps/joins, color policy, XML validity, clipping/margins). Design decision registry. Coverage check. |
 
 ## PTB Pattern Library
 
