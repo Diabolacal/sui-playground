@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="8" height="8">
+  <!--
+    Badge: Warning — Circle + exclamation mark (! = stroke + dot)
+    Renders at NWN NE corner on fuel-low / degraded state.
+    Spec §3.3: "!" badge, amber.
+
+    Geometry:
+      Circle: cx=4, cy=4, r=3, stroke-width=1
+      Exclamation stroke: (4, 2) → (4, 4.5), stroke-width=1, butt
+      Exclamation dot: cx=4, cy=6, r=0.5, fill=currentColor
+  -->
+  <circle
+    cx="4" cy="4" r="3"
+    stroke="currentColor"
+    fill="none"
+    stroke-width="1"
+  />
+  <line
+    x1="4" y1="2" x2="4" y2="4.5"
+    stroke="currentColor"
+    stroke-width="1"
+    stroke-linecap="butt"
+  />
+  <circle
+    cx="4" cy="6" r="0.5"
+    fill="currentColor"
+    stroke="none"
+  />
+</svg>
