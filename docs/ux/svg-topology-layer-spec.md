@@ -5,7 +5,7 @@
 > Canonical design specification for the Strategic Network Map symbol grammar, state system, color doctrine, motion protocol, and layout rules.
 > Sources: UX Architecture Spec §9, Spatial Embed Requirements, Demo Beat Sheet v2, Product Vision, Voice & Narrative Guide, Hackathon Emotional Objective.
 > Validated against: ISA-101 HMI design principles, IEC 60073 color coding, MIL-STD-2525D/APP-6(D) symbology, EEMUA 191 alarm management, High Performance HMI (Hollifield/Habibi), Gestalt perceptual principles.
-> Last updated: 2026-03-03 (rev 3 — semantic zoom and solar system aggregation)
+> Last updated: 2026-03-03 (rev 4 — demo video resilience: badge hold extension, link compression advisory)
 
 ---
 
@@ -254,7 +254,7 @@ No elastic/bouncy easing. No spring physics. No overshoot. All motion uses **eas
 | **State transition** (single element) | 200–300ms | ease-out | Structure state change (online↔offline, armed↔disarmed) | Perceptible but not sluggish. ISA-101 recommends state changes complete within one visual fixation (~300ms). |
 | **Event pulse** (toll, denied, trade) | 200ms expand + 200ms fade | ease-out expand, linear fade | Economic or denial event confirmation | Total 400ms visible. The pulse draws the eye to the source structure, then fades to avoid clutter. |
 | **Badge appear** | 150ms | ease-out (scale 0→1) | Event or state triggering a badge | Badges pop in slightly faster than state transitions — they carry urgent contextual data. |
-| **Badge hold** | 1.5–2s | n/a (static hold) | Post-appear persistence | Long enough for the operator to read the badge content. Revenue badges: 1.5s. Denied badges: 2s (denied events are higher-priority). |
+| **Badge hold** | 2.5–3s | n/a (static hold) | Post-appear persistence | Long enough for the viewer to register the badge while attention is split between topology, Signal Feed, and narration. Revenue badges: 2.5s. Denied badges: 3s (denied events are higher-priority and carry proof-moment weight). Previous values (1.5s/2s) were tight for first-time viewers watching a compressed demo video with subtitles. The extended hold remains well within transient-indicator conventions (ISA-101 upper bound ~5s) and does not risk badge pile-up at expected event frequencies (≤1 event per 5s in demo, ≤1 per 2s in production). |
 | **Badge dismiss** | 200ms | ease-out (opacity 1→0) | Hold timer expires | Fade out, not snap out. |
 | **Defense Mode cascade** | 400–600ms total | ease-out per hop, 80–120ms stagger between elements | Defense Mode posture switch | See §5.3 below. |
 | **Link color transition** | 300ms | ease-out | Link state change | Matches single-element state transition timing. |
@@ -441,6 +441,8 @@ Cross-system links are the dominant visual element connecting Solar Systems. The
 - **Curvature for overlap:** When two or more cross-system links share a similar route (angle between link vectors < 15°), apply symmetric lane offsets: offset each link ±8 display units perpendicular to the midpoint vector. This prevents links from stacking into a single indistinguishable line.
 - **Midpoint clearance:** If a cross-system link passes through an intervening Solar System boundary, apply a quadratic Bézier curve with the control point offset perpendicular to the straight-line path. The offset magnitude = `0.3 × distance to boundary center`. This routes the link around the obstacle.
 - **Defense Mode visual dominance:** During Defense Mode, cross-system links shift to `--link-defense` (amber, 3px) and visually dominate the canvas. The thickened stroke (3px vs. 2px neutral) ensures the cross-system network structure reads clearly during the cascade.
+
+> **Video compression advisory:** The 1px width delta (2→3px) is a secondary reinforcement — the amber color shift is the primary visual signal. At typical hackathon video bitrates (YouTube 1080p, ~8 Mbps), fine stroke-width changes can be quantized away. Mitigations: (1) record at 1920×1080 or higher, (2) zoom the topology view to at least 1.5× during Defense Mode beats so link strokes render at ≥4.5 effective pixels, (3) export at ≥12 Mbps CBR before transcoding. Do NOT increase the spec width beyond 3px — at 4px, links would dominate glyph outlines (2px), inverting the visual hierarchy and pulling attention from the structures under command.
 
 #### Intra-System Link Routing
 
@@ -776,8 +778,8 @@ This matrix verifies that every demo beat's visual requirements are satisfiable 
 | 1 | Pain | None (text-on-black) | n/a | ✓ (no topology visible) |
 | 2 | Power Reveal | Topology opens in **Network View** (aggregated Solar Systems, cross-system links). Operator clicks to expand one system into **System View** showing full cluster layout. Structures resolved, status online, posture "Open for Business" | Aggregate glyphs (§6.14) with teal stroke (all online) + structure counts. Click-to-expand transition (200ms). Expanded view shows all glyphs per §6.8. Posture label (outside SVG). | ✓ |
 | 3 | Policy | Gate highlighted during policy deploy, Signal Feed update | Hover highlight (120ms), post-deploy state transition to "configured" | ✓ |
-| 4 | Denial | Red pulse on the gate where hostile was denied, "✕" badge | `Pulse/Denied` (300ms red) + `Badge/Denied` (2s hold) | ✓ |
-| 5 | Revenue | Green pulse on the gate where toll collected, "$" badge | `Pulse/Revenue` (200ms green) + `Badge/Revenue` (1.5s hold) | ✓ |
+| 4 | Denial | Red pulse on the gate where hostile was denied, "✕" badge | `Pulse/Denied` (300ms red) + `Badge/Denied` (3s hold) | ✓ |
+| 5 | Revenue | Green pulse on the gate where toll collected, "$" badge | `Pulse/Revenue` (200ms green) + `Badge/Revenue` (2.5s hold) | ✓ |
 | 6 | Defense Mode | **Mixed-mode cascade:** expanded origin system shows full structure-level cascade (§5.3 + §6.12). Aggregated destination system shows aggregate-level cascade (stroke → amber, §6.14). Cross-system links turn amber. Wave propagation 400–600ms. | Defense Mode cascade protocol (§5.3). Multi-system wave per §6.12. Aggregate cascade per §6.14. | ✓ |
 | 7 | Commerce | Green pulse on Trade Post where trade settled | `Pulse/Revenue` on Trade Post glyph + `Badge/Revenue` | ✓ |
 | 8 | Command | Full topology visible, all states settled post-Defense Mode, revenue aggregates | Stable topology in Defense Mode state. All amber. Revenue badges cleared (or persistent count badge). | ✓ |
@@ -837,6 +839,7 @@ The SVG topology is a visual control surface and is not the primary interaction 
 | 2026-03-03 | 1 | Initial specification: symbol grammar, state system, color/motion doctrine, layout rules, demo alignment, accessibility | All |
 | 2026-03-03 | 2 | **Intra-system multi-node topology rules.** Added: multi-NWN-per-Solar-System cluster placement (§6.8), Solar System boundary behavior (§6.9), refined gate link routing with cross-system/intra-system distinction (§6.10), link scaling doctrine (§6.11), demo mode fixed layout for 2-system × 2-NWN topology (§6.12), "Topology Is Diagrammatic" framing (§6.13). Updated: §6.2 hierarchy example for multi-NWN, §6.6 terminology alignment, §5.3 cascade wave cross-system propagation, §7.3 React component mapping. | §5.3, §6.2, §6.6, §6.8–§6.13, §7.3 |
 | 2026-03-03 | 3 | **Semantic zoom and Solar System aggregation.** Added: Network View / System View display modes (§6.14), aggregate Solar System glyph (rounded rectangle + counts + state roll-up), expansion trigger (click-to-focus), aggregate-level Defense Mode cascade, demo beat implications for aggregated view. Updated: §7.3 React component mapping (`SolarSystemAggregate`, `expandedSystemId`), §10 Demo Beat Matrix (beats 2 and 6 updated for mixed-mode view). | §6.14, §7.3, §10 |
+| 2026-03-03 | 4 | **Demo video resilience pass.** Extended badge hold durations (revenue 1.5s→2.5s, denied 2s→3s) for split-attention viewing conditions. Added video compression advisory to §6.10 cross-system link Defense Mode stroke (keep 3px, document zoom/bitrate mitigations). Updated §10 Demo Beat Alignment Matrix timing references. | §5.2, §6.10, §10 |
 
 ---
 
