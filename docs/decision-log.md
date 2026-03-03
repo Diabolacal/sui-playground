@@ -6,6 +6,24 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-13 — SSU Extension E2E Validation (TP-05): Cross-Package withdraw_item Against Real World-Contracts
+- **Goal:** Validate that a cross-package extension witness (`TradeAuth has drop`) can call `withdraw_item<TradeAuth>()` on a real world-contracts `StorageUnit`, closing the last structural gap for TradePost.
+- **Decision:** All 7 Move unit tests PASS against real world-contracts v0.0.15. Extension withdrawal, cross-player delivery, partial quantity, authorization enforcement, and full trade flow all confirmed.
+- **Files:** `sandbox/validation/ssu_extension_test/` (Move harness: 3 files), `docs/validation/ssu-extension-e2e-validation.md` (report), `docs/validation/localnet-validation-backlog.md` (updated), `docs/analysis/must-work-claim-registry.md` (updated), `docs/README.md` (index)
+- **Diff:** +700 / -30 (new harness + report, backlog/registry updates)
+- **Risk:** Low (sandbox validation, no production code)
+- **Gates:** typecheck N/A  build ✅  smoke ✅ (7/7 tests PASS)
+- **Key findings:**
+  - `withdraw_item<TradeAuth>(ssu, auth, type_id, quantity, ctx)` succeeds from non-owner address with authorized extension
+  - `deposit_to_owned<TradeAuth>()` enables cross-player delivery (seller SSU → buyer SSU)
+  - Partial quantity extraction confirmed (v0.0.15 `quantity: u32` param)
+  - Wrong extension type (`FakeAuth`) aborts at runtime as expected
+  - `parent_id` field correctly populated on minted items
+  - Full trade flow: authorize → stock → withdraw → deliver → verify balances
+  - **CLI workaround discovered:** `sui move test` with world-contracts dependency requires switching active env to one NOT in Move.toml `[environments]` (e.g., `testnet`) to avoid chain hash mismatch with vendor's `"0x0"` placeholder
+- **Risks eliminated:** TP-05 (last remaining "NOW" structural gap from validation backlog). All 6 original "NOW" priority items now DONE.
+- **Follow-ups:** Port TradePost SSU integration to hackathon submission repo on March 11.
+
 ## 2026-03-03 — Submodule Refresh: world-contracts v0.0.15 + builder-documentation b4178c6
 - **Goal:** Update all vendor submodules to latest upstream commits, audit changes, assess CivilizationControl impact.
 - **Decision:** Two submodules updated: world-contracts (v0.0.14 78854fe → v0.0.15 74d30c8) and builder-documentation (6b6fae8 → b4178c6). builder-scaffold, evevault, eve-frontier-proximity-zk-poc unchanged. v0.0.15 contains significant inventory refactor and SSU API changes. Gate/turret/access modules unchanged — core CC extension patterns intact. Breaking call-site changes documented.

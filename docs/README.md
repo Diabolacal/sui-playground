@@ -278,6 +278,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [validation/version-pinning-verification.md](validation/version-pinning-verification.md) | **Version Pinning Verification** — A1-A4 function signatures confirmed at commit 78854fed (v0.0.14; sigs changed in v0.0.15). |
 | [validation/extension-integration-e2e-validation.md](validation/extension-integration-e2e-validation.md) | **Extension Integration E2E** — Full cross-package Auth witness validation. authorize_extension + issue_jump_permit + DF config all PASS on localnet. |
 | [validation/admin-acl-enrollment-validation.md](validation/admin-acl-enrollment-validation.md) | **AdminACL Self-Enrollment** — verify_sponsor sender-fallback confirmed. Self-enrollment enables all admin operations without dual-sign. |
+| [validation/ssu-extension-e2e-validation.md](validation/ssu-extension-e2e-validation.md) | **SSU Extension E2E (TP-05)** — 7/7 PASS. Cross-package withdraw_item, deposit_to_owned, partial quantity, wrong-extension abort all validated against real world-contracts v0.0.15. |
 
 ## Archive
 
