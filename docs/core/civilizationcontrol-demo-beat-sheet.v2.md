@@ -4,9 +4,9 @@
 
 > Competitive demo blueprint for the CivilizationControl hackathon submission video.
 > Arc: Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command
-> Target duration: **3:00** (hard ceiling 3:15)
+> Target duration: **~2:55** (hard ceiling 3:05)
 > Sources: v1 beat sheet, product vision, emotional objective, voice guide, claim-proof matrix, posture-switch validation, judging criteria digest
-> Last updated: 2026-03-03
+> Last updated: 2026-03-03 (competitive refinement pass)
 
 ---
 
@@ -70,9 +70,9 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 *[Screen: black background. White text fades in, one line at a time, matching narration cadence. No terminal. No UI. Just the words.]*
 
-> "Today, configuring one gate policy takes thirteen CLI commands. You have twelve gates."
+> "Configuring one gate takes thirteen commands. You have twelve gates."
 
-*[Beat. Text: "156 commands. No visibility. No alerts. No control."]*
+*[Beat. Text: "No visibility. No alerts. No control."]*
 
 **On-screen:** Stark text-on-black. Optionally: a single raw CLI error screenshot flashes for 1 second before cutting to black again.
 
@@ -93,7 +93,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 *[Hold 2 seconds. Let the interface breathe.]*
 
-> "Every structure you own. Every gate, turret, trade post, and network node. Status, policy, revenue — one sovereign view."
+> "Every structure you own. Gates, turrets, trade posts, network nodes. Status, policy, revenue — one view."
 
 *[Camera moves slowly across the Command Overview: structure registry left, aggregate metrics center, Signal Feed right.]*
 
@@ -164,16 +164,16 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 5 — Revenue (1:18–1:38)
+### Beat 5 — Revenue (1:18–1:36)
 
-**Duration:** 20 seconds
+**Duration:** 18 seconds
 
 **Spoken narration:**
-> "An ally — right tribe — jumps through. Toll collected: five SUI."
+> "An ally — right tribe — jumps through. Five SUI collected."
 
 *[Signal Feed: new entry, green badge. "Jump completed. Toll: 5 SUI. Gate North-3."]*
 
-> "Payment transfers to the operator. Atomic. Irrevocable."
+> "Revenue to the operator."
 
 *[Revenue counter in Command Overview ticks up.]*
 
@@ -193,9 +193,9 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 6 — Defense Mode (1:38–2:05)
+### Beat 6 — Defense Mode (1:36–2:06)
 
-**Duration:** 27 seconds. This is the climax. Give it room.
+**Duration:** 30 seconds. This is the climax. Give it room.
 
 **Spoken narration:**
 > "Threat inbound."
@@ -206,9 +206,11 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 *[Operator clicks "Defense Mode."]*
 
+*[2 seconds of silence. Let the visual dominate.]*
+
 *[Posture indicator shifts: "Open for Business" → "Defense Mode." Gate link lines shift green → amber. Turret icons flip grey → active. All indicators update in a wave across the Command Overview.]*
 
-> "Gates lock to tribe-only. Turrets come online. Every structure responds. One transaction."
+> "Gates locked. Turrets online. One transaction."
 
 *[Signal Feed floods with posture events: "Posture: Defense Mode." "Turret Alpha: ONLINE." "Turret Bravo: ONLINE." Gate status updates.]*
 
@@ -230,20 +232,19 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 7 — Commerce (2:05–2:30)
+### Beat 7 — Commerce (2:06–2:28)
 
-**Duration:** 25 seconds
+**Duration:** 22 seconds
 
 **Spoken narration:**
-> "On the other side of the gate — a trade post."
 
-*[Switch to Trade Post view. Storefront: fuel rods, ammo, repair paste. Prices listed.]*
+*[Cut to Trade Post view. Storefront: fuel rods, ammo, repair paste. Prices listed.]*
 
-> "Fuel rod. Thirty SUI."
+> "A trade post on the far side of the gate. Fuel rod. Thirty SUI."
 
 *[Buyer clicks. Transaction confirms: "Trade settled. Fuel rod acquired."]*
 
-> "Payment to the seller. Item to the buyer. One transaction, no trust required."
+> "Payment to the seller. Item to the buyer. One transaction."
 
 *[Signal Feed: "Trade settled. Fuel Rod. 30 SUI." Revenue counter ticks up again.]*
 
@@ -259,18 +260,18 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 8 — Command (2:30–2:50)
+### Beat 8 — Command (2:28–2:43)
 
-**Duration:** 20 seconds
+**Duration:** 15 seconds
 
 **Spoken narration:**
-> "Toll revenue from the gate. Trade revenue from the storefront. Turrets standing watch. Every structure reporting. All on-chain. All sovereign."
+> "Toll revenue. Trade revenue. Turrets armed. Every structure reporting."
 
 *[Pull back to full Command Overview. Signal Feed scrolling. Revenue totals visible. Posture: Defense Mode. Turrets: ONLINE. Gates: tribe-locked.]*
 
 *[Hold 3 seconds on the full system view.]*
 
-> "Your frontier. Your rules. Your revenue."
+> "Your infrastructure. Under your command."
 
 **On-screen:** Complete Command Overview — the operator's entire infrastructure under command.
 
@@ -281,17 +282,17 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 9 — Close (2:50–3:00)
+### Beat 9 — Close (2:43–2:56)
 
-**Duration:** 10 seconds
+**Duration:** 13 seconds
 
 *[Title card fades in over the Command Overview:]*
 
-> **"CivilizationControl — The command layer for frontier infrastructure."**
+> **CivilizationControl**
 
-*[Hold 5 seconds. No narration. Let the tagline land.]*
+*[Hold. No narration. No subtitle. The demo defined what it is.]*
 
-**On-screen:** Title card. Clean. Final.
+**On-screen:** Name only. Clean. Final.
 
 ---
 
@@ -303,12 +304,12 @@ If stability forces cuts, protect these five. Everything else is expendable.
 | 2 | Power Reveal | 0:18 | 0:38 | 20s |
 | 3 | Policy | 0:38 | 1:00 | 22s |
 | 4 | Denial | 1:00 | 1:18 | 18s |
-| 5 | Revenue | 1:18 | 1:38 | 20s |
-| 6 | Defense Mode | 1:38 | 2:05 | 27s |
-| 7 | Commerce | 2:05 | 2:30 | 25s |
-| 8 | Command | 2:30 | 2:50 | 20s |
-| 9 | Close | 2:50 | 3:00 | 10s |
-| **Total** | | | | **3:00** |
+| 5 | Revenue | 1:18 | 1:36 | 18s |
+| 6 | Defense Mode | 1:36 | 2:06 | 30s |
+| 7 | Commerce | 2:06 | 2:28 | 22s |
+| 8 | Command | 2:28 | 2:43 | 15s |
+| 9 | Close | 2:43 | 2:56 | 13s |
+| **Total** | | | | **2:56** |
 
 ---
 
@@ -465,6 +466,42 @@ If Trade Post UI is not ready, compress to this variant. Same emotional arc, no 
 4. Record Beat 1 (text-on-black, separate)
 5. Record Beat 9 (title card, separate)
 6. Assemble in editor: Beat 1 → 2–8 (live) → 9. Add proof overlays in post.
+
+---
+
+## Appendix C: Competitive Refinement Pass (2026-03-03)
+
+### What Changed
+
+- **Beat 1 — Removed "156 commands" stat.** The narrator says "thirteen commands" and "twelve gates" — the judge multiplies. Spoon-feeding the arithmetic felt like a pitch deck stat. Letting the viewer compute it is engagement, not exposition.
+- **Beat 2 — Cut second "Every" and "sovereign."** "Gates, turrets, trade posts, network nodes" is more percussive than repeating "Every." Removed "sovereign" from narration — the concept is saved for Beat 8 where it's structurally load-bearing. Overuse dilutes authority.
+- **Beat 5 — Cut "Atomic. Irrevocable." → replaced with "Revenue to the operator."** Three words, no jargon. "Atomic" pings as chain-speak to non-crypto judges. The proof overlay shows the delta — no need to assert irrevocability verbally. Duration 20→18s.
+- **Beat 6 — Added 2 seconds of deliberate silence after the click.** The visual transformation must dominate before the narrator speaks. Post-click narration compressed from four sentences to three: "Gates locked. Turrets online. One transaction." Past tense = fait accompli, not description. Duration 27→30s.
+- **Beat 7 — Compressed from 25s to 22s.** Cut "no trust required" (crypto-speak). Merged opening scene-setting with product line. Commerce is now clearly subordinate to Defense Mode in weight.
+- **Beat 8 — Replaced "Your frontier. Your rules. Your revenue." with "Your infrastructure. Under your command."** Closes the loop from Beat 1 ("no control" → "under your command"). The possessive triad was catchy but didn't complete the narrative arc. Cut "All on-chain. All sovereign." — listing chain attributes at the end is crypto-pride, not authority. Duration 20→15s.
+- **Beat 9 — Title card reduced to name only.** "CivilizationControl" — no subtitle. Three minutes defined what it is. Adding a descriptor undercuts the confidence. Duration 10→13s for a longer hold.
+- **Total duration tightened from 3:00 to ~2:56.** Four fewer seconds of judge attention spent. Every surviving second is functional.
+
+### Why Each Improves Judge Impact
+
+- **Removing "156"** → Judge feels smart (they computed it), not sold to. Engagement > exposition.
+- **Silence after Defense Mode click** → First thing judges process after the click is the transformed state, not a narrator explaining it. The moment imprints visually before it's verbalized.
+- **Past-tense narration ("Gates locked")** → Authority. The change already happened. The narrator reports fact, not process.
+- **"Under your command" close** → Completes the pain→power arc explicitly. A judge who skimmed Beats 2–7 still gets the thesis from Beat 1 + Beat 8.
+- **Name-only title card** → Signals maximum confidence. No explanation needed. The demo was the explanation.
+- **Cutting crypto-speak ("atomic," "no trust required")** → Non-crypto judges (game design, UX) hear governance language, not chain language. CivilizationControl wins on player utility, not technical novelty.
+- **2:56 vs 3:00** → Judges watching 30+ demos notice the entry that didn't pad. Tight runtime = respect for their time = implicit competence signal.
+
+### What Was Intentionally NOT Changed (and Why)
+
+- **Beat 1 storytelling ("Your pilots died")** — Verified against EVE Frontier reality: killmails happen, fuel hauling is real, offline gates have consequences. Authentic frontier pain, not manufactured drama.
+- **Beat 3 policy flow** — "You decide who crosses and what they pay" is the most efficient framing possible. Already at maximum compression.
+- **Beat 4 denial language ("No override. No appeal.")** — Already at maximum compression and impact. Changing it would reduce, not improve.
+- **"The gate pays for itself" (Beat 5)** — The single most memorable non-climax line. Reframes infrastructure as revenue engine. Untouched.
+- **"Threat inbound." / "One click." (Beat 6 setup)** — Two words + two words. Maximum tension compression. Not melodramatic in Frontier context where hostile incursions are gameplay.
+- **Five non-negotiable proof moments** — Evidence structure is correct and complete. No proof type added or removed.
+- **Pre-flight checklist and failure fallbacks** — Operational content, not narrative. Already comprehensive.
+- **Fallback variant** — Insurance policy. Independent of primary narrative changes.
 
 ---
 
