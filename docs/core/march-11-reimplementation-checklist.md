@@ -13,8 +13,8 @@
 
 > If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
 
-> **Date:** 2026-02-16 (updated 2026-03-02 with world-contracts v0.0.14 turret implementation + evevault sponsored tx + fuel refactor; environment model to be confirmed March 11)  
-> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02)**  
+> **Date:** 2026-02-16 (updated 2026-03-03 with world-contracts v0.0.15 inventory refactor + AdminACL removal from owner-path SSU + deposit_to_owned + withdraw quantity param; environment model to be confirmed March 11)  
+> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02, 2026-03-03)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
 > **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for module tests; [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) for complete 13-step gate lifecycle with transaction digests
@@ -55,6 +55,18 @@ This document captures everything needed to **reimplement CivilizationControl fr
 > 5. **Builder-scaffold `@evefrontier/dapp-kit`** now references published npm package (`^0.1.0`) instead of local file path. dApp starter is more self-contained.
 > 6. **No pattern-breaking changes for CivilizationControl.** All validated gate/SSU extension/witness patterns remain intact. Turret implementation confirms the same typed witness pattern extends to new assembly types.
 
+> **CHANGES (2026-03-03 submodule refresh — world-contracts v0.0.15, builder-documentation b4178c6):**
+> 1. **INVENTORY REFACTORED: Item/ItemEntry split.** Items now follow a Coin/Balance analogy: `ItemEntry` (at-rest, `copy, drop, store`, no UID, inside `Inventory`) vs `Item` (in-transit, carries UID + `parent_id` + location, created on withdrawal, destroyed on deposit). `parent_id` tracks the originating assembly. **Impact:** `Item` struct has a new `parent_id: ID` field. Deposit validates `parent_id == storage_unit_id` — items withdrawn from SSU-A can only be deposited back to SSU-A.
+> 2. **`withdraw_item<Auth>` signature CHANGED (BREAKING):** Now takes `quantity: u32` + `ctx: &mut TxContext` additional params. Supports partial withdrawals. **Impact on TradePost:** All `withdraw_item<Auth>` call sites must add `quantity` argument. Example: `withdraw_item<TradeAuth>(ssu, character, TradeAuth{}, type_id, quantity, ctx)` instead of `withdraw_item<TradeAuth>(ssu, character, TradeAuth{}, type_id, ctx)`.
+> 3. **`deposit_item<Auth>` now validates parent_id (BREAKING):** Asserts `inventory::parent_id(&item) == storage_unit_id`. Items cannot be deposited into a DIFFERENT SSU than their origin. **Impact on TradePost:** If trade items need to go to buyer's SSU, use new `deposit_to_owned<Auth>` or `transfer::public_transfer` instead.
+> 4. **New `deposit_to_owned<Auth>` function:** Extension-authorized deposit into any player's owned inventory. Target player does NOT need to be tx sender. Creates owned inventory if it doesn't exist. Validates parent_id + tenant. **ENABLES:** Async trading (deliver to buyer's SSU directly), guild hangars, automated rewards.
+> 5. **AdminACL REMOVED from `deposit_by_owner` / `withdraw_by_owner`:** No longer requires shared AdminACL object or sponsored transaction. Just OwnerCap + sender == character_address. `update_energy_source_connected_assembly` and `update_energy_source_connected_storage_unit` also lost AdminACL+ctx params.
+> 6. **`EItemVolumeMismatch` error removed.** Volume is now static per type_id — incoming mismatches silently use stored volume. Replaced by `ETypeIdMismatch` (code 6) and `ESplitQuantityInvalid` (code 7). `ItemEntry::join()` validates same type_id.
+> 7. **dapp-kit docs simplified:** `useSponsoredTransaction` removed from docs. Transaction pattern: `useDAppKit()` from `@mysten/dapp-kit-react`. Full API TypeDoc at `sui-docs.evefrontier.com`. Assembly ID via URL `?tenant=utopia&itemId=...`.
+> 8. **EVE Vault browser extension docs populated:** Chrome install guide, PIN creation, Utopia sign-in flow, dashboard screenshots. Release v0.0.3.
+> 9. **Gate/turret/access modules UNCHANGED** in v0.0.15. All gate extension patterns remain intact.
+> 10. **corpse_gate_bounty updated:** AdminACL param removed, `withdraw_by_owner` call now includes `quantity: 1`.
+
 ---
 
 ## What Was Validated
@@ -86,11 +98,11 @@ Cross-address PTB item transfer risk is **mitigated**. The typed witness extensi
 1. **Extension-based SSU access does NOT require OwnerCap**: `withdraw_item<Auth>()` and `deposit_item<Auth>()` only need the `Auth` witness value and shared object references. No sender check, no OwnerCap.
 2. **Always accesses main inventory**: extension functions use `storage_unit.owner_cap_id` as the dynamic field key, accessing the owner's inventory — not an ephemeral per-caller inventory.
 3. **Existing test proves the pattern**: `test_swap_ammo_for_lens` in `storage_unit_tests.move` validates cross-address extension-mediated inventory operations.
-4. **TradePost is simpler than the swap test**: it avoids `deposit_by_owner`/`withdraw_by_owner` entirely — no OwnerCap needed in the buy path. (**Updated 2026-02-28:** proximity proof also removed from owner-path functions, replaced by AdminACL verify_sponsor.)
+4. **TradePost is simpler than the swap test**: it avoids `deposit_by_owner`/`withdraw_by_owner` entirely — no OwnerCap needed in the buy path. (**Updated 2026-02-28:** proximity proof also removed from owner-path functions, replaced by AdminACL verify_sponsor.) (**Updated 2026-03-03 (v0.0.15):** AdminACL also removed from owner-path functions — just OwnerCap + sender check now. Extension path still requires only Auth witness.)
 5. **Item has `key + store` abilities**: `transfer::public_transfer(item, buyer_address)` is valid after withdrawal.
 6. **Coin payment is trivial**: `Coin<T>` has `key + store`, standard `transfer::public_transfer` to seller.
 7. **Multi-signer PTB does NOT exist on Sui**: confirmed that the extension pattern is the correct (and only viable) path for cross-address atomic trades.
-8. **deposit_item() now merges quantities (2026-02-20)**: When depositing an item with a `type_id` that already exists in the inventory, quantities are merged automatically (confirmed in world-contracts commit `09c2ec2`, still valid at `e508451`). Volumes must match (`EItemVolumeMismatch` error code 5). Simplifies re-stocking — no need to check for existing items.
+8. **deposit_item() now merges quantities (2026-02-20)**: When depositing an item with a `type_id` that already exists in the inventory, quantities are merged automatically via `ItemEntry::join()`. ~~Volumes must match (`EItemVolumeMismatch` error code 5).~~ **Updated 2026-03-03 (v0.0.15):** `EItemVolumeMismatch` removed. Volume is now static per type_id — incoming mismatches silently use stored volume. `ETypeIdMismatch` (code 6) enforces same type_id on join. Simplifies re-stocking.
 
 ### Infrastructure Setup Chain — Risk: GREEN (verbose but mechanical)
 
@@ -223,12 +235,12 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 **Key flow — buyer purchase (single PTB, buyer-signed):**
 1. `trade_post::buy(ssu, character, listing, payment, ctx)` which internally:
-   - Calls `storage_unit::withdraw_item<TradeAuth>(ssu, character, TradeAuth{}, type_id, ctx)` → gets `Item`
+   - Calls `storage_unit::withdraw_item<TradeAuth>(ssu, character, TradeAuth{}, type_id, quantity, ctx)` → gets `Item`
    - Calls `transfer::public_transfer(item, ctx.sender())` → item goes to buyer
    - Calls `transfer::public_transfer(payment, listing.seller)` → payment goes to seller
    - Destroys the `Listing`
 
-**Critical insight:** `withdraw_item<Auth>` needs NO OwnerCap, NO sender check, and accesses the MAIN inventory (keyed by `owner_cap_id`). This is the designed cross-address mechanism.
+**Critical insight:** `withdraw_item<Auth>` needs NO OwnerCap, NO sender check, and accesses the MAIN inventory (keyed by `owner_cap_id`). This is the designed cross-address mechanism. **Updated 2026-03-03 (v0.0.15):** `withdraw_item<Auth>` now takes `quantity: u32` + `ctx: &mut TxContext` params for partial withdrawals. `deposit_item<Auth>` validates `parent_id` — items can only be deposited back to origin SSU. For cross-SSU buyer delivery, use `transfer::public_transfer(item, buyer)` or new `deposit_to_owned<Auth>` function.
 
 **Design decisions:**
 - Listing should be a shared object (enables discovery without off-chain coordination)
@@ -344,7 +356,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 - [ ] Implement `buy()`:
   1. Verify listing matches SSU
   2. Verify payment >= price
-  3. `storage_unit::withdraw_item<TradeAuth>(ssu, character, TradeAuth{}, type_id, ctx)`
+  3. `storage_unit::withdraw_item<TradeAuth>(ssu, character, TradeAuth{}, type_id, quantity, ctx)`
   4. `transfer::public_transfer(item, ctx.sender())`
   5. Handle payment: exact or with change
   6. `transfer::public_transfer(payment, listing.seller)`
@@ -399,7 +411,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | **Distance proof for `link_gates`** | No game server to sign proofs on local devnet | Self-sign: register local keypair as server address, sign your own proof (BCS format, blake2b+ed25519). Use `generate_distance_proof.mjs` as reference. On hackathon test server, check if admin tools provide distance proofs. |
 | **NetworkNode dependency chain** | ~6 sequential admin operations before gates can go online | Script the full setup chain. Consider a single PTB with all setup calls. |
 | **Coin splitting in PTB** | Buyer must split exact payment from gas coin | Use `--split-coins gas [amount]` in CLI, or `txb.splitCoins()` in SDK |
-| **Item leaves SSU as standalone object** | `withdraw_item` creates a freestanding `Item` — not inside any inventory | This is expected for TradePost. Buyer can later deposit into their own SSU. |
+| **Item leaves SSU as standalone object** | `withdraw_item` creates a freestanding `Item` with `parent_id` set to origin SSU — not inside any inventory | This is expected for TradePost. Buyer receives via `transfer::public_transfer`. **Note (v0.0.15):** `deposit_item<Auth>` now validates `parent_id` — standard deposit only accepts items back to origin SSU. Use `deposit_to_owned<Auth>` or direct transfer for buyer delivery. |
 
 ### Environment
 
@@ -444,11 +456,11 @@ Reasons:
 | Module | Path | Key Functions |
 |--------|------|---------------|
 | Gate | `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` | `authorize_extension`, `issue_jump_permit`, `jump_with_permit`, `jump`, `link_gates`, `online` |
-| Storage Unit | `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` | `authorize_extension`, `withdraw_item`, `deposit_item`, `game_item_to_chain_inventory` |
+| Storage Unit | `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` | `authorize_extension`, `withdraw_item`, `deposit_item`, `deposit_to_owned`, `deposit_by_owner`, `withdraw_by_owner`, `game_item_to_chain_inventory` |
 | Network Node | `vendor/world-contracts/contracts/world/sources/network_node/network_node.move` | `anchor`, `online`, `deposit_fuel`, `connect_assemblies` |
 | Access Control | `vendor/world-contracts/contracts/world/sources/access/access_control.move` | Module name is `world::access` (NOT `world::access_control`). Functions: `add_sponsor_to_acl` (GovernorCap-gated), `verify_sponsor`, `create_owner_cap`, `create_owner_cap_by_id`, `delete_owner_cap`. AdminACL is a shared object with `authorized_sponsors` table. |
 | Character | `vendor/world-contracts/contracts/world/sources/character/character.move` | `create_character`, `borrow_owner_cap`, `return_owner_cap` |
-| Inventory | `vendor/world-contracts/contracts/world/sources/primitives/inventory.move` | `withdraw_item`, `deposit_item`, `Item` struct |
+| Inventory | `vendor/world-contracts/contracts/world/sources/primitives/inventory.move` | `withdraw_item`, `deposit_item`, `Item` struct (transit), `ItemEntry` struct (at-rest), `parent_id`, `join` |
 | Sig Verify | `vendor/world-contracts/contracts/world/sources/crypto/sig_verify.move` | `verify_signature`, `derive_address_from_public_key` |
 
 ### Extension Examples (Pattern Templates)
@@ -456,7 +468,7 @@ Reasons:
 | Module | Path | Pattern Demonstrated |
 |--------|------|---------------------|
 | Config | `vendor/world-contracts/contracts/extension_examples/sources/config.move` | Shared config + dynamic field helpers |
-| Gate (tribe) | `vendor/world-contracts/contracts/extension_examples/sources/gate.move` | Simple tribe filter |
+| Gate (tribe) | ~~`vendor/world-contracts/contracts/extension_examples/sources/gate.move`~~ DELETED (v0.0.14) | ~~Simple tribe filter~~ Use builder-scaffold `tribe_permit.move` instead |
 | Tribe Permit | `vendor/world-contracts/contracts/extension_examples/sources/tribe_permit.move` | Tribe permit with shared config |
 | Corpse Bounty | `vendor/world-contracts/contracts/extension_examples/sources/corpse_gate_bounty.move` | Item toll + SSU interaction |
 

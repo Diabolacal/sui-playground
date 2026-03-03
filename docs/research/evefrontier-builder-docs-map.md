@@ -2,9 +2,9 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-03-02 (submodule refresh: 6b6fae8/6bc43a1/687d432/e508451 → 6b6fae8/572e2ca/a409496/78854fe)
+> **Last updated:** 2026-03-03 (submodule refresh: 6b6fae8/572e2ca/a409496/78854fe → b4178c6/572e2ca/a409496/74d30c8)
 > **Source:** https://docs.evefrontier.com/
-> **Internal review by:** AI agent (initial mapping; refreshed 2026-03-02)
+> **Internal review by:** AI agent (initial mapping; refreshed 2026-03-03)
 
 ## Purpose
 
@@ -12,7 +12,7 @@ This document maps official EVE Frontier GitBook builder documentation to intern
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
 
-> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-02 — no change at commit 6b6fae8) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-03 — commit b4178c6) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -27,7 +27,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 | Smart Contracts | `/smart-contracts` | 5 pages | Substantive content (Object Model, Ownership Model now populated); AdminCap → AdminACL rename reflected |
 | Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); **Gate Build page now populated** (end-to-end guide); SSU Build still stub; **Turret now implemented in world-contracts v0.0.14** (docs page may still be TODO) |
 | dApps | `/dapps` | 4 pages + dapp-kit | dApp sub-pages still TODO; `@evefrontier/dapp-kit` SDK now populated (304 lines) |
-| EVE Vault | `/eve-vault` | 4 pages | Introduction done; GAS Faucet, Wallet Game Setup, Browser Extension still TODO |
+| EVE Vault | `/eve-vault` | 4 pages | Introduction done; GAS Faucet, Wallet Game Setup still TODO; **Browser Extension now populated** (install guide + sign-in flow with screenshots) |
 | Troubleshooting | `/troubleshooting` | 3 pages | All TODO |
 | Contributing | `/contributing` | 2 pages | Complete; **repo now public for contributions** |
 
@@ -158,7 +158,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
   - `docs/architecture/sui-playground-capabilities.md` §4.2
-- **Notable clarifications:** Build page (`/gate/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). ~~**Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions.~~ **Updated 2026-02-28:** Discrepancy resolved — world-contracts code now matches docs. `withdraw_by_owner` takes `admin_acl: &AdminACL` and calls `admin_acl.verify_sponsor(ctx)`. Proximity proof removed from all owner-path SSU functions. Our extension path (deposit_item/withdraw_item<Auth>) is unaffected.
+- **Notable clarifications:** Build page (`/gate/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). ~~**Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions.~~ **Updated 2026-02-28:** Discrepancy resolved — world-contracts code now matches docs. `withdraw_by_owner` takes `admin_acl: &AdminACL` and calls `admin_acl.verify_sponsor(ctx)`. Proximity proof removed from all owner-path SSU functions. Our extension path (deposit_item/withdraw_item<Auth>) is unaffected. **Updated 2026-03-03 (v0.0.15):** AdminACL REMOVED from `deposit_by_owner` and `withdraw_by_owner` — now just requires OwnerCap + sender == character_address. Three access modes documented: extension-based (main inventory), extension-to-owned (`deposit_to_owned<Auth>`), owner-direct (owned inventory). New `deposit_to_owned<Auth>` enables extensions to push items into any player's owned inventory. `withdraw_item<Auth>` now takes `quantity: u32` + `ctx` params. Items have `parent_id` for deposit validation.
 
 ### Smart Storage Unit — Build
 
@@ -207,7 +207,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 | Smart Character | `/smart-assemblies/smart-character` | 34 | Character object structure & interactions |
 | Network Node | `/smart-assemblies/network-node` | 77 | Network Node assembly type documentation |
 | Introduction to Modding | `/smart-assemblies/introduction` | 32 | Builder extension onboarding guide — links to Gate, SSU, Turret |
-| @evefrontier/dapp-kit SDK | `/dapp-kit/dapp-kit` | 304 | React SDK for building EVE Frontier dApps on Sui |
+| @evefrontier/dapp-kit SDK | `/dapp-kit/dapp-kit` | ~230 | React SDK for building EVE Frontier dApps on Sui. **Updated 2026-03-03:** Full TypeDoc link added (`sui-docs.evefrontier.com`), `useSponsoredTransaction` hook removed from docs, transaction pattern simplified to `useDAppKit()` from `@mysten/dapp-kit-react`. Peer-dep sync warning added. |
 
 ### Introduction to EVE Vault
 
@@ -218,7 +218,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Overlaps with:**
   - `vendor/evevault/` (full implementation)
   - `docs/architecture/sui-playground-capabilities.md` §5
-- **Notable clarifications:** Mentions LUX and EVE Token as the two primary currencies — not documented in our code. Wallet Game Setup, Browser Extension sub-pages are `//TODO`.
+- **Notable clarifications:** Mentions LUX and EVE Token as the two primary currencies — not documented in our code. ~~Wallet Game Setup, Browser Extension sub-pages are `//TODO`.~~ **Updated 2026-03-03:** Browser Extension page now populated (install guide, PIN, sign-in flow, screenshots). Wallet Game Setup still `//TODO`.
 
 ### Contributing / Work in Progress
 
@@ -262,6 +262,16 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **EVE Vault sponsored transaction flow (NEW 2026-03-02)**: New `sponsoredTransactionHandler.ts` (221 lines) + `SignSponsoredTransaction.tsx` popup (159 lines). Server provides `bcsDataB64Bytes` + `preparationId`; player signs with zkLogin; execution via `/transactions/sponsored/execute` API endpoint. Sponsored tx now fully functional (previously stubbed).
 - **Fuel withdraw refactor (NEW 2026-03-02)**: `fuel::withdraw` now requires `type_id: u64` parameter. Validates fuel type_id matches (was previously just `is_some` check). Supports backend fuel services.
 - **Builder-scaffold dapp-kit published (NEW 2026-03-02)**: `@evefrontier/dapp-kit` switched from local file reference to published npm `^0.1.0`. New `pnpm-workspace.yaml` for build approvals.
+- **Inventory Item/ItemEntry split (NEW 2026-03-03)**: world-contracts v0.0.15 refactors inventory to a Coin/Balance analogy: `ItemEntry` (at-rest, `copy, drop, store`, no UID) vs `Item` (in-transit, wraps UID + `parent_id` + location). Withdrawal creates a fresh `Item` with UID; deposit destroys it. `parent_id` on `Item` is set to the assembly ID on withdrawal and validated on deposit — items can only be deposited back to their origin SSU (or via `deposit_to_owned<Auth>`).
+- **`withdraw_item<Auth>` signature change (BREAKING 2026-03-03)**: Now takes `quantity: u32` + `ctx: &mut TxContext` — supports partial withdrawal. Previously withdrew the entire item stack. All call sites (TradePost, posture-switch validation, extension tests) must add `quantity` arg.
+- **`deposit_item<Auth>` now validates `parent_id` (BREAKING 2026-03-03)**: Asserts `inventory::parent_id(&item) == storage_unit_id`. Items withdrawn from SSU-A can only be deposited back into SSU-A (same assembly). Cross-SSU deposit requires `deposit_to_owned<Auth>` instead.
+- **New `deposit_to_owned<Auth>` function (NEW 2026-03-03)**: Extension-authorized deposit into a player's owned inventory. Target player does NOT need to be the tx sender. Creates owned inventory if it doesn't exist. Enables async trading, guild hangars, automated rewards. Validates `parent_id` and tenant match.
+- **AdminACL removed from owner-path SSU functions (NEW 2026-03-03)**: `deposit_by_owner` and `withdraw_by_owner` no longer take `admin_acl: &AdminACL`. Just OwnerCap + sender == character_address. `update_energy_source_connected_*` functions also lost AdminACL param. Owner operations are fully self-service now.
+- **`EItemVolumeMismatch` error removed (NEW 2026-03-03)**: Replaced by `ETypeIdMismatch` (code 6) and `ESplitQuantityInvalid` (code 7). Volume is now treated as static per type_id — mismatches silently use stored volume.
+- **dapp-kit API simplified (NEW 2026-03-03)**: `useSponsoredTransaction` hook removed from docs. `dAppKit` import changed to `useDAppKit()` from `@mysten/dapp-kit-react`. Full TypeDoc API published at `http://sui-docs.evefrontier.com/`. Assembly ID now via URL param `?tenant=utopia&itemId=...` instead of env var.
+- **EVE Vault browser extension docs populated (NEW 2026-03-03)**: Install guide for Chrome (load unpacked), PIN creation, sign-in flow with Utopia credentials, dashboard screenshots. Links to evevault repo releases (v0.0.3).
+- **corpse_gate_bounty AdminACL removed (NEW 2026-03-03)**: `collect_corpse_bounty` no longer takes `admin_acl` param. `withdraw_by_owner` call updated with `quantity: 1` arg.
+- **Third test character (NEW 2026-03-03)**: `create-character.ts` now supports `PLAYER_C_PRIVATE_KEY` env var for a third character (`GAME_CHARACTER_C_ID`).
 
 ---
 
@@ -269,7 +279,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 
 1. **Before generating chain interaction flows, sponsorship patterns, or deployment steps**, consult this reference map and the linked official docs pages — especially the "Interfacing with the EVE Frontier World" and "World Explainer" pages.
 2. **Code in `vendor/world-contracts` is canonical; GitBook is explanatory.** If behavior described in docs contradicts Move code, the code wins. Flag the discrepancy.
-3. **If official docs show a "Last updated" date newer than this document's review date** (2026-02-28), re-check the relevant pages before finalizing logic.
+3. **If official docs show a "Last updated" date newer than this document's review date** (2026-03-03), re-check the relevant pages before finalizing logic.
 4. **For access control patterns**, consult "Introduction to Smart Contracts" — the capability, witness, and hot-potato patterns are explained with rationale not present in code comments.
 5. **For Sui-specific limits** (object size, field counts, gas), consult the "Constraints" page and cross-reference with Sui protocol docs.
 6. **Do not copy GitBook content into internal docs.** Summarize insights and link to the official page. This avoids drift and respects content ownership.

@@ -6,6 +6,25 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-03 — Submodule Refresh: world-contracts v0.0.15 + builder-documentation b4178c6
+- **Goal:** Update all vendor submodules to latest upstream commits, audit changes, assess CivilizationControl impact.
+- **Decision:** Two submodules updated: world-contracts (v0.0.14 78854fe → v0.0.15 74d30c8) and builder-documentation (6b6fae8 → b4178c6). builder-scaffold, evevault, eve-frontier-proximity-zk-poc unchanged. v0.0.15 contains significant inventory refactor and SSU API changes. Gate/turret/access modules unchanged — core CC extension patterns intact. Breaking call-site changes documented.
+- **Files:** `vendor/world-contracts` (submodule pin), `vendor/builder-documentation` (submodule pin), `docs/research/evefrontier-builder-docs-map.md`, `docs/core/march-11-reimplementation-checklist.md`, `docs/strategy/_shared/hackathon-portfolio-roadmap.md`, `docs/decision-log.md`
+- **Diff:** submodule pins only; +~120 / -~30 across doc updates
+- **Risk:** Medium — v0.0.15 has breaking API changes for TradePost call sites (withdraw_item signature, parent_id validation)
+- **Gates:** typecheck N/A  build N/A (docs + submodule pins only)  smoke N/A
+- **Key findings:**
+  - **Inventory Item/ItemEntry split:** Coin/Balance analogy. `ItemEntry` (at-rest, lightweight) vs `Item` (in-transit, UID + parent_id). Deposit validates parent_id.
+  - **`withdraw_item<Auth>` now takes `quantity: u32` + `ctx`:** Supports partial withdrawals. All TradePost call sites must update.
+  - **`deposit_item<Auth>` validates `parent_id`:** Items can only deposit back to origin SSU. Cross-SSU delivery needs `deposit_to_owned<Auth>` or `transfer::public_transfer`.
+  - **New `deposit_to_owned<Auth>`:** Extension pushes items into any player's owned inventory — enables async TradePost delivery pattern.
+  - **AdminACL removed from owner-path SSU functions:** `deposit_by_owner`/`withdraw_by_owner` just need OwnerCap + sender check. Energy source updates also lost AdminACL.
+  - **dapp-kit docs simplified:** `useSponsoredTransaction` removed, `useDAppKit()` from `@mysten/dapp-kit-react`. TypeDoc at `sui-docs.evefrontier.com`.
+  - **EVE Vault browser extension docs populated:** Install guide, sign-in flow, screenshots.
+  - **Gate, turret, access modules UNCHANGED.** All validated CC extension patterns remain intact.
+- **CC Impact Assessment:** Medium. Extension-based gate control path unaffected. TradePost `withdraw_item<Auth>` call sites need `quantity` param added. `deposit_to_owned<Auth>` opens a new, potentially better TradePost delivery pattern. AdminACL removal from owner-path simplifies SSU owner operations. No re-validation needed for gate lifecycle — only TradePost call-site update on March 11.
+- **Follow-ups:** Update posture-switch validation TS scripts with new withdraw_item quantity param if re-running. Re-verify TradePost pattern with v0.0.15 on March 11. Consider `deposit_to_owned<Auth>` as preferred TradePost buyer delivery mechanism.
+
 ## 2026-03-12 — Localnet Validation Sprint: Extension E2E + AdminACL + Compound DFs + Version Pinning
 - **Goal:** Execute top-priority localnet validations from the Localnet Validation Backlog to de-risk March 11 hackathon build. Prove cross-package extension pattern, AdminACL self-enrollment, compound DF keys, and version pinning.
 - **Decision:** All targeted validations PASS. Four major structural risks eliminated.
