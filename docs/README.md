@@ -261,12 +261,23 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [analysis/fortune-gauntlet-feasibility.md](analysis/fortune-gauntlet-feasibility.md) | **Fortune Gauntlet feasibility** — sequential multi-gate checkpoint race with probabilistic permit issuance via `sui::random`; 5-area validation against world-contracts surfaces, proxy consequence architecture, multi-gate DF config pattern |
 | [analysis/fortune-gauntlet-scoring-report.md](analysis/fortune-gauntlet-scoring-report.md) | **Fortune Gauntlet scoring report** — 8-criterion + 4-area FAQ scoring, comparative analysis vs Fortune Gate (5.38) and standalone Gauntlet (7.8), prize category fit (Weirdest Idea primary), denial rate/checkpoint tuning, kill criteria |
 | [analysis/turret-project-semantics-and-mismatches.md](analysis/turret-project-semantics-and-mismatches.md) | **Turret project semantics and mismatches** — per-project (CC/CB/FG) translation of turret capabilities, 8 classified mismatches, closed-world constraint analysis, workaround assessment |
+| [analysis/must-work-claim-registry.md](analysis/must-work-claim-registry.md) | **Must-work claim registry** — 148 testable claims extracted from 10 source docs + atomic courier experiment, grouped by project (CC GateControl/TradePost/Posture/UI/Demo, ZK GatePass, Fortune Gauntlet, Atomic Courier, Infrastructure), with demo-critical flags and validation status |
 
 ## Sandbox
 
 | File | Purpose |
 |------|---------|
 | [sandbox/posture-switch-localnet-validation.md](sandbox/posture-switch-localnet-validation.md) | **Posture-switch localnet validation** — Strategy A (single PTB) confirmed for both BUSINESS→DEFENSE and DEFENSE→BUSINESS directions; PTB composition, prerequisites, constraints, and reproducibility notes. Referenced by: [product vision](strategy/civilization-control/civilizationcontrol-product-vision.md), [demo beat sheet](core/civilizationcontrol-demo-beat-sheet.md), [spec.md](core/spec.md). |
+
+## Validation
+
+| File | Purpose |
+|------|---------|
+| [validation/localnet-validation-backlog.md](validation/localnet-validation-backlog.md) | **Localnet Validation Backlog** — Prioritized inventory of all must-work claims, classified by localnet-now vs March 11 vs blocked. Top 10 validations with exact commands/scripts. |
+| [validation/compound-df-key-validation.md](validation/compound-df-key-validation.md) | **Compound DF Key Validation** — 6/6 PASS. Confirms per-gate compound keys produce independent DFs on shared config. Validates GC-09. |
+| [validation/version-pinning-verification.md](validation/version-pinning-verification.md) | **Version Pinning Verification** — A1-A4 function signatures confirmed at commit 78854fed (v0.0.14). |
+| [validation/extension-integration-e2e-validation.md](validation/extension-integration-e2e-validation.md) | **Extension Integration E2E** — Full cross-package Auth witness validation. authorize_extension + issue_jump_permit + DF config all PASS on localnet. |
+| [validation/admin-acl-enrollment-validation.md](validation/admin-acl-enrollment-validation.md) | **AdminACL Self-Enrollment** — verify_sponsor sender-fallback confirmed. Self-enrollment enables all admin operations without dual-sign. |
 
 ## Archive
 

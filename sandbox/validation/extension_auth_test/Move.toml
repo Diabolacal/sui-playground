@@ -1,0 +1,13 @@
+[package]
+name = "extension_auth_test"
+edition = "2024"
+
+[dependencies]
+world = { local = "../../../vendor/world-contracts/contracts/world" }
+
+[addresses]
+extension_auth_test = "0x0"
+
+[environments]
+devnet = "4c78adac"
+local = "fc3f5539"

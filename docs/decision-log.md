@@ -6,6 +6,23 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-12 — Localnet Validation Sprint: Extension E2E + AdminACL + Compound DFs + Version Pinning
+- **Goal:** Execute top-priority localnet validations from the Localnet Validation Backlog to de-risk March 11 hackathon build. Prove cross-package extension pattern, AdminACL self-enrollment, compound DF keys, and version pinning.
+- **Decision:** All targeted validations PASS. Four major structural risks eliminated.
+- **Files:** `sandbox/validation/extension_auth_test/` (Move harness), `sandbox/validation/compound_df_key_test/` (Move harness), `docs/validation/` (5 reports), `docs/README.md` (index updated)
+- **Diff:** +800 / -0 (new validation harnesses + reports)
+- **Risk:** Low (sandbox validation, no production code changes)
+- **Gates:** typecheck N/A  build ✅  smoke ✅ (all claims pass on localnet)
+- **Key findings:**
+  - **Extension E2E (Priority 1):** Full bootstrap chain (Character → NetworkNode → Gate → authorize_extension → issue_jump_permit) executed on fresh localnet. Cross-package `XAuth has drop` witness accepted at both compile and runtime. JumpPermit created. DF config pattern works.
+  - **AdminACL (Priority 4):** `add_sponsor_to_acl` + `verify_sponsor` sender fallback confirmed. Single-signer admin operations work without dual-sign.
+  - **Compound DF Keys (Priority 2):** 6/6 Move unit tests pass. Per-gate compound keys (`TribeRuleKey { gate_id }`) produce independent DFs on shared config.
+  - **Version Pinning (Priority 6):** All A1-A4 function signatures confirmed at commit `78854fed` (v0.0.14).
+  - **Sui CLI v1.66.1 quirk:** `[environments]` section required in Move.toml. Workaround for vendor packages: `sui client test-publish --build-env local`.
+  - **PowerShell 5.1 quirk:** String arguments lose quotes when passed to native commands. Workaround: `cmd /c` with doubled quotes.
+- **Risks eliminated:** SR-1 (AdminACL enrollment), SR-2 (cross-package Auth), SR-3 (OwnerCap borrow/return), SR-4 (extension config DFs)
+- **Follow-ups:** Port extension pattern to CivilizationControl repo on March 11. Re-verify against test-server world-contracts. Full GateControl E2E with toll+tribe on test server.
+
 ## 2026-03-11 — Posture-Switch Single-PTB Validation (Localnet)
 - **Goal:** Validate that CivilizationControl Posture Presets (Open for Business ↔ Defense Mode) can be switched in a single PTB on Sui localnet, confirming the "one click" hypothesis.
 - **Decision:** Strategy A (single PTB) confirmed working for both directions. Single PTB composes: `set_posture` + config DF mutations + per-turret borrow/toggle/return cycles. No need for Strategy B (multi-tx fallback). Documented prerequisites (fuel/energy chain, NetworkNode online, extension authorization) and BCS encoding constraints.

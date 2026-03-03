@@ -1,0 +1,69 @@
+/// Minimal gate extension for validating cross-package Auth witness pattern.
+///
+/// Validates:
+/// - E2E-01: Separate package can define Auth witness (XAuth has drop)
+/// - E2E-02: Can call gate::authorize_extension<XAuth> via cross-package generic
+/// - E2E-03: Can call gate::issue_jump_permit<XAuth> with package-minted witness
+/// - E2E-04: Extension config DF pattern (add/read/mutate rules)
+module extension_auth_test::config;
+
+use sui::dynamic_field as df;
+
+/// Shared config object — created at publish, holds DFs for rules.
+public struct ExtensionConfig has key {
+    id: UID,
+}
+
+/// AdminCap to guard config mutations.
+public struct AdminCap has key, store {
+    id: UID,
+}
+
+/// Auth witness type for this extension. Only needs `drop`.
+/// This is the type param for gate::authorize_extension<XAuth>
+/// and gate::issue_jump_permit<XAuth>.
+public struct XAuth has drop {}
+
+fun init(ctx: &mut TxContext) {
+    let admin_cap = AdminCap { id: object::new(ctx) };
+    transfer::transfer(admin_cap, ctx.sender());
+
+    let config = ExtensionConfig { id: object::new(ctx) };
+    transfer::share_object(config);
+}
+
+// === Dynamic field helpers ===
+
+public fun has_rule<K: copy + drop + store>(config: &ExtensionConfig, key: K): bool {
+    df::exists_(&config.id, key)
+}
+
+public fun borrow_rule<K: copy + drop + store, V: store>(config: &ExtensionConfig, key: K): &V {
+    df::borrow(&config.id, key)
+}
+
+public fun add_rule<K: copy + drop + store, V: store>(
+    config: &mut ExtensionConfig,
+    _: &AdminCap,
+    key: K,
+    value: V,
+) {
+    df::add(&mut config.id, key, value);
+}
+
+public fun set_rule<K: copy + drop + store, V: store + drop>(
+    config: &mut ExtensionConfig,
+    _: &AdminCap,
+    key: K,
+    value: V,
+) {
+    if (df::exists_(&config.id, copy key)) {
+        let _old: V = df::remove(&mut config.id, copy key);
+    };
+    df::add(&mut config.id, key, value);
+}
+
+/// Mint an XAuth witness. MUST be public(package) — prevents external forging.
+public(package) fun x_auth(): XAuth {
+    XAuth {}
+}

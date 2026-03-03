@@ -1,0 +1,12 @@
+[package]
+name = "compound_df_key_test"
+edition = "2024.beta"
+
+[dependencies]
+
+[environments]
+devnet = "675e0fe6"
+local = "aaf00ec3"
+
+[addresses]
+compound_df_key_test = "0x0"
