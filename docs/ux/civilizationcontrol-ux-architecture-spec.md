@@ -667,7 +667,7 @@ After Character resolution, the app checks whether gas sponsorship is available 
 |-------|--------|-----------------|
 | Sponsor address known | App configuration | Warning banner: "Sponsorship not configured — some operations require manual gas payment" |
 | Sponsor in AdminACL | On-chain read of AdminACL table | Error banner: "Sponsor not authorized in access control list" |
-| Sponsor not same as player | Structural constraint | Enforced by app (self-sponsorship silently fails on-chain) |
+| Sponsor not same as player | Structural note | *(Correction 2026-03-04: self-sponsorship does NOT silently fail. `verify_sponsor` falls back to `ctx.sender()` when no distinct sponsor is present — validated on localnet 2026-02-28. Enforced by app if distinct sponsor address is desired.)* |
 
 **Degradation behavior:** When sponsorship is unavailable, all read and player-signed operations remain functional. Actions requiring sponsorship (fuel deposit, jump) display as "Unavailable — gas sponsorship required" with a tooltip explaining the constraint. The dashboard does not block or hide — it degrades gracefully per [Design Principle 7 (§12)](#12-design-principles--upgrade-path).
 

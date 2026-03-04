@@ -347,7 +347,7 @@ Minimal web interface with wallet integration:
 - [ ] Entry functions: `post_job`, `accept_job`, `complete_job`, `expire_job`, `cancel_job`
 - [ ] Events for all state transitions
 - [ ] Web UI: job board, create job, accept job, confirm delivery, expire job
-- [ ] Wallet integration (@mysten/dapp-kit)
+- [ ] Wallet integration (`@evefrontier/dapp-kit` + `EveFrontierProvider`; fallback: raw `@mysten/dapp-kit-react`)
 - [ ] Two-scenario demo: happy path + slash
 
 ### Conditional (Ship If Time Allows)

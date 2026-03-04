@@ -571,7 +571,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **Known constraints:**
 - EVE Vault uses **zkLogin** addresses (Enoki-derived), not traditional keypairs. MaxEpoch expiry requires manual re-login during session — potential mid-demo interruption.
-- Sponsored transaction signing through the zkLogin adapter is untested (standard Sui sponsorship involves `GasData` modification — unclear if this composes cleanly with zkLogin flow).
+- ~~Sponsored transaction signing through the zkLogin adapter is untested~~ *(Correction 2026-03-04: EVE Vault v0.0.3 (a409496) fully implements sponsored transaction signing via the `evefrontier:sponsoredTransaction` wallet feature. The extension fetches a pre-built PTB from the EVE Frontier API, user approves in a popup, and the extension signs with zkLogin + submits. Composition with zkLogin is confirmed functional.)*
 
 **Pre-hackathon action:** Build a minimal dApp that connects EVE Vault and signs a simple PTB. Test sponsored tx signing through EVE Vault specifically. Budget: 2-4 hours.
 

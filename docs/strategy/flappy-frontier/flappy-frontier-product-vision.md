@@ -254,7 +254,7 @@ Mon    Tue    Wed    Thu    Fri    Sat    Sun 00:00 UTC
 |-----------|-------------|------------|
 | **Move package** | `Leaderboard` + `Treasury` + `start_run()` + `submit_score()` + `trigger_payout()` | 3–4h |
 | **Canvas 2D game** | Flappy Bird clone: bird, pipes, score counter, collision detection, space theme | 4–6h |
-| **Wallet integration** | `@mysten/dapp-kit` connect flow, entry fee payment, score submission signing | 2–3h |
+| **Wallet integration** | `@evefrontier/dapp-kit` connect flow (`EveFrontierProvider` + `useConnection()`), entry fee payment, score submission signing | 2–3h |
 | **Leaderboard UI** | Top 10 display (addresses, scores, timestamps), current prize pool, epoch countdown | 1–2h |
 | **Demo video** | 30–60 seconds: play → submit → leaderboard updates → show payout mechanism | 1h |
 

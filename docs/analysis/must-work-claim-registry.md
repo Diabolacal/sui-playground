@@ -106,7 +106,7 @@
 | CC-UX-03 | Polling interval 10 seconds; new data visible within 1 poll cycle | validation.md §Runtime Performance; implementation-plan.md S43 | NO | NO |
 | CC-UX-04 | PTB construction < 500ms client-side | validation.md §Runtime Performance | NO | NO |
 | CC-UX-05 | Transaction confirmation < 10 seconds on target network | validation.md §Runtime Performance; demo-beat-sheet.md timing notes | **YES** | NO |
-| CC-UX-06 | Wallet adapter connects successfully via `@mysten/dapp-kit` | day1-checklist.md §Check 10; implementation-plan.md S08 | **YES** | NO |
+| CC-UX-06 | Wallet adapter connects successfully via `@evefrontier/dapp-kit` (`EveFrontierProvider` + `useConnection()`) | day1-checklist.md §Check 10; implementation-plan.md S08 | **YES** | NO |
 | CC-UX-07 | In-game browser loads dApp without CSP or CORS errors | day1-checklist.md §Check 11; implementation-plan.md S36 | NO | NO |
 | CC-UX-08 | In-game viewport renders correctly at 787×1198 portrait | implementation-plan.md S36; assumption-registry.md A-72 | NO | NO |
 | CC-UX-09 | No `crossOriginIsolated`-dependent features fail silently in-game browser | implementation-plan.md S36 | NO | NO |

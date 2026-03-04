@@ -102,9 +102,7 @@
 
 All world-contract admin operations (gate creation, SSU creation, network node operations) require sponsored transactions via `verify_sponsor()`.
 
-**dapp-kit Integration (Updated 2026-03-03):** The builder documentation now documents a `useSponsoredTransaction()` React hook in `@evefrontier/dapp-kit` with a `SponsoredTransactionActions` enum covering: `BRING_ONLINE`, `BRING_OFFLINE`, `EDIT_UNIT`, `LINK_SMART_GATE`, `UNLINK_SMART_GATE`. This provides a higher-level abstraction over the `setSender()` + `setGasOwner()` pattern for common assembly operations.
-
-> **v0.0.15 update:** `useSponsoredTransaction()` hook has been removed from dapp-kit. Sponsored transaction pattern is now via `useDAppKit()` directly.
+**dapp-kit Integration (Updated 2026-03-04):** ~~The `useSponsoredTransaction()` React hook was documented in early `@evefrontier/dapp-kit` versions but was **removed in v0.0.15**.~~ Sponsored transactions are now handled via `useDAppKit()` from `@mysten/dapp-kit-react` for standard signing, or via the EVE Vault extension's custom `evefrontier:sponsoredTransaction` wallet feature for gas-free operations (see EveVault `sponsoredTransactionHandler.ts`).
 
 ---
 

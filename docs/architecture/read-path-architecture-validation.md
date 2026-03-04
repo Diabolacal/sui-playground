@@ -104,7 +104,7 @@ Step 6: Start polling loop (10s interval)
 | **Active policy count** | Derived from gate object state (`extension` field) | Read gate objects, check presence of extension TypeName | **AVAILABLE (polling)** |
 | **Governed structures** | Derived from gate object state | Count gates with non-null `extension` field | **AVAILABLE (polling)** |
 | **Link established/broken** | `GateLinkedEvent` / `GateUnlinkedEvent` (world-contracts v0.0.13) | Subscribe or query by event type | **AVAILABLE (events)** |
-| **Extension authorized** | **NO event** — `authorize_extension()` silent | Must poll `gate.extension` field changes | **POLLING ONLY** |
+| **Extension authorized** | ~~**NO event**~~ `ExtensionAuthorizedEvent` (world-contracts v0.0.15) | ~~Must poll `gate.extension` field changes~~ Subscribe or query by event type | **AVAILABLE (events)** *(Correction 2026-03-04)* |
 | **Combat detected** | `KillmailCreatedEvent` on-chain event | `suix_queryEvents({ MoveEventType: "...::killmail::KillmailCreatedEvent" })`, filter by operator's controlled `solar_system_id` client-side. Includes `loss_type` (SHIP/STRUCTURE), `killer_character_id`, `victim_character_id`. | **AVAILABLE** — informational signal only, no automation |
 
 ### 2.3 Denial Observability
@@ -333,7 +333,7 @@ For the Stillness deployment bonus window (14 days post-submission), deploy Opti
 | Trade completion | No event | Extension must emit `TradeSettledEvent` |
 | Policy denial | Transaction aborts — no event emitted; but failed tx IS queryable by digest, and abort code is deterministic | Demo: observe directly from wallet adapter failure response (zero infra). Production: two-step evaluate pattern or backend relay needed for third-party denial visibility. See §2.3. |
 | Gate link/unlink | `GateLinkedEvent` / `GateUnlinkedEvent` (world-contracts v0.0.13) | Subscribe or query by event type; polling no longer required |
-| Extension authorization | No event | Detect via state polling (compare `extension` field between polls) |
+| Extension authorization | ~~No event~~ `ExtensionAuthorizedEvent` (v0.0.15) | ~~Detect via state polling~~ Subscribe or query by event type *(Correction 2026-03-04)* |
 | Tribe change | No event | Detect via state polling (`character.tribe_id`) — low priority |
 
 ### 6.3 Unknowns Resolvable Only on Hackathon Test Server (March 11)

@@ -51,7 +51,7 @@ COMMANDS:
 
 WARNINGS:
   - authorize_extension uses swap_or_fill: silently REPLACES any existing extension
-  - No event is emitted for extension changes (governance concern)
+  - ~~No event is emitted for extension changes~~ *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent` on Gate, SSU, and Turret)*
   - OwnerCap MUST be returned in the same PTB (hot-potato while borrowed)
   - AUTH_TYPE must have `drop` ability
 ```

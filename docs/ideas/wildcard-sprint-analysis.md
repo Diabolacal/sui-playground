@@ -30,7 +30,7 @@
 
 **Events (indexable signals):**
 - 27+ distinct event types across gate, SSU, inventory, energy, fuel, killmail, character
-- **Critical gap:** NO event emitted for `authorize_extension` changes
+- ~~**Critical gap:** NO event emitted for `authorize_extension` changes~~ *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent` on Gate, SSU, and Turret. No longer a gap.)*
 - Rich signals: JumpEvent, ItemDepositedEvent, ItemWithdrawnEvent, KillmailCreatedEvent, FuelEvent
 
 **Unusual Surfaces Most Builders Will Miss:**

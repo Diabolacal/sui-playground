@@ -52,7 +52,7 @@ Turrets are game-engine-created assemblies. Most creation flows (`anchor`, `shar
 | E-01 | authorize_extension sets type | ENVIRONMENT-BLOCKED | Requires a shared Turret and its `OwnerCap<Turret>`, both created by `anchor`. |
 | E-02 | Wrong OwnerCap rejected | ENVIRONMENT-BLOCKED | Requires two Turrets and their OwnerCaps to test mismatch — all from game-engine `anchor`. |
 | E-03 | swap_or_fill replaces existing extension | ENVIRONMENT-BLOCKED | Requires an already-extended Turret plus OwnerCap. |
-| E-04 | No event on extension change | ENVIRONMENT-BLOCKED | Requires running E-03; same object dependencies. |
+| E-04 | ~~No event on extension change~~ *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent`)* | ENVIRONMENT-BLOCKED | Requires running E-03; same object dependencies. |
 | L-01 | online() transitions turret | ENVIRONMENT-BLOCKED | Requires Turret, `NetworkNode`, `EnergyConfig`, OwnerCap — all game-engine-provisioned. |
 | L-02 | Wrong NetworkNode rejected | ENVIRONMENT-BLOCKED | Requires Turret plus multiple NetworkNodes — game-engine objects. |
 | L-03 | Wrong OwnerCap rejected | ENVIRONMENT-BLOCKED | Requires Turret plus mismatched OwnerCap — both from `anchor`. |
@@ -117,10 +117,10 @@ Turrets are game-engine-created assemblies. Most creation flows (`anchor`, `shar
 |----|-------|-------|-----------------|--------|------------|
 | E-01 | authorize_extension sets type | `turret::authorize_extension<TurretAuth>(turret, owner_cap)` | `turret.extension = Some(TypeName)` | ENVIRONMENT-BLOCKED | ALL |
 | E-02 | Wrong OwnerCap rejected | authorize_extension with mismatched OwnerCap | Abort code 0 (`ETurretNotAuthorized`) | ENVIRONMENT-BLOCKED | ALL |
-| E-03 | swap_or_fill replaces existing extension | authorize_extension with different Auth type on same turret | Extension silently replaced, NO event | ENVIRONMENT-BLOCKED | CC |
-| E-04 | No event on extension change | Perform E-03 | Zero extension-change events in tx effects | ENVIRONMENT-BLOCKED | CC |
+| E-03 | swap_or_fill replaces existing extension | authorize_extension with different Auth type on same turret | Extension silently replaced; `ExtensionAuthorizedEvent` emitted (v0.0.15) | ENVIRONMENT-BLOCKED | CC |
+| E-04 | ~~No event on extension change~~ `ExtensionAuthorizedEvent` emitted (v0.0.15) | Perform E-03 | `ExtensionAuthorizedEvent` in tx effects with `assembly_id` + `extension_type` | ENVIRONMENT-BLOCKED | CC |
 
-> **CC governance note:** Extension can be silently swapped. Off-chain detection requires polling `turret.extension` field.
+> **CC governance note:** Extension replacement emits `ExtensionAuthorizedEvent` (v0.0.15). ~~Off-chain detection requires polling `turret.extension` field.~~ Event subscription is now sufficient.
 
 ---
 

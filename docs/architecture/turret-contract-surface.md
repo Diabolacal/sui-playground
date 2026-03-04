@@ -140,7 +140,7 @@ Constants: `STARTED_ATTACK_WEIGHT_INCREMENT = 10000`, `ENTERED_WEIGHT_INCREMENT 
 | `TurretCreatedEvent` | `turret_id, turret_key, owner_cap_id, type_id` | `anchor()` |
 | `PriorityListUpdatedEvent` | `turret_id, priority_list: vector<TargetCandidate>` | Default `get_target_priority_list` only |
 
-**Missing events:** `authorize_extension` emits no event (same as gate). Extension-path targeting emits no world-module event (extension must emit its own).
+**Missing events:** ~~`authorize_extension` emits no event (same as gate).~~ *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent` on Gate, SSU, and Turret.)* Extension-path targeting emits no world-module event (extension must emit its own).
 
 ---
 

@@ -36,7 +36,7 @@
 
 **Emit sites:** 4 (GateCreatedEvent ×1, GateLinkedEvent ×1, GateUnlinkedEvent ×1, JumpEvent ×1).
 
-**Key observation:** `JumpEvent` fires for BOTH default jump and extension-gated jump. This is the primary gate traversal evidence. However, there is **no event for extension authorization, permit issuance, or permit denial**.
+**Key observation:** `JumpEvent` fires for BOTH default jump and extension-gated jump. This is the primary gate traversal evidence. However, there is **no event for ~~extension authorization,~~ permit issuance, or permit denial**. *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent` to gate.move. Permit issuance and denial still have no events.)*
 
 ---
 
@@ -189,14 +189,14 @@
 ## B) Missing Events — Critical for UI/Demo
 
 ### 1. Gate extension authorizes or denies a jump?
-**NO EVENT.** `authorize_extension<Auth>()` in gate.move calls `swap_or_fill` silently — no emit. `issue_jump_permit<Auth>()` creates a `JumpPermit` object and transfers it, but **emits no event**. Denial is a `MoveAbort` (no events on abort). The only event is `JumpEvent` which fires AFTER successful jump — it doesn't distinguish default vs. extension-gated jumps.
+**NO EVENT.** ~~`authorize_extension<Auth>()` in gate.move calls `swap_or_fill` silently — no emit.~~ *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent` — emitted by `authorize_extension()` on Gate, SSU, and Turret.)* `issue_jump_permit<Auth>()` creates a `JumpPermit` object and transfers it, but **emits no event**. Denial is a `MoveAbort` (no events on abort). The only event is `JumpEvent` which fires AFTER successful jump — it doesn't distinguish default vs. extension-gated jumps.
 
-**Gap severity: HIGH.** For CivilizationControl, there's no on-chain event distinguishing "ally passed with permit" from "anyone jumped via default gate." The `JumpEvent` fires for both paths identically.
+**Gap severity: ~~HIGH~~ MEDIUM.** Extension authorization is now observable. For CivilizationControl, there's still no on-chain event distinguishing "ally passed with permit" from "anyone jumped via default gate." The `JumpEvent` fires for both paths identically.
 
 ### 2. Extension registration (`authorize_extension`)?
-**NO EVENT.** `authorize_extension<Auth>()` on Gate, SSU, and Turret all silently set `extension.swap_or_fill()` with no event emission.
+~~**NO EVENT.** `authorize_extension<Auth>()` on Gate, SSU, and Turret all silently set `extension.swap_or_fill()` with no event emission.~~ *(Correction 2026-03-04: v0.0.15 added `ExtensionAuthorizedEvent` to all three assembly types. Fields: `assembly_id`, `extension_type`.)*
 
-**Gap severity: MEDIUM.** Policy deployment has no on-chain event. The only proof is reading the object's `extension` field post-transaction.
+**Gap severity: ~~MEDIUM~~ RESOLVED.** Policy deployment is now observable via `ExtensionAuthorizedEvent`.
 
 ### 3. Toll collection?
 **NO EVENT from world-contracts.** Toll is entirely a CC extension responsibility. The world-contracts gate module has no toll/fee mechanism at all (confirmed by prior research). CC extension code must emit its own toll events.
@@ -267,7 +267,7 @@
 ### Requires Object State Reads (`devInspectTransactionBlock` or `getObject`)
 | State | Why | How to Query |
 |---|---|---|
-| Current extension type on gate/SSU/turret | No event on `authorize_extension` | `getObject` → read `extension` field |
+| Current extension type on gate/SSU/turret | ~~No event on `authorize_extension`~~ `ExtensionAuthorizedEvent` added in v0.0.15 | `getObject` → read `extension` field, or subscribe to `ExtensionAuthorizedEvent` |
 | Current inventory contents | Events give history; need snapshot for "what's in the SSU now" | `devInspectTransactionBlock` on view functions |
 | Character tribe | No event on `update_tribe` | `getObject` → read `tribe_id` field |
 | Gate link status | Events give history, but could be linked/unlinked since | `getObject` → read `linked_gate_id` field |
