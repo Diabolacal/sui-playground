@@ -4,7 +4,7 @@
 
 Production narration direction for the CivilizationControl hackathon demo video. Governs vocal delivery, pacing, silence windows, and TTS engine configuration for ElevenLabs Eleven v3.
 
-**Status:** v1.1 — 2026-03-03
+**Status:** v1.2 — 2026-03-04 (gameplay/currency realism pass)
 **Canonical source:** [Demo Beat Sheet v2](../core/civilizationcontrol-demo-beat-sheet.md)
 **Voice doctrine:** [Voice & Narrative Guide](../strategy/civilization-control/civilizationcontrol-voice-and-narrative.md)
 **Emotional target:** [Hackathon Emotional Objective](../strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md)
@@ -130,9 +130,9 @@ Do not select a specific voice. Select against these profile characteristics:
 |---|---|---|---|---|---|---|
 | **1 — Pain** | 0:00–0:18 | Grave, measured — stating facts about loss, not dramatizing | Slow-measured. Each sentence is a separate weight. | 80 | 10–15 | 300ms between sentences. 500ms before "Configuring one gate takes thirteen commands." |
 | **2 — Power Reveal** | 0:18–0:38 | Calm authority. The solution exists. It is not being introduced — it is being revealed. | Measured, unhurried. Hold after "CivilizationControl." | 80 | 0–5 | 1500ms silence after "CivilizationControl." 300ms between structure types in enumeration. |
-| **3 — Policy** | 0:38–1:00 | Neutral-operational. Describing a governance action. | Slightly clipped — action sequence, not reflection. | 80 | 0–5 | 200ms between "Tribe filter: only Tribe 7" and "Toll: five SUI per jump." 400ms before "One action." |
+| **3 — Policy** | 0:38–1:00 | Neutral-operational. Describing a governance action. | Slightly clipped — action sequence, not reflection. | 80 | 0–5 | 200ms between "Tribe filter: only Tribe 7" and "Toll: five EVE per jump." 400ms before "One action." |
 | **4 — Denial** | 1:00–1:18 | Cold-precise. The system acted. The narrator reports the outcome. | Measured. "Denied" lands with zero inflection change. | 85 | 0 | 500ms between "Denied." and "The chain enforced it." 300ms before "No override. No appeal." |
-| **5 — Revenue** | 1:18–1:36 | Neutral-factual. Revenue is stated, not celebrated. | Steady. No acceleration when toll is mentioned. | 80 | 0–5 | 200ms after "Five SUI collected." 400ms before "The gate pays for itself." |
+| **5 — Revenue** | 1:18–1:36 | Neutral-factual. Revenue is stated, not celebrated. | Steady. No acceleration when toll is mentioned. | 80 | 0–5 | 200ms after "Five EVE collected." 400ms before "The gate pays for itself." |
 | **6 — Defense Mode** | 1:36–2:06 | Restrained gravity. The climax is the silence, not the voice. | Slow. Deliberate. Each word in the post-silence line is isolated. | 85 | 0 | **See §5 for full Defense Mode timing spec.** |
 | **7 — Commerce** | 2:06–2:28 | Neutral-operational. Commerce is subordinate to Defense Mode. | Slightly faster than Beat 6 — returning to operational cadence. | 80 | 0–5 | 200ms between trade description sentences. |
 | **8 — Command** | 2:28–2:43 | Authoritative finality. Closing the arc. | Slow-measured. The final line is the slowest delivery in the demo. | 85 | 0 | 500ms before "Your infrastructure. Under your command." Slight deceleration on "Under your command." |
@@ -166,21 +166,22 @@ The following script preserves the canonical narration from the Beat Sheet. Anno
 ```
 //NOTE: Speed 0.95. Stability 80. Style exaggeration 10-15.//
 
-You run twelve gates across three systems on EVE Frontier…
+You run nine gates linking five systems on EVE Frontier…
 Last night, two went offline. Nobody told you.
-Hostiles used the gap.
-Your pilots died hauling fuel through territory you thought you controlled.
+Your pilots rerouted.
+Hostiles caught them hauling fuel through territory you thought you controlled.
 
 //SILENCE 0.5s//
 
-Configuring one gate takes thirteen commands… You have twelve gates.
+Configuring one gate takes thirteen commands… You have nine gates.
 ```
 
 **Delivery notes:**
 - No audio tags. The gravity comes from content, not vocal affect.
 - Ellipsis after "EVE Frontier" creates a natural breath before the bad news arrives.
 - "Nobody told you." — Flat statement. No sympathy inflection.
-- "Your pilots died" — Same register as the preceding sentences. Do not drop pitch or slow down. The lack of vocal change is the emotional weight.
+- "Your pilots rerouted." — Same register as the preceding sentences. Sets up the consequence without editorializing.
+- "Hostiles caught them" — Present-tense impact. No vocal dramatization. The content carries the weight.
 - Ellipsis after "thirteen commands" lets the viewer multiply.
 
 ---
@@ -213,14 +214,14 @@ Status, policy, revenue — one view.
 
 You decide who crosses and what they pay.
 
-Tribe filter — only Tribe Seven. Toll — five SUI per jump.
+Tribe filter — only Tribe Seven. Toll — five EVE per jump.
 
 One action. Two rules. Deployed on-chain.
 ```
 
 **Delivery notes:**
 - "You decide" — No emphasis on "you." The operator's authority is assumed, not highlighted.
-- Number normalization: "7" written as "Seven" to prevent TTS ambiguity. "5 SUI" written as "five SUI" — v3 handles small numerals well but explicit spelling is safer.
+- Number normalization: "7" written as "Seven" to prevent TTS ambiguity. "5 EVE" written as "five EVE" — v3 handles small numerals well but explicit spelling is safer.
 - "One action. Two rules. Deployed on-chain." — Three separate declarative statements. Period after each. Equal cadence. No acceleration. No emphasis on "on-chain."
 
 ---
@@ -250,7 +251,7 @@ Denied. The chain enforced it. No override. No appeal.
 ```
 //NOTE: Speed 0.95. Stability 80. Style exaggeration 0-5.//
 
-An ally — right tribe — jumps through. Five SUI collected.
+An ally — right tribe — jumps through. Five EVE collected.
 
 Revenue to the operator.
 
@@ -291,14 +292,14 @@ Gates locked. Turrets online. One transaction.
 ```
 //NOTE: Speed 0.95. Stability 80. Style exaggeration 0-5.//
 
-A trade post on the far side of the gate… Fuel rod. Thirty SUI.
+A trade post on the far side of the gate… A thousand Eupraxite. Ten EVE.
 
 Payment to the seller. Item to the buyer. One transaction.
 ```
 
 **Delivery notes:**
 - Ellipsis after "gate" creates a scene-setting pause.
-- "Fuel rod. Thirty SUI." — Clipped. Product and price. No elaboration.
+- "A thousand Eupraxite. Ten EVE." — Clipped. Product and price. No elaboration. "Eupraxite" pronounced "you-PRAX-ite."
 - "Payment to the seller. Item to the buyer." — Parallel structure, equal weight. No emphasis on either actor.
 - "One transaction." — Same cadence as Beat 3's "Deployed on-chain" and Beat 6's "One transaction." The repetition is structural, not accidental. The narrator's delivery must be identical each time — the viewer recognizes the pattern subconsciously.
 
@@ -439,7 +440,7 @@ Complete before generating any final narration audio.
 | 2 | Stability slider set to 80 (baseline) | ☐ |
 | 3 | Speed set to 0.92 (baseline, adjust per beat) | ☐ |
 | 4 | Style exaggeration set to 0 (baseline, Beat 1 may use 10–15) | ☐ |
-| 5 | All numerals written as words in script ("Seven," "five SUI," "thirteen") | ☐ |
+| 5 | All numerals written as words in script ("Seven," "five EVE," "thirteen," "A thousand") | ☐ |
 | 6 | "CivilizationControl" pronunciation verified — all syllables articulated | ☐ |
 | 7 | "SUI" pronunciation verified — rhymes with "sweet," not "sue-ee" | ☐ |
 | 8 | Test generation: Beat 4 "Denied." — confirm flat delivery, no emotional coloring | ☐ |
@@ -471,6 +472,8 @@ If using ElevenLabs pronunciation dictionary feature, include these entries:
 | Grapheme | Alias/Phoneme | Reason |
 |---|---|---|
 | SUI | "SWEE" | Prevent "SOO-ee" or "SOO-eye" |
+| EVE | "EEV" | Prevent "EH-vee" — single syllable, rhymes with "leave" |
+| Eupraxite | "you-PRAX-ite" | Smart material item name — stress on second syllable |
 | CivilizationControl | "Civilization Control" | Ensure compound word is articulated as two words with brief juncture |
 | SSU | "S.S.U." | Spell out acronym — prevent "sue" |
 | NWN | "N.W.N." | Spell out acronym |

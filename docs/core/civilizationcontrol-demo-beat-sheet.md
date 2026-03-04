@@ -6,7 +6,7 @@
 > Arc: Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command
 > Target duration: **~2:55** (hard ceiling 3:05)
 > Sources: v1 beat sheet, product vision, emotional objective, voice guide, claim-proof matrix, posture-switch validation, judging criteria digest
-> Last updated: 2026-03-03 (competitive refinement pass)
+> Last updated: 2026-03-04 (gameplay/currency realism pass)
 
 ---
 
@@ -66,11 +66,11 @@ If stability forces cuts, protect these five. Everything else is expendable.
 **Duration:** 18 seconds
 
 **Spoken narration:**
-> "You run twelve gates across three systems on EVE Frontier. Last night, two went offline. Nobody told you. Hostiles used the gap. Your pilots died hauling fuel through territory you thought you controlled."
+> "You run nine gates linking five systems on EVE Frontier. Last night, two went offline. Nobody told you. Your pilots rerouted. Hostiles caught them hauling fuel through territory you thought you controlled."
 
 *[Screen: black background. White text fades in, one line at a time, matching narration cadence. No terminal. No UI. Just the words.]*
 
-> "Configuring one gate takes thirteen commands. You have twelve gates."
+> "Configuring one gate takes thirteen commands. You have nine gates."
 
 *[Beat. Text: "No visibility. No alerts. No control."]*
 
@@ -120,9 +120,9 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 *[Click into a gate. Policy panel opens. Two rule slots: Tribe Filter and Toll.]*
 
-> "Tribe filter: only Tribe 7. Toll: five SUI per jump."
+> "Tribe filter: only Tribe 7. Toll: five EVE per jump."
 
-*[Operator selects Tribe 7. Sets toll to 5 SUI. Clicks "Deploy Policy."]*
+*[Operator selects Tribe 7. Sets toll to 5 EVE. Clicks "Deploy Policy."]*
 
 > "One action. Two rules. Deployed on-chain."
 
@@ -169,9 +169,9 @@ If stability forces cuts, protect these five. Everything else is expendable.
 **Duration:** 18 seconds
 
 **Spoken narration:**
-> "An ally — right tribe — jumps through. Five SUI collected."
+> "An ally — right tribe — jumps through. Five EVE collected."
 
-*[Signal Feed: new entry, green badge. "Jump completed. Toll: 5 SUI. Gate North-3."]*
+*[Signal Feed: new entry, green badge. "Jump completed. Toll: 5 EVE. Gate North-3."]*
 
 > "Revenue to the operator."
 
@@ -185,7 +185,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 - Tx digest of tolled jump
 - `TollCollectedEvent` (CC extension event)
 - `JumpEvent` (world-contracts event)
-- Balance delta: operator +5 SUI
+- Balance delta: operator +5 EVE
 
 **Purpose:** Same policy, opposite outcome. The gate discriminates and generates revenue. "The gate pays for itself" — six words that reframe infrastructure as an asset, not a cost.
 
@@ -242,22 +242,22 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 **Spoken narration:**
 
-*[Cut to Trade Post view. Storefront: fuel rods, ammo, repair paste. Prices listed.]*
+*[Cut to Trade Post view. Storefront: Eupraxite, fuel, repair paste. Prices listed.]*
 
-> "A trade post on the far side of the gate. Fuel rod. Thirty SUI."
+> "A trade post on the far side of the gate. A thousand Eupraxite. Ten EVE."
 
-*[Buyer clicks. Transaction confirms: "Trade settled. Fuel rod acquired."]*
+*[Buyer clicks. Transaction confirms: "Trade settled. Eupraxite acquired."]*
 
 > "Payment to the seller. Item to the buyer. One transaction."
 
-*[Signal Feed: "Trade settled. Fuel Rod. 30 SUI." Revenue counter ticks up again.]*
+*[Signal Feed: "Trade settled. 1,000 Eupraxite. 10 EVE." Revenue counter ticks up again.]*
 
 **On-screen:** Trade Post storefront → Buy → confirmation → Signal Feed + revenue update.
 
 **Evidence overlay (post-production):**
 - Tx digest of buy
 - `TradeSettledEvent` (CC extension event)
-- Balance deltas: buyer −30 SUI, seller +30 SUI
+- Balance deltas: buyer −10 EVE, seller +10 EVE
 - Listing state: `is_active: true → false`
 
 **Purpose:** Close the economic loop. Gate toll drove traffic. Commerce captured demand. The operator profits from both sides. Infrastructure → governance → revenue.
@@ -325,7 +325,7 @@ Every major claim has a corresponding on-chain evidence moment.
 |---|---|---|---|
 | 3 — Policy | Governance deployed in one action | Tx digest + gate object with extension + 2 DF rules | Digest badge + before/after state |
 | 4 — Denial | Hostile blocked by chain enforcement | Failed tx digest + MoveAbort `(tribe_permit, 0)` | Red overlay: digest + abort code |
-| 5 — Revenue | Toll revenue flows to operator atomically | Tx digest + `TollCollectedEvent` + balance delta (+5 SUI) | Green overlay: digest + balance |
+| 5 — Revenue | Toll revenue flows to operator atomically | Tx digest + `TollCollectedEvent` + balance delta (+5 EVE) | Green overlay: digest + balance |
 | 6 — Defense Mode | Infrastructure-wide state change, single tx | Single tx digest + `PostureChangedEvent` + N × `StatusChangedEvent` | Digest badge + before/after state matrix |
 | 7 — Commerce | Atomic settlement, no counterparty risk | Tx digest + `TradeSettledEvent` + buyer/seller balance deltas | Digest badge + balance comparison |
 | 8 — Command | System produces visible, aggregate value | Revenue totals in Command Overview + Signal Feed | UI screenshot (live) |
@@ -364,7 +364,7 @@ Complete every item before pressing record. Incomplete items = retake risk.
 |---|---|---|
 | 12 | Operator address funded (gas for all demo txs) | ☐ |
 | 13 | Hostile pilot: character exists, tribe ≠ filter value, funded | ☐ |
-| 14 | Ally pilot: character exists, tribe = filter value, funded ≥40 SUI | ☐ |
+| 14 | Ally pilot: character exists, tribe = filter value, funded: ≥20 EVE + gas (SUI) | ☐ |
 | 15 | Sponsor address enrolled in AdminACL (for jump txs) | ☐ |
 | 16 | All account addresses shortened for overlay display | ☐ |
 
@@ -495,7 +495,7 @@ Review the assembled video before exporting the final cut. Items 4–6 catch the
 
 ### What Changed
 
-- **Beat 1 — Removed "156 commands" stat.** The narrator says "thirteen commands" and "twelve gates" — the judge multiplies. Spoon-feeding the arithmetic felt like a pitch deck stat. Letting the viewer compute it is engagement, not exposition.
+- **Beat 1 — Removed "156 commands" stat.** The narrator says "thirteen commands" and "nine gates" — the judge multiplies. Spoon-feeding the arithmetic felt like a pitch deck stat. Letting the viewer compute it is engagement, not exposition.
 - **Beat 2 — Cut second "Every" and "sovereign."** "Gates, turrets, trade posts, network nodes" is more percussive than repeating "Every." Removed "sovereign" from narration — the concept is saved for Beat 8 where it's structurally load-bearing. Overuse dilutes authority.
 - **Beat 5 — Cut "Atomic. Irrevocable." → replaced with "Revenue to the operator."** Three words, no jargon. "Atomic" pings as chain-speak to non-crypto judges. The proof overlay shows the delta — no need to assert irrevocability verbally. Duration 20→18s.
 - **Beat 6 — Added 2 seconds of deliberate silence after the click.** The visual transformation must dominate before the narrator speaks. Post-click narration compressed from four sentences to three: "Gates locked. Turrets online. One transaction." Past tense = fait accompli, not description. Duration 27→30s.
