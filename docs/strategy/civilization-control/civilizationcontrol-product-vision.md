@@ -38,7 +38,7 @@ On one side, your gate policies: who gets in, what they pay, and when. Not as ra
 
 On the other side, your storefronts. Items stocked in your SSUs, listed with prices, browsable by anyone in range. A buyer clicks. Payment flows. The item transfers. One atomic transaction, no trust required, no coordination in Discord.
 
-In the center, a live Signal Feed. Gate jumps. Purchases. Toll revenue. Turret state changes. Who's coming through your territory, how much they're paying, and what they're buying. Not raw blockchain events — readable, filterable, human information.
+In the center, a live Signal Feed. Gate jumps. Purchases. Toll revenue. Turret state changes. Combat telemetry from controlled systems. Who's coming through your territory, how much they're paying, what they're buying, and where fighting is happening. Not raw blockchain events — readable, filterable, human information.
 
 **CivilizationControl doesn't add new primitives to EVE Frontier. It takes the primitives that already exist — the extension system, the shared objects, the PTB composition layer — and makes them usable by the people who actually run civilizations.**
 
@@ -116,7 +116,7 @@ You toggle the toll from 2 to 5 Lux. One click. The policy updates on-chain. No 
 
 Then you notice the posture indicator at the top of the Command Overview: **Open for Business**. Gates are broadly accessible. Toll is active. Turrets are offline — stood down, conserving energy, no defensive posture. Your forward logistics corridor is generating revenue.
 
-A Discord ping from your scout: hostile fleet spotted two jumps out. You click **Defense Mode**. Gate link colors shift from green to amber. Turret icons flip from grey to active. The Signal Feed reflects the change: "Posture: Defense Mode. Gates restricted. Turrets online." Your gates now admit only Tribe 7. Your turrets are powered up, running native targeting — same-tribe non-aggressors excluded, active attackers prioritized. One click. The frontier locked down.
+A Discord ping from your scout: hostile fleet spotted two jumps out. Then the Signal Feed confirms it — "Combat detected — System Alpha-7." On-chain killmail data, filtered to your controlled systems, surfaced as readable intelligence. You click **Defense Mode**. Gate link colors shift from green to amber. Turret icons flip from grey to active. The Signal Feed reflects the change: "Posture: Defense Mode. Gates restricted. Turrets online." Your gates now admit only Tribe 7. Your turrets are powered up, running native targeting — same-tribe non-aggressors excluded, active attackers prioritized. One click. The frontier locked down.
 
 Then you switch to TradePost. Your forward supply depot — SSU Echo-2 — is listed as a storefront. Four items stocked: fuel rods, repair paste, ammo cells, and a rare lens module. Each has a price in Lux. You see that two fuel rod listings sold overnight. Revenue: 60 Lux. The buyer history shows two different pilots — one from an allied tribe, one unaffiliated. Both paid, both received their items, both transactions settled atomically on-chain.
 
@@ -356,7 +356,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 | **TurretControl UI** — online/offline toggle for owned turrets | Turrets complete the infrastructure surface. Binary state control via existing world-contracts primitives (`turret::online`, `turret::offline`). No custom extension — native targeting only. |
 | **Posture Presets** — Open for Business / Defense Mode | Orchestrates gates + turrets in one operator action. Transforms individual structure management into infrastructure-level governance. |
 | **Command shell** — structure sidebar, module switching, connected layout | The "control room" framing requires a unified view. Individual screens don't tell the system story. |
-| **Live Signal Feed** — gate jumps, trade completions, toll revenue, turret state changes | Real-time activity turns a static command view into a living control room. This is the "wow" moment. |
+| **Live Signal Feed** — gate jumps, trade completions, toll revenue, turret state changes, combat telemetry | Real-time activity turns a static command view into a living control room. Combat signals from controlled systems surface `KillmailCreatedEvent` data as operator intelligence — informational only, no automation. This is the "wow" moment. |
 | **Recorded demo video** (2–3 minutes) | Required for submission. The demo IS the presentation for judges and voters. |
 
 ### Would Be Amazing (Stretch — In Priority Order)

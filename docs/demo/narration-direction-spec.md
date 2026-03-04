@@ -499,6 +499,7 @@ Generate the hardest beats first. If the voice cannot deliver Beat 6 and Beat 4 
 4. Verify total narration audio duration aligns with beat timing (±1 second per beat).
 5. Export assembled narration as single WAV (48kHz, 24-bit) for video editor import.
 6. Final video assembly includes narration track + screen recording + post-production overlays.
+7. Run [Post-Assembly Review Checklist](../core/civilizationcontrol-demo-beat-sheet.md#post-assembly-review-checklist) from the beat sheet before exporting the final cut.
 
 ---
 

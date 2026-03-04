@@ -6,6 +6,23 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-04 — Post-Assembly Review Checklist (Visual Cadence Discipline)
+- **Goal:** Close the gap between recording guidance (per-beat stage directions) and post-production QA — specifically the "talking over static screen" failure mode that kills momentum for hackathon judges.
+- **Decision:** Added 8-item Post-Assembly Review Checklist to beat sheet, placed after Recommended Recording Order. Core item: muted playback test (watch with audio OFF, verify every beat has visible change, no >3s static segments during narration). Added cross-reference from narration-direction-spec.md Post-Production Assembly (new step 7).
+- **Files:** `docs/core/civilizationcontrol-demo-beat-sheet.md`, `docs/demo/narration-direction-spec.md`
+- **Diff:** ~20 added / ~1 modified
+- **Risk:** Low (docs only)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs-only change)
+
+## 2026-03-04 — Combat Detected Signal Feed Entry Added to Demo Beat Sheet
+- **Goal:** Provide visual grounding for Beat 6's "Threat inbound" narration by surfacing a `KillmailCreatedEvent`-sourced Signal Feed entry ("Combat detected — System Alpha-7") immediately before the posture switch.
+- **Decision:** Added zero-narration Signal Feed visual cue at Beat 6 open. No timing change (still 30s, total still 2:56). No proof moment — informational only. Operator still manually clicks Defense Mode. Added pre-flight checklist item 11a (killmail staging). Updated product vision: Defense Mode scenario now references on-chain combat telemetry alongside Discord scout ping. Signal Feed description expanded to include combat telemetry. Read-path Signal-to-Source table updated with "Combat detected" row.
+- **Files:** `docs/core/civilizationcontrol-demo-beat-sheet.md`, `docs/strategy/civilization-control/civilizationcontrol-product-vision.md`, `docs/architecture/read-path-architecture-validation.md`
+- **Diff:** ~25 added / ~5 modified (no removals)
+- **Risk:** Low (docs only, no code change, no automation, preserves manual-action-first philosophy)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs-only change)
+- **Rationale:** "Threat inbound" was the only narrated claim in the demo without an on-screen visual trigger. Adding a Signal Feed entry strengthens the sovereignty narrative (operator sees intelligence → decides → acts) without adding narration time, automation, or proof obligations. The `KillmailCreatedEvent` includes `loss_type` (SHIP/STRUCTURE) and `solar_system_id` — sufficient signal quality for an informational cue.
+
 ## 2026-03-03 — SVG Topology Spec: Semantic Zoom & Solar System Aggregation
 - **Goal:** Define two-level display model (Network View / System View) so operators see aggregated Solar Systems at network scale and expand into cluster detail on focus.
 - **Decision:** Added §6.14 to svg-topology-layer-spec.md. Aggregate glyph (rounded rectangle, 32×24, structure count row with mini-glyphs, state roll-up via §4.2 priority). Click-to-focus expansion (200ms cross-fade). Aggregate-level Defense Mode cascade. Demo beats 2 and 6 updated for mixed-mode view. Zoom-threshold expansion is a P2 stretch.

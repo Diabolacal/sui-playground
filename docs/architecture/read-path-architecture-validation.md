@@ -105,6 +105,7 @@ Step 6: Start polling loop (10s interval)
 | **Governed structures** | Derived from gate object state | Count gates with non-null `extension` field | **AVAILABLE (polling)** |
 | **Link established/broken** | `GateLinkedEvent` / `GateUnlinkedEvent` (world-contracts v0.0.13) | Subscribe or query by event type | **AVAILABLE (events)** |
 | **Extension authorized** | **NO event** — `authorize_extension()` silent | Must poll `gate.extension` field changes | **POLLING ONLY** |
+| **Combat detected** | `KillmailCreatedEvent` on-chain event | `suix_queryEvents({ MoveEventType: "...::killmail::KillmailCreatedEvent" })`, filter by operator's controlled `solar_system_id` client-side. Includes `loss_type` (SHIP/STRUCTURE), `killer_character_id`, `victim_character_id`. | **AVAILABLE** — informational signal only, no automation |
 
 ### 2.3 Denial Observability
 

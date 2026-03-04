@@ -197,6 +197,8 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 **Duration:** 30 seconds. This is the climax. Give it room.
 
+*[Signal Feed: new entry, amber badge. "Combat detected — System Alpha-7." The entry scrolls in among prior events, no fanfare.]*
+
 **Spoken narration:**
 > "Threat inbound."
 
@@ -225,6 +227,8 @@ If stability forces cuts, protect these five. Everything else is expendable.
 - Before/after state summary: turrets OFFLINE→ONLINE, gates open→tribe-locked, toll removed
 
 **Purpose:** The hammer moment. Everything the demo has built — policy, enforcement, revenue — now escalates to infrastructure-wide command. One human decision, one on-chain transaction, every structure responds. This is the "command layer" claim made undeniable.
+
+**Signal cue note:** The "Combat detected" Signal Feed entry is sourced from `KillmailCreatedEvent` (world-contracts) filtered by the operator's controlled `solar_system_id`. It is purely informational — no automation, no proof moment. Its role is visual grounding: the operator sees intelligence, assesses the situation, and decides to act. "Threat inbound" reads as the operator's spoken assessment of visible intelligence, not an unsourced declaration.
 
 **Technical reality (validated):** Single PTB contains 7–9 Move calls: `set_posture` + `set_tribe_config` + `clear_toll_config` + N × (`borrow_owner_cap<Turret>` → `turret::online` → `return_owner_cap`). Confirmed on localnet: both BUSINESS→DEFENSE and DEFENSE→BUSINESS pass. ~250ms on-chain execution. See [posture-switch validation](../sandbox/posture-switch-localnet-validation.md).
 
@@ -352,6 +356,7 @@ Complete every item before pressing record. Incomplete items = retake risk.
 | 9 | ≥1 NetworkNode online, fueled, producing energy | ☐ |
 | 10 | Fuel efficiency set for turret fuel type (AdminACL) | ☐ |
 | 11 | Posture baseline: "Open for Business" (tribe+toll active on gates) | ☐ |
+| 11a | Killmail staged: `KillmailCreatedEvent` in controlled system ready to appear in Signal Feed before Beat 6 | ☐ |
 
 ### Accounts
 
@@ -466,6 +471,23 @@ If Trade Post UI is not ready, compress to this variant. Same emotional arc, no 
 4. Record Beat 1 (text-on-black, separate)
 5. Record Beat 9 (title card, separate)
 6. Assemble in editor: Beat 1 → 2–8 (live) → 9. Add proof overlays in post.
+
+---
+
+## Post-Assembly Review Checklist
+
+Review the assembled video before exporting the final cut. Items 4–6 catch the most common demo failure mode: narration continuing over a static screen.
+
+| # | Check | Status |
+|---|---|---|
+| 1 | Total duration ≤ 3:05 (target: 2:56) | ☐ |
+| 2 | All 5 non-negotiable proof overlays present and legible | ☐ |
+| 3 | No secrets, full addresses, or prohibited content visible (see Do Not Show) | ☐ |
+| 4 | **Muted playback test:** watch with audio OFF — every beat has visible on-screen change; no segment >3s where the screen is static while narration continues | ☐ |
+| 5 | Beat 6 silence window: ≥2s of visual-only transformation after click, before narrator resumes | ☐ |
+| 6 | Signal Feed entries appear before or simultaneous with their narrated references (not after) | ☐ |
+| 7 | Proof overlay timing: each overlay appears after tx confirmation, never before | ☐ |
+| 8 | Audio levels consistent across beats; no clipping, no silence artifacts | ☐ |
 
 ---
 
