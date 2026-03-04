@@ -166,10 +166,9 @@ The following script preserves the canonical narration from the Beat Sheet. Anno
 ```
 //NOTE: Speed 0.95. Stability 80. Style exaggeration 10-15.//
 
-You run nine gates linking five systems on EVE Frontier…
+Nine gates link five systems on your EVE Frontier…
 Last night, two went offline. Nobody told you.
-Your pilots rerouted.
-Hostiles caught them hauling fuel through territory you thought you controlled.
+Your pilots rerouted into hostile territory, hauling fuel through gates you thought you controlled.
 
 //SILENCE 0.5s//
 
@@ -178,10 +177,9 @@ Configuring one gate takes thirteen commands… You have nine gates.
 
 **Delivery notes:**
 - No audio tags. The gravity comes from content, not vocal affect.
-- Ellipsis after "EVE Frontier" creates a natural breath before the bad news arrives.
+- "Nine gates" lands first — numbers-before-context creates immediate grounding. Ellipsis after "EVE Frontier" creates a natural breath before the bad news.
 - "Nobody told you." — Flat statement. No sympathy inflection.
-- "Your pilots rerouted." — Same register as the preceding sentences. Sets up the consequence without editorializing.
-- "Hostiles caught them" — Present-tense impact. No vocal dramatization. The content carries the weight.
+- "Your pilots rerouted into hostile territory" — Single merged action-consequence. No pause between reroute and its result. "Gates you thought you controlled" closes the loop on the demo's subject.
 - Ellipsis after "thirteen commands" lets the viewer multiply.
 
 ---

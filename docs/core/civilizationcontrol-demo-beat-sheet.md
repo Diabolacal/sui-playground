@@ -66,7 +66,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 **Duration:** 18 seconds
 
 **Spoken narration:**
-> "You run nine gates linking five systems on EVE Frontier. Last night, two went offline. Nobody told you. Your pilots rerouted. Hostiles caught them hauling fuel through territory you thought you controlled."
+> "Nine gates link five systems on your EVE Frontier. Last night, two went offline. Nobody told you. Your pilots rerouted into hostile territory, hauling fuel through gates you thought you controlled."
 
 *[Screen: black background. White text fades in, one line at a time, matching narration cadence. No terminal. No UI. Just the words.]*
 
