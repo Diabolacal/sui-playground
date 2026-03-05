@@ -47,7 +47,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 
 **Architecture model:** Publish-once, configure-via-data. One extension package is published by the CivControl team. Players configure pre-built rule types via PTBs that write dynamic fields to a shared `ExtensionConfig` object. No end user writes Move code.
 
-**Runtime:** Single-page React application served from static hosting (Cloudflare Pages). All chain interaction via direct Sui RPC from the browser.
+**Runtime:** Single-page React application served from static hosting (Cloudflare Pages). All chain reads flow through a **read provider abstraction** — a thin interface boundary that decouples UI components from the specific data backend. The Day-1 provider is direct Sui JSON-RPC from the browser. See [Read Provider Abstraction](../architecture/read-provider-abstraction.md).
 
 **Tech stack:**
 - Move (Sui edition 2024.beta) — extension package
@@ -62,7 +62,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 
 | Exclusion | Rationale |
 |-----------|-----------|
-| No backend / indexer / database | Browser-only for Day-1. Option B (proxy) or Option C (indexer) are post-hackathon |
+| No backend / indexer / database | Browser-only for Day-1. The read provider abstraction enables switching to Option B (proxy) or Option C (indexer) post-hackathon without UI changes |
 | No visual Move programming | Users configure opinionated rule blocks, not code |
 | No custom token for Day-1 | `Coin<SUI>` only. TribeMint (`Coin<TribeToken>`) is stretch |
 | No real-time coordinate mapping | Coordinates are not on-chain — only Poseidon(2) hashes. Manual spatial pinning |
@@ -127,9 +127,9 @@ Every chain write the app performs, with exact Move targets:
 
 ### 2.2 Read Paths
 
-All reads are browser-side via Sui JSON-RPC:
+All reads flow through the **read provider abstraction layer** ([architecture doc](../architecture/read-provider-abstraction.md)). The Day-1 provider implementation uses browser-side Sui JSON-RPC:
 
-| Query | RPC Method | Purpose |
+| Query | RPC Method (RPC Provider) | Purpose |
 |-------|-----------|---------|
 | Structure discovery | `suix_getOwnedObjects(character_addr, filter: OwnerCap<Gate>)` | Find player's gates |
 | Structure state | `sui_multiGetObjects(ids, { showContent: true })` | Read gate/SSU fields |
@@ -139,6 +139,8 @@ All reads are browser-side via Sui JSON-RPC:
 | Inventory | `suix_getDynamicFields(inventory_uid)` | SSU item listing |
 
 **Polling interval:** 10 seconds (MVP default). Per-data-type intervals may vary — see [in-game-dapp-surface.md §10](../architecture/in-game-dapp-surface.md) for granular rates (structure state: 5–10s, rules: 15–30s, events: 5s). No WebSocket, no indexer subscription.
+
+**Provider abstraction:** The RPC methods above are implementation details of the RPC Provider. A Demo Provider (synthetic event replay for recording and showcase) and future GraphQL/Indexer providers share the same semantic query interface. See [Read Provider Abstraction](../architecture/read-provider-abstraction.md) for the four supported provider types.
 
 ### 2.3 Sponsored Transaction Model
 

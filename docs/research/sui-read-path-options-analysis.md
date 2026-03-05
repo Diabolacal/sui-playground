@@ -508,6 +508,7 @@ If the submission reaches Stillness deployment with >10 concurrent users, deploy
 3. **GraphQL is the future** but requires indexer infrastructure behind it. Public endpoints exist for mainnet/testnet but hackathon server availability is unknown.
 4. **No EVE Frontier event infrastructure exists.** Builders are on their own for event consumption. The only pattern in the ecosystem is synchronous tx-inline extraction.
 5. **Browser-only polling is the correct hackathon architecture.** Zero deployment risk, minimal code, real on-chain data. Upgrade to thin backend only if scale demands it.
+6. **A read provider abstraction layer insulates the UI from transport changes.** JSON-RPC deprecation (July 2026), potential GraphQL migration, and scaling to a backend proxy are all deployment-time provider swaps — not UI rewrites. The same abstraction enables a synthetic Demo Provider for repeatable demo recording and post-launch showcase. See [Read Provider Abstraction](../architecture/read-provider-abstraction.md).
 
 ---
 

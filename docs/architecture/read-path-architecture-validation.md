@@ -181,7 +181,9 @@ These events are emitted by the extension's `issue_jump_permit` (for toll) and t
 
 ## 3. Architecture Options Comparison
 
-### Option A: Browser-Only Direct Reads
+> **Read Provider Abstraction (2026-03-05):** Options A, B, and C below correspond to **provider implementations** behind a unified read interface. The UI consumes data through named hooks (`useOwnedStructures`, `useEventPolling`, etc.) that call through the active provider. Swapping from Option A to B or C changes only the provider implementation — no UI component modifications required. A fourth provider type, the **Demo Provider** (synthetic event replay for recording and showcase), is also supported. See [Read Provider Abstraction](read-provider-abstraction.md) for the full architectural concept.
+
+### Option A: Browser-Only Direct Reads (→ RPC Provider)
 
 | Aspect | Assessment |
 |--------|-----------|
@@ -198,7 +200,7 @@ These events are emitted by the extension's `issue_jump_permit` (for toll) and t
 | **Security** | Excellent — all reads are public Sui state; no user data stored; no backend to breach |
 | **Demo quality** | Good for single-user demo. Real-time feel with 10s polling. |
 
-### Option B: Browser + Thin Backend (Cache/Proxy)
+### Option B: Browser + Thin Backend (Cache/Proxy) (→ Indexer Provider)
 
 | Aspect | Assessment |
 |--------|-----------|
@@ -216,7 +218,7 @@ These events are emitted by the extension's `issue_jump_permit` (for toll) and t
 | **Security** | Backend stores no user secrets; all data is public chain state; CORS must be configured correctly; user scoping is by public object IDs only |
 | **Demo quality** | Better — faster loads, pre-computed aggregates (revenue totals), smoother polling |
 
-### Option C: Full Custom Indexer
+### Option C: Full Custom Indexer (→ Indexer Provider, full variant)
 
 | Aspect | Assessment |
 |--------|-----------|
@@ -230,7 +232,7 @@ These events are emitted by the extension's `issue_jump_permit` (for toll) and t
 | **Security** | Largest attack surface — database, API, indexer process |
 | **Demo quality** | Best if working — but setup risk outweighs demo benefit |
 
-### Recommendation: **Option A for hackathon demo, Option B for Stillness deployment**
+### Recommendation: **Option A (RPC Provider) for hackathon demo, Option B (Indexer Provider) for Stillness deployment**
 
 **Rationale:**
 - The hackathon demo is a single-user presentation. Option A's rate limit concern doesn't apply.
@@ -239,6 +241,8 @@ These events are emitted by the extension's `issue_jump_permit` (for toll) and t
 - Character resolution is the only component that benefits from a backend — and manual fallback is designed in.
 - Option B should be deployed for Stillness if >10 concurrent users are expected. The backend is a simple cache/proxy (<200 lines).
 - Option C is unjustified for the hackathon timeline. Building an indexer consumes 1-2 days that are better spent on extension code and demo polish.
+
+**Provider abstraction note:** The read provider abstraction ensures this is a deployment-time configuration choice, not a code migration. Additionally, the **Demo Provider** enables repeatable demo recording and post-launch showcase without chain dependency. See [Read Provider Abstraction](read-provider-abstraction.md).
 
 ---
 
@@ -438,8 +442,9 @@ GET /health
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| **Hackathon demo architecture** | Option A (browser-only) | Single-user demo; no rate limit concern; eliminates backend deployment risk |
-| **Stillness deployment** | Option B (thin backend) if >10 users expected | Prevents RPC rate limiting; enables pre-computed revenue; <200 lines additional code |
+| **Hackathon demo architecture** | Option A / RPC Provider (browser-only) | Single-user demo; no rate limit concern; eliminates backend deployment risk |
+| **Stillness deployment** | Option B / Indexer Provider (thin backend) if >10 users expected | Prevents RPC rate limiting; enables pre-computed revenue; <200 lines additional code |
+| **Demo recording & showcase** | Demo Provider (synthetic event replay) | Repeatable timing for video capture; post-launch visitor experience; clearly labeled simulation |
 | **Character resolution** | Manual fallback Day 1; attempt event indexing within first 2 hours | Risk-ordered; don't block on unknowns |
 | **Revenue tracking** | Custom extension events (TollCollectedEvent, TradeSettledEvent) | No world-contracts support; must be self-sovereign |
 | **Denial signals** | Demo: wallet adapter failure response (synchronous, zero infra); Production: two-step or backend relay | Failed tx stored on-chain with deterministic abort code; demo operator controls both wallets |

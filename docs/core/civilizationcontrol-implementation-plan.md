@@ -1290,12 +1290,14 @@ Add title card: "CivilizationControl — The Frontier Control Room". Add package
 **Dependencies:** S08  
 **Description:** Implement the core polling loop and state management layer used by all pages. 10-second polling interval for structure state + events. Use `@tanstack/react-query` for caching and automatic refetching.
 
-Key queries:
+Key queries (these form the **read provider interface boundary**):
 - `useOwnedStructures(characterId)` — discovers OwnerCaps → reads structures
 - `useStructureState(objectId)` — reads individual structure state
 - `useEventPolling(packageId, eventTypes)` — polls events by type with cursor pagination
 
 All queries auto-refetch on 10-second interval. Stale data tolerance: 1 cycle (10s).
+
+**Read provider abstraction:** These hooks define the semantic query interface for the [Read Provider Abstraction Layer](../architecture/read-provider-abstraction.md). The Day-1 implementation calls Sui JSON-RPC directly (RPC Provider). Swapping to a Demo Provider (synthetic events), GraphQL Provider, or Indexer Provider changes only the implementation behind these hooks — no consuming component modifications required.
 
 **Files:**
 - `frontend/src/hooks/useOwnedStructures.ts`

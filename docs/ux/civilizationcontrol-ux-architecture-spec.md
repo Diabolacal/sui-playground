@@ -931,7 +931,9 @@ The UI communicates that both gates in a link must share the same extension type
 
 ## Appendix: Data Source Reference
 
-| Data Element          | Source                                   | Latency     | Notes                          |
+> **Read Provider Abstraction (2026-03-05):** The sources listed below are implementation details of the **RPC Provider** (Day-1 default). All data flows through the [read provider abstraction layer](../architecture/read-provider-abstraction.md), enabling future transport switching (GraphQL, Indexer backend, Demo Provider) without UI component changes. The semantic query interface is defined by the hooks in S43 of the [implementation plan](../core/civilizationcontrol-implementation-plan.md).
+
+| Data Element          | Source (RPC Provider)                    | Latency     | Notes                          |
 | --------------------- | ---------------------------------------- | ----------- | ------------------------------ |
 | Structure list        | RPC: `suix_getOwnedObjects` on Character | ~1s         | Requires Character ID first    |
 | Structure status      | RPC: `sui_getObject` per structure       | ~1s         | Can be cached, polled          |
@@ -1160,6 +1162,8 @@ Evidence overlays (tx digests, event data) display identically in both contexts 
 | Revenue aggregates | Derived from cached events | Recompute on update |
 
 Polling uses `@tanstack/react-query` with configurable `refetchInterval`. IndexedDB cache enables instant page loads for historical data, with chain re-validation on session start.
+
+**Provider note:** Polling intervals and caching apply to the RPC Provider (Day-1 implementation). The Demo Provider replays events from scripted fixtures at simulated intervals. Future providers (GraphQL, Indexer) may use different polling strategies. The polling model is an implementation detail of the active provider, not a UI-layer concern.
 
 ### Failure State UX
 
