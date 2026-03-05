@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World-contracts emits **30 unique event types** from **37 call sites** across 13 modules (updated 2026-03-05; see [complete inventory](world-contracts-event-inventory.md)). Events cover assembly lifecycle (gate, turret, SSU, network node), inventory operations (mint/burn/deposit/withdraw), fuel/energy state, access control, killmails, metadata, and status changes.
+World-contracts emits **33 unique event types** from **40 call sites** across 13 modules (updated 2026-03-05; see [complete inventory](world-contracts-event-inventory.md)). Events cover assembly lifecycle (gate, turret, SSU, network node), inventory operations (mint/burn/deposit/withdraw), fuel/energy state, access control, killmails, metadata, status changes, and extension authorization.
 
 **Spatial linkage is sparse.** Only `KillmailCreatedEvent` contains a direct `solar_system_id`. Gate and SSU creation events include a hashed `location_hash`. All other events require an off-chain object lookup to derive spatial position from `assembly_id` → assembly object → location field.
 
@@ -43,6 +43,7 @@ World-contracts emits **30 unique event types** from **37 call sites** across 13
 | `GateLinkedEvent` | `link_gates()` | `source_gate_id: ID`, `source_gate_key: TenantItemId`, `destination_gate_id: ID`, `destination_gate_key: TenantItemId` | Derivable (gate IDs → objects → location) | Topology change |
 | `GateUnlinkedEvent` | `unlink()` (private; called by `unlink_gates()`) | `source_gate_id: ID`, `source_gate_key: TenantItemId`, `destination_gate_id: ID`, `destination_gate_key: TenantItemId` | Derivable (gate IDs → objects → location) | Topology change |
 | `JumpEvent` | `jump_internal()` (private; called by `jump()`, `jump_with_permit()`) | `source_gate_id: ID`, `source_gate_key: TenantItemId`, `destination_gate_id: ID`, `destination_gate_key: TenantItemId`, `character_id: ID`, `character_key: TenantItemId` | Derivable (gate IDs → objects → location); **character_id** present | **Highest-value event for activity tracking** |
+| `ExtensionAuthorizedEvent` | `authorize_extension()` | `assembly_id: ID`, `assembly_key: TenantItemId`, `extension_type: TypeName`, `previous_extension: Option<TypeName>`, `owner_cap_id: ID` | Derivable (assembly_id → object → location) | Added v0.0.15+ (PR #110 / commit 3cc9ffa). **CC Proof Moment #1 evidence.** |
 
 ### Module: `world::turret` — turret.move
 
@@ -50,12 +51,14 @@ World-contracts emits **30 unique event types** from **37 call sites** across 13
 |-------|-----------|--------|-----------------|-------|
 | `TurretCreatedEvent` | `anchor()` | `turret_id: ID`, `turret_key: TenantItemId`, `owner_cap_id: ID`, `type_id: u64` | None (location on object, not in event) | |
 | `PriorityListUpdatedEvent` | `get_target_priority_list()` | `turret_id: ID`, `priority_list: vector<TargetCandidate>` | None (turret_id → object → location) | TargetCandidate includes character_id, tribe, aggressor flag |
+| `ExtensionAuthorizedEvent` | `authorize_extension()` | `assembly_id: ID`, `assembly_key: TenantItemId`, `extension_type: TypeName`, `previous_extension: Option<TypeName>`, `owner_cap_id: ID` | Derivable (assembly_id → object → location) | Added v0.0.15+ (PR #110 / commit 3cc9ffa) |
 
 ### Module: `world::storage_unit` — storage_unit.move
 
 | Event | Emitted By | Fields | Location Linkage | Notes |
 |-------|-----------|--------|-----------------|-------|
 | `StorageUnitCreatedEvent` | `anchor()` | `storage_unit_id: ID`, `assembly_key: TenantItemId`, `owner_cap_id: ID`, `type_id: u64`, `max_capacity: u64`, `location_hash: vector<u8>`, `status: Status` | **Direct: `location_hash`** (hashed) | One of 2 events with spatial data |
+| `ExtensionAuthorizedEvent` | `authorize_extension()` | `assembly_id: ID`, `assembly_key: TenantItemId`, `extension_type: TypeName`, `previous_extension: Option<TypeName>`, `owner_cap_id: ID` | Derivable (assembly_id → object → location) | Added v0.0.15+ (PR #110 / commit 3cc9ffa) |
 
 ### Module: `world::metadata` — metadata.move
 

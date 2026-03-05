@@ -63,7 +63,7 @@
 | C-2 | OwnerCap discovery via object-address RPC unverified on live | MEDIUM | `suix_getOwnedObjects` with type filter — works on devnet, unverified on test server |
 | C-6 | 20–24 setup transactions before populated Command Overview | MEDIUM | publish + spawn + fuel + online + authorize + config + stock |
 | C-8 | `JumpEvent` missing tribe/toll fields | MEDIUM | Signal Feed must correlate with extension config to show tribe + toll |
-| C-10 | `link_gates`/`authorize_extension` emit no events (silent) | MEDIUM | State changes require polling-based detection |
+| C-10 | ~~`link_gates`/`authorize_extension` emit no events~~ Partially resolved | ~~MEDIUM~~ LOW | `link_gates` emits `GateLinkedEvent` (v0.0.13); `authorize_extension` emits `ExtensionAuthorizedEvent` (v0.0.15+ / PR #110) |
 | C-4 | Revenue = 0 at cold start | LOW | Expected; UI must handle gracefully |
 | C-5 | Polling at 10s reliable; subscription unverified | LOW | Acceptable for MVP |
 | C-7 | Claim-proof matrix references stale mock events | LOW | Doc correction needed |
@@ -71,7 +71,7 @@
 
 **Promoted to main report:** C-1 → Risk #4 (character resolution)
 
-> **Update 2026-02-28:** C-10 is partially superseded — `link_gates`/`unlink_gates` now emit `GateLinkedEvent`/`GateUnlinkedEvent` (world-contracts v0.0.13 @ e508451). `authorize_extension` still emits no event.
+> **Update 2026-02-28:** C-10 is partially superseded — `link_gates`/`unlink_gates` now emit `GateLinkedEvent`/`GateUnlinkedEvent` (world-contracts v0.0.13 @ e508451). ~~`authorize_extension` still emits no event.~~ (Updated 2026-03-05: `authorize_extension` now emits `ExtensionAuthorizedEvent` — world-contracts v0.0.15+ / PR #110 / commit 3cc9ffa.)
 
 ---
 

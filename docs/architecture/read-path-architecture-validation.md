@@ -286,7 +286,7 @@ For the Stillness deployment bonus window (14 days post-submission), deploy Opti
 | **Passage completed** | Execute `jump_with_permit` on test server → `JumpEvent` emitted | Real tx digest + real event |
 | **Gate online/offline** | Call `online()` / `offline()` → `StatusChangedEvent` | Real tx digest + real event |
 | **Fuel deposited/burned** | Call `deposit_fuel()` / `start_burning()` → `FuelEvent` | Real tx digest + real event |
-| **Extension authorized** | Call `authorize_extension<Auth>()` — NO event, but object state changes | Real tx digest + state diff |
+| **Extension authorized** | Call `authorize_extension<Auth>()` — emits `ExtensionAuthorizedEvent` (v0.0.15+ / commit 3cc9ffa) | Real tx digest + real event |
 | **Toll collected** | Custom extension emits `TollCollectedEvent` during `issue_jump_permit` | Real tx digest + real event |
 | **Structure discovery** | OwnerCap enumeration via RPC | Real on-chain data |
 

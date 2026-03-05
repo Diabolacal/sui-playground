@@ -172,7 +172,7 @@ Turrets are game-engine-created assemblies. Most creation flows (`anchor`, `shar
 
 | ID | Title | Steps | Expected Result | Status | Applies To |
 |----|-------|-------|-----------------|--------|------------|
-| X-01 | Extension overwrite | authorize_extension with different Auth on already-extended turret | Silently replaced; no event | ENVIRONMENT-BLOCKED | CC |
+| X-01 | Extension overwrite | authorize_extension with different Auth on already-extended turret | Replaced; emits `ExtensionAuthorizedEvent` with `previous_extension` (v0.0.15+ / PR #110) | ENVIRONMENT-BLOCKED | CC |
 | X-02 | Receipt-turret mismatch | verify_online(A); pass receipt to get_target_priority_list(B) | Abort code 8 (`EInvalidOnlineReceipt`) | ENVIRONMENT-BLOCKED | ALL |
 | X-03 | Unconsumed receipt | verify_online only (no consumption call) | Transaction aborts (hot potato has no drop) | ENVIRONMENT-BLOCKED | ALL |
 | X-04 | destroy_online_receipt type check | Attempt with wrong Auth type | Compilation error (type constraint) | EXECUTABLE NOW | ALL |
@@ -187,7 +187,7 @@ Turrets are game-engine-created assemblies. Most creation flows (`anchor`, `shar
 | ID | Title | Method | Expected Result | Status | Applies To |
 |----|-------|--------|-----------------|--------|------------|
 | A-01 | Default turret tribe-filter matches gate tribe_permit | Source comparison | Both enforce tribe-based access; turret excludes same-tribe non-aggressors; gate tribe_permit allows same-tribe only | EXECUTABLE NOW | CC |
-| A-02 | authorize_extension identical pattern | Source comparison | Both use swap_or_fill on `extension: Option<TypeName>`, require OwnerCap, emit no event | EXECUTABLE NOW | CC |
+| A-02 | authorize_extension identical pattern | Source comparison | Both use swap_or_fill on `extension: Option<TypeName>`, require OwnerCap, emit `ExtensionAuthorizedEvent` (v0.0.15+ / PR #110) | EXECUTABLE NOW | CC |
 | A-03 | Closed-world difference: turret vs gate | Source comparison | Gate extension PTB can include shared objects; turret extension signature is fixed by game engine | EXECUTABLE NOW | CC |
 | A-04 | Default behavior = CC policy | Confirm D-01 through D-03 on localnet | Default turret = tribe_only; no custom extension needed | ENVIRONMENT-BLOCKED | CC |
 | A-05 | CB/FG turret applicability | Architecture review | Bond-checking and scoring logic cannot run inside turret extension (closed-world) | STRUCTURALLY IMPOSSIBLE | CB, FG |

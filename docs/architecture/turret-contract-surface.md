@@ -89,7 +89,7 @@ public enum BehaviourChangeReason has copy, drop, store {
 
 | Function | Signature | Auth | Notes |
 |----------|-----------|------|-------|
-| `authorize_extension<Auth: drop>` | `(turret: &mut Turret, owner_cap: &OwnerCap<Turret>)` | OwnerCap | swap_or_fill; silently overwrites; NO event |
+| `authorize_extension<Auth: drop>` | `(turret: &mut Turret, owner_cap: &OwnerCap<Turret>)` | OwnerCap | swap_or_fill; emits `ExtensionAuthorizedEvent` with `previous_extension` (v0.0.15+ / PR #110) |
 | `online` | `(turret, network_node, energy_config, owner_cap)` | OwnerCap | Reserves energy on NetworkNode |
 | `offline` | `(turret, network_node, energy_config, owner_cap)` | OwnerCap | Releases energy |
 

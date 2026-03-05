@@ -37,7 +37,7 @@ The world-contracts codebase is structurally sound for its core purpose: a capab
 
 | ID | Finding | Module | Evidence |
 |----|---------|--------|----------|
-| **H-01** | `authorize_extension` emits no event | [gate.move#L129-L131](../../../vendor/world-contracts/contracts/world/sources/assemblies/gate.move#L129-L131) | Policy deployment (CC proof moment #1) produces no observable event. Tx digest exists but no typed event for subscription. |
+| **H-01** | ~~`authorize_extension` emits no event~~ **RESOLVED** (PR #110 / commit 3cc9ffa) | [gate.move#L127-L147](../../../vendor/world-contracts/contracts/world/sources/assemblies/gate.move#L127-L147) | `ExtensionAuthorizedEvent` now emitted for Gate, SSU, and Turret. Proof moment #1 has typed event evidence. |
 | **H-02** | `extension_type()` aborts on Turret if no extension, returns `&Option` on Gate | [turret.move#L330](../../../vendor/world-contracts/contracts/world/sources/assemblies/turret.move#L330) vs [gate.move#L407](../../../vendor/world-contracts/contracts/world/sources/assemblies/gate.move#L407) | API inconsistency — builder must defensively check `is_extension_configured()` on Turret but not Gate. |
 | **H-03** | `item_quantity()` on Inventory is `#[test_only]` | [inventory.move#L476](../../../vendor/world-contracts/contracts/world/sources/primitives/inventory.move#L476) | SSU contents cannot be queried on-chain without raw object parsing. `contains_item()` is public but `item_quantity()` is not. |
 | **H-04** | `connected_assemblies()` returns `vector<ID>` with no type info | [network_node.move#L160](../../../vendor/world-contracts/contracts/world/sources/network_node/network_node.move#L160) | Browsers must fetch each ID individually to determine if it's a Gate, Turret, or SSU. |
@@ -110,15 +110,14 @@ The world-contracts codebase is structurally sound for its core purpose: a capab
 
 ### EASY (Moderate but safe, submittable this week)
 
-#### S-EASY-01: Add `ExtensionAuthorizedEvent` to all three assembly types
+#### S-EASY-01: Add `ExtensionAuthorizedEvent` to all three assembly types — **IMPLEMENTED** (PR #110 / commit 3cc9ffa)
 
 - **Title:** Emit event on `authorize_extension` for Gate, SSU, and Turret
-- **Description:** Define `ExtensionAuthorizedEvent { assembly_id: ID, extension_type: TypeName, previous_extension: Option<TypeName> }` and emit in `authorize_extension` for each assembly.
-- **CC benefit:** Proof moment #1 ("Policy deploys on-chain") gets a typed event for UI subscription and demo proof cards. `previous_extension` field captures replacement.
+- **Description:** `ExtensionAuthorizedEvent { assembly_id: ID, assembly_key: TenantItemId, extension_type: TypeName, previous_extension: Option<TypeName>, owner_cap_id: ID }` — emitted in `authorize_extension` for each assembly.
+- **Actual fields:** 5 fields (added `assembly_key` and `owner_cap_id` beyond original proposal).
+- **CC benefit:** Proof moment #1 ("Policy deploys on-chain") has typed event for UI subscription and demo proof cards. `previous_extension` field captures replacement.
 - **Ecosystem benefit:** All builders can observe extension registration without polling.
-- **Risk:** Low — additive change, no logic modification. Events are `copy, drop`.
-- **Diff size:** ~15 lines per assembly (event struct + emit site) = ~45 lines total
-- **Safe pre-hackathon:** YES
+- **Status:** Merged to world-contracts `main` — pinned in this repo at commit 3cc9ffa.
 
 #### S-EASY-02: Promote Metadata, Inventory, and OwnerCap view functions from `#[test_only]` to public
 

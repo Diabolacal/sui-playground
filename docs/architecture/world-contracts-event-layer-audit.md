@@ -296,14 +296,14 @@
 ### Proof Moment 1: "Policy deploys on-chain"
 **Action:** `authorize_extension<CCAuth>(gate, owner_cap)` + DF config writes.
 
-**Event fired:** **NONE from `authorize_extension`.** The `StatusChangedEvent` does NOT fire (extension registration doesn't change status). No event in world-contracts marks this.
+**Event fired:** `ExtensionAuthorizedEvent` — added in world-contracts v0.0.15+ (PR #110 / commit 3cc9ffa). Fields: `assembly_id`, `assembly_key`, `extension_type`, `previous_extension`, `owner_cap_id`. Emitted identically for Gate, SSU, and Turret.
 
-**Mitigation:** 
-- CC extension code should emit a custom `PolicyDeployedEvent` when the extension is authorized.
-- Alternatively, use the **transaction digest** as proof. The successful PTB that calls `authorize_extension` is itself the evidence. Read it back with `sui_getTransactionBlock`.
-- Can read the gate object post-tx to confirm `extension` field is set.
+**Mitigation (no longer required for extension registration):**
+- ~~CC extension code should emit a custom `PolicyDeployedEvent` when the extension is authorized.~~
+- World-contracts now emits a typed event. Subscribe via `suix_queryEvents` with `MoveEventType` filter `<WORLD_PKG>::gate::ExtensionAuthorizedEvent`.
+- CC code may still emit a custom `PolicyDeployedEvent` for additional context (e.g., config DF writes) beyond what the world-contracts event covers.
 
-**Verdict: GAP — CC must emit its own event or rely on tx digest.**
+**Verdict: ~~GAP~~ RESOLVED — `ExtensionAuthorizedEvent` provides typed evidence for Proof Moment #1. CC may optionally supplement with custom events for DF config writes.**
 
 ---
 
