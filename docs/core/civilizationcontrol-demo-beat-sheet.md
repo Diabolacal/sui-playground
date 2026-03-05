@@ -134,6 +134,8 @@ If stability forces cuts, protect these five. Everything else is expendable.
 - Tx digest of policy deployment
 - Gate object showing `extension: Some(TypeName)` + 2 dynamic field rules
 
+**Signal Feed enrichment:** `ExtensionAuthorizedEvent` (world-contracts v0.0.15+) confirms policy deployment asynchronously via event polling (`suix_queryEvents`). Fields: `assembly_id`, `extension_type`. This is enrichment — the UI reacts immediately to the tx response, not to the event.
+
 **Purpose:** Core value — governance through interface, not CLI. One click replaces 8+ commands. No jargon about typed witnesses or dynamic fields.
 
 ---
@@ -221,7 +223,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 **On-screen:** The full Command Overview transforming — posture indicator, gate colors, turret states, Signal Feed cascade. This must feel like flipping a switch on an entire network.
 
 **Evidence overlay (post-production):**
-- **Single tx digest** containing all posture changes (validated: single PTB, ~2.3s latency)
+- **Single tx digest** containing all posture changes (validated: single PTB, ~2.3s end-to-end — chain finality ~250ms + indexer sync)
 - `PostureChangedEvent`: `old_mode: BUSINESS → new_mode: DEFENSE`
 - Turret `StatusChangedEvent` × N (one per turret): `action: ONLINE`
 - Before/after state summary: turrets OFFLINE→ONLINE, gates open→tribe-locked, toll removed

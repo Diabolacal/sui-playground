@@ -320,7 +320,7 @@ If TradePost UI not ready: 2-minute GateControl-only (Beats 1–5 + close). Drop
 | H4 | Coin<SUI> toll works on target network | PROVISIONAL | S14 |
 | H5 | Event query performance ≤ 10s | PROVISIONAL | S26 |
 | H6 | world-contracts v0.0.13 stable | PROVISIONAL | S03 |
-| H7 | Single-PTB posture switch feasible | **VALIDATED** | Localnet validation: single PTB confirmed for both directions (~2–3s latency). See [posture-switch validation](../sandbox/posture-switch-localnet-validation.md). |
+| H7 | Single-PTB posture switch feasible | **VALIDATED** | Localnet validation: single PTB confirmed for both directions (~2–3s end-to-end; chain finality ~250ms + indexer sync). See [posture-switch validation](../sandbox/posture-switch-localnet-validation.md). |
 | H8 | NWN fueled+online for turret toggle | **VALIDATED** | Energy prerequisite chain required: `set_fuel_efficiency` → `deposit_fuel` → `network_node::online`. `turret::online()` aborts with `ENotProducingEnergy` otherwise. Demo dependency. |
 | H9 | Off-chain pre-check for turret state | **VALIDATED** | `status::online()`/`offline()` abort if already in target state. PTB construction must read current turret status before including toggle calls. |
 

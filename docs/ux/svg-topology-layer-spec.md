@@ -281,11 +281,11 @@ The Defense Mode posture switch is the **climax visual event** of the demo (Beat
 ### 5.4 Demo Latency Alignment
 
 Per the Demo Beat Sheet's Transaction Latency Protocol:
-- On-chain PTB execution: ~2–3 seconds
+- End-to-end tx response: ~2–3 seconds (chain finality ~250ms + `waitForTransaction` indexer sync ~2s)
 - Narrator stays ~2 seconds ahead of UI
 - Post-click silence: 2 seconds
 
-The cascade animation (400–600ms) begins **after the transaction confirms** (after the on-chain ~2.3s latency). The 2 seconds of narrator silence accommodate: confirmation wait (~2.3s) + cascade animation (~0.5s) + visual absorption (~1.5s before narration resumes). The cascade must be fully settled before "Gates locked. Turrets online. One transaction." is spoken.
+The cascade animation (400–600ms) begins **after the tx response** (~2.3s end-to-end; chain finality is ~250ms, remainder is indexer sync via `waitForTransaction`). The 2 seconds of narrator silence accommodate: tx response wait (~2.3s) + cascade animation (~0.5s) + visual absorption (~1.5s before narration resumes). The cascade must be fully settled before "Gates locked. Turrets online. One transaction." is spoken.
 
 ---
 

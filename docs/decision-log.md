@@ -101,7 +101,7 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 - **Risk:** Low (sandbox validation, no production code)
 - **Gates:** typecheck N/A  build ✅ (Move compiled)  smoke ✅ (localnet full-test ALL PASS)
 - **Key findings:**
-  - BUSINESS→DEFENSE: 1 tx, ~2.3s latency. DEFENSE→BUSINESS: 1 tx, ~2.8s latency.
+  - BUSINESS→DEFENSE: 1 tx, ~2.3s end-to-end (chain finality ~250ms; remainder is `waitForTransaction` indexer sync). DEFENSE→BUSINESS: 1 tx, ~2.8s end-to-end.
   - Energy prerequisite chain required: `set_fuel_efficiency` → `deposit_fuel` → `network_node::online` → turret `online()`.
   - BCS encoding: `tx.pure.vector('u8', Array.from(...))` required for `vector<u8>` params.
   - `status::online()`/`offline()` abort if already in target state — pre-check mandatory.

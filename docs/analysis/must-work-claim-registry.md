@@ -82,7 +82,7 @@
 | CC-PS-06 | Batch turret toggle feasible in single PTB (multiple borrow/toggle/return cycles) | posture-switch-validation.md §PTB Composition; spec.md H9 | NO | YES |
 | CC-PS-07 | Prerequisites enforced: `set_fuel_efficiency` → `deposit_fuel` → NWN `online` → turret `online` | posture-switch-validation.md §Prerequisites | NO | YES |
 | CC-PS-08 | Status guards abort if turret already in target state (must check off-chain before PTB) | posture-switch-validation.md §Constraints | NO | YES |
-| CC-PS-09 | Posture switch latency ≤ 3 seconds including indexer sync | posture-switch-validation.md §Results (2255ms / 2754ms measured) | NO | YES |
+| CC-PS-09 | Posture switch end-to-end ≤ 3 seconds (chain finality ~250ms + indexer sync ~2s; UI reacts on tx response, before indexer) | posture-switch-validation.md §Results (2255ms / 2754ms measured) | NO | YES |
 
 ---
 
