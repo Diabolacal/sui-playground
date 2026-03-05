@@ -764,7 +764,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 20 | Multi-gate network view | Graph layout engine needed |
 | 21 | Map layer toggle | Depends on having map layers |
 | 22 | Quick action shortcuts (dashboard) | UX convenience; demo walks modules explicitly |
-| 23 | Revenue overview (dashboard card) | Requires event indexing |
+| 23 | Revenue overview (dashboard card) | `suix_queryEvents` polling + client-side aggregation sufficient for single-operator demo; indexer only needed for multi-user Stillness deployment |
 | 24 | Event type filtering | Polish for activity feed |
 | 25 | Structure-specific filtering | Polish for activity feed |
 | 26 | Time range filtering | Polish for activity feed |

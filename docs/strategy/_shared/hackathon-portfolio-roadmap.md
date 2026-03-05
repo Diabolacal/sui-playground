@@ -556,7 +556,7 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 **Problem:** Character is a shared object. There is no on-chain wallet→Character mapping. `suix_getOwnedObjects` on the wallet address does NOT return the Character. The entire structure discovery chain depends on knowing the Character ID first.
 
 **Resolution options:**
-1. **Event indexing** — query `CharacterCreatedEvent` (emits `character_address`) to build wallet→Character mapping. Requires historical event access on the target RPC.
+1. **Event polling** — query `CharacterCreatedEvent` via `suix_queryEvents` (emits `character_address`) to build wallet→Character mapping. Requires historical event access on the target RPC. This is RPC polling, not a server-side indexer.
 2. **Deterministic ID computation** — `derived_object::claim(registry_id, character_key)`. Requires knowing ObjectRegistry UID + game_character_id + tenant string — may not be publicly documented.
 3. **Game server API** — rely on CCP's server to provide the mapping. Availability uncertain.
 4. **Manual fallback** — user pastes their Character ID. Functional but poor UX.

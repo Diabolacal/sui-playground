@@ -287,7 +287,7 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 **Voiceover:** *"TradePost turns your storage units into storefronts. Stock items, set prices, publish listings."*
 
-*[A buyer interface appears. Selects a fuel rod listing at 30 Lux. Clicks Buy. Transaction confirmation appears. ItemPurchased event in the feed.]*
+*[A buyer interface appears. Selects a fuel rod listing at 30 Lux. Clicks Buy. Transaction confirmation appears. TradeSettledEvent in the feed.]*
 
 **Voiceover:** *"A pilot passes through your toll gate — paying 5 Lux — lands at your SSU, and buys fuel for 30 Lux. One click. Atomic settlement. No counterparty risk. The fuel is in their inventory. The revenue is in yours."*
 

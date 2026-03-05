@@ -157,7 +157,7 @@
 |---|---|
 | **Script** | `sandbox/validation/ssu_trade_test.sh` (459 lines — full SSU-backed trade lifecycle) |
 | **Command** | `cd sandbox/validation && bash ssu_trade_test.sh` |
-| **Expected Output** | 6+ tx digests: publish, setup_storefront, authorize_ext, stock_item, list_item, buy. Events: `ItemListed`, `ItemSold`/`ItemPurchased`. Balance deltas for buyer and seller. |
+| **Expected Output** | 6+ tx digests: publish, setup_storefront, authorize_ext, stock_item, list_item, buy. Events: `ListingCreatedEvent`, `TradeSettledEvent` (CC custom). Balance deltas for buyer and seller. |
 | **Prior evidence** | Full results in `sandbox/validation/ssu_trade_results.txt` (167 lines). Key digests: Publish `49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z`, Buy `42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw`. Seller +5 SUI, Buyer −5 SUI confirmed. |
 | **Capture Method** | Terminal output from script run. Explorer tx view for buy digest. Balance comparison: `sui client gas $SELLER` / `sui client gas $BUYER` before and after. |
 | **Script exists?** | YES — fully scripted with prior evidence |

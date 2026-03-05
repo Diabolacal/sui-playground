@@ -18,7 +18,7 @@ If the demo shows nothing else, these five overlays must appear on-screen with t
 
 1. **Policy deploy** — tx digest proving gate policy (tribe filter + toll) was written on-chain in one action.
 2. **Hostile denied** — tx digest showing MoveAbort when a wrong-tribe pilot attempts to jump.
-3. **Ally tolled + revenue** — tx digest showing AccessGrant + toll transfer, with operator balance delta.
+3. **Ally tolled + revenue** — tx digest showing `TollCollectedEvent` (CC custom event) + toll transfer, with operator balance delta.
 4. **Trade buy + settlement** — tx digest showing atomic buy (payment to seller, item to buyer, listing deactivated).
 5. **Aggregate revenue** — Command Overview screenshot/overlay showing combined toll + trade revenue.
 
@@ -30,7 +30,7 @@ If the demo shows nothing else, these five overlays must appear on-screen with t
 |---|---|---|---|---|
 | Gate extension system supports custom access rules | Code analysis — `gate.move` L105 `authorize_extension<Auth>()` | gatecontrol-feasibility-report.md §A | N/A (architecture proof) | Architecture diagram slide |
 | ★ Tribe filter blocks non-matching tribes atomically | Devnet test — PLAYER_B (tribe 2) denied, MoveAbort code 0 (ETribeMismatch) | shortlist-viability-validation-report.md Test 2 | Devnet checkpoint ~6500 (sandbox); `[TBD-digest]` (submission) | Red "Access Denied" overlay + error code callout |
-| Tribe filter allows matching tribes | Devnet test — PLAYER_A (tribe 1) granted passage + 1 SUI toll transferred | shortlist-viability-validation-report.md Test 3 | Devnet checkpoint ~6260 (sandbox); `[TBD-digest]` (submission) | Green "Passage completed" overlay + custom `TollCollectedEvent` from extension (Note: `AccessGrant` is a sandbox mock event — submission extension must emit its own event; see [read-path validation](../architecture/read-path-architecture-validation.md) §2.4) |
+| Tribe filter allows matching tribes | Devnet test — PLAYER_A (tribe 1) granted passage + 1 SUI toll transferred | shortlist-viability-validation-report.md Test 3 | Devnet checkpoint ~6260 (sandbox); `[TBD-digest]` (submission) | Green "Passage completed" overlay + `TollCollectedEvent` (CC custom event; see [read-path validation](../architecture/read-path-architecture-validation.md) §2.4) |
 | ★ Coin toll collects payment atomically on jump | Devnet test — 1 SUI transferred to collector (ADMIN) address | shortlist-viability-validation-report.md Test 3 | GateConfig: `0xfbb73175002a87f1ffd6f56056e4e24d741176dd24d871b952c9c0abd1ce4160` (sandbox) | Balance delta overlay: collector +1 SUI |
 | Rules compose as independent layers (tribe + toll on same gate) | Devnet test — TribeRule + TollRule stored as dynamic fields on shared GateConfig | shortlist-viability-validation-report.md §Key Architectural Findings | GateConfig object ID above (sandbox) | Dynamic field inspector screenshot |
 | Extension authorization registers on gate | Devnet lifecycle — `authorize_extension<TestAuth>` on both gates | gate-lifecycle-runbook.md Step 11c-d | `2miDiePXprTSj1Hfso88fHnwTUrE8ZbgaTVCiRLHF75x` (Gate A), `FPDV7Ur72fhEGfdVSi6kkTRyjntKfjidU23tcHYDZcS2` (Gate B) | Gate object `extension: Some(TypeName)` field |
@@ -44,7 +44,7 @@ If the demo shows nothing else, these five overlays must appear on-screen with t
 
 | Demo Claim | Evidence Type | Source | Tx Digest / Object ID | Demo Overlay Format |
 |---|---|---|---|---|
-| ★ Cross-address atomic buy — buyer pays, receives item in one tx | Devnet test — 3 successful buys at different prices by different buyers | shortlist-viability-validation-report.md Test 5 | `3GtyTmJmLZxLQ3sqcuGTwoEm566Ts87c8Kedqjfh1NJ2` (Buy 3: Gem, 3 SUI) | Tx digest + ItemPurchased event overlay |
+| ★ Cross-address atomic buy — buyer pays, receives item in one tx | Devnet test — 3 successful buys at different prices by different buyers | shortlist-viability-validation-report.md Test 5 | `3GtyTmJmLZxLQ3sqcuGTwoEm566Ts87c8Kedqjfh1NJ2` (Buy 3: Gem, 3 SUI) | Tx digest + `TradeSettledEvent` (CC custom) overlay |
 | Seller receives payment without being online | Devnet test — seller balance increased, no seller signature at buy time | shortlist-viability-validation-report.md Test 5 | Same tx above; ADMIN balance +3 SUI confirmed | Balance delta overlay: seller +3 SUI |
 | Listing deactivated after purchase | Devnet test — Listing `is_active: false` after buy | shortlist-viability-validation-report.md Test 5 | Listing `0x857a869108e853f26d48ae29886d1211514215643c829858e5649464bc8d9b69` | Before/after listing state |
 | SSU-backed storefront — item withdrawn via extension witness (no OwnerCap sharing) | Devnet test — full SSU-backed buy lifecycle (6 txs) | shortlist-viability-validation-report.md Test 7 | Buy: `42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw` | SSU items before/after (1→0) + buyer owns item |
@@ -113,7 +113,7 @@ Three quantified targets for the demo. Values marked `[TBD]` are refined during 
 | Toll revenue captured | ≥[TBD] SUI across demo gate jumps | Collector address balance delta |
 | Trade revenue captured | ≥[TBD] SUI across demo TradePost buys | Seller address balance delta |
 | Combined revenue visible | Total shown in Command Overview or Signal Feed | Aggregate balance summary |
-| Atomic settlement proof | ≥1 complete buy showing payment + item transfer in one tx | Tx digest with ItemPurchased event + balance changes |
+| Atomic settlement proof | ≥1 complete buy showing payment + item transfer in one tx | Tx digest with `TradeSettledEvent` (CC custom) + balance changes |
 
 **Demo proof:** Revenue counter in Signal Feed ticking up as toll + trade events occur.
 

@@ -382,8 +382,8 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 ### Hour 7: Event Emission + Custom Events (1 hour)
 
-- [ ] Add custom events to GateControl: `TribeCheckPassedEvent`, `TollPaidEvent`
-- [ ] Add custom events to TradePost: `ListingCreatedEvent`, `ItemSoldEvent`, `ListingCancelledEvent`
+- [ ] Add custom events to GateControl: `TribeCheckPassedEvent`, `TollCollectedEvent`
+- [ ] Add custom events to TradePost: `ListingCreatedEvent`, `TradeSettledEvent`, `ListingCancelledEvent`
 - [ ] Verify events appear in `sui client events --package <pkg>`
 
 ### Hour 8+: Dashboard / Web UI
@@ -392,7 +392,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 - [ ] Install `@mysten/sui` SDK
 - [ ] Gate policy builder: toggle tribe rule, set toll price
 - [ ] TradePost browser: list items, one-click buy
-- [ ] Event feed: subscribe to JumpEvents + ItemSoldEvents
+- [ ] Event feed: subscribe to JumpEvents + TradeSettledEvents
 
 ---
 

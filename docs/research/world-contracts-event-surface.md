@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-World-contracts emits **28 unique event types** from **37 call sites** across 11 modules. Events cover assembly lifecycle (gate, turret, SSU, network node), inventory operations (mint/burn/deposit/withdraw), fuel/energy state, access control, killmails, metadata, and status changes.
+World-contracts emits **30 unique event types** from **37 call sites** across 13 modules (updated 2026-03-05; see [complete inventory](world-contracts-event-inventory.md)). Events cover assembly lifecycle (gate, turret, SSU, network node), inventory operations (mint/burn/deposit/withdraw), fuel/energy state, access control, killmails, metadata, and status changes.
 
 **Spatial linkage is sparse.** Only `KillmailCreatedEvent` contains a direct `solar_system_id`. Gate and SSU creation events include a hashed `location_hash`. All other events require an off-chain object lookup to derive spatial position from `assembly_id` → assembly object → location field.
 

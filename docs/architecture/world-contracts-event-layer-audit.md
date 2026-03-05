@@ -9,7 +9,7 @@
 
 ## A) Complete Event Inventory
 
-### Summary: 34 `event::emit` call sites across 10 modules, 20 distinct event struct types.
+### Summary: 37 `event::emit` call sites across 13 modules, 30 distinct event struct types (updated 2026-03-05; prior count under-reported — see [complete inventory](../research/world-contracts-event-inventory.md)).
 
 ---
 

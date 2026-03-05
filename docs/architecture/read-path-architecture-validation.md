@@ -4,7 +4,7 @@
 
 - **Date:** 2026-02-18
 - **Scope:** Wallet→structures discovery, signal feed data sources, read architecture options, scale considerations, demo requirements
-- **Validated against:** world-contracts event audit (31 `event::emit` calls, 16 event types, 9 modules), Sui RPC/GraphQL documentation, all CivilizationControl docs
+- **Validated against:** world-contracts event audit (37 `event::emit` calls, 30 event types, 13 modules — updated 2026-03-05), Sui RPC/GraphQL documentation, all CivilizationControl docs
 
 ---
 
@@ -65,7 +65,7 @@ Step 6: Start polling loop (10s interval)
 
 ### 2.1 World-Contracts Event Inventory
 
-**31 event emissions across 9 modules, 16 distinct event struct types.** Complete audit:
+**37 event emissions across 13 modules, 30 distinct event struct types** (updated 2026-03-05; see [event inventory](../research/world-contracts-event-inventory.md)). Complete audit:
 
 | Event | Module | Trigger | User-scoped? | CivControl Relevance |
 |-------|--------|---------|-------------|---------------------|
@@ -317,8 +317,8 @@ For the Stillness deployment bonus window (14 days post-submission), deploy Opti
 | Assumption | Location | Status | Impact |
 |-----------|----------|--------|--------|
 | Toll revenue = "sum of Coin\<SUI\> transfers" | UX Spec Appendix | **INCORRECT** — generic Coin transfers are ambiguous; extension must emit dedicated revenue events | Must redesign revenue tracking to use custom events |
-| `AccessGrant` event exists | Demo Beat Sheet Beat 5, Claim Proof Matrix | **INCORRECT** — this is a sandbox mock, not a world-contracts event | Extension must emit equivalent custom event |
-| `ItemPurchased` event exists | Product Vision §5, Claim Proof Matrix | **INCORRECT** — sandbox mock only | TradePost extension must emit trade events |
+| `AccessGrant` event exists | Demo Beat Sheet Beat 5, Claim Proof Matrix | **INCORRECT** — sandbox mock only. Canonical CC event: `TollCollectedEvent` | Extension must emit `TollCollectedEvent` |
+| `ItemPurchased` event exists | Product Vision §5, Claim Proof Matrix | **INCORRECT** — sandbox mock only. Canonical CC event: `TradeSettledEvent` | TradePost extension must emit `TradeSettledEvent` |
 | Gate status change events exist | UX Spec §7 Signal Feed | **PARTIAL** — `StatusChangedEvent` exists in `status.move`, triggered by online/offline | **VALIDATED** — was incorrectly flagged as missing in some internal discussions |
 | Time-range event filtering is native | UX Spec §7 time range selector | **INCORRECT** — `suix_queryEvents` uses cursor-based pagination, not native time-range windows; `TimeRange` filter exists in JSON-RPC but is deprecated | Client must paginate and filter by checkpoint timestamp |
 | `suix_subscribeEvent` is available | UX Spec Appendix | **UNPROVEN** — availability on hackathon test server / Stillness RPC unknown | MVP should use polling (confirmed fallback design) |
