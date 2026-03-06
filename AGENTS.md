@@ -254,6 +254,14 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
 6. **Retention classification is mandatory.** All docs must begin with: `**Retention:** [Carry-forward | Prep-only | Sandbox-only | Archive]`. Agents must classify before commit. Default to **Prep-only** if uncertain.
 
+## VS Code 1.110 – Agent Tooling Notes
+
+These carry forward when this repo is copied into hackathon repositories.
+
+- **Built-in browser tools** (`workbench.browser.enableChatTools`) are enabled in `.vscode/settings.json`. Prefer them over external browser MCP tooling (e.g., chrome-devtools MCP) for routine web-app verification unless a specific gap is found. Tools include: `openBrowserPage`, `navigatePage`, `readPage`, `screenshotPage`, `clickElement`, `hoverElement`, `typeInPage`, `handleDialog`, `runPlaywrightCode`.
+- **Agent Debug panel** is opened manually — not a persistent setting. Access via Command Palette → `Developer: Open Agent Debug Panel`, or Chat gear menu → `View Agent Logs`. Only available for local sessions; log data is not persisted across VS Code restarts.
+- **Context compaction** happens automatically when the context window fills. Manual compaction: type `/compact` in the chat input, optionally with focus instructions (e.g., `/compact focus on accepted architecture and unresolved blockers`). Also available via the context-window control → "Compact Conversation".
+
 ## Fast context to load on start
 
 - Read `.github/copilot-instructions.md` (source of truth)

@@ -70,6 +70,15 @@
     "chat.agent.maxRequests": 100,
 
     // ─────────────────────────────────────────────────────────────────────────
+    // VS Code 1.110 – Agentic Browser Tools (Experimental)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Built-in browser chat tools — lets agents drive the integrated browser
+    // to navigate, read, screenshot, and interact with pages without external
+    // MCP tooling.  Prefer these over chrome-devtools MCP for routine checks.
+    "workbench.browser.enableChatTools": true,
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Git Settings
     // ─────────────────────────────────────────────────────────────────────────
 

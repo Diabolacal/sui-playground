@@ -477,6 +477,14 @@ The operator may paste a "spec" produced by an external LLM. Treat it as **INTEN
 4. If the spec is inefficient, outdated, or architecturally unsound, propose a safer or cleaner approach and proceed.
 5. If the spec implies unsafe actions (e.g., copying sandbox code into hackathon submission, editing `vendor/`, pushing without authorization), **STOP** and propose a compliant alternative.
 
+## VS Code 1.110 – Agent Tooling Notes
+
+These carry forward when this repo is copied into hackathon repositories.
+
+- **Built-in browser tools** (`workbench.browser.enableChatTools`) are enabled in `.vscode/settings.json`. Prefer them over external browser MCP tooling (e.g., chrome-devtools MCP) for routine web-app verification unless a specific gap is found. Tools include: `openBrowserPage`, `navigatePage`, `readPage`, `screenshotPage`, `clickElement`, `hoverElement`, `dragElement`, `typeInPage`, `handleDialog`, `runPlaywrightCode`.
+- **Agent Debug panel** is opened manually — not a persistent setting. Access via Command Palette → `Developer: Open Agent Debug Panel`, or Chat gear menu → `View Agent Logs`. Only available for local sessions; log data is not persisted across VS Code restarts.
+- **Context compaction** does not require a setting; it happens automatically when the context window fills. Manual compaction: type `/compact` in the chat input, optionally with focus instructions (e.g., `/compact focus on accepted architecture and unresolved blockers`). Also available via the context-window control → "Compact Conversation".
+
 ## When Unsure
 - Search existing patterns first (grep for similar feature names).
 - Mirror existing instrumented modes for any UI mode needing session vs enter counts + time.
