@@ -115,7 +115,7 @@ Every chain write the app performs, with exact Move targets:
 | Operation | Move Call | Auth Required | Notes |
 |-----------|----------|---------------|-------|
 | Request jump permit | `civcontrol::gate_permit::request_jump_permit(config, src, dst, character, payment, clock, ctx)` | Extension witness (GateAuth) | Evaluates all rules, emits TollCollectedEvent. Auth is the typed `GateAuth` witness — no AdminACL or verify_sponsor involved. |
-| Execute jump | `gate::jump_with_permit(src, dst, character, permit, clock, ctx)` | AdminACL sponsor | Consumes JumpPermit (owned, deleted on use — not a hot-potato; `key, store` abilities). **PROVISIONAL:** Issue + jump are two separate transactions; permit is transferred to character address, not returned in PTB. |
+| Execute jump | `gate::jump_with_permit(src, dst, character, permit, clock, ctx)` | AdminACL sponsor | Consumes JumpPermit (owned, deleted on use — not a hot-potato; `key, store` abilities). **CONFIRMED (source-verified 2026-03-07):** Issue + jump are two separate transactions. `issue_jump_permit` calls `transfer::transfer(permit, character.character_address())`, placing the permit in the player's wallet; `jump_with_permit` takes `JumpPermit` by value (owned input). These cannot be composed in the same PTB. Runtime model: TX1 = permit issuance (extension-signed or player-signed), TX2 = sponsored jump execution. |
 
 #### Phase: Trade
 
@@ -124,6 +124,8 @@ Every chain write the app performs, with exact Move targets:
 | Create listing | `civcontrol::trade_post::create_listing(config, ssu, owner_cap, type_id, price, ctx)` | OwnerCap<StorageUnit> | Creates shared Listing object |
 | Buy | `civcontrol::trade_post::buy(config, ssu, character, listing, payment, ctx)` | None (buyer signs) | Cross-address: withdraw_item<TradeAuth> + transfer |
 | Cancel listing | `civcontrol::trade_post::cancel_listing(listing, owner_cap, ctx)` | OwnerCap<StorageUnit> | Sets is_active = false |
+
+> **⚠️ v0.0.15 constraint (Day-1 validation required):** `deposit_item<Auth>` now validates `parent_id` — items can only be deposited back to their origin SSU. Cross-SSU item transfer in the buy flow may require using the new `deposit_to_owned<Auth>` function instead. This is not yet a resolved design choice; validate the buy-path item routing on the hackathon test server before committing to an approach.
 
 ### 2.2 Read Paths
 

@@ -247,6 +247,8 @@ Then test: `corpse_gate_bounty::collect_corpse_bounty<T>(...)` requires:
 
 **⚠️ This step has high complexity** — requires a populated StorageUnit with correctly-typed items and valid proximity proofs.
 
+> **⚠️ v0.0.15 version note:** The `corpse_gate_bounty` example's `deposit_item()` call may be affected by a v0.0.15 change: `deposit_item<Auth>` now validates `parent_id`, restricting items to deposit only to their origin SSU. If the corpse originated from a different SSU, the deposit step would fail. v0.0.15 adds `deposit_to_owned<Auth>` as an alternative path for cross-SSU item delivery. Verify against current contract source before relying on this example's pattern directly.
+
 ---
 
 ## C. Toll Mechanism Options

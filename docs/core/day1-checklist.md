@@ -271,6 +271,24 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 
 ---
 
+## Check 9b: Two-Transaction Permit Flow Validation
+
+**Priority:** HIGH — gate demo depends on this
+**Time budget:** 10 minutes
+**Step ID:** Part of S14
+
+| Field | Value |
+|-------|-------|
+| **Check** | JumpPermit issued in TX1 persists as an owned object and can be consumed by `jump_with_permit` in a separate TX2 |
+| **Test Sequence** | 1. TX1: Call extension `request_jump_permit(config, src, dst, character, payment, clock, ctx)` → capture tx digest and JumpPermit object ID. 2. Verify permit exists as owned object at `character.character_address()` (query `suix_getOwnedObjects` with JumpPermit type filter). 3. TX2 (sponsored): Call `gate::jump_with_permit(src, dst, character, permit, admin_acl, clock, ctx)` → capture tx digest and JumpEvent. 4. Verify permit object no longer exists (deleted on consumption). |
+| **Expected Output** | TX1 succeeds with permit object created. TX2 succeeds with JumpEvent emitted and permit deleted. |
+| **Blocking?** | Yes — if permits do not persist across transactions, the entire gate demo flow fails. |
+| **Fallback** | If TX2 fails with object-not-found: check TX1 confirmation latency. Retry with explicit `waitForTransaction` between TX1 and TX2. |
+
+**Result:** ☐ TX1 permit issued ☐ Permit persists ☐ TX2 jump succeeds ☐ Permit consumed
+
+---
+
 ## Check 10: Wallet Connectivity
 
 **Priority:** MEDIUM
