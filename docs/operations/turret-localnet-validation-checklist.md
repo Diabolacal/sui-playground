@@ -194,6 +194,22 @@ Turrets are game-engine-created assemblies. Most creation flows (`anchor`, `shar
 
 ---
 
+## 9. Bouncer Turret Posture (Extension-Based Passive Mode)
+
+> **Internal label:** "bouncer turret" (alias: "peacekeeper turret"). This section validates whether a turret can remain ONLINE without firing at neutral traffic, using a custom extension that returns only aggressors. Derived from code inspection of `effective_weight_and_excluded()` and the extension calling convention — NOT yet runtime-validated. See Day 1 checklist Check 9c.
+
+| ID | Title | Steps | Expected Result | Status | Applies To |
+|----|-------|-------|-----------------|--------|------------|
+| BT-01 | Empty return list → turret stands down | Deploy extension returning empty `vector<ReturnTargetPriorityList>`. Online turret, send neutral candidates. | Turret does not fire. No abort. | ENVIRONMENT-BLOCKED | CC |
+| BT-02 | Aggressor-only return list → turret engages | Same extension, but include candidates with `is_aggressor=true` or `behaviour_change=STARTED_ATTACK` in return. | Turret fires on aggressor only. | ENVIRONMENT-BLOCKED | CC |
+| BT-03 | STOPPED_ATTACK de-escalation | Aggressor candidate changes to `behaviour_change=STOPPED_ATTACK`. Extension excludes from return. | Turret stops firing on that target. | ENVIRONMENT-BLOCKED | CC |
+| BT-04 | Multi-turret extension authorization | Authorize bouncer extension on 2+ turrets in a single PTB (borrow/authorize/return per OwnerCap). | All turrets updated in one tx. | ENVIRONMENT-BLOCKED | CC |
+| BT-05 | Posture switch: swap extension ↔ remove extension | PTB that removes bouncer extension on turret (revert to default) OR swaps to a different extension. | Extension swap/removal succeeds in single PTB alongside gate policy changes. | ENVIRONMENT-BLOCKED | CC |
+
+> **If BT-01 fails** (game engine rejects empty list or falls back to default targeting): the bouncer posture is not feasible. Keep current model: Business = turrets offline, Defense = turrets online with default targeting. No demo rewrite needed.
+
+---
+
 ## Object Dependency Matrix
 
 | Object | Created By | Builder-Creatable? | Used By |

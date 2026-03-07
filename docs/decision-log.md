@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-07 — Bouncer Turret Posture: Day 1 Validation Target Added
+- **Goal:** Capture a new empirical validation target: can a turret remain ONLINE but passive (no fire on neutrals) while still retaliating against aggressors? If yes, Business posture upgrades from "turrets offline" to "turrets online, peacekeeper mode."
+- **Decision:** Added Day 1 checklist item (Check 9c) and turret validation checklist section (§9, items BT-01 through BT-05). Framed as upgrade-path validation, not a demo blocker. Current fallback (offline/online posture model) preserved. Derived from code inspection of `effective_weight_and_excluded()` and the extension calling convention (closed-world constraint). Key uncertainty: whether game engine handles an empty return list gracefully.
+- **Files:** `docs/core/day1-checklist.md` (Check 9c), `docs/operations/turret-localnet-validation-checklist.md` (§9 BT-01–BT-05)
+- **Diff:** ~40 added / 0 removed
+- **Risk:** Low (docs only, no code change, no demo plan change)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs-only)
+- **Internal terminology:** "bouncer turret" (alias: "peacekeeper turret") — not committed to product copy yet
+- **Follow-ups:** Runtime validation on test server Day 1. If BT-01 fails, close this path and keep offline/online model.
+
 ## 2026-03-04 — Post-Assembly Review Checklist (Visual Cadence Discipline)
 - **Goal:** Close the gap between recording guidance (per-beat stage directions) and post-production QA — specifically the "talking over static screen" failure mode that kills momentum for hackathon judges.
 - **Decision:** Added 8-item Post-Assembly Review Checklist to beat sheet, placed after Recommended Recording Order. Core item: muted playback test (watch with audio OFF, verify every beat has visible change, no >3s static segments during narration). Added cross-reference from narration-direction-spec.md Post-Production Assembly (new step 7).

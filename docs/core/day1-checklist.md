@@ -289,6 +289,29 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 
 ---
 
+## Check 9c: Bouncer Turret Posture Validation
+
+**Priority:** MEDIUM — upgrade-path for Business posture (not a demo blocker)
+**Time budget:** 20 minutes
+**Step ID:** Part of S14
+**Internal terminology:** "bouncer turret" (alias: "peacekeeper turret")
+
+> **Context:** Code inspection suggests a custom turret extension could return an empty target list (suppress all fire) while still including aggressors. If validated, Business posture could become "online but passive" instead of "offline" — a significant product upgrade for market/trade post scenarios. This is NOT yet proven at runtime. Current fallback (turrets offline in Business) is unaffected.
+
+| Field | Value |
+|-------|-------|
+| **Check** | Can a turret remain ONLINE, suppress fire on neutral traffic, and still engage aggressors? |
+| **Pre-requisite** | Deploy a minimal "bouncer" turret extension that: (a) filters out all non-aggressor candidates, (b) returns only candidates where `is_aggressor == true` or `behaviour_change == STARTED_ATTACK`. |
+| **Test Sequence** | 1. Deploy bouncer extension package → authorize on test turret. 2. Bring turret online (via OwnerCap). 3. Verify turret remains online without firing at neutral/same-tribe traffic (empty return list path). 4. Trigger aggression scenario → verify turret targets aggressor. 5. STOPPED_ATTACK → verify turret de-escalates (aggressor removed from return list). |
+| **Expected Output** | Turret online + no fire on neutrals + fire on aggressors + de-escalation on stop. |
+| **Scaling check** | If basic behavior validates: test authorizing the same bouncer extension on 2+ turrets. Verify `authorize_extension` can be called per-turret in a single PTB (borrow/authorize/return per cap). Confirm posture-switch PTB can toggle between bouncer and default extension (or remove extension) across multiple turrets. |
+| **Fallback** | If empty list causes game engine error, or aggression filtering doesn't work as expected: keep current model (Business = offline, Defense = online/aggressive). No demo rewrite needed. |
+| **Blocking?** | No — this is an upgrade-path validation. Main demo uses offline/online toggle regardless of outcome. |
+
+**Result:** ☐ Empty list → turret stands down ☐ Aggressor targeted ☐ De-escalation works ☐ Multi-turret extension rollout feasible ☐ NOT VALIDATED (keep fallback)
+
+---
+
 ## Check 10: Wallet Connectivity
 
 **Priority:** MEDIUM
