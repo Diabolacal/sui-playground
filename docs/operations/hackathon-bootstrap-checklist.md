@@ -63,6 +63,17 @@ This checklist ensures the hackathon submission repo starts with zero prior Git 
 
 ---
 
+## Update Workspace-Scoped Files for Submission Context
+
+- [ ] Update `AGENTS.md`: remove or rewrite the "Workspace-Specific Rules (sui-playground sandbox)" section for submission context (the repo is no longer a sandbox)
+- [ ] Update `.github/copilot-instructions.md`: replace the "Sui Local Devnet" section (references `docs/architecture/sui-playground.md` which does not exist in the submission repo) with hackathon test server guidance or a generic devnet fallback
+- [ ] Search both files for `sui-playground` and replace with the project name
+- [ ] Update `llms.txt`: replace planning-workspace navigation with submission repo structure
+- [ ] Update `README.md`: rewrite the repo identity section — it currently says "Not the hackathon submission repo" which is now false
+- [ ] Update `GITHUB-COPILOT.md` if present: same identity rewrite as README
+
+---
+
 ## Final Verification
 
 - [ ] Check GitHub commit history — should show exactly one commit

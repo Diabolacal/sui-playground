@@ -241,7 +241,7 @@ Three candidate navigation sets were evaluated against four criteria: Authority 
 
 ### Narration Register
 
-- **Tone:** Steady. Unhurried. The narrator is describing something that already works, not pitching something that might.
+- **Tone:** Steady. Unhurried. The narrator should present the system as if it already works, not pitch something that might.
 - **Vocabulary:** Match the label mapping table (§3). Use "deploy" not "save." Use "signals" not "notifications." Use "structures" not "objects."
 - **Pacing:** One idea per sentence. Pause between segments. The demo should feel like watching someone competent at work, not like a feature tour.
 

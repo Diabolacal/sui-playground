@@ -35,7 +35,7 @@
 
 ### 1.1 What CivilizationControl IS
 
-A **browser-only governance command layer** for EVE Frontier tribe leaders. Two core modules shipped as a single published Move extension package:
+A **browser-only governance command layer** for EVE Frontier tribe leaders. Two core modules designed as a single published Move extension package:
 
 | Module | Purpose | World-Contracts Surface |
 |--------|---------|------------------------|
@@ -43,7 +43,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | **TradePost** | SSU-backed storefronts with cross-address atomic buy settlement using `Coin<SUI>` | `storage_unit.move`: `authorize_extension`, `withdraw_item<Auth>`, `deposit_item<Auth>` |
 | **TurretControl** | Binary state toggle (online/offline) for owned turrets. No custom extension — native targeting only. Orchestrated via Posture Presets. | `turret.move`: `online`, `offline` (player-callable via `OwnerCap<Turret>`) |
 
-> **Note:** Turret assembly exists in world-contracts v0.0.14 (`turret.move`) using the same extension pattern. CivilizationControl uses turrets at the state-toggle level only (`online`/`offline` via `OwnerCap<Turret>`) — no custom turret extension is deployed. Default turret targeting already matches tribe_only policy. See [Turret Contract Surface](../architecture/turret-contract-surface.md). Turret state is orchestrated alongside gate policy via **Posture Presets** (Open for Business / Defense Mode).
+> **Note:** Turret assembly exists in world-contracts v0.0.14 (`turret.move`) using the same extension pattern. CivilizationControl uses turrets at the state-toggle level only (`online`/`offline` via `OwnerCap<Turret>`) — CivilizationControl does not implement a custom turret extension. Default turret targeting already matches tribe_only policy. See [Turret Contract Surface](../architecture/turret-contract-surface.md). Turret state is orchestrated alongside gate policy via **Posture Presets** (Open for Business / Defense Mode).
 
 **Architecture model:** Publish-once, configure-via-data. One extension package is published by the CivControl team. Players configure pre-built rule types via PTBs that write dynamic fields to a shared `ExtensionConfig` object. No end user writes Move code.
 
@@ -73,7 +73,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | No drag-and-drop rule ordering | Fixed evaluation order enforced in Move module |
 | No server-side analytics | No backend |
 | No in-game write operations for Day-1 | In-game browser lacks Sui wallet. Read-only in-game surface; external browser for writes. EVE Vault relay is stretch. |
-| No turret extension for Day-1 | Turret assembly exists (v0.0.14). CivilizationControl toggles turret online/offline state only — no custom turret extension deployed. Default turret targeting already matches tribe_only policy. Turret extensions cannot access external state (closed-world constraint). |
+| No turret extension for Day-1 | Turret assembly exists (v0.0.14). CivilizationControl toggles turret online/offline state only — no custom turret extension will be built. Default turret targeting already matches tribe_only policy. Turret extensions cannot access external state (closed-world constraint). |
 
 ### 1.3 External Dependencies
 

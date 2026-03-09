@@ -6,7 +6,7 @@
 >
 > Companion to: [civilizationcontrol-demo-beat-sheet.md](../core/civilizationcontrol-demo-beat-sheet.md)
 > Cross-reference: [civilizationcontrol-claim-proof-matrix.md](../core/civilizationcontrol-claim-proof-matrix.md)
-> Last updated: 2026-03-11
+> Last updated: 2026-03-09 (pre-hackathon; will be finalized during hackathon execution)
 
 ---
 

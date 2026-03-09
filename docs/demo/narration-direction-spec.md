@@ -13,7 +13,7 @@ Production narration direction for the CivilizationControl hackathon demo video.
 
 ## Baseline Voice Configuration — Tested Reference Profile
 
-The following configuration has been tested and confirmed as the production baseline for all CivilizationControl demo narration. It is not permanently locked — future iterations may adjust parameters — but all future work must begin from this configuration to eliminate voice re-selection drift.
+The following configuration has been tested and confirmed as the demo baseline for all CivilizationControl demo narration. It is not permanently locked — future iterations may adjust parameters — but all future work must begin from this configuration to eliminate voice re-selection drift.
 
 ### Tested Parameters
 
@@ -68,7 +68,7 @@ If any test phrase fails, do not proceed with generation. Adjust parameters or r
 
 CivilizationControl's narration must sound like a mission controller on a routine shift — not a cinematic trailer, not a keynote pitch, not a crypto hype reel. The reasons are structural, not aesthetic:
 
-1. **Confidence is the product signal.** The narrator describes a system that already works. Dramatic delivery implies the system needs selling. Restrained delivery implies the system speaks for itself.
+1. **Confidence is the product signal.** The narrator should present the system as if it already works. Dramatic delivery implies the system needs selling. Restrained delivery implies the system speaks for itself.
 2. **Judges evaluate 30+ demos.** Hype fatigue sets in by entry #5. A calm, measured voice cuts through because it is the anomaly. Restrained delivery is a competitive advantage.
 3. **The demo carries the emotion.** Defense Mode — gates locking, turrets coming online, the silence after the click — creates the moment. The narrator's job is to frame it, not amplify it. Overdirection competes with the visual.
 4. **The 3-Second Clarity Rule.** Every sentence must be immediately parseable. Dramatic inflection adds cognitive load. Flat, measured delivery keeps attention on content.

@@ -35,10 +35,10 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 |------|---------|
 | `docs/strategy/civilization-control/civilizationcontrol-voice-and-narrative.md` | Voice, labels, microcopy guidelines |
 | `docs/strategy/civilization-control/civilizationcontrol-hackathon-emotional-objective.md` | Emotional design target |
-| `docs/strategy/civilizationcontrol-strategy-memo.md` | Strategic positioning |
-| `docs/strategy/civilizationcontrol-product-vision.md` | Product vision |
-| `docs/strategy/hackathon-portfolio-roadmap.md` | Portfolio strategy and prize targeting |
-| `docs/strategy/marketing-plan.md` | Marketing and submission narrative |
+| `docs/strategy/civilization-control/civilizationcontrol-strategy-memo.md` | Strategic positioning |
+| `docs/strategy/civilization-control/civilizationcontrol-product-vision.md` | Product vision |
+| `docs/strategy/_shared/hackathon-portfolio-roadmap.md` | Portfolio strategy and prize targeting |
+| `docs/strategy/_shared/marketing-plan.md` | Marketing and submission narrative |
 
 ## UX Documents (copy for design guidance)
 

@@ -40,7 +40,7 @@
 2. GateControl is the strongest "Best Entry" backbone based on weighted composite (7.97).
 3. TradePost improves player vote by adding an immediately understood mechanic ("space shop").
 4. TradePost provides an immediately understood mechanic ("space shop") that raises player vote appeal.
-5. Two tightly integrated modules can be shipped with high polish within the hackathon timeline; TribeMint and LootDrop are stretch goals that add depth without threatening core delivery.
+5. Two tightly integrated modules are planned to ship with high polish within the hackathon timeline; TribeMint and LootDrop are stretch goals that add depth without threatening core delivery.
 6. Over-scope is the primary execution risk, managed by strict priority ordering.
 
 ---

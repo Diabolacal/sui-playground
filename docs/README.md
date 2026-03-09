@@ -241,6 +241,8 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [operations/demo-evidence-appendix.md](operations/demo-evidence-appendix.md) | **Demo evidence mapping** — maps every beat sheet artifact to its executable script, expected output, and capture method. Gap analysis included. Carry-forward. |
 | [operations/submodule-refresh-prompt.md](operations/submodule-refresh-prompt.md) | **Reusable submodule refresh procedure** — step-by-step commands, audit focus areas, doc update checklist, agent prompt template |
 | [operations/turret-localnet-validation-checklist.md](operations/turret-localnet-validation-checklist.md) | **Turret localnet validation checklist** — 45 test cases (8 executable, 36 environment-blocked, 1 structurally impossible), BCS encoding reference, object dependency matrix |
+| [operations/compliance-audit-2026-02-24.md](operations/compliance-audit-2026-02-24.md) | **Compliance audit (2026-02-24)** — First structured hackathon compliance check. Prep-only. |
+| [operations/compliance-audit-2026-03-09.md](operations/compliance-audit-2026-03-09.md) | **Compliance audit (2026-03-09)** — Pre-template compliance audit. 2 HIGH, 6 MEDIUM findings. Prep-only. |
 
 ## UX
 

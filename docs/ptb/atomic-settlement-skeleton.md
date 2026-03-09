@@ -1,6 +1,6 @@
 # Atomic Settlement Skeleton
 
-**Retention:** Prep-only
+**Retention:** Carry-forward
 
 - **Status:** Pattern/Template (Non-Canonical)
 - **Last Verified:** Not yet verified on hackathon test server
