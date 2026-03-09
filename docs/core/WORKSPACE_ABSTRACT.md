@@ -1,6 +1,6 @@
 # Workspace Abstract
 
-**Retention:** Carry-forward
+**Retention:** Prep-only
 
 > A one-page overview of what this scaffold provides and how to start using it.
 

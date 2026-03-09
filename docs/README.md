@@ -219,7 +219,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [research/hackathon-event-rules-source.md](research/hackathon-event-rules-source.md) | Verbatim snapshot of official EVE Frontier Hackathon Event Rules (captured 2026-02-16) |
 | [research/hackathon-event-rules-digest.md](research/hackathon-event-rules-digest.md) | **Practical digest** — dates, eligibility, judging criteria, agent compliance checklist |
 | [research/currency-truth-table.md](research/currency-truth-table.md) | Currency/token model truth table — LUX, EVE Token, Coin types, sponsored tx, exchange rates |
-| [research/capabilities.json](research/capabilities.json) | **In-game browser capabilities** — raw probe data from EVE Frontier embedded WebView (Chromium 122 CEF), captured 2026-02-28 |
+| [research/capabilities.json](research/capabilities.json) | **In-game browser capabilities** — raw probe data from EVE Frontier embedded WebView (Chromium 122 CEF), captured 2026-02-28. Prep-only (JSON; no header). |
 | [research/civcontrol-independent-audit.md](research/civcontrol-independent-audit.md) | **Independent audit** — external scorecard review of CivilizationControl positioning, gap analysis, P0/P1 action items |
 | [research/location-proof-independent-audit.md](research/location-proof-independent-audit.md) | **Location proof independent audit** — distance proof observability, trilateration analysis, risk classification |
 | [research/world-contracts-event-surface.md](research/world-contracts-event-surface.md) | **World-contracts event surface audit** — 28 event types, field index, spatial linkage, consumption paths (RPC/GraphQL/gRPC), Ethereum assumption mismatches, polling architecture |

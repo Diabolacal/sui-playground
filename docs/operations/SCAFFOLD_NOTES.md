@@ -1,6 +1,6 @@
 # Scaffold Notes — Customization Guide
 
-**Retention:** Carry-forward
+**Retention:** Prep-only
 
 How to adapt this workflow scaffold for your project.
 

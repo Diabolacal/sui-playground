@@ -1,6 +1,6 @@
 # Hackathon Compliance Audit — 2026-02-24
 
-**Retention:** Prep-only
+**Retention:** Prep-only (superseded by compliance-audit-2026-03-09.md)
 
 > Governance snapshot — structured compliance audit of the sui-playground planning repository against EVE Frontier hackathon rules.
 > Audit date: 2026-02-24

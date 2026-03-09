@@ -1,6 +1,6 @@
 # Turret Closed-World Constraint: Clarified Reference
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-03-02
 > **Source:** `vendor/world-contracts/contracts/world/sources/assemblies/turret.move` (v0.0.14, 678 lines), `vendor/world-contracts/contracts/extension_examples/sources/turret.move` (65 lines), `vendor/world-contracts/ts-scripts/turret/get-priority-list.ts`

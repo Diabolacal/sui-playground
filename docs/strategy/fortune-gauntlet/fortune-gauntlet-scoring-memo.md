@@ -1,6 +1,6 @@
 # Fortune Gauntlet — Scoring Memo
 
-**Retention:** Carry-forward
+**Retention:** Carry-forward (Fortune Gauntlet repo only — not part of CivilizationControl export)
 
 > **Date:** 2026-03-02
 > **Status:** Concept synthesis complete — ready for sprint scheduling

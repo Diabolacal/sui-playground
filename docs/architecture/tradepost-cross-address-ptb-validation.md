@@ -1,6 +1,6 @@
 # TradePost Cross-Address PTB Risk Validation — Design Report
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Sub-agent:** C — Cross-Address PTB Risk Validation Design
 > **Date:** 2026-02-16

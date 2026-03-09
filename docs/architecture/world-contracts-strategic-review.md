@@ -1,6 +1,6 @@
 # World Contracts Strategic Review
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 **Date:** 2026-03-03
 **Scope:** `vendor/world-contracts/` (v0.0.15) — read-only analysis

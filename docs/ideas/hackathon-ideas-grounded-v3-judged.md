@@ -1,6 +1,6 @@
 # Hackathon Ideas V3 — Judging-Aligned Rankings
 
-**Retention:** Carry-forward
+**Retention:** Prep-only
 
 > **Version:** V3 (judging-optimized)
 > **Date:** 2026-02-15

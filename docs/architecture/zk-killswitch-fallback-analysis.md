@@ -1,6 +1,6 @@
 # ZK GatePass — Kill-Switch & Fallback Analysis
 
-**Retention:** Carry-forward
+**Retention:** Prep-only
 
 > **Date:** 2026-02-16  
 > **Type:** Decision framework — quantitative kill criteria, fallback plans, demo narratives  

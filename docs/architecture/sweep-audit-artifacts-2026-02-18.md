@@ -1,6 +1,6 @@
 # Structural Risk Sweep — Consolidated Audit Artifacts
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-02-18
 > **Purpose:** Consolidated working notes from 6 parallel subagent audit tracks that fed the [Structural Risk Sweep](structural-risk-sweep-2026-02-18.md). Findings are numbered per-audit and cross-referenced to the main report's Top 5 risks and assumptions ledger.

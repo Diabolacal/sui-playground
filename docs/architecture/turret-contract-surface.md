@@ -1,6 +1,6 @@
 # Turret Contract Surface Summary (world-contracts v0.0.14)
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-03-02
 > **Source:** Direct code inspection of `vendor/world-contracts/contracts/world/sources/assemblies/turret.move` (678 lines), `vendor/world-contracts/contracts/extension_examples/sources/turret.move` (65 lines), `vendor/world-contracts/contracts/world/tests/assemblies/turret_tests.move` (1098 lines).

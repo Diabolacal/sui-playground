@@ -1,6 +1,6 @@
 # World-Contracts Event Layer & Observability Audit
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > Deep technical audit of all event structs and emit sites in `vendor/world-contracts/` (v0.0.15).
 > Research only — no files modified.

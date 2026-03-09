@@ -1,6 +1,6 @@
 # Shortlist Viability Validation Plan
 
-**Retention:** Carry-forward
+**Retention:** Prep-only
 
 > **Purpose:** Validate that GateControl and TradePost — the two core modules of CivilizationControl — are technically feasible on Sui using the EVE Frontier world-contracts extension pattern. Produce documented evidence for a confident March 11 reimplementation.
 >

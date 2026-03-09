@@ -1,6 +1,6 @@
 # Fortune Gauntlet — Project Vision
 
-**Retention:** Carry-forward
+**Retention:** Carry-forward (Fortune Gauntlet repo only — not part of CivilizationControl export)
 
 ---
 

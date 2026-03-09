@@ -1,6 +1,6 @@
 # CivilizationControl — Structural Risk Sweep
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-02-18 (revised 2026-02-18 — sponsor risk reclassification)
 > **Type:** Adversarial pre-mortem. Six parallel audit tracks. Evidence-based.

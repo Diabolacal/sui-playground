@@ -1,6 +1,6 @@
 # Shortlist Viability Validation Report
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-02-16 (ZK addendum: sandbox validation, to re-validate March 11)  
 > **Status:** Complete  

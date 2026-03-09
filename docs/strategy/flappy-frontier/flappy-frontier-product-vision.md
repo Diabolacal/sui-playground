@@ -1,6 +1,6 @@
 # Flappy Frontier — Product Vision
 
-**Retention:** Carry-forward
+**Retention:** Carry-forward (Flappy Frontier repo only — not part of CivilizationControl export)
 
 > **Date:** 2026-03-02  
 > **Status:** Pre-hackathon planning (code moratorium until March 11)  

@@ -45,6 +45,14 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 | File | Purpose |
 |------|---------|
 | `docs/ux/civilizationcontrol-ux-architecture-spec.md` | UX architecture specification |
+| `docs/ux/svg-topology-layer-spec.md` | Strategic Network Map symbol grammar, state system, color doctrine |
+| `docs/ux/svg-asset-audit.md` | SVG primitive inventory and compliance checklist |
+
+## Demo Documents (copy for demo production)
+
+| File | Purpose |
+|------|---------|
+| `docs/demo/narration-direction-spec.md` | Demo video narration voice config and delivery control |
 
 ## Architecture Documents (copy selectively — validated patterns)
 
@@ -55,6 +63,10 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 | `docs/architecture/world-contracts-auth-model.md` | Auth model reference |
 | `docs/architecture/read-path-architecture-validation.md` | Read-path validation |
 | `docs/architecture/policy-authoring-model-validation.md` | Policy model validation |
+| `docs/architecture/read-provider-abstraction.md` | Read-path abstraction layer design (RPC/GraphQL/Indexer providers) |
+| `docs/architecture/spatial-embed-requirements.md` | Hybrid spatial architecture decision (SVG + EF-Map embed) |
+| `docs/architecture/in-game-dapp-surface.md` | In-game embedded browser constraints (787px, Chromium 122) |
+| `docs/architecture/authenticated-user-surface-analysis.md` | Wallet-to-structures discovery read-path analysis |
 
 ## Operations Documents (copy for bootstrap procedures)
 
@@ -63,6 +75,7 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 | `docs/operations/gate-lifecycle-runbook.md` | 13-step gate lifecycle procedure |
 | `docs/operations/hackathon-bootstrap-checklist.md` | Repo bootstrap checklist |
 | `docs/operations/demo-evidence-appendix.md` | Evidence collection appendix |
+| `docs/operations/submodule-refresh-prompt.md` | Reusable submodule refresh procedure |
 
 ## Documentation Infrastructure (copy for repo hygiene)
 
@@ -86,6 +99,30 @@ All function signatures, object requirements, and package IDs must be revalidate
 
 ---
 
+## Other-Project Strategy Documents (project-specific routing)
+
+These documents carry forward into **their own project repos only** — NOT the CivilizationControl submission repo.
+
+| File | Target Repo |
+|------|-------------|
+| `docs/strategy/flappy-frontier/flappy-frontier-product-vision.md` | Flappy Frontier repo |
+| `docs/strategy/cargo-bond/cargo-bond-product-vision.md` | Cargo Bond / Atomic Courier repo |
+| `docs/strategy/fortune-gauntlet/fortune-gauntlet-project-vision.md` | Fortune Gauntlet repo |
+| `docs/strategy/fortune-gauntlet/fortune-gauntlet-scoring-memo.md` | Fortune Gauntlet repo |
+
+---
+
+## Intentional Exclusions from CC Carry-Forward
+
+The following are useful docs but are deliberately **not included** in the CC export set:
+
+- `docs/analysis/must-work-claim-registry.md` — claims already captured in `validation.md`, `claim-proof-matrix.md`, and `day1-checklist.md`
+- `docs/analysis/assumption-registry-and-demo-fragility-audit.md` — risk assumptions absorbed into `march-11-reimplementation-checklist.md` and `day1-checklist.md`
+- `docs/operations/DECISIONS_TEMPLATE.md` — template format embedded in `.github/copilot-instructions.md`; not needed as a standalone file
+- `docs/validation/` — localnet validation evidence stays in the evidence repo; carry-forward validation procedures live in `docs/core/validation.md`
+
+---
+
 ## Explicit Exclusions
 
 The following are **NOT** carried forward into the hackathon submission repo:
@@ -102,6 +139,7 @@ The following are **NOT** carried forward into the hackathon submission repo:
 - `docs/core/WORKSPACE_ABSTRACT.md` — scaffold template documentation
 - `docs/core/COPILOT_MEMORY_GUIDELINES.md` — agent memory guidelines (scaffold)
 - `docs/operations/SCAFFOLD_NOTES.md` — scaffold setup notes
-- `docs/operations/compliance-audit-2026-02-24.md` — point-in-time compliance check
+- `docs/operations/compliance-audit-2026-02-24.md` — point-in-time compliance check (superseded by 2026-03-09 audit)
+- `docs/operations/compliance-audit-2026-03-09.md` — final pre-start compliance check (prep-only)
 - `docs/ideas/` — idea exploration (decisions already captured in core docs)
 - Historical validation artifacts unless explicitly listed above

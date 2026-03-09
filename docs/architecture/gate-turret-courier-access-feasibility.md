@@ -1,6 +1,6 @@
 # Gate & Turret Access Control Integration with Cargo Bond (Atomic Courier) — Feasibility Report
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > Derived from canonical source: `vendor/world-contracts/contracts/world/` Move modules at current HEAD  
 > Date: 2026-03-02

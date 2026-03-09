@@ -1,6 +1,6 @@
 # Version Pinning Verification Report
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 **Date:** 2026-03-03
 **Environment:** Sui CLI v1.66.1
 

@@ -1,6 +1,6 @@
 # Turret Localnet Validation Checklist
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-03-02
 > **Source:** turret.move (678 lines), extension_examples/turret.move (65 lines), turret_tests.move (1098 lines).

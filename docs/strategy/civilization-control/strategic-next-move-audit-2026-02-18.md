@@ -1,6 +1,6 @@
 # Strategic Next-Move Audit — CivilizationControl (2026-02-18)
 
-**Retention:** Carry-forward
+**Retention:** Prep-only
 
 - **Date:** 2026-02-18 (environment model to be confirmed March 11)
 - **Window:** 3 weeks until March 11 coding start

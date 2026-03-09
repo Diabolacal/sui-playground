@@ -1,6 +1,6 @@
 # TradePost Buyer Journey — Feasibility Validation
 
-**Retention:** Carry-forward
+**Retention:** Sandbox-only
 
 > **Date:** 2026-02-18 (re-checked 2026-02-19)
 > **Verdict:** PARTIAL PASS (unchanged after re-check)
