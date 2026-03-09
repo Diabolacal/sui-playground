@@ -61,46 +61,46 @@ These are optional enhancements, not MVP requirements.
 
 ---
 
-## Currency Model: Lux, On-Chain Tokens, and Gas
+## Currency Model: EVE, Lux, and On-Chain Settlement
 
-> **Status:** Partially validated. On-chain settlement uses `Coin<SUI>` today. As of world-contracts v0.0.13, `Coin<EVE>` now exists on-chain (`contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, separate AdminCap + EveTreasury, burn-only after init). In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). Lux is the in-game engine currency that players earn and spend — it has no on-chain representation in the Sui codebase. Whether CivilizationControl tolls settle in `Coin<SUI>` or `Coin<EVE>` requires sandbox validation.
+> **Status:** Partially validated. On-chain settlement uses `Coin<SUI>` for Day-1. `Coin<EVE>` exists on-chain (`contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, separate AdminCap + EveTreasury, burn-only after init) but is not yet integrated into CivilizationControl. Demo narration uses **EVE** as the on-chain denomination. **Lux** (10,000 Lux = 1 EVE) is the in-game player-facing display denomination. Dual-display (EVE + Lux) is valid in dashboard contexts.
 
 ### How Players Think About Money
 
-- **Lux** is the in-game currency. Players earn Lux, see prices in Lux, and think in Lux. This is the language of the game economy.
-- **On-chain settlement** currently uses `Coin<SUI>` (the Sui blockchain's native token). Tolls, trades, and storefront purchases all settle in SUI on-chain.
-- **EVE Token** is the ecosystem settlement token. As of world-contracts v0.0.13, `Coin<EVE>` is now implemented on Sui (`contracts/assets/sources/EVE.move`: 10B supply, 9 decimals, OTW via `coin_registry`, separate AdminCap + EveTreasury). In the live Ethereum-based Frontier cycle, an EVE token is also surfaced in-game with Lux conversion (observed rate: 10,000 Lux = 1 EVE token). Whether on-chain settlement migrates from `Coin<SUI>` to `Coin<EVE>` requires sandbox validation.
+- **EVE** is the on-chain denomination used in demo narration and proof overlays (e.g., "5 EVE toll"). EVE is meaningful to players — it bridges the in-game economy and the chain.
+- **Lux** is the in-game player-facing display denomination (10,000 Lux = 1 EVE). Players earn Lux, see prices in Lux, and think in Lux. Dual-display (EVE + Lux) is valid where dashboard context allows.
+- **On-chain settlement** currently uses `Coin<SUI>` (the Sui blockchain's native token). Tolls, trades, and storefront purchases all settle in SUI on-chain for Day-1. Migration to `Coin<EVE>` is stretch.
 - **Gas (SUI)** is a separate concern — the transaction fee for executing on-chain operations. Gas should be abstracted from the player experience, ideally via sponsored transactions.
 
 ### CivilizationControl UX Implications
 
 | Layer | What Players See | What Happens On-Chain |
 |-------|-------------------|----------------------|
-| **Toll** | "Toll: 5 Lux" | `Coin<SUI>` transfer (amount TBD by exchange rate) |
-| **Trade** | "Fuel Rod: 35 Lux" | `Coin<SUI>` payment in atomic PTB |
-| **Revenue** | "Revenue: 240 Lux today" | Aggregated `Coin<SUI>` receipts |
+| **Toll** | "Toll: 5 EVE" (dual: "50,000 Lux") | `Coin<SUI>` transfer |
+| **Trade** | "Fuel Rod: 10 EVE" | `Coin<SUI>` payment in atomic PTB |
+| **Revenue** | "Revenue: 42 EVE today" | Aggregated `Coin<SUI>` receipts |
 | **Gas** | Hidden / "Sponsored" | SUI gas fee (ideally sponsored) |
 
 ### Assumptions and Unknowns (Requires Validation)
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Lux-to-SUI exchange rate | **Partially known** | Observed in live Ethereum cycle UI: 10,000 Lux = 1 EVE token. Lux-to-SUI rate depends on EVE-to-SUI exchange, which is undefined. If CivilizationControl displays Lux values, the conversion rate must be confirmed in the March 11 sandbox — either by the game server, a fixed ratio, or builder configuration. |
-| EVE Token availability | **Sui: implemented (v0.0.13); Ethereum live cycle: exists** | `Coin<EVE>` exists in `contracts/assets/sources/EVE.move` (10B supply, 9 decimals, separate AdminCap + EveTreasury). The live Ethereum-based Frontier cycle also surfaces EVE token in-game. Whether builders can interact with `Coin<EVE>` (toll collection, trade settlement) requires sandbox validation. |
+| EVE-to-SUI exchange rate | **Partially known** | Observed in live Ethereum cycle UI: 10,000 Lux = 1 EVE token. EVE-to-SUI rate depends on the hackathon test server environment. If a builder-configured fixed ratio is needed, mock it for demo. |
+| EVE Token availability | **Sui: implemented (v0.0.13); Ethereum live cycle: exists** | `Coin<EVE>` exists in `contracts/assets/sources/EVE.move` (10B supply, 9 decimals, separate AdminCap + EveTreasury). Whether builders can interact with `Coin<EVE>` (toll collection, trade settlement) requires sandbox validation. |
 | Automatic Lux→on-chain conversion | **Not confirmed** | No mechanism exists that converts Lux to any on-chain token automatically. This may be a game-server-side operation, a future platform feature, or a UX design requirement for CivilizationControl to solve. |
 | Sponsored transactions for gas abstraction | **Implemented but access-controlled** | `AdminACL.verify_sponsor()` exists in world-contracts. Builders need AdminACL authorization. Requires sandbox validation on March 11. |
 | `Coin<T>` generic toll support | **Architecturally possible** | The toll mechanism can accept any `Coin<T>` type. If TribeMint ships, faction currency tolls are feasible. Current validation uses `Coin<SUI>` only. |
 
 ### Design Principle
 
-**CivilizationControl surfaces Lux values as the primary player-facing denomination.** On-chain settlement details (`Coin<SUI>`, gas fees, transaction digests) are implementation concerns that the UI abstracts away. Where both values are relevant, the UI displays both:
+**CivilizationControl uses EVE as the primary denomination in demo narration and proof overlays. Lux is the secondary player-facing display denomination.** On-chain settlement details (`Coin<SUI>`, gas fees, transaction digests) are implementation concerns that the UI abstracts away. Where both values are relevant, the UI displays both:
 
-> *Toll: 5 Lux*
-> *Fuel Rod: 35 Lux*
+> *Toll: 5 EVE · 50,000 Lux*
+> *Fuel Rod: 10 EVE · 100,000 Lux*
 
-If/when EVE Token launches or a Lux exchange rate is established, the UI layer adapts without changing the underlying Move contracts.
+If/when `Coin<EVE>` is integrated or a fixed exchange rate is established, the settlement layer adapts without changing the UI denomination.
 
-CivilizationControl displays prices in Lux (player-native), settles on-chain in the game's economic token, and abstracts gas from the player experience.
+CivilizationControl displays prices in EVE (on-chain denomination) with Lux as secondary (player-native), settles on-chain in `Coin<SUI>` for Day-1, and abstracts gas from the player experience.
 
 ---
 
@@ -110,21 +110,21 @@ You open CivilizationControl and log in through EVE Vault.
 
 The Command Overview loads and you see your structures listed in the sidebar: six gates, four SSUs, three network nodes. The first four gates show green status — all online, all passing traffic. Gates five and six show amber — fuel below 30% on the connected NWN.
 
-You click into Gate North-3. The policy panel shows your current rules: **Tribe Filter** (Tribe 7 allowed) and **Toll** (2 Lux per jump). Both rules are active, composed as layers — not either/or, but both-and. A small counter shows 47 jumps in the last 24 hours and 94 Lux collected in tolls.
+You click into Gate North-3. The policy panel shows your current rules: **Tribe Filter** (Tribe 7 allowed) and **Toll** (2 EVE per jump). Both rules are active, composed as layers — not either/or, but both-and. A small counter shows 47 jumps in the last 24 hours and 94 EVE collected in tolls.
 
-You toggle the toll from 2 to 5 Lux. One click. The policy updates on-chain. No Move code, no CLI, no deploy step.
+You toggle the toll from 2 to 5 EVE. One click. The policy updates on-chain. No Move code, no CLI, no deploy step.
 
 Then you notice the posture indicator at the top of the Command Overview: **Open for Business**. Gates are broadly accessible. Toll is active. Turrets are offline — stood down, conserving energy, no defensive posture. Your forward logistics corridor is generating revenue.
 
 A Discord ping from your scout: hostile fleet spotted two jumps out. Then the Signal Feed confirms it — "Combat detected — System Alpha-7." On-chain killmail data, filtered to your controlled systems, surfaced as readable intelligence. You click **Defense Mode**. Gate link colors shift from green to amber. Turret icons flip from grey to active. The Signal Feed reflects the change: "Posture: Defense Mode. Gates restricted. Turrets online." Your gates now admit only Tribe 7. Your turrets are powered up, running native targeting — same-tribe non-aggressors excluded, active attackers prioritized. One click. The frontier locked down.
 
-Then you switch to TradePost. Your forward supply depot — SSU Echo-2 — is listed as a storefront. Four items stocked: fuel rods, repair paste, ammo cells, and a rare lens module. Each has a price in Lux. You see that two fuel rod listings sold overnight. Revenue: 60 Lux. The buyer history shows two different pilots — one from an allied tribe, one unaffiliated. Both paid, both received their items, both transactions settled atomically on-chain.
+Then you switch to TradePost. Your forward supply depot — SSU Echo-2 — is listed as a storefront. Four items stocked: fuel rods, repair paste, ammo cells, and a rare lens module. Each has a price in EVE. You see that two fuel rod listings sold overnight. Revenue: 6 EVE. The buyer history shows two different pilots — one from an allied tribe, one unaffiliated. Both paid, both received their items, both transactions settled atomically on-chain.
 
-You stock five more fuel rods and list them at 35 Lux each.
+You stock five more fuel rods and list them at 3 EVE each.
 
-The Signal Feed scrolls quietly in the sidebar. A jump signal from Gate North-1: pilot from Tribe 12, toll paid 5 Lux. A purchase signal from SSU Echo-2: pilot bought repair paste, 20 Lux. A turret status change: Turret South-1 back online after the posture switch. A fuel warning from NWN-South: estimated 8 hours remaining.
+The Signal Feed scrolls quietly in the sidebar. A jump signal from Gate North-1: pilot from Tribe 12, toll paid 5 EVE. A purchase signal from SSU Echo-2: pilot bought repair paste, 2 EVE. A turret status change: Turret South-1 back online after the posture switch. A fuel warning from NWN-South: estimated 8 hours remaining.
 
-For the first time, you can see your toll and trade revenue in real time — in Lux, the currency you actually think in. Not in a spreadsheet. Not in Discord messages. On a control surface that shows you what's happening, right now, across every structure you own.
+For the first time, you can see your toll and trade revenue in real time — in EVE, the denomination that maps directly to on-chain value. Not in a spreadsheet. Not in Discord messages. On a control surface that shows you what's happening, right now, across every structure you own.
 
 ---
 
@@ -150,7 +150,7 @@ What's validated and real:
 
 Every frontier eventually needs a market. Not a centralized exchange — a network of storefronts, each attached to a physical storage unit in space, each stocked by its owner, each open to buyers ready to pay.
 
-TradePost turns SSUs into shops. An operator stocks items from their inventory, sets prices (displayed in Lux), and publishes listings. A buyer browsing the storefront sees what's available, clicks buy, and the entire transaction settles atomically on-chain — payment to the seller, item to the buyer, listing marked complete. One signature. No counterparty risk. No coordination. No trust required.
+TradePost turns SSUs into shops. An operator stocks items from their inventory, sets prices (displayed in EVE), and publishes listings. A buyer browsing the storefront sees what's available, clicks buy, and the entire transaction settles atomically on-chain — payment to the seller, item to the buyer, listing marked complete. One signature. No counterparty risk. No coordination. No trust required.
 
 What's validated and real:
 - Atomic buy flow: buyer pays, receives item, seller receives payment — single on-chain transaction (currently `Coin<SUI>`).
@@ -207,7 +207,7 @@ GateControl and TradePost aren't two separate features that happen to ship toget
 
 A gate toll charges for passage through your territory. Where do those pilots spend their funds? At the storefront on the other side. What does the storefront sell? Fuel, ammo, supplies — the things you need to keep jumping, keep fighting, keep surviving. The toll feeds the commerce. The commerce justifies the toll. The operator profits from both sides of the loop.
 
-When a buyer at your TradePost pays 30 Lux for a fuel cell — an item that the gate on the other side of the system is also demanding as a toll condition — two modules create emergent economic interaction without explicit coupling. The gate drives demand. The storefront fills it. The tribe leader profits from both.
+When a buyer at your TradePost pays 10 EVE for a fuel cell — an item that the gate on the other side of the system is also demanding as a toll condition — two modules create emergent economic interaction without explicit coupling. The gate drives demand. The storefront fills it. The tribe leader profits from both.
 
 That's not two instruments. That's an integrated governance suite — gate policy and frontier commerce reinforcing each other.
 
@@ -235,75 +235,82 @@ CivilizationControl is not another Move contract demo. It's the missing layer be
 
 ---
 
-## Demo Narrative (3-Minute Video)
+## Demo Narrative (~2:56 Video)
 
-### Opening — The Problem (0:00–0:40)
+> **Canonical demo blueprint:** [CivilizationControl — Demo Beat Sheet v2](../../core/civilizationcontrol-demo-beat-sheet.md)
+> This section summarizes the 9-beat arc. For full narration scripts, stage directions, evidence overlays, failure fallbacks, and pre-flight checklists, see the beat sheet.
 
-*[Screen: a terminal with raw Sui CLI commands scrolling. Dense, technical, intimidating.]*
+**Arc:** Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command → Close
 
-**Voiceover:** *"This is what managing a gate on EVE Frontier looks like today. Raw commands. Manual queries. No visibility. If you're a tribe leader running twenty gates across three systems... you're flying blind."*
+### Beat 1 — Pain (0:00–0:18)
 
-*[Quick cuts: error messages, manual fuel queries, Discord screenshots of "is the gate down?" messages.]*
+*[Screen: black background. White text fades in, one line at a time. No terminal. No UI. Just the words.]*
 
-**Voiceover:** *"The frontier's structures are the most powerful infrastructure on the frontier. The problem is, they don't come with a command layer."*
+> "Nine gates link five systems on your EVE Frontier. Last night, two went offline. Nobody told you."
 
-### The Reveal — CivilizationControl (0:40–1:10)
+Stark text-on-black. Visceral, specific pain. The viewer must feel the gap before seeing the solution.
 
-*[Cut to: the CivilizationControl Command Overview loading. Clean UI. Structure sidebar populating with gates and SSUs. Status indicators going green.]*
+### Beat 2 — Power Reveal (0:18–0:38)
 
-**Voiceover:** *"CivilizationControl changes that. One screen. Every gate. Every storage unit. Live status. Real-time activity."*
+*[Hard cut from black to the Command Overview, fully loaded. Structures resolve. Status indicators light green. Posture reads "Open for Business." Signal Feed scrolls.]*
 
-*[Camera pans across the control surface: structure list, policy panel, Signal Feed.]*
+> "CivilizationControl. Every structure you own. Gates, turrets, trade posts, network nodes. Status, policy, revenue — one view."
 
-**Voiceover:** *"This is what infrastructure command should feel like on the frontier."*
+### Beat 3 — Policy (0:38–1:00)
 
-### Control — GateControl in Action (1:10–1:50)
+> "You decide who crosses and what they pay."
 
-*[Click into a gate. Policy panel opens. Tribe filter toggle set to Tribe 7. Toll slider set to 5 Lux.]*
+Click into a gate → Tribe filter: Tribe 7 → Toll: 5 EVE → "Deploy Policy" → "Policy deployed. 2 rules active."
 
-**Voiceover:** *"GateControl lets you set the rules on your gates — who passes through, and what they pay. Tribe filter. Toll. Both active on the same gate, composing as layers within the CC extension."*
+**★ Proof moment:** Policy deploy tx digest + gate object with extension + 2 DF rules.
 
-*[A jump event appears in the Signal Feed: Pilot from Tribe 7, toll paid: 5 Lux. Green checkmark.]*
+### Beat 4 — Denial (1:00–1:18)
 
-**Voiceover:** *"A friendly pilot jumps through. Tribe matches, toll paid, passage granted. One atomic transaction."*
+> "A hostile pilot — wrong tribe — tries to jump. Denied. The chain enforced it. No override. No appeal."
 
-*[A second jump attempt: Pilot from Tribe 3. Red X. Access denied.]*
+Signal Feed: red badge. Failed tx digest + MoveAbort `(tribe_permit, 0)`.
 
-**Voiceover:** *"A hostile pilot tries the same gate. Tribe mismatch. Blocked. No passage, no appeal, no workaround. On-chain enforcement."*
+**★ Proof moment:** Denied tx digest + MoveAbort code.
 
-### Posture Shift — Defense Mode (1:50–2:05)
+### Beat 5 — Revenue (1:18–1:36)
 
-*[Operator clicks "Defense Mode" at the top of the Command Overview. Gate link indicators shift from green to amber. Turret icons flip from grey to active.]*
+> "An ally — right tribe — jumps through. Five EVE collected. Revenue to the operator. The gate pays for itself."
 
-**Voiceover:** *"Threat incoming. One click — Defense Mode. Gates restrict to tribe-only. Turrets come online."*
+Signal Feed: green badge. Revenue counter increments.
 
-*[Signal Feed updates: "Posture: Defense Mode. Gates restricted. Turrets online." Turret status indicators in the sidebar update to show active state.]*
+**★ Proof moment:** Toll tx digest + `TollCollectedEvent` + balance delta: operator +5 EVE.
 
-**Voiceover:** *"The frontier responds. Every gate, every turret — one command."*
+### Beat 6 — Defense Mode (1:36–2:06) — CLIMAX
 
-### Economy — TradePost in Action (1:50–2:30)
+> "Threat inbound. One click. Gates locked. Turrets online. One transaction."
 
-*[Switch to TradePost view. SSU storefront with listed items: fuel rods, ammo cells, repair paste. Prices in Lux.]*
+*[Posture indicator shifts: "Open for Business" → "Defense Mode." Gate colors shift green → amber. Turret icons flip grey → active. Signal Feed floods with posture events.]*
 
-**Voiceover:** *"TradePost turns your storage units into storefronts. Stock items, set prices, publish listings."*
+30 seconds. The hammer moment. Everything the demo has built — policy, enforcement, revenue — escalates to infrastructure-wide command.
 
-*[A buyer interface appears. Selects a fuel rod listing at 30 Lux. Clicks Buy. Transaction confirmation appears. TradeSettledEvent in the feed.]*
+**★ Proof moment:** Single tx digest containing posture change + turret toggles. `PostureChangedEvent` + N × `StatusChangedEvent`.
 
-**Voiceover:** *"A pilot passes through your toll gate — paying 5 Lux — lands at your SSU, and buys fuel for 30 Lux. One click. Atomic settlement. No counterparty risk. The fuel is in their inventory. The revenue is in yours."*
+### Beat 7 — Commerce (2:06–2:28)
 
-*[Revenue counter ticks up.]*
+> "A thousand Eupraxite. Ten EVE. Payment to the seller. Item to the buyer. One transaction."
 
-**Voiceover:** *"The toll feeds the foot traffic. The storefront captures the demand. Your infrastructure pays for itself."*
+Trade Post storefront → buy → atomic settlement.
 
-### The System — Closing (2:30–3:00)
+**★ Proof moment:** Trade tx digest + `TradeSettledEvent` + buyer/seller balance deltas.
 
-*[Pull back to full Command Overview. Multiple gates, multiple SSUs, Signal Feed scrolling with jumps and purchases. Revenue totals accumulating.]*
+### Beat 8 — Command (2:28–2:43)
 
-**Voiceover:** *"CivilizationControl is more than a single-purpose gate extension or a standalone marketplace. It's a unified governance layer — composable gate policies and frontier commerce, integrated in one control room. Your gates, your rules, your revenue."*
+> "Toll revenue. Trade revenue. Turrets armed. Every structure reporting. Your infrastructure. Under your command."
 
-*[Title card: CivilizationControl — The Frontier Control Room]*
+Full Command Overview — the operator's entire infrastructure under command.
 
-**Voiceover:** *"Built on EVE Frontier's extension model. Built for tribe leaders. Built to make your infrastructure worth governing."*
+### Beat 9 — Close (2:43–2:56)
+
+*[Title card fades in:]*
+
+> **CivilizationControl**
+
+No subtitle. No narration. The demo defined what it is.
 
 ---
 
@@ -363,7 +370,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 
 | Stretch Goal | What It Adds | Condition |
 |---|---|---|
-| **TribeMint** — faction currency (`Coin<TribeToken>`) | Completes the "tribal economy" narrative; tolls and trades denominated in faction currency instead of raw `Coin<SUI>`. Enables Lux-equivalent pricing in a builder-controlled token. Emotionally powerful but adds integration complexity. | Only after both core modules pass a complete demo rehearsal. |
+| **TribeMint** — faction currency (`Coin<TribeToken>`) | Completes the "tribal economy" narrative; tolls and trades denominated in faction currency instead of raw `Coin<SUI>`. Enables custom-denomination pricing in a builder-controlled token. Emotionally powerful but adds integration complexity. | Only after both core modules pass a complete demo rehearsal. |
 | **LootDrop** — VRF loot crate via on-chain randomness | Adds a "surprise and delight" layer; storefronts can sell mystery crates. Compelling demo moment. | Only if TribeMint is stable. |
 | **Stillness deployment** | Earns the "Best Live Frontier Integration" bonus criterion. Shows real-world deployment confidence. | Only if core is polished and time permits. Deferred to post-submission bonus window (14 days post-close). Primary build and evidence uses hackathon test server. |
 
@@ -414,5 +421,5 @@ The frontier is full of powerful primitives. It's waiting for someone to build t
 
 ---
 
-*CivilizationControl — The Frontier Control Room*
+*CivilizationControl*
 *EVE Frontier Hackathon 2026*

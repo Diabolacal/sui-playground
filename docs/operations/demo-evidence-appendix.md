@@ -6,7 +6,7 @@
 >
 > Companion to: [civilizationcontrol-demo-beat-sheet.md](../core/civilizationcontrol-demo-beat-sheet.md)
 > Cross-reference: [civilizationcontrol-claim-proof-matrix.md](../core/civilizationcontrol-claim-proof-matrix.md)
-> Last updated: 2026-02-19
+> Last updated: 2026-03-11
 
 ---
 
@@ -23,32 +23,32 @@
 | Server address derivation | `derive_server_address.mjs` | `sandbox/validation/` |
 | Object parsing | `extract_objects.py`, `parse_step.py` | `sandbox/validation/` |
 | EVE Vault signing | `App.tsx` (signing smoke test) | `sandbox/evevault-signing-smoke/` |
+| Posture switch | `posture-switch.ts` (single PTB: BUSINESS↔DEFENSE) | `sandbox/posture-switch-validation/ts/` |
 | Runbook (embedded CLI) | `gate-lifecycle-runbook.md` (all 16 steps with PTB syntax) | `docs/operations/` |
 
 ---
 
-## Appendix A — Primary Demo Variant (3 Minutes)
+## Appendix A — Primary Demo Variant (~2:56)
 
-### Beat 1 — Raw CLI Contrast (0:00–0:25)
+### Beat 1 — Pain (0:00–0:18)
 
-**What the beat shows:** Raw `sui client ptb` commands, dense terminal output, a failed PTB error, Discord coordination screenshot.
+**What the beat shows:** Stark text-on-black. Pain narrative (gates offline, pilots lost, hostile territory). Optionally: a single raw CLI error screenshot flashes for 1 second. No terminal, no UI — just words.
 
 | Field | Value |
 |---|---|
-| **Script** | `sandbox/validation/gate_lifecycle_rehearsal.sh` (replays full 13-step lifecycle) |
-| **Command** | `cd sandbox/validation && bash gate_lifecycle_rehearsal.sh` |
-| **Expected Output** | 17+ tx digests scrolling in terminal, dense PTB text, object IDs |
-| **Capture Method** | Terminal screen recording of the script running (first 30s of output). Alternatively, paste raw PTB commands from `docs/operations/gate-lifecycle-runbook.md` Steps 8–13 into terminal and let them scroll. |
-| **Failed PTB capture** | Run any step with a deliberate bad parameter (e.g., wrong object ID in `step13.sh`) to produce `MoveAbort` or `InvalidInput` error on screen. |
-| **Script exists?** | YES — `gate_lifecycle_rehearsal.sh` and all `step*.sh` exist and produce terminal output |
+| **Script** | N/A — pre-rendered text-on-black frames |
+| **Command** | N/A — no live execution in this beat |
+| **Expected Output** | White text on black background, fading in line-by-line matching narration cadence |
+| **Capture Method** | Pre-recorded title card frames. Optional: 1-second flash of raw `MoveAbort` terminal output (from any `step*.sh` with a bad param) for visceral contrast. |
+| **Script exists?** | N/A — text-on-black is a post-production asset, not a script output |
 
-**Gap:** No dedicated "intentional failure demo" script. The failed PTB screenshot can be produced by running any step with a wrong object ID — trivial to capture ad hoc. **Low priority — no script required.**
+**Note:** Beat 1 in v2 is pure narrative (text-on-black), not raw CLI terminal output. The raw CLI contrast originally in v1 Beat 1 can still be captured via `gate_lifecycle_rehearsal.sh` for the optional 1-second flash.
 
 ---
 
-### Beat 2 — The Reveal: Command Overview (0:25–0:50)
+### Beat 2 — Power Reveal (0:18–0:38)
 
-**What the beat shows:** CivilizationControl UI loading — Command Overview with structures, status, Strategic Network Map, Signal Feed.
+**What the beat shows:** Hard cut from black to CivilizationControl Command Overview, fully loaded. Structures, status indicators, posture, Signal Feed. Strategic Network Panel.
 
 | Field | Value |
 |---|---|
@@ -63,7 +63,7 @@
 
 ---
 
-### Beat 3 — Control: Set Gate Policy (0:50–1:20)
+### Beat 3 — Policy (0:38–1:00)
 
 **What the beat shows:** Operator configures tribe filter + toll → clicks "Deploy Policy" → tx digest of policy deployment → gate object showing extension + dynamic fields.
 
@@ -92,7 +92,7 @@
 
 ---
 
-### Beat 4 — Consequence A: Hostile Denied (1:20–1:45)
+### Beat 4 — Denial (1:00–1:18)
 
 **What the beat shows:** Wrong-tribe pilot attempts jump → blocked → MoveAbort with ETribeMismatch → Signal Feed shows denied event.
 
@@ -113,9 +113,9 @@
 
 ---
 
-### Beat 5 — Consequence B: Ally Tolled (1:45–2:10)
+### Beat 5 — Revenue (1:18–1:36)
 
-**What the beat shows:** Matching-tribe pilot jumps → toll paid (5 SUI) → `TollCollectedEvent` → operator balance +5 SUI → Signal Feed green entry.
+**What the beat shows:** Matching-tribe pilot jumps → toll paid (5 EVE) → `TollCollectedEvent` → operator balance +5 EVE → Signal Feed green entry.
 
 **Evidence artifacts:**
 
@@ -149,7 +149,44 @@
 
 ---
 
-### Beat 6 — Commerce: Ally Buys at TradePost (2:10–2:40)
+### Beat 6 — Defense Mode (1:36–2:06) ★
+
+**What the beat shows:** Operator sees threat intel (killmail in Signal Feed), clicks "Defense Mode" — single PTB changes posture, locks gates, brings turrets online. Infrastructure-wide state change in one transaction. This is the demo climax (30 seconds).
+
+**Evidence artifacts:**
+
+**(a) Posture switch — single PTB (validated on localnet):**
+
+| Field | Value |
+|---|---|
+| **Script** | `sandbox/posture-switch-validation/ts/src/posture-switch.ts` (Strategy A — single PTB) |
+| **Command** | `cd sandbox/posture-switch-validation/ts && npx tsx src/posture-switch.ts` |
+| **Expected Output** | Single tx digest containing: `set_posture` + `set_tribe_config` + `clear_toll_config` + N × (borrow OwnerCap<Turret> → `turret::online` → return OwnerCap). `PostureChangedEvent`: BUSINESS→DEFENSE. N × `StatusChangedEvent` (turret ONLINE). |
+| **Prior evidence** | Validated on localnet: BUSINESS→DEFENSE and DEFENSE→BUSINESS both pass. ~2.3s end-to-end (~250ms on-chain). See `docs/sandbox/posture-switch-localnet-validation.md`. |
+| **Capture Method** | Terminal output showing single tx digest. Before/after: `sui client object` on each turret (OFFLINE→ONLINE) and gate (tribe filter changed / toll cleared). |
+| **Script exists?** | YES — TS script validated on localnet. Shell equivalent TBD for submission chain. |
+
+**(b) Turret state before/after:**
+
+| Field | Value |
+|---|---|
+| **Command** | `sui client object $TURRET_ID --json` (run before and after posture switch) |
+| **Expected Output** | Before: `is_online: false`. After: `is_online: true`. |
+| **Capture Method** | Terminal output diff or explorer screenshot |
+
+**(c) Signal Feed cascade (UI):**
+
+| Field | Value |
+|---|---|
+| **Script** | N/A — UI event display |
+| **Expected Output** | Signal Feed floods with: "Posture: Defense Mode", "Turret Alpha: ONLINE", "Turret Bravo: ONLINE", gate status updates |
+| **Capture Method** | Screen recording of the Command Overview transforming |
+
+**Gap:** TS script exists for localnet. **TODO — Shell-based rehearsal script for submission chain** (same PTB, different object IDs). The PTB composition pattern is validated; only target objects change. **Preconditions:** ≥1 turret anchored + offline, connected to online/fueled NetworkNode. Gates in "Open for Business" (tribe+toll). OwnerCap<Turret> accessible via character borrow. Energy reservation available.
+
+---
+
+### Beat 7 — Commerce (2:06–2:28)
 
 **What the beat shows:** Buyer selects fuel rod listing → Buy → atomic settlement → `TradeSettledEvent` → buyer gets item, seller gets payment → Signal Feed update.
 
@@ -158,7 +195,7 @@
 | **Script** | `sandbox/validation/ssu_trade_test.sh` (459 lines — full SSU-backed trade lifecycle) |
 | **Command** | `cd sandbox/validation && bash ssu_trade_test.sh` |
 | **Expected Output** | 6+ tx digests: publish, setup_storefront, authorize_ext, stock_item, list_item, buy. Events: `ListingCreatedEvent`, `TradeSettledEvent` (CC custom). Balance deltas for buyer and seller. |
-| **Prior evidence** | Full results in `sandbox/validation/ssu_trade_results.txt` (167 lines). Key digests: Publish `49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z`, Buy `42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw`. Seller +5 SUI, Buyer −5 SUI confirmed. |
+| **Prior evidence** | Full results in `sandbox/validation/ssu_trade_results.txt` (167 lines). Key digests: Publish `49KABHpbQJ1sDmkHvYdUTr9S8JWgjpgwu152Nmz1Qg7z`, Buy `42Uc2VqSGuHx9rYqBRNFJ3gUhgDpGmY76mjtVDM6usvw`. Seller +5 EVE, Buyer −5 EVE confirmed. |
 | **Capture Method** | Terminal output from script run. Explorer tx view for buy digest. Balance comparison: `sui client gas $SELLER` / `sui client gas $BUYER` before and after. |
 | **Script exists?** | YES — fully scripted with prior evidence |
 
@@ -171,19 +208,33 @@
 
 ---
 
-### Beat 7 — The System: Revenue Visible (2:40–3:00)
+### Beat 8 — Command (2:28–2:43)
 
-**What the beat shows:** Pull back to full Command Overview — aggregate revenue, structure counts, Signal Feed with mixed jump + trade events.
+**What the beat shows:** Pull back to full Command Overview — aggregate revenue (toll + trade), structure counts, posture indicator (Defense Mode), Signal Feed with mixed deny + toll + trade + posture events.
 
 | Field | Value |
 |---|---|
 | **Script** | N/A — UI screenshot/recording |
 | **Command** | Navigate to Command Overview in running frontend |
-| **Expected Output** | Aggregate revenue total (toll + trade), structure count badge, Signal Feed with deny + toll + trade events |
+| **Expected Output** | Aggregate revenue total (toll + trade), structure count badge, posture: Defense Mode, turrets: ONLINE, Signal Feed with deny + toll + trade + posture events |
 | **Capture Method** | Screen recording of the fully populated Command Overview |
 | **Script exists?** | N/A — UI-only beat, no rehearsal script needed |
 
 **Gap:** Depends on frontend application (Beat 2 gap). Revenue aggregation is a read-path operation — `sui client object` queries or indexer events. No separate script needed; the UI computes this from on-chain data at display time.
+
+---
+
+### Beat 9 — Close (2:43–2:56)
+
+**What the beat shows:** Title card fades in over the Command Overview: "CivilizationControl." No narration. No subtitle.
+
+| Field | Value |
+|---|---|
+| **Script** | N/A — post-production title card |
+| **Command** | N/A |
+| **Expected Output** | Brand name on screen. Clean. Final. |
+| **Capture Method** | Post-production overlay on final Command Overview frame |
+| **Script exists?** | N/A — title card, not a script output |
 
 ---
 
@@ -232,14 +283,14 @@ All fallback beats map to the same scripts as their primary counterparts. Cross-
 
 | Fallback Beat | Primary Beat | Script Reference |
 |---|---|---|
-| Fallback Beat 1 — The Problem | Beat 1 | `gate_lifecycle_rehearsal.sh` (same) |
-| Fallback Beat 2 — The Reveal | Beat 2 | Frontend app (same gap) |
+| Fallback Beat 1 — Pain | Beat 1 | Text-on-black (post-production asset) |
+| Fallback Beat 2 — Power Reveal | Beat 2 | Frontend app (same gap) |
 | Fallback Beat 3 — Set Gate Policy | Beat 3 | `step11.sh` / `step11cd.sh` (same) |
 | Fallback Beat 4 — Hostile Denied | Beat 4 | **TODO — same gap** |
 | Fallback Beat 5 — Ally Tolled + Revenue | Beat 5 | `step12.sh` + `step13.sh` (basic); toll gap same |
-| Fallback Beat 6 — Close | Beat 7 | Frontend app (same gap) |
+| Fallback Beat 6 — Close | Beat 8 | Frontend app (same gap) |
 
-No additional scripts required for the fallback variant beyond what the primary variant needs.
+**Note:** Fallback variant omits Defense Mode (Beat 6) and Commerce (Beat 7) to fit in 2 minutes. The 6-beat fallback maps to primary beats 1–5 + 8.
 
 ---
 
@@ -249,8 +300,10 @@ No additional scripts required for the fallback variant beyond what the primary 
 
 | Beat | Script | Status |
 |---|---|---|
-| Beat 1 — Raw CLI Contrast | `gate_lifecycle_rehearsal.sh`, all `step*.sh` | READY — produces all raw terminal output needed |
-| Beat 6 — Ally Buys (mock SSU) | `ssu_trade_test.sh` | READY — full lifecycle with mock SSU, all tx digests captured |
+| Beat 1 — Pain | N/A (text-on-black) | READY — post-production asset |
+| Beat 5 — Revenue (basic jump) | `step12.sh` + `step13.sh` | READY — basic jump lifecycle scripted |
+| Beat 6 — Defense Mode | `posture-switch-validation/ts/src/posture-switch.ts` | READY — validated on localnet (single PTB, ~2.3s) |
+| Beat 7 — Commerce (mock SSU) | `ssu_trade_test.sh` | READY — full lifecycle with mock SSU, all tx digests captured |
 | ZK Accent — Groth16 | `publish_zk.sh` + CLI call | READY — prior evidence available |
 | ZK Accent — Membership | `generate_test_input.js` + `serialize_membership_for_sui.js` | READY — proof generation scripted |
 
@@ -258,18 +311,20 @@ No additional scripts required for the fallback variant beyond what the primary 
 
 | Priority | Beat | Gap | Required Script | Effort |
 |---|---|---|---|---|
-| **HIGH** | Beat 4 — Hostile Denied | No script produces a denied jump with `MoveAbort` | `hostile_jump_denied.sh` — attempt jump with wrong-tribe character, capture abort code | ~30 lines, pattern from `step13.sh` |
-| **HIGH** | Beat 5 — Ally Tolled (toll collection) | Toll extension not integrated in rehearsal flow | `toll_jump_rehearsal.sh` — deploy toll extension, issue permit with toll, jump, capture `TollCollectedEvent` + balance delta | ~80 lines, composes `step11.sh` + `step12.sh` + `step13.sh` with toll extension |
+| **HIGH** | Beat 4 — Denial | No script produces a denied jump with `MoveAbort` | `hostile_jump_denied.sh` — attempt jump with wrong-tribe character, capture abort code | ~30 lines, pattern from `step13.sh` |
+| **HIGH** | Beat 5 — Revenue (toll collection) | Toll extension not integrated in rehearsal flow | `toll_jump_rehearsal.sh` — deploy toll extension, issue permit with toll, jump, capture `TollCollectedEvent` + balance delta | ~80 lines, composes `step11.sh` + `step12.sh` + `step13.sh` with toll extension |
+| **HIGH** | Beat 6 — Defense Mode (submission chain) | TS script validated on localnet; shell equivalent for submission chain TBD | `defense_mode_rehearsal.sh` — posture switch PTB on submission chain objects | ~60 lines, pattern from posture-switch TS |
 | **MEDIUM** | Beat 3 — Policy Deploy (submission extension) | Test extension (`test_gate_ext`) is pass-through; submission needs tribe+toll extension | `deploy_policy.sh` — publish production extension + authorize on gate | ~50 lines, pattern from `step11.sh` |
-| **MEDIUM** | Beat 6 — Ally Buys (world-contracts SSU) | Script targets mock SSU; submission needs real world-contracts SSU | `submission_trade_test.sh` — same PTB pattern, real SSU objects | ~80 lines, refactor of `ssu_trade_test.sh` |
+| **MEDIUM** | Beat 7 — Commerce (world-contracts SSU) | Script targets mock SSU; submission needs real world-contracts SSU | `submission_trade_test.sh` — same PTB pattern, real SSU objects | ~80 lines, refactor of `ssu_trade_test.sh` |
 | **LOW** | ZK Accent — end-to-end | Individual steps scripted but no single-command rehearsal | `zk_accent_rehearsal.sh` — compose existing scripts | ~40 lines |
 
 ### Gaps That Are Not Script Gaps
 
 | Beat | Gap | Nature |
 |---|---|---|
-| Beat 2 — Command Overview | Frontend application not built | **Hackathon deliverable** — not a rehearsal script gap |
-| Beat 7 — Revenue Visible | Depends on frontend | Same as above |
+| Beat 2 — Power Reveal | Frontend application not built | **Hackathon deliverable** — not a rehearsal script gap |
+| Beat 8 — Command | Depends on frontend | Same as above |
+| Beat 9 — Close | Title card (post-production) | Post-production asset |
 | All beats — Submission chain | Sandbox digests are proof-of-pattern; submission digests TBD | **Pre-recording task** — re-run scripts on hackathon test server |
 
 ---

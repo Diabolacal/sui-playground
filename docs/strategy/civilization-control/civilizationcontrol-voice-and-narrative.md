@@ -147,7 +147,7 @@ Three candidate navigation sets were evaluated against four criteria: Authority 
 ### Do
 
 - **State facts.** "Policy deployed." "Gate offline." "3 jumps in the last hour."
-- **Use active voice.** "Toll collected: 5 SUI." Not "A toll of 5 SUI has been collected."
+- **Use active voice.** "Toll collected: 5 EVE." Not "A toll of 5 EVE has been collected."
 - **Match world-contracts vocabulary.** Online/Offline, Gate, SSU, NWN, Extension, Jump, Tribe.
 - **Affirm the operator's authority.** "Your gates, your rules." Framing assumes the player is in charge.
 - **Be brief.** Every word in a heading or status message should earn its space.

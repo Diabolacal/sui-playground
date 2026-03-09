@@ -2,7 +2,7 @@
 
 **Retention:** Carry-forward
 
-Structural UX planning document for the CivilizationControl governance dashboard. Defines screen hierarchy, interaction flows, data models, and upgrade paths. This is NOT UI implementation or visual styling — it is the architectural blueprint that implementation follows.
+Structural UX planning document for the CivilizationControl governance command layer. Defines screen hierarchy, interaction flows, data models, and upgrade paths. This is NOT UI implementation or visual styling — it is the architectural blueprint that implementation follows.
 
 **Status:** Draft v1.1 — 2026-02-17  
 **Scope:** Gate governance (GateControl) + frontier commerce (TradePost)  
@@ -73,7 +73,7 @@ Structural UX planning document for the CivilizationControl governance dashboard
 
 - On-chain settlement in `Coin<SUI>` — tolls, trades, storefront purchases
 - `Coin<T>` generic toll support architecturally possible (any coin type)
-- Lux as display denomination — in-game currency; observed rate: 10,000 Lux = 1 EVE token (Ethereum cycle)
+- **Dual-display currency model:** **EVE** is the on-chain denomination used in demo narration and proof overlays (e.g., "5 EVE toll"). **Lux** (10,000 Lux = 1 EVE) is the in-game player-facing display denomination. Dashboard contexts may show both (e.g., "5 EVE · 50,000 Lux"). On-chain implementation remains `Coin<SUI>` for Day-1.
 
 ---
 
@@ -149,9 +149,11 @@ Structural UX planning document for the CivilizationControl governance dashboard
 ```
 CivilizationControl (Command Nexus)
 ├── Command Overview (Dashboard)
+│   ├── Posture Indicator ("Open for Business" / "Defense Mode" — always visible)
+│   ├── Strategic Network Panel (SVG topology: structures, links, status indicators)
 │   ├── Aggregated Metrics (structure counts, online/offline, revenue, fuel)
 │   ├── Alert / Warning Cards (fuel critical, offline, unlinked, unconfigured)
-│   ├── Quick Action Shortcuts (deploy policy, create listing, bring online) — **external browser only; hidden in-game read-only mode**
+│   ├── Quick Action Shortcuts (deploy policy, create listing, bring online, posture switch) — **external browser only; hidden in-game read-only mode**
 │   └── Recent Signal Preview (last 5 events)
 ├── Gates (Primary Control Plane)
 │   ├── Gate List View (sortable, filterable, taggable)
@@ -227,7 +229,7 @@ The gate list is the most important screen — every gate is a policy enforcemen
 | **Extension**     | Badge: "GateControl" / "None"            | Blue = active, gray = none                |
 | **Rules**         | Compact tags: "Tribe + Toll"             | Or "No rules"                             |
 | **Fuel Source**   | Icon + text                              | "● Fueled" / "◐ Low" / "○ Offline"       |
-| **Revenue**       | "42 Lux"                                 | Configurable period (24h default)         |
+| **Revenue**       | "42 EVE"                                 | Configurable period (24h default)         |
 | **Tags**          | Colored pill badges                      | User-assigned grouping                    |
 
 ### Search & Filter
@@ -295,7 +297,7 @@ Single-page layout with vertically stacked, independently collapsible sections.
 
 - **Extension status banner:** "GateControl Active" (blue) or "No Extension — gate is open to all jumpers" (gray)
 - **Active rules list:** each rule module displayed as a card (see §6 Rule Composer)
-- **Rule summary sentence:** auto-generated: "Jumpers must: belong to Tribe 7 AND pay 5 Lux toll"
+- **Rule summary sentence:** auto-generated: "Jumpers must: belong to Tribe 7 AND pay 5 EVE toll"
 - **Configure Rules button** → opens Rule Composer panel
 
 **Extension compatibility banner (when linked):**
@@ -308,14 +310,14 @@ Or warning:
 
 | Element           | Content                                           |
 | ----------------- | ------------------------------------------------- |
-| **Toll Config**      | "Toll: 5 Lux per jump" or "No toll"              |
+| **Toll Config**      | "Toll: 5 EVE per jump" or "No toll"              |
 | **Treasury Address** | Truncated address where toll payments route       |
-| **Total Revenue**    | "487 Lux all-time"                               |
-| **Period Revenue**   | "42 Lux last 24h"                                |
+| **Total Revenue**    | "487 EVE all-time" (dual-display: "4,870,000 Lux") |
+| **Period Revenue**   | "42 EVE last 24h"                                |
 | **Jump Count**       | "94 jumps (last 24h) · 1,247 all-time"            |
 | **Configure Toll**   | → opens Rule Composer economic module             |
 
-**Currency display convention:** Primary in Lux. Confirmed rate: 10,000 Lux = 1 EVE token. On-chain settlement in SUI (amount derived from Lux→EVE→SUI conversion; EVE-to-SUI exchange TBD). SUI parenthetical shown only when full exchange rate chain is configured. Lux-denominated display is stretch goal (#31).
+**Currency display convention:** **EVE** is primary in demo narration and proof overlays. **Lux** (10,000 Lux = 1 EVE) is the player-facing in-game denomination. Dual-display (EVE + Lux) is valid in dashboard/detail contexts. On-chain settlement uses `Coin<SUI>` for Day-1; conversion to `Coin<EVE>` is stretch.
 
 ### 5d. Linking Section
 
@@ -332,9 +334,9 @@ Gate-scoped event stream. Event types:
 
 | Event Type          | Example Display                                          |
 | ------------------- | -------------------------------------------------------- |
-| **Jump**               | "14:23 · Pilot-0x3f2a (Tribe 7) · North→South · Toll: 5 Lux" |
+| **Jump**               | "14:23 · Pilot-0x3f2a (Tribe 7) · North→South · Toll: 5 EVE" |
 | **Rule Application**   | "14:22 · Pilot-0x7b1c (Tribe 3) · Tribe Filter · BLOCKED"    |
-| **Toll Collection**    | "14:23 · 5 Lux from Pilot-0x3f2a"                           |
+| **Toll Collection**    | "14:23 · 5 EVE from Pilot-0x3f2a"                           |
 | **Status Change**      | "09:00 · Offline → Online · You"                              |
 | **Extension Change**   | "08:55 · None → GateControl"                                  |
 | **Link Change**        | "08:50 · Linked to Gate South-1" (on-chain: `GateLinkedEvent` / `GateUnlinkedEvent`) |
@@ -378,10 +380,10 @@ Time range selector: 1h · 24h · 7d · 30d · All. Auto-refresh: polling every 
 
 | Property     | Value                                                                  |
 | ------------ | ---------------------------------------------------------------------- |
-| **Purpose**     | Require SUI payment for each gate jump                                 |
+| **Purpose**     | Require payment for each gate jump                                     |
 | **Toggle**      | On / Off                                                               |
-| **Config**      | **Toll Amount**: Numeric input in Lux (SUI equivalent shown). **Treasury**: Auto-filled with connected wallet; editable (advanced). |
-| **Status**      | "Coin Toll: 5 Lux per jump → Treasury: 0x1a2b...9f0e"               |
+| **Config**      | **Toll Amount**: Numeric input in EVE (Lux equivalent shown). **Treasury**: Auto-filled with connected wallet; editable (advanced). |
+| **Status**      | "Coin Toll: 5 EVE per jump → Treasury: 0x1a2b...9f0e"               |
 | **On-Chain**    | Dynamic field `CoinTollKey → CoinTollRule { price_mist, treasury }` |
 
 #### Allow List (Access Rule)
@@ -450,8 +452,8 @@ Evaluation order is fixed and opinionated. Users do not arrange or reorder rules
 | Step | Action                                                                          |
 | ---- | ------------------------------------------------------------------------------- |
 | 1    | Configure modules — toggle on/off, set values                                  |
-| 2    | **Rule stack preview** — "Active Policy: Tribe 7 only + 5 Lux toll"            |
-| 3    | **Diff display** (if modifying) — "Toll: 2 → 5 Lux. Tribe filter unchanged."  |
+| 2    | **Rule stack preview** — "Active Policy: Tribe 7 only + 5 EVE toll"            |
+| 3    | **Diff display** (if modifying) — "Toll: 2 → 5 EVE. Tribe filter unchanged."  |
 | 4    | **"Deploy Policy"** → constructs PTB (borrow OwnerCap → set dynamic fields → return OwnerCap) |
 | 5    | Wallet signature prompt                                                         |
 | 6    | Confirmation — "Policy deployed ✓"                                              |
@@ -772,7 +774,7 @@ The UI surfaces permission boundaries so users understand what they can do at th
 | 28 | Spatial mappings manager | Maps are stretch |
 | 29 | Group/tag manager | Tags are stretch |
 | 30 | Account info display | Wallet visible in header |
-| 31 | Lux-denominated display | Exchange rate unresolved; raw SUI fallback |
+| 31 | Dual-currency display (EVE + Lux) | EVE primary, Lux secondary; raw SUI fallback for Day-1 |
 | 32 | EVE Vault in-game relay | postMessage bridge for Sui signing from in-game browser; unconfirmed feasibility |
 
 ### Demo Scenario — 3-Minute Script (MVP Only)
@@ -825,7 +827,7 @@ Users optionally assign structures to solar systems for visual organization. Exp
 
 Policy configuration uses predefined, dropdown-based rule modules with bounded configuration surfaces. No visual programming canvas, no arbitrary logic builder, no raw Move code input.
 
-**Example:** The policy panel shows two cards: "Tribe Filter" (dropdown: Tribe 7) and "Toll" (slider: 5 Lux). Adding or removing a rule is a single click. Dynamic field dispatch is invisible.
+**Example:** The policy panel shows two cards: "Tribe Filter" (dropdown: Tribe 7) and "Toll" (slider: 5 EVE). Adding or removing a rule is a single click. Dynamic field dispatch is invisible.
 
 **Why:** Move's type system and dynamic fields are powerful but require developer-level understanding. Opinionated blocks constrain configuration to validated, tested, safe-to-compose patterns.
 
@@ -846,11 +848,11 @@ Operations requiring server computation (distance proofs for gate linking) or Ad
 
 **Example:** User selects two gates, clicks "Link," sees "Linking..." → "Linked ✓." Behind the scenes: coordinate computation, Ed25519 attestation, PTB construction, submission — all invisible.
 
-#### 6. Lux-Denominated Clarity
+#### 6. Dual-Currency Display
 
-All economic values display in Lux (in-game currency players think in). Confirmed rate: 10,000 Lux = 1 EVE token. SUI equivalent shown only when full exchange rate chain (Lux→EVE→SUI) is configured. Format: **"Toll: 5 Lux"** — Lux primary.
+Economic values use a dual-display model: **EVE** is the on-chain denomination shown in demo narration, proof overlays, and as the primary value in dashboards (e.g., "Toll: 5 EVE"). **Lux** (10,000 Lux = 1 EVE) is the in-game player-facing denomination shown as a secondary value where context allows (e.g., "5 EVE · 50,000 Lux"). On-chain settlement uses `Coin<SUI>` for Day-1.
 
-**Why:** Players already price things in Lux. Displaying raw SUI makes the dashboard feel like a blockchain tool rather than a game management tool. Lux-first keeps the frontier metaphor intact.
+**Why:** Players price things in Lux; the chain settles in SUI. EVE bridges both worlds — meaningful to players and verifiable on-chain. Dual-display keeps the frontier metaphor intact without hiding the governance layer.
 
 #### 7. Graceful Degradation
 
@@ -1085,13 +1087,13 @@ The initial layout reads as a generic SaaS monitoring dashboard: equal-weight me
 | Subtitle | "Overview of your infrastructure operations" | **"Your infrastructure at a glance"** | UX Spec §6 microcopy |
 | Section | Alerts | **Attention Required** | Governance register |
 | Section | Recent Activity | **Recent Signals** | Voice Guide §3 |
-| Currency | CRDT | **Lux** (SUI parenthetical) | UX Spec §5c |
+| Currency | CRDT | **EVE** (Lux secondary) | UX Spec §5c |
 
 ### Signal Feed Event Copy Corrections
 
 | Screenshot Copy | Canonical Copy |
 |---|---|
-| "Fleet passage recorded" | "Passage completed. +125 Lux" |
+| "Fleet passage recorded" | "Passage completed. +5 EVE" |
 | "Item sold: Advanced Components x50" | "Trade settled. Advanced Components ×50" |
 | "Fuel level warning threshold reached" | "Fuel warning. Beta Gate." |
 | "Linked to Delta Gate in Sector 7" | "Link established. Delta Gate." |
@@ -1122,9 +1124,11 @@ No new Figma brief required — §13 Command Overview description updated inline
 
 Confirmed constraints from the EVE Frontier embedded Chromium browser. Full reference: [In-Game DApp Browser Surface](../architecture/in-game-dapp-surface.md).
 
-### Portrait-First Layout (787 × 1198 px)
+> **Viewport priority:** The primary design target is **1440p widescreen** (2560×1440 or 1920×1080) for the external browser and demo recording. The in-game portrait layout below is the secondary adaptation. Demo video is always recorded in the external browser.
 
-All CivilizationControl screens must render in a portrait viewport approximately 800px wide and 1200px tall.
+### Portrait Layout — In-Game Adaptation (787 × 1198 px)
+
+All CivilizationControl screens must also render in the in-game portrait viewport approximately 800px wide and 1200px tall.
 
 | Desktop Element | Portrait Adaptation |
 |----------------|-------------------|

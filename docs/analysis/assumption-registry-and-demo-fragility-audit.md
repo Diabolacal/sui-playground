@@ -231,23 +231,23 @@
 
 ### 2.1 Beat-by-Beat Analysis
 
-#### Beat 1 — The Problem (0:00-0:25)
+#### Beat 1 — Pain (0:00-0:18)
 
 | Attribute | Value |
 |-----------|-------|
-| **On-chain actions** | None (pre-recorded CLI footage) |
+| **On-chain actions** | None (text-on-black narrative frames; optionally a 1-second CLI error screenshot flash) |
 | **Transaction count** | 0 |
 | **Shared objects touched** | None |
 | **Event dependencies** | None |
 | **Assumptions referenced** | None |
 | **Determinism score** | 5/5 |
-| **Failure surface** | Pre-recorded footage missing or unusable |
-| **Recoverability** | Easy — re-record CLI session offline |
-| **Mitigation** | Prepare `gate_lifecycle_rehearsal.sh` output in advance; discord screenshot staged |
+| **Failure surface** | Text-on-black frames missing or unusable |
+| **Recoverability** | Easy — post-production asset, re-create offline |
+| **Mitigation** | Prepare text-on-black frames and optional CLI error screenshot in advance |
 
 ---
 
-#### Beat 2 — The Reveal: Command Overview (0:25-0:50)
+#### Beat 2 — Power Reveal (0:18-0:38)
 
 | Attribute | Value |
 |-----------|-------|
@@ -263,7 +263,7 @@
 
 ---
 
-#### Beat 3 — Control: Set Gate Policy (0:50-1:20)
+#### Beat 3 — Policy (0:38-1:00)
 
 | Attribute | Value |
 |-----------|-------|
@@ -279,7 +279,7 @@
 
 ---
 
-#### Beat 4 — Consequence A: Hostile Denied (1:20-1:45)
+#### Beat 4 — Denial (1:00-1:18)
 
 | Attribute | Value |
 |-----------|-------|
@@ -295,7 +295,7 @@
 
 ---
 
-#### Beat 5 — Consequence B: Ally Tolled (1:45-2:10)
+#### Beat 5 — Revenue (1:18-1:36)
 
 | Attribute | Value |
 |-----------|-------|
@@ -311,7 +311,23 @@
 
 ---
 
-#### Beat 6 — Commerce: Ally Buys at TradePost (2:10-2:40)
+#### Beat 6 — Defense Mode (1:36-2:06) ★ Climax
+
+| Attribute | Value |
+|-----------|-------|
+| **On-chain actions** | Single PTB: `set_posture` + `set_tribe_config` + `clear_toll_config` + N × (borrow OwnerCap<Turret> → `turret::online` → return OwnerCap) |
+| **Transaction count** | 1 (single PTB, 7-9 Move calls) |
+| **Shared objects touched** | Gate(s) (mutable for config changes), Turret(s) (mutable via OwnerCap borrow), Character (mutable for OwnerCap borrow/return), NetworkNode (immutable for energy validation) |
+| **Event dependencies** | `PostureChangedEvent` (CC extension), N × `StatusChangedEvent` (world-contracts turret online/offline) |
+| **Assumptions referenced** | A-30, A-33, A-39, A-41, A-81 (posture switch validated on localnet — see posture-switch-localnet-validation.md) |
+| **Determinism score** | 3/5 |
+| **Failure surface** | Turret already online; NetworkNode not producing energy; gas budget exceeded for multi-call PTB; OwnerCap borrow/return ordering wrong; shared object contention on turrets |
+| **Recoverability** | Moderate — fallback Strategy B: separate per-turret txs (~3s total, still impressive); pre-check all turret states + NWN energy before recording |
+| **Mitigation** | Pre-verify all turrets OFFLINE and NWN producing energy; validated on localnet (BUSINESS→DEFENSE and reverse both pass, ~2.3s e2e); have Strategy B fallback ready |
+
+---
+
+#### Beat 7 — Commerce (2:06-2:28)
 
 | Attribute | Value |
 |-----------|-------|
@@ -327,23 +343,39 @@
 
 ---
 
-#### Beat 7 — The System: Revenue Visible (2:40-3:00)
+#### Beat 8 — Command (2:28-2:43)
 
 | Attribute | Value |
 |-----------|-------|
 | **On-chain actions** | RPC reads only: `suix_queryEvents` for revenue aggregation, `sui_multiGetObjects` for structure state |
 | **Transaction count** | 0 (read-only) |
 | **Shared objects touched** | None (reads only) |
-| **Event dependencies** | `TollCollectedEvent` + `TradeSettledEvent` from Beats 5-6 must be queryable |
+| **Event dependencies** | `TollCollectedEvent` + `TradeSettledEvent` + `PostureChangedEvent` + `StatusChangedEvent` from Beats 5-7 must be queryable |
 | **Assumptions referenced** | A-30, A-36, A-37, A-54, A-81 |
 | **Determinism score** | 3/5 |
 | **Failure surface** | Event queries return empty or stale data (polling lag); revenue aggregation calculation error; prior beat events not yet indexed; Command Overview shows incomplete state |
 | **Recoverability** | Moderate — wait for next poll cycle (10s); if events never appear, hold on existing Signal Feed entries and capture what is visible |
-| **Mitigation** | Wait 15-30 seconds after Beat 6 before recording Beat 7; verify event queries return expected data before starting camera; consider manual poll trigger in UI |
+| **Mitigation** | Wait 15-30 seconds after Beat 7 before recording Beat 8; verify event queries return expected data before starting camera; consider manual poll trigger in UI |
 
 ---
 
-#### ZK Accent (Optional, 30 seconds before Beat 7)
+#### Beat 9 — Close (2:43-2:56)
+
+| Attribute | Value |
+|-----------|-------|
+| **On-chain actions** | None (title card overlay) |
+| **Transaction count** | 0 |
+| **Shared objects touched** | None |
+| **Event dependencies** | None |
+| **Assumptions referenced** | None |
+| **Determinism score** | 5/5 |
+| **Failure surface** | Title card asset missing |
+| **Recoverability** | Easy — post-production asset |
+| **Mitigation** | Prepare "CivilizationControl" title card in advance |
+
+---
+
+#### ZK Accent (Optional, 30 seconds before Beat 8)
 
 | Attribute | Value |
 |-----------|-------|
@@ -381,23 +413,25 @@
 
 | Beat | Score | Rationale |
 |------|-------|-----------|
-| Beat 1 — The Problem | 5/5 | Pre-recorded footage; no live dependencies |
+| Beat 1 — Pain | 5/5 | Text-on-black frames; no live dependencies |
+| Beat 9 — Close | 5/5 | Title card overlay; no live dependencies |
 
 #### Conditionally Deterministic (Score 3-4)
 
 | Beat | Score | Condition |
 |------|-------|-----------|
-| Beat 2 — The Reveal | 4/5 | Deterministic if wallet connects and RPC is healthy; pre-verified in rehearsal |
-| Beat 3 — Set Gate Policy | 3/5 | Deterministic if extension package published and gate in clean state |
-| Beat 4 — Hostile Denied | 3/5 | Deterministic if Beat 3 confirmed and hostile account tribe verified |
-| Beat 7 — Revenue Visible | 3/5 | Deterministic if Beats 5-6 events indexed before recording |
+| Beat 2 — Power Reveal | 4/5 | Deterministic if wallet connects and RPC is healthy; pre-verified in rehearsal |
+| Beat 3 — Policy | 3/5 | Deterministic if extension package published and gate in clean state |
+| Beat 4 — Denial | 3/5 | Deterministic if Beat 3 confirmed and hostile account tribe verified |
+| Beat 6 — Defense Mode | 3/5 | Deterministic if turrets OFFLINE, NWN producing energy, OwnerCaps accessible; validated on localnet |
+| Beat 8 — Command | 3/5 | Deterministic if Beats 5-7 events indexed before recording |
 
 #### Fragile (Score 2)
 
 | Beat | Score | Primary Fragility |
 |------|-------|-------------------|
-| Beat 5 — Ally Tolled | 2/5 | AdminACL enrollment dependency; two-transaction flow with permit expiry window; sponsorship configuration |
-| Beat 6 — TradePost Buy | 2/5 | Cross-address atomic settlement depends on unvalidated `withdraw_item` behavior; SSU online requirement |
+| Beat 5 — Revenue | 2/5 | AdminACL enrollment dependency; two-transaction flow with permit expiry window; sponsorship configuration |
+| Beat 7 — Commerce | 2/5 | Cross-address atomic settlement depends on unvalidated `withdraw_item` behavior; SSU online requirement |
 | ZK Accent | 2/5 | Browser proof generation timing; circuit/hash compatibility; optional — can be dropped |
 
 #### High-Risk Demo Moments
@@ -461,7 +495,7 @@ Impact: Signal Feed empty; Command Overview shows no revenue; listing discovery 
 
 **DR-1: AdminACL Not Enrolled Before Recording**
 
-If the CivControl sponsor address is not in AdminACL when recording begins, Beat 5 (ally tolled jump) cannot execute. This is the single highest-impact demo-breaking risk because:
+If the CivControl sponsor address is not in AdminACL when recording begins, Beat 5 (revenue — ally tolled jump) cannot execute. This is the single highest-impact demo-breaking risk because:
 - It requires external cooperation (GovernorCap holder)
 - There is no code-level workaround
 - It blocks the proof moment that demonstrates revenue generation
@@ -477,7 +511,7 @@ Probability: Medium (distance proof tooling may not be builder-accessible).
 
 **DR-3: TradePost Atomic Buy Fails**
 
-The atomic buy flow (withdraw + transfer + payment in one PTB) depends on `withdraw_item<Auth>` NOT requiring OwnerCap (A-73). This assumption has been validated against source code but not tested on the live test server. If the test server runs a version where this behavior differs, Beat 6 (commerce) is impossible and the primary 3-minute demo must fall back to the 2-minute GateControl-only variant.
+The atomic buy flow (withdraw + transfer + payment in one PTB) depends on `withdraw_item<Auth>` NOT requiring OwnerCap (A-73). This assumption has been validated against source code but not tested on the live test server. If the test server runs a version where this behavior differs, Beat 7 (commerce) is impossible and the primary ~2:56 demo must fall back to the 2-minute GateControl-only variant.
 
 Probability: Low (source-validated) but consequence is high.
 
@@ -517,7 +551,7 @@ Derived from the fragility audit. Complete ALL items before pressing record.
 | 16 | Ensure SSU Trade Post is deployed, authorized, online, with 1+ listed item | TradePost demo prerequisite | A-71, A-68 |
 | 17 | Ensure recording gate has NO current extension (clean state for Beat 3) OR plan to show re-deploy | Beat 3 precondition | A-10 |
 | 18 | Note operator balance before recording (for toll revenue delta evidence) | Beat 5 evidence | A-81 |
-| 19 | Note buyer/seller balances before recording (for trade delta evidence) | Beat 6 evidence | A-81 |
+| 19 | Note buyer/seller balances before recording (for trade delta evidence) | Beat 7 evidence | A-81 |
 | 20 | Verify Signal Feed shows prior events (warm cache for Beat 2 reveal) | Beat 2 visual | A-36, A-37 |
 
 ### 3.4 If X Fails on March 11
@@ -558,8 +592,8 @@ Time cost: 30 minutes (compatible upgrade) to 2 hours (full redeploy + re-auth).
 
 Response:
 1. Immediately switch to 2-minute fallback demo variant (GateControl-only)
-2. Fallback covers: policy deploy, hostile denied, ally tolled, revenue visible
-3. Fallback omits Beat 6 (commerce) only
+2. Fallback covers: pain narrative, policy deploy, hostile denied, ally tolled, revenue visible
+3. Fallback omits Beat 6 (Defense Mode) and Beat 7 (commerce)
 4. Captures 3 of 5 non-negotiable proof moments (policy, denial, toll)
 5. Begin TradePost debugging in parallel; re-attempt if fixed within 4 hours
 
@@ -611,9 +645,9 @@ Time cost: 30 minutes to pivot recording approach.
 
 | Demo Classification | Beat Count |
 |---------------------|------------|
-| Deterministic | 1 |
-| Conditionally Deterministic | 4 |
-| Fragile | 3 (incl. ZK accent) |
+| Deterministic | 2 (Beat 1, Beat 9) |
+| Conditionally Deterministic | 5 (Beats 2-4, 6, 8) |
+| Fragile | 3 (Beats 5, 7, ZK accent) |
 | High-Risk | 1 (Gate Preset accent) |
 
 ---

@@ -102,6 +102,8 @@ Independent weighted outlook (equal main criteria): strong contender, not yet wi
 
 ## 6) Demo Beat Sheet (3–5 minutes)
 
+> **⚠ Superseded.** This section reflects an earlier 8-beat / 4:00 demo concept. The canonical demo structure is the **9-beat / ~2:56 arc** in [CivilizationControl — Demo Beat Sheet v2](../../core/civilizationcontrol-demo-beat-sheet.md). Defense Mode (Beat 6, 30s climax) was added as the central proof moment. Retain this section for audit trail.
+
 **Target: 4:00 total**
 - **0:00–0:20** — Problem pressure: blind/fragmented operations baseline.
 - **0:20–0:45** — Command reveal: active network view, structures, signal feed, revenue status.

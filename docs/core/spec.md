@@ -64,7 +64,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 |-----------|-----------|
 | No backend / indexer / database | Browser-only for Day-1. The read provider abstraction enables switching to Option B (proxy) or Option C (indexer) post-hackathon without UI changes |
 | No visual Move programming | Users configure opinionated rule blocks, not code |
-| No custom token for Day-1 | `Coin<SUI>` only. TribeMint (`Coin<TribeToken>`) is stretch |
+| No custom token for Day-1 | `Coin<SUI>` only. TribeMint (`Coin<TribeToken>`) is stretch. **Currency display:** demo narration uses "EVE" as the on-chain denomination; "Lux" (10,000 Lux = 1 EVE) is the player-facing display denomination. Dual-display (EVE + Lux) is valid in dashboard contexts. On-chain implementation remains `Coin<SUI>`. |
 | No real-time coordinate mapping | Coordinates are not on-chain — only Poseidon(2) hashes. Manual spatial pinning |
 | No auto-discovery of structures | Character resolution requires manual ID input (fallback). Automated resolution is stretch |
 | No multi-chain support | Sui only |
@@ -272,22 +272,27 @@ All UI labels follow canonical mapping. Banned terms: Dashboard, Admin, Settings
 
 ### 5.1 Narrative Spine
 
-> "Set gate policy → Hostile denied → Ally tolled → Defense Mode → Ally buys at TradePost → Revenue visible."
+> Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command → Close
 
-### 5.2 Primary Variant (3:10, 8 beats)
+Arc: A frontier operator wakes up to chaos. By the end, every gate, turret, and trade post is under sovereign command — policy enforced, hostiles denied, revenue flowing, and the entire network locked down in one click. Defense Mode is the climax.
 
-| Beat | Content | Duration | Non-Negotiable Proof |
-|------|---------|----------|---------------------|
-| 1 | The Problem — CLI complexity shown | 25s | CLI screenshot |
-| 2 | The Reveal — Command Overview loads | 25s | Live UI |
-| 3 | Control — set tribe+toll via Rule Composer | 30s | ★ Policy deploy tx digest |
-| 4 | Hostile denied | 25s | ★ Denied tx digest + MoveAbort |
-| 5 | Ally tolled | 25s | ★ Toll tx + balance delta |
-| 5b | Posture shift — Defense Mode | 15s | ★ Turret StatusChangedEvent + gate update |
-| 6 | Commerce — TradePost buy | 25s | ★ Buy tx + balance deltas |
-| 7 | System — revenue visible | 20s | ★ Aggregate in Command Overview |
+> Canonical demo blueprint: [CivilizationControl — Demo Beat Sheet v2](civilizationcontrol-demo-beat-sheet.md)
 
-★ = Non-negotiable proof moment (6 total)
+### 5.2 Primary Variant (~2:56, 9 beats)
+
+| Beat | Name | Duration | Non-Negotiable Proof |
+|------|------|----------|---------------------|
+| 1 | Pain — text-on-black, specific loss | 18s | — (the "before") |
+| 2 | Power Reveal — Command Overview loads | 20s | Package ID overlay |
+| 3 | Policy — tribe filter + toll deployed | 22s | ★ Policy deploy tx digest |
+| 4 | Denial — hostile pilot blocked | 18s | ★ Denied tx + MoveAbort |
+| 5 | Revenue — ally tolled, operator paid | 18s | ★ Toll tx + balance delta |
+| 6 | Defense Mode — posture switch, turrets online | 30s | ★ Single PTB tx digest (posture + turrets) |
+| 7 | Commerce — TradePost atomic buy | 22s | ★ Buy tx + balance deltas |
+| 8 | Command — full system view, aggregate revenue | 15s | UI screenshot (live) |
+| 9 | Close — title card, no subtitle | 13s | — |
+
+★ = Non-negotiable proof moment (5 total). Beat 6 (Defense Mode) is the 30-second climax.
 
 ### 5.3 Fallback Variant
 
