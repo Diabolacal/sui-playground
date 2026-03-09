@@ -177,6 +177,8 @@ Every other team will build "gate access control." This treats gate access as a 
 **World-Contract Hooks:**
 - `&Killmail` as function parameter (shared, readable by any contract)
 - Killmail fields: killer_character_id, victim_character_id, solar_system_id, loss_type
+
+> **Outdated (v0.0.17):** Killmail fields renamed: `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`.
 - `issue_jump_permit<Auth>` → mint permit after killmail validation
 - ExtensionConfig DF → store bounty targets / kill requirements
 

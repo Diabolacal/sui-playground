@@ -117,7 +117,9 @@ public enum BehaviourChangeReason has copy, drop, store {
 
 ## Default Targeting Rules
 
-From `effective_weight_and_excluded()` (turret.move L626-650):
+From `effective_weight_and_excluded()` (turret.move L662-685):
+
+> **v0.0.17 update:** Line numbers updated (was L626-650). Owner is now excluded by `character_id` match in addition to same-tribe exclusion.
 
 | Condition | Result |
 |-----------|--------|

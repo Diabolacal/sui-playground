@@ -81,7 +81,7 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 |------------|------|--------|----------|
 | Sui RPC (fullnode) | Read/Write | Available | Local devnet via Docker |
 | world-contracts v0.0.13 | Move dependency | Pinned @ e508451 | Carry cached copy |
-| EVE Vault wallet | Browser extension (external browser only); FusionAuth OAuth → zkLogin address — effectively "Sign in with EVE Frontier" (no seed phrase) | Functional (a409496, v0.0.3) | Standard Sui wallet |
+| EVE Vault wallet | Browser extension (external browser only); FusionAuth OAuth → zkLogin address — effectively "Sign in with EVE Frontier" (no seed phrase) | Functional (30f74ef, v0.0.4) | Standard Sui wallet |
 | @evefrontier/dapp-kit | NPM ^0.1.0 (wraps @mysten/dapp-kit-react ^1.0.2 + @mysten/dapp-kit-core ^1.0.4) | Stable | Raw @mysten/dapp-kit-react |
 | In-game embedded browser | DApp runtime | Confirmed (787×1198 portrait, no Sui wallet) | Read-only mode; external browser for writes |
 | AdminACL (sponsored tx) | On-chain whitelist | **BLOCKED until Day-1** | Non-sponsored fallback |

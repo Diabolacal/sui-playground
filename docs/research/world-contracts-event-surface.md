@@ -113,6 +113,8 @@ World-contracts emits **33 unique event types** from **40 call sites** across 13
 |-------|-----------|--------|-----------------|-------|
 | `KillmailCreatedEvent` | `create_killmail()` | `killmail_id: TenantItemId`, `killer_character_id: TenantItemId`, `victim_character_id: TenantItemId`, `solar_system_id: TenantItemId`, `loss_type: LossType` (SHIP/STRUCTURE), `kill_timestamp: u64` | **Direct: `solar_system_id`** — the ONLY event with an explicit solar system identifier | Source comment: "Emits killmail events for indexer-based queries" |
 
+> **Outdated (v0.0.17):** `KillmailCreatedEvent` fields renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`. Types remain `TenantItemId`.
+
 ### Module: `world::character` — character.move
 
 | Event | Emitted By | Fields | Location Linkage | Notes |

@@ -113,7 +113,9 @@ This is the root cause of all per-project feasibility outcomes.
 
 ## 5. Default Targeting Behavior Matrix
 
-Source: `turret.move` `effective_weight_and_excluded` (L632-653)
+Source: `turret.move` `effective_weight_and_excluded` (L662-685)
+
+> **v0.0.17 update:** Line numbers updated (was L632-653). Owner is now excluded by `character_id` match in addition to same-tribe exclusion.
 
 **Constants:** `STARTED_ATTACK_WEIGHT_INCREMENT = 10000`, `ENTERED_WEIGHT_INCREMENT = 1000`
 

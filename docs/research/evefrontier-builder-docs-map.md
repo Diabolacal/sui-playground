@@ -2,7 +2,7 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-03-03 (submodule refresh: 6b6fae8/572e2ca/a409496/78854fe → b4178c6/572e2ca/a409496/74d30c8)
+> **Last updated:** 2026-03-09 (submodule refresh: b4178c6/572e2ca/a409496/3cc9ffa → 1eb5ad4/9200be4/30f74ef/26d0a8c)
 > **Source:** https://docs.evefrontier.com/
 > **Internal review by:** AI agent (initial mapping; refreshed 2026-03-03)
 
@@ -12,7 +12,7 @@ This document maps official EVE Frontier GitBook builder documentation to intern
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
 
-> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-03 — commit b4178c6) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-09 — commit 1eb5ad4) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -23,12 +23,13 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 | Section | Base URL Path | Pages | Status |
 |---------|--------------|-------|--------|
 | Welcome | `/welcome` | 5 pages | Mostly complete |
-| Tools | `/tools` | 2 pages | Partial (GAS Faucet is TODO) |
-| Smart Contracts | `/smart-contracts` | 5 pages | Substantive content (Object Model, Ownership Model now populated); AdminCap → AdminACL rename reflected |
-| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | Introductions now substantive (Gate 120 lines, SSU 126 lines); **Gate Build page now populated** (end-to-end guide); SSU Build still stub; **Turret now implemented in world-contracts v0.0.14** (docs page may still be TODO) |
-| dApps | `/dapps` | 4 pages + dapp-kit | dApp sub-pages still TODO; `@evefrontier/dapp-kit` SDK now populated (304 lines) |
-| EVE Vault | `/eve-vault` | 4 pages | Introduction done; GAS Faucet, Wallet Game Setup still TODO; **Browser Extension now populated** (install guide + sign-in flow with screenshots) |
-| Troubleshooting | `/troubleshooting` | 3 pages | All TODO |
+| Tools | `/tools` | 4 pages | `dapp-kit.md`, `efctl.md`, `debugging.md`, `interfacing-with-the-eve-frontier-world.md` moved here |
+| Quickstart | `/quickstart` | 1 page | `environment-setup.md` moved here |
+| Smart Contracts | `/smart-contracts` | 4 pages | Substantive content (Object Model, Ownership Model now populated); AdminCap → AdminACL rename reflected; new `move-patterns-in-frontier.md` |
+| Smart Assemblies | `/smart-assemblies` | 7+ pages (Gate, SSU, Turret, Smart Character, Network Node, Modding intro) | All assembly types documented; Turret docs fully populated; Gate/SSU build pages expanded |
+| dApps | `/dapps` | 4 pages + dapp-kit | dApp sub-pages still TODO; `@evefrontier/dapp-kit` SDK now populated |
+| EVE Vault | `/eve-vault` | 4 pages | Introduction done; `wallets-and-identity.md` moved here; Browser Extension URL updated; GAS Faucet page deleted |
+| Troubleshooting | `/troubleshooting` | 2 pages | `player.md` deleted; `builder.md` and `wallet.md` remain |
 | Contributing | `/contributing` | 2 pages | Complete; **repo now public for contributions** |
 
 ---
@@ -158,7 +159,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
   - `docs/architecture/sui-playground-capabilities.md` §4.2
-- **Notable clarifications:** Build page (`/gate/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). ~~**Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions.~~ **Updated 2026-02-28:** Discrepancy resolved — world-contracts code now matches docs. `withdraw_by_owner` takes `admin_acl: &AdminACL` and calls `admin_acl.verify_sponsor(ctx)`. Proximity proof removed from all owner-path SSU functions. Our extension path (deposit_item/withdraw_item<Auth>) is unaffected. **Updated 2026-03-03 (v0.0.15):** AdminACL REMOVED from `deposit_by_owner` and `withdraw_by_owner` — now just requires OwnerCap + sender == character_address. Three access modes documented: extension-based (main inventory), extension-to-owned (`deposit_to_owned<Auth>`), owner-direct (owned inventory). New `deposit_to_owned<Auth>` enables extensions to push items into any player's owned inventory. `withdraw_item<Auth>` now takes `quantity: u32` + `ctx` params. Items have `parent_id` for deposit validation.
+- **Notable clarifications:** Build page (`/gate/build`) exists but is still a stub (header only). Page structure changed from Configure/Deploy to single Build page. **Updated 2026-02-20:** Docs now show `deposit_by_owner`/`withdraw_by_owner` taking `AdminACL` instead of proximity proof (temporarily; docs say proximity proof returns "once a location service is available"). ~~**Code-docs discrepancy:** world-contracts code still has proximity_proof in these functions.~~ **Updated 2026-02-28:** Discrepancy resolved — world-contracts code now matches docs. `withdraw_by_owner` takes `admin_acl: &AdminACL` and calls `admin_acl.verify_sponsor(ctx)`. Proximity proof removed from all owner-path SSU functions. Our extension path (deposit_item/withdraw_item<Auth>) is unaffected. **Updated 2026-03-03 (v0.0.15):** AdminACL REMOVED from `deposit_by_owner` and `withdraw_by_owner` — now just requires OwnerCap + sender == character_address. Three access modes documented: extension-based (main inventory), extension-to-owned (`deposit_to_owned<Auth>`), owner-direct (owned inventory). New `deposit_to_owned<Auth>` enables extensions to push items into any player's owned inventory. `withdraw_item<Auth>` now takes `quantity: u32` + `ctx` params. Items have `parent_id` for deposit validation. **Updated 2026-03-09 (v0.0.16):** `withdraw_item<Auth>` now also requires SSU to be online (`ENotOnline` check added).
 
 ### Smart Storage Unit — Build
 
@@ -186,7 +187,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Last updated:** ~4 days ago (docs page may still be TODO)
 - **Summary:** ~~Placeholder page (`//TODO`). No content yet.~~ **Updated 2026-03-02:** world-contracts v0.0.14 now includes a full `turret.move` module (677 lines) + 1097-line test suite + extension example + TS scripts. Turret is a programmable structure with target-priority logic, typed witness extension pattern (same as gate/SSU), BCS-serialized `TargetCandidate` / `ReturnTargetPriorityList` protocol, `OnlineReceipt` hot-potato, and network node energy management.
 - **Why it matters for us:** Turrets are now a **real and fully implemented assembly type**. Uses the same extension pattern as gates (typed witness `authorize_extension<Auth>`, `swap_or_fill`). The `get_target_priority_list` function is the builder-extensible entry point — game calls it with BCS-encoded target candidates, extension returns priority weights. Turret extensions MUST consume the `OnlineReceipt` hot-potato via `destroy_online_receipt(receipt, auth_witness)`.
-- **Notable clarifications:** Turret extension in `extension_examples/sources/turret.move` replaces the old gate extension example (gate.move was deleted from extension_examples). Default targeting rules: same-tribe non-aggressors excluded, `STARTED_ATTACK` adds +10000 weight, `ENTERED` adds +1000 weight.
+- **Notable clarifications:** Turret extension in `extension_examples/sources/turret.move` replaces the old gate extension example (gate.move was deleted from extension_examples). Default targeting rules: owner always excluded (by character_id match), same-tribe non-aggressors excluded, `STARTED_ATTACK` adds +10000 weight, `ENTERED` adds +1000 weight. **Updated 2026-03-09 (v0.0.17):** Turret anchor now initializes metadata (empty strings) instead of `option::none()`.
 
 ### dApps Quick Start / Connecting / Customizing
 
@@ -272,6 +273,18 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **EVE Vault browser extension docs populated (NEW 2026-03-03)**: Install guide for Chrome (load unpacked), PIN creation, sign-in flow with Utopia credentials, dashboard screenshots. Links to evevault repo releases (v0.0.3).
 - **corpse_gate_bounty AdminACL removed (NEW 2026-03-03)**: `collect_corpse_bounty` no longer takes `admin_acl` param. `withdraw_by_owner` call updated with `quantity: 1` arg.
 - **Third test character (NEW 2026-03-03)**: `create-character.ts` now supports `PLAYER_C_PRIVATE_KEY` env var for a third character (`GAME_CHARACTER_C_ID`).
+- **PlayerProfile struct (NEW 2026-03-09, v0.0.16)**: `character::create_character` now auto-creates a `PlayerProfile { id, character_id }` struct and transfers it to the player's wallet address. Enables clients to query characters by wallet. Marked as temporary — to be replaced by OwnerCap-to-wallet flow.
+- **transfer_owner_cap_to_address fix (NEW 2026-03-09, v0.0.16)**: `access::transfer_owner_cap_to_address<T>` Character type detection fixed — now uses `module_string()` + `datatype_string()` instead of full TypeName comparison (which was broken across package boundaries).
+- **Assembly-level metadata update functions (NEW 2026-03-09, v0.0.16)**: All assembly types (gate, turret, SSU, assembly, network_node) and Character now have `update_metadata_name`, `update_metadata_description`, `update_metadata_url` functions. Requires OwnerCap authorization.
+- **Killmail refactored with registry (NEW 2026-03-09, v0.0.16)**: `create_killmail` signature changed — now takes `registry: &mut KillmailRegistry`, raw `u64` IDs (not TenantItemId), `&Character` reference, `u8` loss_type. New `KillmailRegistry` module added. Killmail struct fields renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New `reported_by_character_id` field. Duplicate check via `EKillmailAlreadyExists`.
+- **Unlink/unanchor gate functions (NEW 2026-03-09, v0.0.16)**: `gate::unlink_and_unanchor` and `gate::unlink_and_unanchor_orphan` — convenience admin functions to unlink and destroy a gate in one call.
+- **Extension withdraw_item online guard (NEW 2026-03-09, v0.0.16)**: `storage_unit::withdraw_item<Auth>` now asserts `storage_unit.status.is_online()` — cannot withdraw items from an offline SSU via extension. Previously only owner-path had this check.
+- **Gate type matching required for linking (NEW 2026-03-09, v0.0.17)**: `gate::link_gates` now asserts `source_gate.type_id == destination_gate.type_id` (error: `EGateTypeMismatch`). Gates of different types cannot be linked.
+- **Turret anchor initializes metadata (NEW 2026-03-09, v0.0.17)**: `turret::anchor` now creates metadata (empty strings) on anchor instead of `option::none()`. Ensures turrets always have metadata for `update_metadata_*` calls.
+- **Turret owner exclusion in target priority (NEW 2026-03-09, v0.0.17)**: `effective_weight_and_excluded` now excludes the turret owner by `character_id` match (in addition to same-tribe exclusion). Prevents turrets from targeting their own operator.
+- **builder-documentation restructured (NEW 2026-03-09)**: 35 commits. Files moved: `wallets-and-identity.md` → `eve-vault/`, `environment-setup.md` → `quickstart/`, `dapp-kit.md` → `tools/`, `interfacing-with-the-eve-frontier-world.md` → `tools/`. New files: `move-patterns-in-frontier.md`, `tools/efctl.md`, `tools/debugging.md`. Deleted: `welcome/contstraints.md`, `troubleshooting/player.md`, `eve-vault/gas-faucet.md`. Turret docs now fully populated. SSU build page expanded. Gate docs simplified. Ownership model now includes `transfer_owner_cap_to_address` and PlayerProfile. EVE Vault URL updated for browser extension.
+- **builder-scaffold PostgreSQL indexer (NEW 2026-03-09, v0.0.1)**: 6 commits. New PostgreSQL Indexer + GraphQL support. Docker overlay for custom indexer stack. `CONTRIBUTING.md` expanded. dapp-kit updated to 0.1.2. Node.js install via APT instead of curl|bash. Additional build/deploy docs.
+- **EVE Vault v0.0.4 (NEW 2026-03-09)**: 8 commits. Sponsored tx now sends metadata to endpoint. Gas estimation for token transfers. Device reset + centralized logout. Reusable SignPopupAuthGate component. Fix sign message bytes and auth flow. EVE token support added. `useSendToken` significantly enhanced. New GraphQL epoch queries. New `resetVaultOnDevice` with tests. `storageKeys.ts` centralized. Send token screen added. Lockscreen enhanced.
 
 ---
 
@@ -279,7 +292,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 
 1. **Before generating chain interaction flows, sponsorship patterns, or deployment steps**, consult this reference map and the linked official docs pages — especially the "Interfacing with the EVE Frontier World" and "World Explainer" pages.
 2. **Code in `vendor/world-contracts` is canonical; GitBook is explanatory.** If behavior described in docs contradicts Move code, the code wins. Flag the discrepancy.
-3. **If official docs show a "Last updated" date newer than this document's review date** (2026-03-03), re-check the relevant pages before finalizing logic.
+3. **If official docs show a "Last updated" date newer than this document's review date** (2026-03-09), re-check the relevant pages before finalizing logic.
 4. **For access control patterns**, consult "Introduction to Smart Contracts" — the capability, witness, and hot-potato patterns are explained with rationale not present in code comments.
 5. **For Sui-specific limits** (object size, field counts, gas), consult the "Constraints" page and cross-reference with Sui protocol docs.
 6. **Do not copy GitBook content into internal docs.** Summarize insights and link to the official page. This avoids drift and respects content ownership.

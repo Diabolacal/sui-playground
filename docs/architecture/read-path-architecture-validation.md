@@ -107,6 +107,8 @@ Step 6: Start polling loop (10s interval)
 | **Extension authorized** | ~~**NO event**~~ `ExtensionAuthorizedEvent` (world-contracts v0.0.15) | ~~Must poll `gate.extension` field changes~~ Subscribe or query by event type | **AVAILABLE (events)** *(Correction 2026-03-04)* |
 | **Combat detected** | `KillmailCreatedEvent` on-chain event | `suix_queryEvents({ MoveEventType: "...::killmail::KillmailCreatedEvent" })`, filter by operator's controlled `solar_system_id` client-side. Includes `loss_type` (SHIP/STRUCTURE), `killer_character_id`, `victim_character_id`. | **AVAILABLE** — informational signal only, no automation |
 
+> **v0.0.17 update:** `KillmailCreatedEvent` fields renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`.
+
 ### 2.3 Denial Observability
 
 Gate jump denials (policy rejections) result in **transaction aborts** (MoveAbort), not on-chain events. However, Sui **does store failed transactions on-chain** and they are queryable:

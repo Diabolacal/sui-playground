@@ -54,7 +54,9 @@ CC has two gate policies in MVP:
 
 | Gate Policy | What It Does | Turret Equivalent? |
 |---|---|---|
-| **Tribe Filter** | Allow only characters matching `tribe_id` | **Already the default behavior.** Default turret logic at [turret.move L631-650](../../vendor/world-contracts/contracts/world/sources/assemblies/turret.move): same tribe as owner AND not aggressor → excluded from priority list. Non-tribe → entered weight boost (+1000). Aggressors → attack weight boost (+10000). |
+| **Tribe Filter** | Allow only characters matching `tribe_id` | **Already the default behavior.** Default turret logic at [turret.move L662-685](../../vendor/world-contracts/contracts/world/sources/assemblies/turret.move): same tribe as owner AND not aggressor → excluded from priority list. Non-tribe → entered weight boost (+1000). Aggressors → attack weight boost (+10000). |
+
+> **v0.0.17 update:** Line reference updated (was L631-650). Owner is now also excluded by `character_id` match — turrets never target their own operator.
 | **Coin Toll** | Charge SUI per jump, allow anyone who pays | **No turret equivalent.** Turret has no coin payment mechanism. Extension cannot read gate toll-payment status (closed-world constraint). A toll-payer who is NOT in the owner's tribe will still be targeted at default priority. |
 
 **Key insight:** For the `tribe_only` preset, no custom turret extension is needed. The default turret behavior already deprioritizes tribe members — which is exactly what "gate allows tribe, turret ignores tribe" means.

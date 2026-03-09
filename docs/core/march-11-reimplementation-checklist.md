@@ -13,8 +13,8 @@
 
 > If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
 
-> **Date:** 2026-02-16 (updated 2026-03-03 with world-contracts v0.0.15 inventory refactor + AdminACL removal from owner-path SSU + deposit_to_owned + withdraw quantity param; environment model to be confirmed March 11)  
-> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02, 2026-03-03)**  
+> **Date:** 2026-02-16 (updated 2026-03-09 with world-contracts v0.0.16/v0.0.17 changes: PlayerProfile, gate type matching, turret owner exclusion, killmail registry, assembly metadata updates, withdraw_item online guard)  
+> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02, 2026-03-03, 2026-03-09)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
 > **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for module tests; [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) for complete 13-step gate lifecycle with transaction digests
@@ -66,6 +66,20 @@ This document captures everything needed to **reimplement CivilizationControl fr
 > 8. **EVE Vault browser extension docs populated:** Chrome install guide, PIN creation, Utopia sign-in flow, dashboard screenshots. Release v0.0.3.
 > 9. **Gate/turret/access modules UNCHANGED** in v0.0.15. All gate extension patterns remain intact.
 > 10. **corpse_gate_bounty updated:** AdminACL param removed, `withdraw_by_owner` call now includes `quantity: 1`.
+
+> **CHANGES (2026-03-09 submodule refresh — world-contracts v0.0.16/v0.0.17, builder-documentation 1eb5ad4, builder-scaffold 9200be4/v0.0.1, evevault 30f74ef/v0.0.4):**
+> 1. **PlayerProfile struct auto-created (v0.0.16):** `character::create_character` now auto-creates `PlayerProfile { id, character_id }` and transfers it to `character_address`. Enables wallet-based character lookup by clients. Temporary — to be replaced by OwnerCap-to-wallet flow.
+> 2. **transfer_owner_cap_to_address fix (v0.0.16):** Character type detection now uses `module_string()` + `datatype_string()` instead of broken full TypeName comparison. Functionally unchanged but now actually works across package boundaries.
+> 3. **Assembly metadata update functions (v0.0.16):** All assemblies (gate, turret, SSU, assembly, NWN) + Character now have `update_metadata_name`, `update_metadata_description`, `update_metadata_url`. Requires OwnerCap. **CC Impact:** Can be used for naming player structures in CivilizationControl UI.
+> 4. **Killmail refactored with KillmailRegistry (v0.0.16):** `create_killmail` signature completely changed — now takes `registry: &mut KillmailRegistry`, raw `u64` IDs, `&Character` reference, `u8` loss_type. Struct fields renamed (`killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`). New `reported_by_character_id` field + duplicate check. **CC Impact:** Updates event parsing for KillmailCreatedEvent in Signal Feed — field names changed.
+> 5. **Gate type matching (v0.0.17):** `link_gates` now asserts `source_gate.type_id == destination_gate.type_id` (`EGateTypeMismatch`). Gates of different types cannot be linked. **CC Impact:** Low — CivilizationControl doesn't call link_gates.
+> 6. **Turret anchor initializes metadata (v0.0.17):** Creates empty metadata on anchor instead of `option::none()`.
+> 7. **Turret owner exclusion (v0.0.17):** `effective_weight_and_excluded` now excludes turret owner by character_id match. **CC Impact:** Positive — Defense Mode posture benefits from turrets never targeting operator.
+> 8. **Extension withdraw_item online guard (v0.0.16):** `withdraw_item<Auth>` now requires SSU to be online (`ENotOnline`). **CC Impact:** TradePost operations blocked while SSU is offline — consistent with expectations.
+> 9. **Unlink/unanchor convenience functions (v0.0.16):** `gate::unlink_and_unanchor` and `gate::unlink_and_unanchor_orphan` for admin cleanup.
+> 10. **builder-documentation major restructure:** Files moved across directories. New Move patterns page. efctl CLI tool documented. Constraints page deleted.
+> 11. **builder-scaffold v0.0.1:** PostgreSQL Indexer + GraphQL support added. Docker overlay. dapp-kit 0.1.2.
+> 12. **EVE Vault v0.0.4:** Sponsored tx metadata, gas estimation, device reset, EVE token support, enhanced send flow.
 
 ---
 

@@ -150,6 +150,8 @@ Ranked by: feasibility (Green weight ×2) + demo power + uniqueness + minimal ex
 - **Viability:** Green
 - **Required world-contract primitives:**
   - `KillmailCreatedEvent` — confirmed fields: `killmail_id`, `killer_character_id`, `victim_character_id`, `solar_system_id`, `loss_type`, `kill_timestamp`
+
+> **Outdated (v0.0.17):** Field names renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`.
   - `Character::tribe_id` for tribe correlation
   - `create_killmail()` — admin-only, for generating test data
 - **Sui constraints that matter:** Events are ephemeral — not stored on-chain. Need indexer or local cache. **No `structure_id` in killmail** — only `victim_character_id` and `solar_system_id`. Heat maps use `solar_system_id` as spatial key (location hashes cannot be decoded).

@@ -513,7 +513,7 @@ npx tsx src/full-test.ts      # Run posture switch both directions
 | Q5 | Will `suix_queryEvents` work on test server RPC? | MEDIUM — Signal Feed depends on this | `curl` event query Day 1. If no: fallback to tx-digest polling. |
 | Q6 | Is EVE token (Coin<EVE>) usable on test server, or SUI-only? | LOW — toll denomination | Check `assets` package deployment. Default to SUI<> if EVE unavailable. |
 | Q7 | Can we set DApp URL on SSU/Gate objects for in-game browser? | LOW — "Best Integration" bonus | Check via test server admin tools. |
-| Q8 | ~~Will sponsored tx dual-sign flow work without EVE Vault?~~ | ~~MEDIUM~~ **RESOLVED** | *(Resolved 2026-03-04: (1) Non-sponsored path: sender in AdminACL, `verify_sponsor` falls back to `ctx.sender()` — validated on localnet 2026-02-28. (2) EVE Vault sponsored tx via `evefrontier:sponsoredTransaction` wallet feature works end-to-end (v0.0.3, a409496). No custom sponsor service needed.)* |
+| Q8 | ~~Will sponsored tx dual-sign flow work without EVE Vault?~~ | ~~MEDIUM~~ **RESOLVED** | *(Resolved 2026-03-04: (1) Non-sponsored path: sender in AdminACL, `verify_sponsor` falls back to `ctx.sender()` — validated on localnet 2026-02-28. (2) EVE Vault sponsored tx via `evefrontier:sponsoredTransaction` wallet feature works end-to-end (v0.0.4, 30f74ef). No custom sponsor service needed.)* |
 | Q9 | Are there pre-spawned assemblies (Gates, SSUs, Turrets) on test server? | MEDIUM — saves setup time | Check test server state on Day 1. If yes: use existing. If no: create from scratch. |
 | Q10 | Test server Sui version — same as our localnet (v1.65+)? | LOW — subtle behavior diffs | `sui --version` on both. |
 

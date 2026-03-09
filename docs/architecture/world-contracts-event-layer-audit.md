@@ -11,6 +11,8 @@
 
 ### Summary: 37 `event::emit` call sites across 13 modules, 30 distinct event struct types (updated 2026-03-05; prior count under-reported — see [complete inventory](../research/world-contracts-event-inventory.md)).
 
+> **v0.0.17 update (2026-03-09):** Counts above are for v0.0.15. v0.0.16/v0.0.17 added `MetadataChangedEvent` (new struct in `metadata.move`) and restructured killmail module. At least 31 event types now. Full re-inventory recommended.
+
 ---
 
 ### Module: `world::status` (primitives/status.move)
@@ -168,6 +170,8 @@
 | Event Struct | When Emitted | Fields |
 |---|---|---|
 | `KillmailCreatedEvent` | `create_killmail()` (admin-only PvP record) | `killmail_id: TenantItemId`, `killer_character_id: TenantItemId`, `victim_character_id: TenantItemId`, `solar_system_id: TenantItemId`, `loss_type: LossType`, `kill_timestamp: u64` |
+
+> **Outdated (v0.0.17):** Fields renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`. New `KillmailRegistry` module. `create_killmail` signature changed completely.
 
 **Emit sites:** 1.
 

@@ -5,6 +5,8 @@
 **Environment:** Sui CLI v1.66.1
 
 > **⚠️ SUPERSEDED (v0.0.15, 2026-03-03):** This document verified signatures at v0.0.14 (78854fe). world-contracts is now at v0.0.15 (74d30c8). A3 (`withdraw_item`) signature has changed — now includes `quantity: u32` + `ctx: &mut TxContext`. A1, A2, A4 remain valid. Gate/turret/access modules are unchanged.
+>
+> **⚠️ SUPERSEDED (v0.0.17, 2026-03-09):** world-contracts updated to v0.0.17 (26d0a8c). Further changes: `create_killmail` signature completely changed, `link_gates` adds type_id matching, `withdraw_item` adds online guard, new `MetadataChangedEvent`, new `PlayerProfile` struct. See `docs/core/march-11-reimplementation-checklist.md` for full change list.
 
 ## World-Contracts Pin
 

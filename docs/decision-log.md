@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-09 — Submodule Refresh (world-contracts v0.0.17, builder-documentation 1eb5ad4, builder-scaffold v0.0.1, evevault v0.0.4)
+- **Goal:** Refresh all submodules to latest upstream; audit changes for CivilizationControl impact; update stale documentation references.
+- **Decision:** Updated 4 of 5 submodules: world-contracts `3cc9ffa→26d0a8c` (v0.0.15→v0.0.17, +14 commits), builder-documentation `b4178c6→1eb5ad4` (+35 commits, major restructure), builder-scaffold `572e2ca→9200be4` (v0.0.1, +6 commits), evevault `a409496→30f74ef` (v0.0.4, +8 commits). proximity-zk-poc unchanged. **Key world-contracts changes:** (1) `PlayerProfile` auto-created at character creation. (2) `transfer_owner_cap_to_address` Character type detection fixed. (3) `MetadataChangedEvent` + `update_metadata_name/description/url` on all assemblies. (4) Killmail refactored — `KillmailRegistry` module, `create_killmail` signature changed, fields renamed (`killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`). (5) `link_gates` type_id matching (`EGateTypeMismatch`). (6) Turret owner excluded by `character_id` in `effective_weight_and_excluded`. (7) SSU `withdraw_item` online guard (`ENotOnline`). (8) Gate `unlink_and_unanchor` convenience functions. **No pattern-breaking changes for CivilizationControl.** Low CC impact overall — posture switch, extension auth, toll collection patterns remain valid.
+- **Files:** vendor/ (4 submodule pointers), docs/research/evefrontier-builder-docs-map.md, docs/core/march-11-reimplementation-checklist.md, docs/strategy/_shared/hackathon-portfolio-roadmap.md, + 15 docs annotated with v0.0.17 callouts (turret line refs, killmail fields, evevault version, event counts, link_gates constraint)
+- **Diff:** submodule pins + ~200 LoC doc updates/annotations
+- **Risk:** Low (submodule pins + documentation only, no application code changed)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs-only)
+- **Follow-ups:** Full event inventory re-count recommended for v0.0.17. Killmail test data generator scripts need signature updates.
+
+---
+
 ## 2026-03-07 — Bouncer Turret Posture: Day 1 Validation Target Added
 - **Goal:** Capture a new empirical validation target: can a turret remain ONLINE but passive (no fire on neutrals) while still retaliating against aggressors? If yes, Business posture upgrades from "turrets offline" to "turrets online, peacekeeper mode."
 - **Decision:** Added Day 1 checklist item (Check 9c) and turret validation checklist section (§9, items BT-01 through BT-05). Framed as upgrade-path validation, not a demo blocker. Current fallback (offline/online posture model) preserved. Derived from code inspection of `effective_weight_and_excluded()` and the extension calling convention (closed-world constraint). Key uncertainty: whether game engine handles an empty return list gracefully.

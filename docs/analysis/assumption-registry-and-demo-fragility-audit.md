@@ -64,6 +64,8 @@
 | A-04 | Function name inconsistency: checklist says `add_sponsor_to_acl`, runbook uses `add_access` | march-11-checklist vs gate-lifecycle-runbook Step 3a | Contract behavior | Medium | Yes | Verify correct function name against world-contracts source |
 | A-05 | `AdminACL` takes `&AdminACL` (immutable ref) in `verify_sponsor` — read-only shared object access, lower contention | access_control.move L156, spec.md S2.3 | Contract behavior | Medium | No | If mutable ref, concurrent jumps contend on AdminACL |
 | A-06 | `link_gates` now requires `admin_acl: &AdminACL` param and authorized sponsored tx (v0.0.13 breaking change) | march-11-checklist "Breaking Changes" #2, gate.move L170-215 | Contract behavior | High | Yes | Pre-link gates on devnet; use pre-linked pairs on test server |
+
+> **v0.0.17 update:** `link_gates` now also asserts `source_gate.type_id == destination_gate.type_id` (`EGateTypeMismatch`). Low CC impact — CivilizationControl doesn’t call `link_gates`.
 | A-07 | `deposit_fuel` requires sponsored transaction | gate-lifecycle-runbook Step 6b | Contract behavior | High | Yes | Fuel on devnet before demo |
 
 ### 1.2 Extension Authorization and Witness Model

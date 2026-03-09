@@ -66,6 +66,8 @@
 | **Killmails are write-only** | `create_killmail()` creates shared objects and emits `KillmailCreatedEvent`, but there are no query/view functions for filtering or aggregation. Killmails accumulate as individual shared objects. | Killmail analytics dashboard: index `KillmailCreatedEvent` data (killer, victim, solar_system, loss_type, timestamp). Provide filters by: solar system, character, timeframe, loss type (SHIP vs STRUCTURE). |
 | **No territorial intelligence** | `Killmail.solar_system_id` reveals where kills happen. But there's no aggregation layer to show "System X had 47 kills last week." | Heat map: aggregate killmails by `solar_system_id` over time windows. Identify "hot zones" (dangerous) vs "cold zones" (safe). |
 | **No threat assessment** | Individual killmails tell you "A killed B in system C." No player profiles, no K/D ratios, no serial killer detection. | Player threat profiles: aggregate killmails by `killer_character_id` → kill count, preferred solar systems, ship vs structure ratio. Flag high-threat characters. |
+
+> **v0.0.17 update:** Killmail field references in this section use v0.0.15 names. `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id` as of v0.0.16.
 | **Structure loss is mixed into killmails** | `LossType::STRUCTURE` exists but there's no structured link between a killmail and the destroyed Gate/SSU/NWN object. | Structure loss tracker: correlate `LossType::STRUCTURE` killmails with assembly `unanchor` events (if the assembly was destroyed in combat vs voluntarily removed). |
 | **Gate traffic is intelligence-blind** | `JumpEvent` shows who jumped where, but there's no correlation to killmail data or threat assessment. | Gate traffic + threat correlation: "A known hostile character jumped through your gate 5 minutes ago — alert." |
 | **No gate network topology analysis** | `linked_gate_id` creates a graph, but there's no tool to visualize or query the network topology. | Gate network map: traverse `linked_gate_id` across all gates, render a graph. Show traffic flow, chokepoints, disconnected segments. |
@@ -146,6 +148,8 @@
 | **Key Screens / UX Elements** | • **Kill feed**: real-time stream of `KillmailCreatedEvent`, filterable by solar system, character, loss type. • **Solar system heat map**: aggregate kills per system over configurable time window (24h, 7d, 30d). Color-code by intensity. • **Player profiles**: per-character kill/death count, preferred systems, ship vs structure ratio. • **Threat advisory**: "Character X has killed 12 players in your gate's solar system this week." • **Loss analysis**: "Your corp lost 3 structures last month — all in System Y." |
 | **Structures Touched** | `Killmail` (shared objects), `Character` (identity correlation) |
 | **Data Sources** | `KillmailCreatedEvent`: `killmail_id`, `killer_character_id`, `victim_character_id`, `solar_system_id`, `loss_type`, `kill_timestamp`. Index these events off-chain or query via `sui client events`. |
+
+> **Outdated (v0.0.17):** Field names above use v0.0.15 schema. Renamed in v0.0.16: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`.
 | **Feasibility** | High — purely indexing + visualization. No contract changes needed. |
 
 ---

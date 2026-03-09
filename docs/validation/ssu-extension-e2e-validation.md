@@ -23,6 +23,8 @@
 - **Sui CLI:** v1.66.1-bac3f508b83b
 - **Test mode:** `sui move test` (in-memory `test_scenario`, no chain connection)
 - **world-contracts:** v0.0.15 (commit `74d30c8eef5d327b8477334326d195750c886900`)
+
+> **v0.0.17 update:** This validation was performed against v0.0.15. world-contracts is now at v0.0.17 (26d0a8c). SSU `withdraw_item` now has an online guard (`ENotOnline`). Extension auth and deposit/withdraw patterns remain structurally valid.
 - **Test package:** `sandbox/validation/ssu_extension_test/`
 - **Active env workaround:** Switched to `testnet` env before running `sui move test` to avoid CLI v1.66.1 environment hash mismatch with dependency `[environments] local = "0x0"` placeholder
 

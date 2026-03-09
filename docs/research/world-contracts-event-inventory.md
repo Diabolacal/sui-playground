@@ -169,6 +169,8 @@
 |---|---|---|---|---|---|
 | 30 | `KillmailCreatedEvent` | `killmail_id: TenantItemId`, `killer_character_id: TenantItemId`, `victim_character_id: TenantItemId`, `solar_system_id: TenantItemId`, `loss_type: LossType`, `kill_timestamp: u64` | `create_killmail()` (admin-only) | L55 | L100 |
 
+> **Outdated (v0.0.17):** `KillmailCreatedEvent` fields renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`. New `KillmailRegistry` module + `create_killmail` signature changed. New event #31: `MetadataChangedEvent` in `metadata.move`. Full re-inventory recommended.
+
 **Emit sites:** 1. Only event with `solar_system_id` (spatial context).
 
 ---
