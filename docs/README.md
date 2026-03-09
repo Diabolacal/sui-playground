@@ -243,6 +243,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [operations/turret-localnet-validation-checklist.md](operations/turret-localnet-validation-checklist.md) | **Turret localnet validation checklist** — 45 test cases (8 executable, 36 environment-blocked, 1 structurally impossible), BCS encoding reference, object dependency matrix |
 | [operations/compliance-audit-2026-02-24.md](operations/compliance-audit-2026-02-24.md) | **Compliance audit (2026-02-24)** — First structured hackathon compliance check. Prep-only. |
 | [operations/compliance-audit-2026-03-09.md](operations/compliance-audit-2026-03-09.md) | **Compliance audit (2026-03-09)** — Pre-template compliance audit. 2 HIGH, 6 MEDIUM findings. Prep-only. |
+| [operations/starter-repo-packaging-recommendation.md](operations/starter-repo-packaging-recommendation.md) | **Starter-repo packaging recommendation** — Full artifact-set classification (shared-starter / CC-starter / evidence-only / local-only), root repo shape, rewrite list, export-risk notes. Prep-only. |
 
 ## UX
 
