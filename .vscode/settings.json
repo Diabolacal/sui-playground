@@ -68,6 +68,7 @@
     "workbench.secondarySideBar.defaultVisibility": "visible",
     "chat.math.enabled": true,
     "chat.agent.maxRequests": 100,
+    "chat.autopilot.enabled": true,
 
     // ─────────────────────────────────────────────────────────────────────────
     // VS Code 1.110 – Agentic Browser Tools (Experimental)
