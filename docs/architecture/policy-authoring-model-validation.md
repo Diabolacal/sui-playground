@@ -6,6 +6,8 @@
 > **Source:** Targeted feasibility analysis across world-contracts, builder-scaffold, builder-documentation, evevault  
 > **Question:** Can players configure enforcement rules (deny/allow/toll) via CivilizationControl UI without writing Move code?
 
+> **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`. References to `smart_gate/` below use the pre-rename path.
+
 ---
 
 ## Verdict: Model 2 — "Publish Once, Configure via Data"

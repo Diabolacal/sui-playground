@@ -13,7 +13,7 @@
 
 > If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
 
-> **Date:** 2026-02-16 (updated 2026-03-09 with world-contracts v0.0.16/v0.0.17 changes: PlayerProfile, gate type matching, turret owner exclusion, killmail registry, assembly metadata updates, withdraw_item online guard)  
+> **Date:** 2026-02-16 (updated 2026-03-10 with world-contracts 2aed50b: LocationRegistry + reveal_location on all assemblies, builder-scaffold smart_gate→smart_gate_extension rename, builder-documentation PlayerProfile discovery docs)  
 > **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON LOCAL DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02, 2026-03-03, 2026-03-09)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
@@ -35,7 +35,7 @@ This document captures everything needed to **reimplement CivilizationControl fr
 - A code dump — all sandbox code stays in `sui-playground`
 - A substitute for reading the world-contracts source — this is a map, not the territory
 
-> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold/move-contracts/smart_gate/` now contains 3 canonical reference implementations directly relevant to CivilizationControl: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based gate access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS scripts at `ts-scripts/smart_gate/` and utility library at `ts-scripts/utils/` (config, derive-object-id, sponsored tx helpers). Builder-documentation `gate/build.md` now provides an end-to-end build guide. New deployment automation scripts at `vendor/world-contracts/scripts/` (deploy-world.sh, seed-world.sh).
+> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold/move-contracts/smart_gate_extension/` now contains 3 canonical reference implementations directly relevant to CivilizationControl: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based gate access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS scripts at `ts-scripts/smart_gate_extension/` and utility library at `ts-scripts/utils/` (config, derive-object-id, sponsored tx helpers). Builder-documentation `gate/build.md` now provides an end-to-end build guide. New deployment automation scripts at `vendor/world-contracts/scripts/` (deploy-world.sh, seed-world.sh). *(Paths updated 2026-03-10: `smart_gate` → `smart_gate_extension`, `storage_unit` → `storage_unit_extension` per builder-scaffold 3c65b22.)*
 
 > **BREAKING CHANGES (2026-02-28 submodule refresh — world-contracts v0.0.13, builder-scaffold 6bc43a1):**
 > 1. **Proximity proof REMOVED** from all owner-path SSU functions (`withdraw_by_owner`, `withdraw`). Replaced by `admin_acl: &AdminACL` + `admin_acl.verify_sponsor(ctx)`. Marked as temporary "until a location service is available." Our extension path (`withdraw_item<Auth>`, `deposit_item<Auth>`) is unaffected.
@@ -80,6 +80,11 @@ This document captures everything needed to **reimplement CivilizationControl fr
 > 10. **builder-documentation major restructure:** Files moved across directories. New Move patterns page. efctl CLI tool documented. Constraints page deleted.
 > 11. **builder-scaffold v0.0.1:** PostgreSQL Indexer + GraphQL support added. Docker overlay. dapp-kit 0.1.2.
 > 12. **EVE Vault v0.0.4:** Sponsored tx metadata, gas estimation, device reset, EVE token support, enhanced send flow.
+
+> **CHANGES (2026-03-10 submodule refresh — world-contracts 2aed50b, builder-documentation 9222d42, builder-scaffold 3c65b22):**
+> 1. **LocationRegistry + reveal_location on ALL assemblies (world-contracts 2aed50b):** New shared `LocationRegistry` object (`Table<ID, Coordinates>`). New `Coordinates` struct: `solarsystem: u64`, `x/y/z: String` (strings for negative values). `reveal_location()` added to Assembly, Gate, StorageUnit, Turret, and NetworkNode — AdminACL-sponsored call stores plain-text coordinates on-chain. New `LocationRevealedEvent`. `get_location(registry, assembly_id) → Option<Coordinates>` reads. Marked temporary ("until offchain location reveal service is ready"). **HIGH CC IMPACT on onboarding:** Eliminates need for manual structure position input. Full wallet→PlayerProfile→Character→OwnerCaps→Structures→LocationRegistry discovery chain now possible. SVG topology map can be populated from on-chain data instead of user input.
+> 2. **builder-documentation PlayerProfile discovery docs (9222d42):** `smart-character.md` now documents wallet→PlayerProfile→Character lookup. Ownership model deduplicated to link to character page. Confirms query pattern: objects owned by wallet → filter type `PlayerProfile` → `character_id` → fetch `Character`.
+> 3. **builder-scaffold renamed smart_gate→smart_gate_extension, storage_unit→storage_unit_extension (3c65b22):** Move contracts and TS scripts directories renamed with `_extension` suffix. `tokens/` package removed entirely. Docs refactored. **CC Impact:** Reference paths for scaffold examples changed — update any `smart_gate/` references to `smart_gate_extension/`.
 
 ---
 

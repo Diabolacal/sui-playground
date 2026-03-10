@@ -89,7 +89,9 @@ Structural UX planning document for the CivilizationControl governance command l
 
 ### Wallet & Identity
 
-- **No on-chain wallet→Character mapping** — first discovery step requires off-chain resolution
+> **2026-03-10 update:** `PlayerProfile` (v0.0.16) now enables wallet→Character lookup on-chain. The "off-chain resolution" constraint below is largely resolved. `LocationRegistry` (v0.0.18/2aed50b) now stores plain-text coordinates on-chain via `reveal_location()`. Several spatial constraints below are softened.
+
+- **~~No on-chain wallet→Character mapping~~** — ~~first discovery step requires off-chain resolution~~ **Now available via PlayerProfile (v0.0.16)**
 - **Character is a shared object** — `suix_getOwnedObjects` on wallet address does NOT find the Character
 - **Character ID resolution requires off-chain data** — event indexing, game server API, or deterministic ID computation
 - **OwnerCaps use transfer-to-object** — live under Character's UID, not player's wallet address
@@ -120,8 +122,8 @@ Structural UX planning document for the CivilizationControl governance command l
 
 ### Hard UX Constraints
 
-- **List-first, not map-first is mandatory** — spatial data unavailable from chain
-- **Wallet→Character mapping is off-chain** — bootstrapping constraint on first use
+- **List-first, not map-first is mandatory** — ~~spatial data unavailable from chain~~ **2026-03-10:** `LocationRegistry` now provides coordinates; list-first remains the design choice but map-first is now technically feasible
+- **~~Wallet→Character mapping is off-chain~~** — ~~bootstrapping constraint on first use~~ **2026-03-10:** `PlayerProfile` enables on-chain wallet→Character lookup
 - **Server involvement for linking and inventory** — cannot be purely client-side
 - **Sponsorship required for core gameplay** — gas abstraction needs separate sponsor address
 - **Currency display requires conversion logic** — players think Lux, settlement is SUI
@@ -504,9 +506,11 @@ Evaluation order is fixed and opinionated. Users do not arrange or reorder rules
 
 ## 8. Manual Pinning Model
 
+> **2026-03-10 update:** `LocationRegistry` now stores plain-text coordinates on-chain for all assembly types. Manual pinning becomes a fallback/override instead of the only option. Auto-placement from `LocationRegistry` data is feasible for structures whose owners have called `reveal_location()`. The flow below still applies for structures without on-chain coordinates.
+
 ### Purpose
 
-Users manually assign structures to solar systems for visual organization and grouping. Explicitly user-curated — not chain-derived. Works on day one regardless of CCP API availability.
+Users manually assign structures to solar systems for visual organization and grouping. ~~Explicitly user-curated — not chain-derived.~~ Works on day one regardless of CCP API availability. **2026-03-10:** Now supplementary to `LocationRegistry` auto-placement.
 
 ### Flow
 
@@ -538,8 +542,8 @@ interface SpatialPin {
 ### UI Labels & Disclosures
 
 - Pinned structures display 📍 icon to distinguish user-curated from (future) auto-placement
-- Always-visible: **"Operator-curated placement — not derived from on-chain data"**
-- Future-ready note (tooltip): "If CCP exposes a coordinate API, automatic placement will replace manual pins"
+- Always-visible: **"Operator-curated placement — not derived from on-chain data"** *(Review: positions may now be LocationRegistry-sourced)*
+- Future-ready note (tooltip): ~~"If CCP exposes a coordinate API, automatic placement will replace manual pins"~~ **2026-03-10:** `LocationRegistry` now provides coordinates. Auto-placement is available for revealed structures.
 
 ### Solar System Dataset
 
@@ -562,7 +566,7 @@ CivilizationControl uses **two complementary spatial layers**, each assigned to 
 **Characteristics:**
 
 - **Rendering:** React SVG component (~150–200 LoC). Nodes represent systems or structures; edges represent gate links.
-- **Data source:** Manual spatial pins (§8) provide system-level positions. On-chain state provides structure status, policy, links, fuel.
+- **Data source:** Manual spatial pins (§8) provide system-level positions. On-chain state provides structure status, policy, links, fuel. **2026-03-10:** `LocationRegistry` can now supplement/replace manual pins for revealed structures.
 - **State encoding:** Node color/border reflects online/offline/warning. Edge styling encodes link status (active, degraded, unlinked). Optional badges for policy type, revenue, fuel.
 - **Interactivity:** Click node → navigate to structure detail. Hover → tooltip with status summary. Expandable to occupy primary screen space.
 - **Reactivity:** Standard React state propagation. Structure state changes reflected immediately.
@@ -570,8 +574,8 @@ CivilizationControl uses **two complementary spatial layers**, each assigned to 
 
 **What It Is NOT:**
 
-- Not a real-time position tracker (manual pins, not coordinates)
-- Not derived from chain data (positions are user-curated; only _state_ is on-chain)
+- Not a real-time position tracker (manual pins, not coordinates) *(Review: LocationRegistry now provides coordinates)*
+- Not derived from chain data (positions are user-curated; only _state_ is on-chain) *(Review: positions CAN now be chain-derived via LocationRegistry)*
 - Not the primary navigation surface (the list is)
 
 **Representation Options:** Three approaches identified (system-level nodes with badges, expandable per-system clusters, lens-based toggling). To be finalized during build phase. See [Spatial Embed Requirements — Representation Options](../architecture/spatial-embed-requirements.md).
@@ -597,6 +601,8 @@ CivilizationControl uses **two complementary spatial layers**, each assigned to 
 - Deep-link from Strategic Network Map node → EF-Map centered on that system
 
 ### Upgrade Path
+
+> **2026-03-10:** The coordinate API trigger below is now substantively resolved by `LocationRegistry`. Coordinates are available on-chain for structures whose owners call `reveal_location()`.
 
 If CCP exposes a coordinate API:
 - Manual pins replaced with real positions in the Strategic Network Map
@@ -815,7 +821,7 @@ The primary interface is a structured list of owned structures, not a map. All g
 
 **Example:** A tribe leader sees six gates listed with status indicators. They click Gate North-3, open the policy panel, toggle a tribe filter, and set a toll — never needing spatial coordinates.
 
-**Why:** Structure coordinates are not on-chain (Poseidon2 hash only). Building a map-first UI on data that doesn't exist would require unconfirmed external API dependencies.
+**Why:** ~~Structure coordinates are not on-chain (Poseidon2 hash only).~~ **2026-03-10:** `LocationRegistry` now stores coordinates on-chain. List-first remains the design choice for governance clarity, not due to data unavailability. Building a map-first UI on data that doesn't exist would require unconfirmed external API dependencies.
 
 #### 2. Manual Spatial Augmentation
 
@@ -877,6 +883,8 @@ The UI communicates that both gates in a link must share the same extension type
 
 #### Trigger 1: Wallet→Character Mapping API
 
+> **2026-03-10:** This trigger is now substantively resolved by `PlayerProfile` (v0.0.16). Wallet→Character lookup is available on-chain.
+
 | Aspect | Detail |
 |--------|--------|
 | **Current** | Character ID requires off-chain event indexing or manual input |
@@ -887,6 +895,8 @@ The UI communicates that both gates in a link must share the same extension type
 | **Classification** | **Additive.** No breaking changes. Trivial rollback. |
 
 #### Trigger 2: Coordinate API (Structure Position Data)
+
+> **2026-03-10:** This trigger is now substantively resolved by `LocationRegistry` (world-contracts 2aed50b). Plain-text coordinates stored on-chain via `reveal_location()` on all assembly types.
 
 | Aspect | Detail |
 |--------|--------|

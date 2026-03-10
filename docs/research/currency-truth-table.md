@@ -6,6 +6,8 @@
 > **Sources:** world-contracts Move code, EVE Frontier GitBook (via reference map), Sui docs reference map, builder-documentation submodule, internal strategy/ideas docs, validation reports
 > **Purpose:** Single source of truth for the currency/token model as understood from this workspace
 
+> **2026-03-10 submodule refresh:** Builder-scaffold `tokens/` package removed entirely. References to `tokens.move` below point to a deleted path.
+
 ---
 
 ## Summary

@@ -65,8 +65,8 @@ A **browser-only governance command layer** for EVE Frontier tribe leaders. Two 
 | No backend / indexer / database | Browser-only for Day-1. The read provider abstraction enables switching to Option B (proxy) or Option C (indexer) post-hackathon without UI changes |
 | No visual Move programming | Users configure opinionated rule blocks, not code |
 | No custom token for Day-1 | `Coin<SUI>` only. TribeMint (`Coin<TribeToken>`) is stretch. **Currency display:** demo narration uses "EVE" as the on-chain denomination; "Lux" (10,000 Lux = 1 EVE) is the player-facing display denomination. Dual-display (EVE + Lux) is valid in dashboard contexts. On-chain implementation remains `Coin<SUI>`. |
-| No real-time coordinate mapping | Coordinates are not on-chain — only Poseidon(2) hashes. Manual spatial pinning |
-| No auto-discovery of structures | Character resolution requires manual ID input (fallback). Automated resolution is stretch |
+| No real-time coordinate mapping | ~~Coordinates are not on-chain — only Poseidon(2) hashes.~~ **2026-03-10:** `LocationRegistry` now stores plain-text coordinates on-chain (`reveal_location()` on all assemblies). Manual spatial pinning remains fallback; auto-placement from chain data is now feasible. |
+| No auto-discovery of structures | ~~Character resolution requires manual ID input (fallback).~~ **2026-03-10:** `PlayerProfile` (v0.0.16) enables wallet→Character lookup. Automated resolution is now standard path, not stretch. |
 | No multi-chain support | Sui only |
 | No PII storage | Events are aggregate only |
 | No EF-Map visual primitives | 0/12 required primitives available. CivControl-native SVG topology for Day-1 |

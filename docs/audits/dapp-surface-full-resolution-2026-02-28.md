@@ -21,7 +21,7 @@
 - `vendor/world-contracts/contracts/world/sources/assemblies/gate.move`
 - `vendor/world-contracts/contracts/world/sources/access/access_control.move`
 - `vendor/world-contracts/contracts/assets/sources/EVE.move`
-- `vendor/builder-scaffold/move-contracts/smart_gate/sources/config.move`
+- `vendor/builder-scaffold/move-contracts/smart_gate/sources/config.move` *(renamed to `smart_gate_extension/` in scaffold v3c65b22, 2026-03-10)*
 
 ---
 

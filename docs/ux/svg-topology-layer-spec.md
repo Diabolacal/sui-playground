@@ -41,7 +41,7 @@ The Strategic Network Map is a **governance topology schematic** — not a star 
 - **Nodes** represent structures (Network Nodes, Gates, Trade Posts)
 - **Edges** represent gate links (passage corridors between linked gate pairs)
 - **State overlays** encode runtime condition (online, offline, armed, Revenue event, etc.)
-- **Layout** is operator-curated (manual spatial pins), not coordinate-derived
+- **Layout** is operator-curated (manual spatial pins), not coordinate-derived\n\n> **2026-03-10 update:** `LocationRegistry` now stores plain-text coordinates on-chain for revealed structures. Layout can potentially be auto-derived from on-chain data instead of requiring manual pins. Manual pins remain as fallback/override.", "oldString": "- **Layout** is operator-curated (manual spatial pins), not coordinate-derived
 
 This spec defines the complete visual language for this schematic. All implementation must conform to this document. Where this spec and the UX Architecture Spec §9 overlap, this document is canonical for visual language; the UX spec remains canonical for interaction patterns and screen hierarchy.
 

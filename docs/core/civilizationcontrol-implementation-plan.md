@@ -260,7 +260,7 @@ Per UX spec §10: implement connection states (Not Connected, Connecting, Connec
 
 > **Note:** `AdminCap` follows the builder-scaffold pattern for future global admin operations (e.g., emergency config migration, fee parameter changes). MVP rule configuration uses `OwnerCap<Gate>` for per-gate self-service. AdminCap is reserved — no MVP function requires it.
 
-References: `vendor/builder-scaffold/move-contracts/smart_gate/sources/config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers).
+References: `vendor/builder-scaffold/move-contracts/smart_gate_extension/sources/config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers). *(Renamed from `smart_gate/` in scaffold v3c65b22, 2026-03-10.)*
 
 **Critical design:** Both GateAuth and TradeAuth witnesses live in the SAME package because each gate/SSU supports only one extension type (`Option<TypeName>`). The config object is shared across all enrolled structures.
 
@@ -314,7 +314,7 @@ On local devnet: may need `[environments]` section in Move.toml with chain ID.
 
 Gate the config functions with OwnerCap<Gate> verification: accept `&OwnerCap<Gate>` and assert `owner_cap.authorized_object_id() == gate_id` to enable self-service.
 
-Reference: `vendor/world-contracts/contracts/extension_examples/sources/config.move` DF helpers, `vendor/builder-scaffold/move-contracts/smart_gate/sources/tribe_permit.move`.
+Reference: `vendor/world-contracts/contracts/extension_examples/sources/config.move` DF helpers, `vendor/builder-scaffold/move-contracts/smart_gate_extension/sources/tribe_permit.move`. *(Renamed from `smart_gate/` in scaffold v3c65b22, 2026-03-10.)*
 
 **Files:**
 - `contracts/civcontrol/sources/gate_rules.move`
@@ -1358,7 +1358,9 @@ All builders use hot-potato OwnerCap borrow/return pattern where needed. Coin sp
 
 Only renders structures that have manual spatial pins (§8). Unpinned structures appear only in the list view. Click node → navigate to structure detail. Hover → tooltip.
 
-Always-visible disclaimer: "User-curated placement; not on-chain."
+> **2026-03-10 update:** `LocationRegistry` now provides on-chain coordinates for all assemblies. Auto-placement from chain data is feasible — manual pins become fallback/override. The "user-curated" disclaimer applies only to manually-pinned positions.
+
+Always-visible disclaimer: "User-curated placement; not on-chain." *(Review: may no longer apply if positions sourced from LocationRegistry.)*
 
 **Files:**
 - `frontend/src/components/StrategicNetworkMap.tsx`
@@ -1372,7 +1374,7 @@ Always-visible disclaimer: "User-curated placement; not on-chain."
 - Disclaimer visible
 - `npm run build` passes
 
-**Assumption to verify:** Manual pin data from localStorage is sufficient to render a meaningful topology. At least 3 structures should be pinned for demo.
+**Assumption to verify:** ~~Manual pin data from localStorage is sufficient to render a meaningful topology.~~ **2026-03-10:** `LocationRegistry` can now supply coordinates directly from chain data. Manual pinning remains as fallback. At least 3 structures should have coordinates (on-chain or pinned) for demo.
 
 ---
 

@@ -6,6 +6,8 @@
 > **Audience:** LLM-driven "vibe coders" who need to understand what agents can realistically build and test in this playground.
 > **Repo:** `sui-playground` (private sandbox — do not push without operator approval)
 
+> **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`, `storage_unit/` → `storage_unit_extension/`. `tokens/` package removed. World-contracts added `LocationRegistry` + `reveal_location()` on all assemblies. Paths referenced below may be stale — see `docs/core/march-11-reimplementation-checklist.md` for current paths.
+
 ---
 
 ## 1. Mental Model: EVE Frontier Architecture vs This Playground

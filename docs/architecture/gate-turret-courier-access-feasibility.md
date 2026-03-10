@@ -5,6 +5,8 @@
 > Derived from canonical source: `vendor/world-contracts/contracts/world/` Move modules at current HEAD  
 > Date: 2026-03-02
 
+> **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`. References to `smart_gate/sources/` below use the pre-rename path. World-contracts added `LocationRegistry` (not relevant to this analysis).
+
 ---
 
 ## Table of Contents

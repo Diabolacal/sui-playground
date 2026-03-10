@@ -178,7 +178,7 @@
 
 | ID | Description | Source(s) | Dependency Type | Risk | March 11 | Fallback |
 |----|------------|-----------|-----------------|------|----------|----------|
-| A-64 | No on-chain wallet-to-Character mapping exists; manual Character ID input is MVP | spec.md S1.2, implementation-plan S27 | Game client | Medium | No | Pre-populate known Character ID for demo |
+| A-64 | ~~No on-chain wallet-to-Character mapping exists; manual Character ID input is MVP~~ **2026-03-10:** `PlayerProfile` (v0.0.16) enables wallet→Character lookup. Reduces to LOW risk. | spec.md S1.2, implementation-plan S27 | Game client | ~~Medium~~ Low | No | Pre-populate known Character ID for demo |
 | A-65 | `suix_getOwnedObjects` with StructType filter works on test server for OwnerCap discovery | implementation-plan S15 | Infrastructure | High | Yes | If filter fails, gate/SSU list pages are empty |
 | A-66 | `suix_getOwnedObjects` on a Character object address returns object-owned children | hackathon-portfolio-roadmap S10.4 | Infrastructure | Medium | Yes | If different behavior, OwnerCap discovery fails |
 | A-67 | `suix_getDynamicFields` returns DFs on CivControlConfig keyed by gate ID | implementation-plan S17 | Infrastructure | Medium | Yes | If DF read path fails, Rule Composer is blind |

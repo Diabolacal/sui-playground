@@ -8,6 +8,8 @@ Feasibility validation for a "Fortune Gauntlet" concept: sequential multi-gate c
 **Inputs:** `vendor/world-contracts` (gate.move, assemblies), `vendor/builder-scaffold` (smart_gate extensions), Sui documentation reference map  
 **Method:** Direct code inspection with line-level citations
 
+> **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`. References to `smart_gate/` below use the pre-rename path.
+
 ---
 
 ## Executive Summary

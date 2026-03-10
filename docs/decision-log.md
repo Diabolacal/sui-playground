@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-10 — Submodule Refresh (world-contracts 2aed50b, builder-documentation 9222d42, builder-scaffold 3c65b22)
+- **Goal:** Refresh submodules to latest upstream; audit changes; annotate stale documentation.
+- **Decision:** Updated 3 of 5 submodules: world-contracts `26d0a8cb→2aed50ba` (1 commit — PR #129: LocationRegistry + reveal_location on all assemblies), builder-documentation `1eb5ad44→9222d426` (3 commits — PlayerProfile discovery docs, ownership-model dedupe), builder-scaffold `9200be45→3c65b22e` (2 commits — smart_gate→smart_gate_extension rename, storage_unit→storage_unit_extension rename, tokens/ deleted). proximity-zk-poc/evevault unchanged. **HIGH CC IMPACT:** LocationRegistry stores plain-text coordinates on-chain, eliminating manual position input for onboarding. Full wallet→PlayerProfile→Character→OwnerCaps→Structures→LocationRegistry discovery chain now possible. SVG topology map can auto-populate from chain data. **Drift sweep:** 20+ docs annotated with scaffold rename callouts, LocationRegistry/PlayerProfile resolution notes.
+- **Files:** vendor/ (3 submodule pointers), docs/core/spec.md, docs/core/civilizationcontrol-implementation-plan.md, docs/ux/civilizationcontrol-ux-architecture-spec.md, docs/ux/svg-topology-layer-spec.md, docs/strategy/_shared/hackathon-portfolio-roadmap.md, docs/research/evefrontier-builder-docs-map.md, docs/core/march-11-reimplementation-checklist.md, docs/architecture/ (6 files), docs/analysis/ (2 files), docs/research/ (2 files), docs/audits/ (1 file), docs/ideas/ (1 file), docs/operations/ (1 file), sandbox/ (1 file)
+- **Diff:** submodule pins + ~250 LoC doc annotations
+- **Risk:** Low (submodule pins + documentation only, no application code changed)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs-only)
+- **Follow-ups:** UX spec §8 manual pinning model needs redesign for LocationRegistry auto-placement. Implementation plan S45 needs updated data source (LocationRegistry instead of localStorage pins). Event inventory needs re-count (LocationRevealedEvent added).
+
+---
+
 ## 2026-03-10 — Agent Guardrail Improvements (Pre-Planning, Error Recovery, Bootstrap Archive)
 - **Goal:** Strengthen agent instructions before hackathon Day-1: (1) force pre-planning for file splits, (2) mandate automated error recovery for non-coder workflow, (3) archive superseded bootstrap checklist.
 - **Files:** `.github/instructions/typescript-react.instructions.md`, `.github/instructions/move.instructions.md`, `.github/copilot-instructions.md`, `AGENTS.md`, `docs/core/CARRY_FORWARD_INDEX.md`, `docs/README.md`, `docs/core/march-11-reimplementation-checklist.md`, `docs/operations/starter-repo-packaging-recommendation.md`, `docs/operations/hackathon-bootstrap-checklist.md` → `docs/archive/operations/`
