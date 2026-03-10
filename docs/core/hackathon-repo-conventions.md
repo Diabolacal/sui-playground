@@ -103,9 +103,22 @@ Trivial PRs (single-file doc fix): title-only is fine.
 ```
 /
 ├── README.md                  # Hero doc — judges start here
+├── AGENTS.md                  # AI agent guardrails and context
 ├── LICENSE
+├── llms.txt                   # LLM-readable project index
 ├── .gitignore
 ├── .env.example               # Placeholder env vars only
+├── .github/
+│   ├── copilot-instructions.md  # Repo-wide AI conventions
+│   ├── security-guidelines.md
+│   ├── instructions/          # Path-specific AI coding conventions
+│   ├── prompts/               # Agent chat prompts (rehydrate, plan)
+│   └── skills/                # Agent skill playbooks
+├── .vscode/
+│   ├── settings.json
+│   ├── extensions.json
+│   ├── tasks.json
+│   └── prompts/
 ├── contracts/                 # Sui Move smart contracts
 │   ├── <package>/
 │   │   ├── Move.toml
@@ -118,30 +131,44 @@ Trivial PRs (single-file doc fix): title-only is fine.
 │   └── src/
 ├── scripts/                   # Deploy, setup, seed scripts
 │   └── README.md
-├── docs/                      # Architecture, demo guide, screenshots
-│   ├── architecture.md
-│   ├── demo-guide.md
-│   └── screenshots/
-└── assets/                    # Branding (logo, banner)
+├── docs/                      # Architecture, strategy, demo, screenshots
+│   ├── core/                  # Authority docs (spec, checklists, conventions)
+│   ├── architecture/          # Design docs, feasibility reports
+│   ├── demo/                  # Demo narration, beat sheets
+│   ├── screenshots/
+│   └── ...
+├── assets/                    # Branding (logo, banner, SVG glyphs)
+└── vendor/                    # Git submodules (fresh adds, not copies)
 ```
 
 **Rules:**
-- **Max 10 items at repo root.** More signals disorganization.
+- **Max 15 items at repo root** (code + config + AI orchestration). AI infrastructure files (`AGENTS.md`, `llms.txt`, `.github/`) are legitimate root items — they serve the same role as `tsconfig.json` or `.editorconfig` for an AI-assisted workflow.
 - **Separate concerns clearly:** `contracts/`, `frontend/`, `scripts/`, `docs/` are immediately legible.
 - **README.md at root AND in each major directory.** Root is the entry point; subdirectory READMEs explain local context.
 - **No monorepo tooling** (turborepo, nx, lerna) for a 10-day project — it obscures structure.
 
-### What to Exclude from Submission Repos
+### What to Include vs. Exclude from Submission Repos
 
-Do NOT copy from the planning repo:
-- `docs/working_memory/`, `docs/strategy/`, `docs/operations/`, `docs/research/`
-- `docs/analysis/`, `docs/archive/`, `docs/ideas/`, `docs/sandbox/`
-- `AGENTS.md`, `.github/copilot-instructions.md`, `.github/instructions/`
-- `notes/`, `sandbox/`, `experiments/`, `vendor/`, `templates/`
-- `llms.txt`, `GITHUB-COPILOT.md`
-- Decision logs, internal planning docs, audit reports
+Inclusion is governed by **retention metadata**, not by directory name. Every document in the planning repo has a retention classification in its header block. Use that classification to decide what ships.
 
-**Rule:** If a document doesn't help a judge understand what the project does, how it works, or how to run it — leave it out.
+**Include (Carry-forward):**
+- Any file tagged `**Retention:** Carry-forward` — regardless of its parent folder
+- AI orchestration infrastructure: `AGENTS.md`, `.github/copilot-instructions.md`, `.github/instructions/`, `.github/prompts/`, `.github/skills/`, `.github/security-guidelines.md`
+- Agent configuration: `.vscode/settings.json`, `.vscode/extensions.json`, `.vscode/tasks.json`, `.vscode/prompts/`
+- LLM index: `llms.txt`, `GITHUB-COPILOT.md` (rewrite content for target project)
+- Assets: `assets/icons/` (entire tree)
+- Templates: `templates/cloudflare/`
+- Vendor submodules: fresh `git submodule add` in the new repo (never copy directories)
+
+**Exclude (always):**
+- Files tagged `**Retention:** Prep-only`, `Sandbox-only`, or `Archive`
+- Ephemeral state: `notes/`, `docs/working_memory/`, `sandbox/`, `experiments/`
+- Point-in-time artifacts: audit snapshots, idea exploration docs, research digests
+- Local-only files: `.env` files, `*.keystore`, Docker workspace-data
+
+**Why AI infrastructure ships with the repo:** In a vibe-coding workflow, files like `AGENTS.md`, `copilot-instructions.md`, and `.instructions.md` files are **development infrastructure** — equivalent to `tsconfig.json` or `.editorconfig`. They define how the AI agent builds, tests, and maintains the project. Stripping them leaves the agent without guardrails, conventions, or project context for any post-submission work (e.g., Stillness deployment, iteration, bug fixes).
+
+> **Cross-reference:** See `docs/core/CARRY_FORWARD_INDEX.md` for the definitive export checklist and `docs/operations/starter-repo-packaging-recommendation.md` for the full packaging audit.
 
 ---
 
@@ -340,6 +367,11 @@ contracts/<package>/
 | `docs/demo-guide.md` | Step-by-step demo walkthrough | **Should** |
 | `docs/screenshots/` | Visual evidence, hero screenshot/GIF | **Should** |
 | `.env.example` | Environment variable template | **Must** if app uses env vars |
+| `AGENTS.md` | AI agent context, guardrails, workflow boundaries | **Must** (AI workflow) |
+| `.github/copilot-instructions.md` | Repo-wide AI conventions and interaction protocol | **Must** (AI workflow) |
+| `.github/instructions/*.instructions.md` | Language/path-specific AI coding conventions | **Must** (AI workflow) |
+| `llms.txt` | LLM-readable project index for agent onboarding | **Should** |
+| Carry-forward docs (`docs/core/`, etc.) | Strategy, validation, PTB patterns per retention tag | Per retention tag |
 
 ### README Template (Judge-Optimized)
 
@@ -367,10 +399,12 @@ cd contracts/<pkg> && sui move build && sui move test
 
 ## Project Structure
 \```
+.github/    — AI agent instructions, prompts, skills
 contracts/  — Sui Move smart contracts
 frontend/   — React/TypeScript UI
 scripts/    — Deployment and setup
-docs/       — Architecture and screenshots
+docs/       — Architecture, strategy, demo guide
+vendor/     — Third-party submodules
 \```
 
 ## Team
@@ -381,7 +415,10 @@ docs/       — Architecture and screenshots
 
 - Remove `TODO` and `fix later` comments before submission.
 - Remove dead links. Test every link.
-- Internal planning docs (decision logs, research, working memory) stay in the planning repo — never ship them.
+- Use **retention metadata** to filter: only `Carry-forward` docs ship. `Prep-only`, `Sandbox-only`, and `Archive` docs stay in the planning repo.
+- Decision logs ship with a **fresh start** (empty template) — planning-era entries are evidence-only.
+- Files requiring content rewrite (see `CARRY_FORWARD_INDEX.md`) must be updated for the target project before shipping.
+- AI infrastructure files (`AGENTS.md`, `copilot-instructions.md`) need project-specific rewrites — shared scaffold stays, project facts get updated.
 
 ---
 
@@ -438,7 +475,7 @@ Thumbs.db
 - `node_modules` committed
 - Secrets in repo (check git history too)
 - Dead links or missing images
-- 30+ files at repo root
+- 30+ files at repo root (15 is the max with AI infrastructure; more is noise)
 - Lots of commented-out code
 - "TODO" / "fix later" scattered in code
 - No license file
@@ -465,6 +502,7 @@ Thumbs.db
 - No license
 - Plagiarized code without attribution
 - Giant monolithic files (>500 lines) — always take the 5 minutes to split
+- Stripping AI infrastructure (`AGENTS.md`, `copilot-instructions.md`, `.instructions.md` files) from an AI-assisted project — these are your development environment, not clutter
 
 ### How to Document Shortcuts Cleanly
 
@@ -481,15 +519,34 @@ This signals awareness and intentionality — far better than leaving gaps unexp
 
 ---
 
-## 12. Agent-Specific Rules
+## 12. AI Agent Workflow & Rules
 
-These rules apply when AI agents produce code or documentation.
+This project uses a **vibe-coding workflow**: the human operator provides intent in plain language, and AI agents implement changes. Agents are the primary development mechanism — these rules reflect that.
+
+### AI Development Infrastructure
+
+The following files form the agent's development environment. They ship with the repo and are maintained alongside code:
+
+| File | Role |
+|------|------|
+| `AGENTS.md` | Agent context, boundaries, guardrails — read on every session start |
+| `.github/copilot-instructions.md` | Repo-wide conventions, interaction protocol, quality gates |
+| `.github/instructions/*.instructions.md` | Language-specific coding conventions (auto-applied by path match) |
+| `.github/prompts/*.prompt.md` | Reusable chat prompts (context recovery, planning) |
+| `.github/skills/*/SKILL.md` | Domain-specific playbooks (deploy, Docker ops) |
+| `.github/security-guidelines.md` | OWASP baseline, security rules |
+| `llms.txt` | LLM-readable project index |
+| `GITHUB-COPILOT.md` | Quick-reference pointer file |
+| `.vscode/settings.json` | Workspace settings including agent tool config |
+
+**Maintenance rule:** Update these files when project structure, conventions, or patterns materially change. They are living infrastructure, not one-time setup.
 
 ### File Creation
 
 - **Check for existing files before creating new ones.** Duplicate utilities/helpers are a common agent failure mode.
 - **Place files in the correct directory** per the conventions above. Never create random one-off files at project root.
 - **Name files according to the naming conventions.** No generic names like `utils2.ts`, `helper.ts`, `stuff.ts`.
+- **Respect retention classification.** When creating docs, include the retention header block. Default to `Prep-only` if uncertain.
 
 ### Code Production
 
@@ -498,6 +555,7 @@ These rules apply when AI agents produce code or documentation.
 - **Do not add speculative utilities** "for future use." Only write what's needed now.
 - **Check for existing hooks/utils before creating new ones.** Grep the workspace first.
 - **Use consistent naming.** Match existing patterns in the codebase.
+- **Self-diagnose build failures.** If a build, typecheck, or test fails after a patch, diagnose and fix it before reporting to the operator. Never present raw compiler output without a plain-English explanation.
 
 ### Commit Behavior
 
@@ -510,3 +568,4 @@ These rules apply when AI agents produce code or documentation.
 - **Do not create docs that won't be read.** Only create documentation that serves judges, operators, or future agents.
 - **Do not create a summary document after every change.** Update existing docs or confirm completion verbally.
 - **Keep generated docs concise.** Match the conventions in this document.
+- **Tag retention on every new doc.** Every new markdown document must include `**Retention:** [Carry-forward | Prep-only | Sandbox-only | Archive]` in its header block.
