@@ -118,21 +118,21 @@ If stability forces cuts, protect these five. Everything else is expendable.
 **Spoken narration:**
 > "You decide who crosses and what they pay."
 
-*[Click into a gate. Policy panel opens. Two rule slots: Tribe Filter and Toll.]*
+*[Click into a gate. Policy panel opens. Three rule types: Tribe Filter, Toll, and Subscription Pass.]*
 
-> "Tribe filter: only Tribe 7. Toll: five EVE per jump."
+> "Tribe filter: only Tribe 7. Toll: five EVE per jump. And a subscription — fifty EVE for thirty days."
 
-*[Operator selects Tribe 7. Sets toll to 5 EVE. Clicks "Deploy Policy."]*
+*[Operator selects Tribe 7. Sets toll to 5 EVE. Enables subscription: 50 EVE / 30 days. Clicks "Deploy Policy."]*
 
-> "One action. Two rules. Deployed on-chain."
+> "One action. Three rules. Deployed on-chain."
 
-*[Confirmation: "Policy deployed. 2 rules active." Signal Feed updates.]*
+*[Confirmation: "Policy deployed. 3 rules active." Signal Feed updates.]*
 
 **On-screen:** Gate detail → policy configuration → deploy → confirmation.
 
 **Evidence overlay (post-production):**
 - Tx digest of policy deployment
-- Gate object showing `extension: Some(TypeName)` + 2 dynamic field rules
+- Gate object showing `extension: Some(TypeName)` + 3 dynamic field rules (tribe + toll + subscription)
 
 **Signal Feed enrichment:** `ExtensionAuthorizedEvent` (world-contracts v0.0.15+) confirms policy deployment asynchronously via event polling (`suix_queryEvents`). Fields: `assembly_id`, `extension_type`. This is enrichment — the UI reacts immediately to the tx response, not to the event.
 
@@ -325,7 +325,7 @@ Every major claim has a corresponding on-chain evidence moment.
 
 | Beat | Claim | Evidence Artifact | Overlay Format |
 |---|---|---|---|
-| 3 — Policy | Governance deployed in one action | Tx digest + gate object with extension + 2 DF rules | Digest badge + before/after state |
+| 3 — Policy | Governance deployed in one action | Tx digest + gate object with extension + 3 DF rules (tribe + toll + subscription) | Digest badge + before/after state |
 | 4 — Denial | Hostile blocked by chain enforcement | Failed tx digest + MoveAbort `(tribe_permit, 0)` | Red overlay: digest + abort code |
 | 5 — Revenue | Toll revenue flows to operator atomically | Tx digest + `TollCollectedEvent` + balance delta (+5 EVE) | Green overlay: digest + balance |
 | 6 — Defense Mode | Infrastructure-wide state change, single tx | Single tx digest + `PostureChangedEvent` + N × `StatusChangedEvent` | Digest badge + before/after state matrix |

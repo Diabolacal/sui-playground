@@ -75,6 +75,8 @@ Consistent naming conventions used across all active documents.
 |------------|-------------|---------|
 | `TribeRuleKey` | `TribeRule { tribe_id }` | Tribe-based access filtering |
 | `CoinTollKey` | `CoinTollRule { price_mist, treasury }` | SUI toll per jump |
+| `SubPassKey` | `SubPassLedger { Table<ID, u64> }` | Subscription pass ledger (character_id → expiry_ms) |
+| `SubTierKey` | `SubTierConfig { price_mist, duration_ms }` | Subscription pricing & duration config |
 
 ### Currency & Units
 
@@ -208,6 +210,16 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | File | Purpose |
 |------|---------|
 | [strategy/cargo-bond/cargo-bond-product-vision.md](strategy/cargo-bond/cargo-bond-product-vision.md) | **Product vision** — escrow lifecycle, collateral model, gate access integration, Sui primitives, economic model, demo scope, MVP boundaries, risks |
+
+### Shadow Broker Protocol (Sprint)
+
+Encrypted intelligence marketplace using Seal threshold encryption + Walrus blob storage.
+
+| File | Purpose |
+|------|---------|
+| [strategy/shadow-broker-protocol/shadow-broker-product-vision.md](strategy/shadow-broker-protocol/shadow-broker-product-vision.md) | **Product vision** — encrypted intel marketplace, Seal + Walrus architecture, pricing model, demo scope |
+| [strategy/shadow-broker-protocol/shadow-broker-demo-beat-sheet.md](strategy/shadow-broker-protocol/shadow-broker-demo-beat-sheet.md) | **Demo beat sheet** — narrative arc, proof moments, recording plan |
+| [strategy/shadow-broker-protocol/shadow-broker-technical-architecture.md](strategy/shadow-broker-protocol/shadow-broker-technical-architecture.md) | **Technical architecture** — Move contracts, Seal integration, Walrus storage, PTB composition |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 

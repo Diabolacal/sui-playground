@@ -108,6 +108,7 @@ Every chain write the app performs, with exact Move targets:
 |-----------|----------|---------------|-------|
 | Set tribe filter | `civcontrol::gate_rules::set_tribe_rule(&mut Config, gate_id, tribe_id)` | OwnerCap<Gate> | Dynamic field write |
 | Set coin toll | `civcontrol::gate_rules::set_coin_toll(&mut Config, gate_id, price_mist, treasury)` | OwnerCap<Gate> | Dynamic field write |
+| Set subscription tier | `civcontrol::gate_rules::set_subscription_tier(&mut Config, gate_id, price_mist, duration_ms)` | OwnerCap<Gate> | Dynamic field write — configures subscription pricing & duration for a gate |
 | Remove rule | `civcontrol::gate_rules::remove_*(&mut Config, gate_id)` | OwnerCap<Gate> | Dynamic field remove |
 
 #### Phase: Gate Jump (player-initiated)
@@ -176,7 +177,7 @@ contracts/civcontrol/
 ├── Move.toml          # Depends on world-contracts World package
 └── sources/
     ├── config.move       # CivControlConfig + AdminCap + GateAuth + TradeAuth
-    ├── gate_rules.move   # Tribe filter + coin toll dynamic field rules
+    ├── gate_rules.move   # Tribe filter + coin toll + subscription pass dynamic field rules
     ├── gate_permit.move  # request_jump_permit (rule evaluation + permit issuance)
     ├── trade_post.move   # Listing + buy + cancel
     └── zk_gate.move      # (stretch) ZK membership verification
@@ -194,6 +195,10 @@ contracts/civcontrol/
 | `TribeRule` | `drop, store` | DF value: `{ tribe_id: u32 }` |
 | `CoinTollKey` | `copy, drop, store` | DF key: `{ gate_id: ID }` |
 | `CoinTollRule` | `drop, store` | DF value: `{ price_mist: u64, treasury: address }` |
+| `SubPassKey` | `copy, drop, store` | DF key: `{ gate_id: ID }` |
+| `SubPassLedger` | `store` | DF value: `{ Table<ID, u64> }` — maps character_id → expiry_timestamp_ms |
+| `SubTierKey` | `copy, drop, store` | DF key: `{ gate_id: ID }` |
+| `SubTierConfig` | `drop, store` | DF value: `{ price_mist: u64, duration_ms: u64 }` — subscription pricing & duration |
 | `Listing` | `key, store` | Shared object — links SSU + item + price |
 
 ### 3.3 Custom Events
@@ -201,6 +206,7 @@ contracts/civcontrol/
 | Event | Fields | Emitted By |
 |-------|--------|-----------|
 | `TollCollectedEvent` | `gate_id, character_id, amount_mist, timestamp_ms` | `request_jump_permit` |
+| `SubscriptionPurchasedEvent` | `gate_id, character_id, price_mist, expires_at_ms` | `purchase_subscription` |
 | `ListingCreatedEvent` | `listing_id, ssu_id, seller, item_type_id, price_mist` | `create_listing` |
 | `TradeSettledEvent` | `ssu_id, buyer, seller, item_type_id, quantity, price_mist` | `buy` |
 | `ListingCancelledEvent` | `listing_id, ssu_id` | `cancel_listing` |
@@ -210,8 +216,9 @@ contracts/civcontrol/
 Fixed AND composition inside `request_jump_permit`:
 
 1. **Tribe Filter** — if DF exists: `character.tribe() == rule.tribe_id` → abort on mismatch. **Note:** `character.tribe()` is the public accessor; `tribe_id()` is `#[test_only]`.
-2. **Coin Toll** — if DF exists: `coin::value(&payment) >= rule.price_mist` → transfer to treasury → return change
-3. All passed → `gate::issue_jump_permit<GateAuth>(...)`
+2. **Subscription Pass** — if SubPassLedger DF exists: look up `character_id` in Table → if found AND `expiry >= clock.timestamp_ms()` → **skip toll collection** (pass holder jumps free). Expired entries are not auto-cleaned; subscription must be re-purchased.
+3. **Coin Toll** — if DF exists AND subscription did not bypass: `coin::value(&payment) >= rule.price_mist` → transfer to treasury → return change
+4. All passed → `gate::issue_jump_permit<GateAuth>(...)`
 
 Allow/Block list rules (stretch, not in Day-1 MVP) would insert at positions 0-1 before tribe:
 0. Block List → instant deny
@@ -253,6 +260,7 @@ Opinionated card-based UI (not visual programming). Two MVP module cards:
 |--------|--------|---------|
 | **Tribe Filter** | Toggle + tribe ID (u32) | "Tribe Filter: Allow Tribe 7 only" |
 | **Coin Toll** | Toggle + amount (MIST) + treasury (address) | "Coin Toll: 5 SUI per jump → 0x1a2b..." |
+| **Subscription Pass** | Toggle + price (MIST) + duration (days) | "Subscription: 50 SUI for 30 days — bypasses toll" |
 
 7-step deployment flow: select gate → toggle modules → configure → preview → diff → sign → confirm.
 

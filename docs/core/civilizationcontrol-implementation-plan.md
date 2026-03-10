@@ -348,12 +348,47 @@ Per pattern catalog: toll is `Coin<SUI>` for MVP. Generic `Coin<T>` is stretch (
 
 ---
 
+### S12b — Implement subscription pass rule in Move
+
+**Phase:** GateControl  
+**Status:** PROVISIONAL  
+**Effort:** 1.5 hours  
+**Dependencies:** S09  
+**Description:** Implement time-based subscription pass as a dynamic field rule. Define:
+- `SubPassKey { gate_id: ID }` → `SubPassLedger { passes: Table<ID, u64> }` — maps character_id to expiry_timestamp_ms
+- `SubTierKey { gate_id: ID }` → `SubTierConfig { price_mist: u64, duration_ms: u64 }` — pricing & duration
+
+Admin functions:
+- `set_subscription_tier(config, gate_id, price_mist, duration_ms)` — adds or updates tier DF + creates empty ledger DF if absent
+- `remove_subscription_tier(config, gate_id)` — removes tier + ledger DFs
+
+Player-facing function:
+- `purchase_subscription(config, gate_id, character, payment: Coin<SUI>, clock: &Clock, ctx)` — reads SubTierConfig, verifies payment, sets `passes[character_id] = clock.timestamp_ms() + duration_ms`, emits `SubscriptionPurchasedEvent`
+
+Helper (called during permit dispatch):
+- `has_active_subscription(config, gate_id, character_id, clock): bool` — returns true if entry exists and `expiry >= clock.timestamp_ms()`
+
+**Files:**
+- `contracts/civcontrol/sources/gate_rules.move` (extend existing module)
+
+**Definition of Done:**
+- `sui move build` passes
+- `sui move test` passes with tests:
+  - Set subscription tier → verify DF
+  - Purchase subscription → verify ledger entry + SubscriptionPurchasedEvent
+  - `has_active_subscription` returns true before expiry, false after
+  - Remove subscription tier → verify DFs gone
+- SubTierConfig stores `price_mist` as u64 and `duration_ms` as u64
+- SubscriptionPurchasedEvent has `copy, drop` abilities
+
+---
+
 ### S13 — Implement request_jump_permit entry function
 
 **Phase:** GateControl  
 **Status:** CONFIRMED  
 **Effort:** 2.5 hours  
-**Dependencies:** S11, S12  
+**Dependencies:** S11, S12, S12b  
 **Description:** Implement the core entry function that evaluates all active rules and issues a JumpPermit if all pass. Function signature:
 
 ```move
@@ -370,8 +405,9 @@ public fun request_jump_permit(
 
 Evaluation order (per UX spec §6 composition logic):
 1. Check tribe rule (if DF exists for source gate) → compare `character.tribe()` (**Note:** `tribe_id()` is `#[test_only]`; use `tribe()`) → abort on mismatch
-2. Check coin toll (if DF exists for source gate) → verify `coin::value(&payment) >= price` → transfer to treasury → return change if overpaid
-3. All passed → call `gate::issue_jump_permit<GateAuth>(source, dest, character, GateAuth{}, expiry, ctx)`
+2. Check subscription pass (if SubPassLedger DF exists for source gate) → if `has_active_subscription(config, gate_id, character_id, clock)` is true → **skip toll collection** (subscriber jumps free)
+3. Check coin toll (if DF exists for source gate AND subscription did not bypass) → verify `coin::value(&payment) >= price` → transfer to treasury → return change if overpaid
+4. All passed → call `gate::issue_jump_permit<GateAuth>(source, dest, character, GateAuth{}, expiry, ctx)`
 
 Emit custom `TollCollectedEvent { gate_id, character_id, amount, timestamp_ms }` when toll is collected (required for Signal Feed per read-path §2.4).
 
@@ -384,6 +420,8 @@ Handle zero-value coin when no toll rule exists (destroy empty coin).
 - `sui move build` passes
 - `sui move test` passes with tests:
   - Correct tribe + correct toll → JumpPermit issued + TollCollectedEvent emitted
+  - Correct tribe + active subscription → JumpPermit issued, NO toll deducted
+  - Correct tribe + expired subscription + correct toll → JumpPermit issued + TollCollectedEvent emitted (subscription bypass not applied)
   - Wrong tribe → MoveAbort with expected error code
   - Insufficient payment → MoveAbort
   - No toll rule active + correct tribe → permit issued, zero coin destroyed
@@ -500,7 +538,7 @@ Quick Actions: Online/Offline toggle that constructs PTB: `borrow_owner_cap<Gate
 
 **Deploy Policy button:** Constructs a single PTB that:
 1. Borrows OwnerCap<Gate> from Character
-2. Calls `set_tribe_rule()` and/or `set_coin_toll()` on config
+2. Calls `set_tribe_rule()` and/or `set_coin_toll()` and/or `set_subscription_tier()` on config
 3. If first time: calls `gate::authorize_extension<GateAuth>()` on both linked gates
 4. Returns OwnerCap
 5. Prompts wallet signature
@@ -511,6 +549,7 @@ Read current rule state by querying dynamic fields on CivControlConfig for the g
 - `frontend/src/components/RuleComposer.tsx`
 - `frontend/src/components/TribeFilterCard.tsx`
 - `frontend/src/components/CoinTollCard.tsx`
+- `frontend/src/components/SubscriptionPassCard.tsx`
 - `frontend/src/components/PolicyPreview.tsx`
 - `frontend/src/lib/ptb.ts` (add deployPolicy PTB builder)
 - `frontend/src/hooks/useGateRules.ts`
@@ -518,6 +557,7 @@ Read current rule state by querying dynamic fields on CivControlConfig for the g
 **Definition of Done:**
 - Tribe filter toggle + config input renders
 - Coin toll toggle + config input renders
+- Subscription pass toggle + config inputs (price, duration) render
 - Policy summary auto-generates from active rules
 - "Deploy Policy" button constructs correct PTB (inspectable in console)
 - After wallet signs, on-chain state reflects the configured rules

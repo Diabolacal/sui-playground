@@ -6,6 +6,17 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Add Subscription Pass Rule to GateControl
+- **Goal:** Integrate time-based subscription passes into CivilizationControl's GateControl module as a third composable rule type alongside tribe filter and coin toll.
+- **Decision:** After evaluating "Aegis GatePass Protocol" as a standalone hackathon entry (scored 7.59, ~4th in roster), determined subscription passes are a feature (~60-80 LoC Move), not a product. Adding to CC yields +0.4-0.5 weighted judge score delta with excellent ROI. Subscription checks insert between tribe filter and coin toll — active subscribers bypass per-jump toll. New DF types: SubPassKey/SubPassLedger (Table<ID, u64>), SubTierKey/SubTierConfig (price, duration). New event: SubscriptionPurchasedEvent. New implementation step S12b added to Phase 2 (GateControl).
+- **Files:** docs/core/spec.md, docs/strategy/civilization-control/civilizationcontrol-product-vision.md, docs/core/civilizationcontrol-demo-beat-sheet.md, docs/core/civilizationcontrol-implementation-plan.md, docs/core/civilizationcontrol-claim-proof-matrix.md, docs/README.md
+- **Diff:** +~80 LoC across 6 docs
+- **Risk:** Low (documentation only — no contract code changed)
+- **Gates:** N/A (docs-only)
+- **Follow-ups:** Implement S12b Move code on hackathon build start. Add SubscriptionPassCard.tsx to Rule Composer UI.
+
+---
+
 ## 2026-03-10 — Sui Prover Formal Verification Note (Carry-Forward Docs)
 - **Goal:** Document intent to formally verify economic-critical Move modules before mainnet deployment, demonstrating security awareness to hackathon judges.
 - **Decision:** Added "Pre-Mainnet: Formal Verification" notes referencing the [Sui Prover](https://github.com/asymptotic-code/sui-prover) (Asymptotic Code, Boogie/Z3, Move 2024 native, actively maintained). NOT adopted for hackathon sprint — contracts don't exist yet and iteration speed takes priority. Will adopt post-submission for `gate_permit` (toll atomicity) and `courier_escrow` (balance conservation) before any real-value deployment.

@@ -201,6 +201,8 @@ One click applies the preset across all structures in the operator's infrastruct
 
 > **Toll in "Open for Business":** The toll is a CC extension rule, not a world-contracts primitive. The CC extension's `request_jump_permit` evaluates a `CoinTollRule` dynamic field: if present, the jumper must provide sufficient `Coin<SUI>`. In "Open for Business" mode, the tribe filter is removed (or set to allow-all) and only the toll rule remains — any pilot who pays can pass. In "Defense Mode," the tribe filter is set to the operator's tribe and the toll rule is removed — only tribe members pass, free of charge.
 
+> **Subscription Pass:** An optional time-based pass rule. When configured on a gate, pilots can purchase a subscription (e.g., 50 EVE for 30 days). Active subscribers bypass the per-jump toll entirely — the dispatch checks the subscription ledger before evaluating the coin toll. This creates a pricing tier: casual travelers pay per jump, regular commuters buy a pass. The subscription ledger is a `Table<ID, u64>` dynamic field mapping character IDs to expiry timestamps. Expired entries remain inert until re-purchased; no cleanup overhead.
+
 ### Why They're a System, Not Standalone Instruments
 
 GateControl and TradePost aren't two separate features that happen to ship together. They create a feedback loop:
@@ -260,9 +262,9 @@ Stark text-on-black. Visceral, specific pain. The viewer must feel the gap befor
 
 > "You decide who crosses and what they pay."
 
-Click into a gate → Tribe filter: Tribe 7 → Toll: 5 EVE → "Deploy Policy" → "Policy deployed. 2 rules active."
+Click into a gate → Tribe filter: Tribe 7 → Toll: 5 EVE → Subscription: 50 EVE / 30 days → "Deploy Policy" → "Policy deployed. 3 rules active."
 
-**★ Proof moment:** Policy deploy tx digest + gate object with extension + 2 DF rules.
+**★ Proof moment:** Policy deploy tx digest + gate object with extension + 3 DF rules.
 
 ### Beat 4 — Denial (1:00–1:18)
 
@@ -334,7 +336,7 @@ Everything shown in the demo is real. Seven validation tests passed on devnet. T
 
 ### Creativity & Originality — "Bold, novel, uniquely Frontier"
 
-No one has built a governance layer for EVE Frontier gate and SSU operations. Tribe leaders have structures but no way to see, configure, or monetize them as a unified system. The composable rule engine — stackable tribe filters and tolls on the same gate via dynamic field dispatch — is a novel pattern that the current builder docs don't demonstrate.
+No one has built a governance layer for EVE Frontier gate and SSU operations. Tribe leaders have structures but no way to see, configure, or monetize them as a unified system. The composable rule engine — stackable tribe filters, tolls, and subscription passes on the same gate via dynamic field dispatch — is a novel pattern that the current builder docs don't demonstrate.
 
 ### UX & Usability — "Intuitive and usable in real play"
 
@@ -356,7 +358,7 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 
 | Deliverable | Why It's Core |
 |---|---|
-| **GateControl Move module** — tribe filter + coin toll, composable as dynamic field rules | The gate policy engine is the headline feature. Without it, there's no "control" in CivilizationControl. |
+| **GateControl Move module** — tribe filter + coin toll + subscription pass, composable as dynamic field rules | The gate policy engine is the headline feature. Without it, there's no "control" in CivilizationControl. |
 | **GateControl web UI** — toggle-based policy builder for gate rules | Without the UI, GateControl is just another Move contract. The control surface IS the product. |
 | **TradePost Move module** — listing CRUD + atomic PTB buy flow | Commerce anchors the economy narrative. Gate tolls without a marketplace is half a story. |
 | **TradePost web UI** — browse listings, one-click buy | Same principle: the UI surfaces the value. A contract without a frontend is a demo, not a product. |
@@ -376,7 +378,6 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 
 ### Not in Scope (Explicitly Excluded)
 
-- Time-window rule types for gates (interesting but not MVP)
 - Revenue analytics views (the feed provides live data; historical charts are polish)
 - Mobile/responsive layout (desktop-first is fine for demo and hackathon)
 - ZK privacy rules for gate access (validated on local devnet; integrated into CivilizationControl as GateControl rule type — see [ZK feasibility report](../../operations/zk-gatepass-feasibility-report.md); to re-validate on hackathon test server March 11)
@@ -393,7 +394,8 @@ Players vote for mods they want to use. A tribe leader watching the demo will se
 
 | Term | Definition |
 |------|-----------|
-| **GateControl** | The gate access governance module. Manages tribe filters and toll rules on gates via the CC extension. |
+| **GateControl** | The gate access governance module. Manages tribe filters, toll rules, and subscription passes on gates via the CC extension. |
+| **Subscription Pass** | A time-based access pass for a gate. Pilots purchase a subscription (price + duration configured by operator); active subscribers bypass the per-jump toll. Stored as a Table mapping character IDs to expiry timestamps. |
 | **TradePost** | The commerce module. Turns SSUs into storefronts with atomic buy settlement. |
 | **TurretControl** | Binary state management for turrets: online or offline. Uses native world-contracts `turret::online()` / `turret::offline()`. No custom targeting logic. No turret extension. |
 | **Posture Preset** | A named configuration that orchestrates gates and turrets together in one operator action. Two presets ship with MVP: Open for Business and Defense Mode. |

@@ -40,6 +40,8 @@ If the demo shows nothing else, these five overlays must appear on-screen with t
 | Jump with permit succeeds (permit consumed) | Devnet lifecycle — JumpEvent emitted, permit deleted | gate-lifecycle-runbook.md Step 13 | `CzjEQmyRnKmUuCCLyEn8SmVVFogG4mmp6iZMPtvrXGs6` | Tx digest + JumpEvent in event list |
 | Default jump blocked when extension is set | Code analysis + world-contracts tests — `gate_tests.move` L388-419 | gatecontrol-feasibility-report.md §A | N/A (test evidence) | "Default jump: BLOCKED" badge |
 | Full 13-step gate lifecycle reproducible | Devnet lifecycle — all 13 steps executed with digests | gate-lifecycle-runbook.md Evidence section | 17 tx digests (see runbook) | Step count indicator |
+| Subscription pass bypasses toll for active subscribers | Devnet test — subscriber jumps free, non-subscriber pays toll | `[TBD-source]` | `[TBD-digest]` | Subscription ledger entry overlay + zero toll |
+| Subscription purchase emits SubscriptionPurchasedEvent | Devnet test — purchase tx with event + ledger entry | `[TBD-source]` | `[TBD-digest]` | Event overlay: gate_id, character_id, expires_at_ms |
 | ★ Policy change is a single operator action (UI claim) | Design + devnet pattern — one PTB updates GateConfig dynamic fields | shortlist-viability-validation-report.md §Key Architectural Findings | `[TBD-digest]` (submission UI tx) | Before/after policy state comparison |
 
 ## TradePost
