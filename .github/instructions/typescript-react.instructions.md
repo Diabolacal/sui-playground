@@ -249,3 +249,179 @@ const result = await client.executeTransactionBlock({
 - Client class: `SuiClient` → **`SuiJsonRpcClient`**
 - Transaction class: `TransactionBlock` → **`Transaction`**
 - Execute method: `signAndExecuteTransactionBlock` → **`signAndExecuteTransaction`** (on new client)
+
+## world-contracts v0.0.15 Breaking Changes (LLM Hallucination Guards)
+
+> **CRITICAL:** LLM training data does NOT include these March 2026 changes. Agents MUST use
+> the exact signatures below. Any deviation means a runtime abort on-chain.
+
+### `withdraw_item<Auth>` — CHANGED Signature
+
+v0.0.15 added a mandatory `quantity: u32` parameter and `ctx: &mut TxContext`. The old
+call `withdraw_item<Auth>(ssu, character, auth, type_id, ctx)` **will not compile**.
+
+```typescript
+// ❌ BAD — pre-v0.0.15 call (WILL NOT COMPILE)
+tx.moveCall({
+  target: `${worldPkg}::storage_unit::withdraw_item`,
+  typeArguments: [authType],
+  arguments: [
+    tx.object(ssuId),
+    tx.object(characterId),
+    authWitness,
+    tx.pure.u64(typeId),
+    // MISSING: quantity
+  ],
+});
+
+// ✅ GOOD — v0.0.15 call
+const [item] = tx.moveCall({
+  target: `${worldPkg}::storage_unit::withdraw_item`,
+  typeArguments: [authType],
+  arguments: [
+    tx.object(ssuId),       // &mut StorageUnit
+    tx.object(characterId), // &Character
+    authWitness,            // Auth (drop witness)
+    tx.pure.u64(typeId),    // type_id: u64
+    tx.pure.u32(quantity),  // quantity: u32  ← NEW in v0.0.15
+  ],
+});
+```
+
+### `deposit_item<Auth>` — parent_id Validation (BREAKING)
+
+v0.0.15 asserts `parent_id(&item) == storage_unit_id`. Items withdrawn from SSU-A **cannot**
+be deposited into SSU-B. For cross-SSU delivery, use `deposit_to_owned<Auth>` or
+`transfer::public_transfer`.
+
+```typescript
+// ❌ BAD — depositing into a DIFFERENT SSU than the item's origin
+tx.moveCall({
+  target: `${worldPkg}::storage_unit::deposit_item`,
+  typeArguments: [authType],
+  arguments: [tx.object(buyerSsuId), tx.object(buyerCharId), item, authWitness],
+});
+// Runtime abort: EItemParentMismatch
+
+// ✅ GOOD — deposit_to_owned for cross-player delivery (same SSU)
+tx.moveCall({
+  target: `${worldPkg}::storage_unit::deposit_to_owned`,
+  typeArguments: [authType],
+  arguments: [
+    tx.object(sellerSsuId), // &mut StorageUnit — SAME SSU the item came from
+    tx.object(buyerCharId), // &Character — buyer (does NOT need to be tx sender)
+    item,                   // Item returned by withdraw_item
+    authWitness,            // Auth (drop witness)
+  ],
+});
+```
+
+### Atomic TradePost Buy PTB (v0.0.15 Reference Pattern)
+
+This is the complete, correct atomic buy transaction. Copy this pattern exactly.
+
+```typescript
+const tx = new Transaction();
+
+// 1. Borrow seller's OwnerCap (needed for withdraw)
+const [sellerCap, sellerReceipt] = tx.moveCall({
+  target: `${worldPkg}::character::borrow_owner_cap`,
+  typeArguments: [`${worldPkg}::storage_unit::StorageUnit`],
+  arguments: [tx.object(sellerCharId), tx.object(sellerOwnerCapTicket)],
+});
+
+// 2. Withdraw item from seller's SSU (v0.0.15: requires quantity)
+const [item] = tx.moveCall({
+  target: `${worldPkg}::storage_unit::withdraw_item`,
+  typeArguments: [`${ccPkg}::config::TradeAuth`],
+  arguments: [
+    tx.object(ssuId),
+    tx.object(sellerCharId),
+    tx.moveCall({ target: `${ccPkg}::config::trade_auth` }), // mint witness
+    tx.pure.u64(itemTypeId),
+    tx.pure.u32(quantity),  // ← v0.0.15 mandatory
+  ],
+});
+
+// 3. Deposit item into buyer's owned inventory on the SAME SSU
+tx.moveCall({
+  target: `${worldPkg}::storage_unit::deposit_to_owned`,
+  typeArguments: [`${ccPkg}::config::TradeAuth`],
+  arguments: [
+    tx.object(ssuId),      // same SSU (parent_id must match)
+    tx.object(buyerCharId),
+    item,
+    tx.moveCall({ target: `${ccPkg}::config::trade_auth` }),
+  ],
+});
+
+// 4. Split payment from buyer's gas coin and transfer to seller
+const [payment] = tx.splitCoins(tx.gas, [tx.pure.u64(priceInMist)]);
+tx.transferObjects([payment], tx.pure.address(sellerAddress));
+
+// 5. Return seller's OwnerCap (hot-potato — MUST happen)
+tx.moveCall({
+  target: `${worldPkg}::character::return_owner_cap`,
+  typeArguments: [`${worldPkg}::storage_unit::StorageUnit`],
+  arguments: [tx.object(sellerCharId), sellerCap, sellerReceipt],
+});
+
+const result = await client.signAndExecuteTransaction({
+  transaction: tx,
+  signer: keypair,
+  options: { showEffects: true, showEvents: true },
+});
+```
+
+## Move Call Tuple Destructuring (LLM Failure Point)
+
+> **CRITICAL:** Sui Move functions that return tuples (e.g., `(OwnerCap<T>, ReturnReceipt)`)
+> return an **array of `TransactionResult` objects** in the TS SDK. Agents MUST destructure
+> the result with array syntax. Treating the result as a single value or calling `.result[0]`
+> will silently produce an invalid transaction argument.
+
+### The Correct Pattern
+
+```typescript
+// ✅ CORRECT — array destructuring on moveCall result
+const [ownerCap, returnReceipt] = tx.moveCall({
+  target: `${worldPkg}::character::borrow_owner_cap`,
+  typeArguments: [`${worldPkg}::gate::Gate`],
+  arguments: [tx.object(characterId), tx.object(ownerCapTicket)],
+});
+// ownerCap and returnReceipt are each a TransactionResult
+// Use them directly as arguments in subsequent moveCall calls
+```
+
+### Common Hallucinated Patterns (ALL WRONG)
+
+```typescript
+// ❌ WRONG — treating result as a single value
+const borrowResult = tx.moveCall({ ... });
+tx.moveCall({ arguments: [borrowResult] }); // passes the TUPLE, not element 0
+
+// ❌ WRONG — using .result accessor (does not exist)
+const res = tx.moveCall({ ... });
+const cap = res.result[0]; // TypeError at runtime
+
+// ❌ WRONG — using nestedResult (old SDK pattern, removed)
+const cap = tx.moveCall({ ... }).nestedResult(0); // does not exist
+
+// ❌ WRONG — wrapping in tx.object() after destructuring
+const [cap, receipt] = tx.moveCall({ ... });
+tx.moveCall({ arguments: [tx.object(cap)] }); // cap is already a tx argument
+```
+
+### Hot-Potato Rule
+
+If a Move function returns a receipt/token with **no `drop` ability** (hot-potato), the
+transaction **will abort** unless that value is consumed by another Move call in the same PTB.
+Always plan the full borrow → use → return chain before writing any PTB code.
+
+```typescript
+// MANDATORY pattern: borrow → use → return (ALL in same PTB)
+const [cap, receipt] = tx.moveCall({ target: "...::borrow_owner_cap", ... });
+tx.moveCall({ target: "...::authorize_extension", arguments: [..., cap] });
+tx.moveCall({ target: "...::return_owner_cap", arguments: [..., cap, receipt] });
+// If you forget the return_owner_cap call, the tx aborts on-chain.
+```

@@ -116,3 +116,151 @@ Before generating any new Move module or making significant additions to an exis
 | Raw `vector<u8>` string keys for DFs | Use typed key structs with `copy, drop, store` |
 | `assert!(condition, 0)` in tests | Use `assert!(condition)` or `assert_eq!` |
 | `test_scenario` for single-tx tests | Use `tx_context::dummy()` instead |
+
+## GateControl Extension Package — Reference Structure (Anti-God-File)
+
+> **Paradox:** world-contracts requires a **single `Auth` witness type** for each assembly extension,
+> but our rules forbid files over ~500 lines. The resolution: define the witness in a small `config`
+> module and use `public(package)` to let sibling modules mint it. Each rule gets its own file.
+
+### Canonical Layout
+
+```
+contracts/civcontrol/
+├── Move.toml
+├── README.md
+└── sources/
+    ├── config.move          # ~50 lines — GateAuth + TradeAuth witnesses, AdminCap, init
+    ├── gate_rules.move       # ~120 lines — tribe filter + coin toll DF helpers
+    ├── gate_permit.move      # ~100 lines — request_jump_permit (evaluates rules, calls gate::issue_jump_permit)
+    ├── trade_post.move       # ~200 lines — listing, atomic buy, cancel
+    ├── trade_events.move     # ~40 lines  — TollCollectedEvent, ListingCreatedEvent, etc.
+    └── tests/
+        ├── gate_rules_tests.move
+        └── trade_post_tests.move
+```
+
+**Each source file stays well under 500 lines.** If `trade_post.move` grows beyond ~300 lines,
+extract listing management into `trade_listing.move`.
+
+### config.move — Witness + Init (Reference)
+
+```move
+module civcontrol::config;
+
+use sui::dynamic_field as df;
+
+/// Auth witness for gate extension operations.
+/// drop-only — cannot be stored, copied, or transferred.
+public struct GateAuth has drop {}
+
+/// Auth witness for SSU/trade extension operations.
+public struct TradeAuth has drop {}
+
+public struct CivControlConfig has key {
+    id: UID,
+}
+
+public struct AdminCap has key, store {
+    id: UID,
+}
+
+fun init(ctx: &mut TxContext) {
+    transfer::transfer(AdminCap { id: object::new(ctx) }, ctx.sender());
+    transfer::share_object(CivControlConfig { id: object::new(ctx) });
+}
+
+/// Mint a GateAuth witness. Callable ONLY within this package.
+public(package) fun gate_auth(): GateAuth { GateAuth {} }
+
+/// Mint a TradeAuth witness. Callable ONLY within this package.
+public(package) fun trade_auth(): TradeAuth { TradeAuth {} }
+
+// --- Dynamic field helpers for attached rule configs ---
+
+public fun has_rule<K: copy + drop + store>(config: &CivControlConfig, key: K): bool {
+    df::exists_(&config.id, key)
+}
+
+public fun borrow_rule<K: copy + drop + store, V: store>(
+    config: &CivControlConfig, key: K
+): &V {
+    df::borrow(&config.id, key)
+}
+
+public(package) fun borrow_rule_mut<K: copy + drop + store, V: store>(
+    config: &mut CivControlConfig, key: K
+): &mut V {
+    df::borrow_mut(&mut config.id, key)
+}
+
+public(package) fun set_rule<K: copy + drop + store, V: store>(
+    config: &mut CivControlConfig, key: K, value: V
+) {
+    if (df::exists_(&config.id, key)) {
+        let _old: V = df::remove(&mut config.id, key);
+        // old value dropped
+    };
+    df::add(&mut config.id, key, value);
+}
+```
+
+### gate_permit.move — Rule Dispatch (Reference)
+
+```move
+module civcontrol::gate_permit;
+
+use world::gate::{Self, Gate};
+use world::character::Character;
+use sui::clock::Clock;
+use civcontrol::config::{Self, CivControlConfig, GateAuth};
+use civcontrol::gate_rules;
+
+/// Evaluate all attached rules, then issue permit via world-contracts.
+public fun request_jump_permit(
+    config: &CivControlConfig,
+    source_gate: &Gate,
+    destination_gate: &Gate,
+    character: &Character,
+    clock: &Clock,
+    ctx: &mut TxContext,
+) {
+    // Rule 1: Tribe filter (if configured)
+    gate_rules::enforce_tribe_rule(config, character);
+
+    // Rule 2: Coin toll (if configured) — handled in a separate moveCall
+    // so the coin argument comes from the PTB, not from this function.
+
+    // Issue the permit through world-contracts
+    gate::issue_jump_permit<GateAuth>(
+        source_gate,
+        destination_gate,
+        character,
+        config::gate_auth(),    // mint witness via public(package)
+        clock.timestamp_ms() + gate_rules::get_expiry_ms(config),
+        ctx,
+    );
+}
+```
+
+### Why This Works
+
+| Concern | Resolution |
+|---------|------------|
+| **Single witness per gate** | `GateAuth` is defined once in `config.move` and used by all rule modules |
+| **No god file** | Each module handles one concern: config, rules, permits, trading, events |
+| **Cross-module witness minting** | `public(package) fun gate_auth()` — only sibling modules can call it |
+| **<500 lines per file** | Config ~50, rules ~120, permit ~100, trade ~200, events ~40 |
+| **Extensibility** | New rules = new DF key struct + new helper in `gate_rules.move` (or a new `rules/` module) |
+
+### v0.0.15 Breaking Changes (Agent Must-Know)
+
+These world-contracts v0.0.15 signature changes are **not in LLM training data**.
+Always verify against `vendor/world-contracts` before generating call sites.
+
+| Function | Change | Impact |
+|----------|--------|--------|
+| `withdraw_item<Auth>` | Added `quantity: u32` + `ctx: &mut TxContext` params | All call sites must add quantity |
+| `deposit_item<Auth>` | Now asserts `parent_id == storage_unit_id` | Items cannot cross SSUs via deposit_item |
+| `deposit_to_owned<Auth>` | **New function** — deposit into any player's owned inventory | Enables cross-player delivery on same SSU |
+| `create_killmail` | Completely new signature (takes registry, raw u64 IDs, Character ref, u8 loss_type) | Old call sites will not compile |
