@@ -39,6 +39,21 @@
 | `trade_post` | 1 | EInsufficientFunds | Coin value < listing price |
 | `trade_post` | 2 | ESSUMismatch | Listing SSU ID ≠ passed SSU |
 
+### 1.1b Pre-Mainnet: Formal Verification (Sui Prover)
+
+> **Not in hackathon scope.** Included here to document our intent before any real-value deployment.
+
+Before deploying contracts to mainnet (real assets at risk), all economic-critical Move modules must be formally verified using the [Sui Prover](https://github.com/asymptotic-code/sui-prover) (Boogie/Z3-based, supports Move 2024).
+
+| Module | Properties to Prove | Priority |
+|--------|---------------------|----------|
+| `gate_permit` | Toll payment atomicity, no-double-toll, rule evaluation completeness | P0 |
+| `courier_escrow` | Balance conservation, state machine correctness | P0 |
+| `trade_post` | Payment atomicity, no partial fills | P1 |
+| `gate_toll` | Arithmetic overflow safety, fee math correctness | P1 |
+
+Specs will live in a separate `specs/` package using Sui Prover's `#[spec(prove)]` attribute and `target` mechanism (required until upstream integration lands). See [Sui Prover Guide](https://info.asymptotic.tech/sui-prover-guide) for specification patterns.
+
 ### 1.2 Frontend (React + TypeScript)
 
 | Gate | Command | Expected | Frequency |

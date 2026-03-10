@@ -441,6 +441,12 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | **world-contracts API changed** | Pull latest on hackathon day, verify assumptions A1–A4 before writing code |
 | **Test server unavailable** | Fall back to local devnet. All patterns are validated on local devnet. Evidence quality equivalent for demo purposes. |
 
+### Pre-Mainnet: Formal Verification
+
+> **Post-hackathon gate — not blocking for demo/submission.** Documented here to demonstrate security awareness.
+
+Before any mainnet deployment where contracts control real value, we will run formal verification using the [Sui Prover](https://github.com/asymptotic-code/sui-prover) (Boogie/Z3, Move 2024 native). Priority targets: `gate_permit` (toll atomicity, rule completeness) and `courier_escrow` (balance conservation). The prover's `#[spec(prove, ignore_abort)]` mode enables lightweight "does the math conserve value?" proofs with modest effort once contracts stabilise.
+
 ---
 
 ## DO NOT COPY — Sandbox Code Notice
