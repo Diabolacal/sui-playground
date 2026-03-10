@@ -14,7 +14,7 @@
 > If conflicts exist, defer to the March-11 Reimplementation Checklist for execution decisions.
 
 > **Date:** 2026-02-16 (updated 2026-03-09 with world-contracts v0.0.16/v0.0.17 changes: PlayerProfile, gate type matching, turret owner exclusion, killmail registry, assembly metadata updates, withdraw_item online guard)  
-> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02, 2026-03-03, 2026-03-09)**  
+> **Status:** Pre-hackathon carry-forward document — **ALL MODULES VALIDATED ON LOCAL DEVNET** + **FULL GATE LIFECYCLE REHEARSED** — **UPSTREAM BREAKING CHANGES DOCUMENTED (2026-02-28, 2026-03-02, 2026-03-03, 2026-03-09)**  
 > **Source:** Validated patterns from `sui-playground` sandbox  
 > **Scope:** CivilizationControl — GateControl + TradePost (core), TribeMint (stretch)  
 > **Evidence:** See [validation report](../operations/shortlist-viability-validation-report.md) for module tests; [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) for complete 13-step gate lifecycle with transaction digests
@@ -35,7 +35,7 @@ This document captures everything needed to **reimplement CivilizationControl fr
 - A code dump — all sandbox code stays in `sui-playground`
 - A substitute for reading the world-contracts source — this is a map, not the territory
 
-> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold/move-contracts/smart_gate/` now contains 3 canonical reference implementations directly relevant to CivilizationControl: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based gate access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS scripts at `ts-scripts/smart_gate/` and utility library at `ts-scripts/utils/` (config, derive-object-id, proof generation, sponsored tx dual-sign). Builder-documentation `gate/build.md` now provides an end-to-end build guide. New deployment automation scripts at `vendor/world-contracts/scripts/` (deploy-world.sh, seed-world.sh).
+> **Upstream reference code (2026-02-20 submodule refresh):** `vendor/builder-scaffold/move-contracts/smart_gate/` now contains 3 canonical reference implementations directly relevant to CivilizationControl: `config.move` (ExtensionConfig + AdminCap + XAuth + DF helpers), `tribe_permit.move` (tribe-based gate access), `corpse_gate_bounty.move` (SSU+gate cross-assembly composition). Full TS scripts at `ts-scripts/smart_gate/` and utility library at `ts-scripts/utils/` (config, derive-object-id, sponsored tx helpers). Builder-documentation `gate/build.md` now provides an end-to-end build guide. New deployment automation scripts at `vendor/world-contracts/scripts/` (deploy-world.sh, seed-world.sh).
 
 > **BREAKING CHANGES (2026-02-28 submodule refresh — world-contracts v0.0.13, builder-scaffold 6bc43a1):**
 > 1. **Proximity proof REMOVED** from all owner-path SSU functions (`withdraw_by_owner`, `withdraw`). Replaced by `admin_acl: &AdminACL` + `admin_acl.verify_sponsor(ctx)`. Marked as temporary "until a location service is available." Our extension path (`withdraw_item<Auth>`, `deposit_item<Auth>`) is unaffected.
@@ -52,7 +52,7 @@ This document captures everything needed to **reimplement CivilizationControl fr
 > 2. **Gate extension example DELETED** from `extension_examples/sources/gate.move` — replaced by turret extension example. `vendor/builder-scaffold/move-contracts/smart_gate/` remains the canonical gate extension reference. **Action:** Ensure march-11 code references builder-scaffold, not extension_examples, for gate patterns (already the case).
 > 3. **`fuel::withdraw` signature changed** — now requires `type_id: u64` parameter (added). Validates `fuel.type_id == option::some(type_id)` instead of `is_some` check. Affects any code calling `withdraw` on fuel directly. **Low impact for CivilizationControl** — we don't interact with fuel directly.
 > 4. **EVE Vault sponsored transaction flow FULLY IMPLEMENTED** — new `sponsoredTransactionHandler.ts` (221 lines), `SignSponsoredTransaction.tsx` popup (159 lines), and `/sign_sponsored_transaction/` entrypoint. Server provides `bcsDataB64Bytes` + `preparationId`; player signs with zkLogin; response returned via `/transactions/sponsored/execute`. Real dual-phase flow. **Previously stubbed — now functional.** Relevant for CivilizationControl dApp integration planning.
-> 5. **Builder-scaffold `@evefrontier/dapp-kit`** now references published npm package (`^0.1.0`) instead of local file path. dApp starter is more self-contained.
+> 5. **Builder-scaffold `@evefrontier/dapp-kit`** now references published npm package (currently `^0.1.2`) instead of local file path. dApp starter is more self-contained.
 > 6. **No pattern-breaking changes for CivilizationControl.** All validated gate/SSU extension/witness patterns remain intact. Turret implementation confirms the same typed witness pattern extends to new assembly types.
 
 > **CHANGES (2026-03-03 submodule refresh — world-contracts v0.0.15, builder-documentation b4178c6):**
@@ -166,7 +166,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 | # | Assumption | How to Verify |
 |---|-----------|---------------|
 | E1 | `world-contracts` repo has not been restructured or renamed | Check GitHub repo, pull latest |
-| E2 | `builder-scaffold` Docker devnet still works with same entrypoint (fallback environment) | `docker compose run --rm sui-local` |
+| E2 | `builder-scaffold` Docker local devnet still works with same entrypoint (fallback environment) | `docker compose run --rm sui-dev` |
 | E3 | Sui CLI supports `--gas-sponsor` flag on `sui client ptb` (NOT `--sponsor`, NOT on `sui client call`) | `sui client ptb --help` |
 | E4 | Local devnet genesis creates faucet for funding test accounts | Check container startup logs |
 | E5 | **Hackathon test server** is available from March 11 with same world-contracts as Stillness | Connect via provided RPC URL; verify with `sui client active-env` |
@@ -223,7 +223,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 ### Pattern 3: Coin Toll for Gate Access
 
-**What:** Require payment in SUI (or a custom `Coin<T>`) to receive a JumpPermit.
+**What:** Require payment in SUI (or another `Coin<T>` such as `Coin<EVE>`) to receive a JumpPermit.
 
 **Key flow:**
 1. Read toll config from dynamic field on shared GateConfig
@@ -269,11 +269,11 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 ### Pattern 5: Infrastructure Deployment Sequence
 
-**What:** The full chain from fresh devnet to working gates and SSUs.
+**What:** The full chain from fresh local devnet to working gates and SSUs.
 
 **Sequence (each step depends on the previous):**
 1. **Publish world package** → receive `GovernorCap`
-2. **Add sponsor to AdminACL** → `access::add_sponsor_to_acl(admin_acl, governor_cap, sponsor_addr)` — **must be a different address than the sender for sponsored txs**
+2. **Add sponsor to AdminACL** → `access::add_sponsor_to_acl(admin_acl, governor_cap, sponsor_addr)` — a dedicated sponsor address is recommended for clarity, but `verify_sponsor` falls back to `ctx.sender()` so self-sponsorship works if the sender is in AdminACL
 3. **Register server address** → `access::register_server_address(server_registry, governor_cap, server_addr)` (for distance proofs)
 4. **Configure fuel** → `fuel::set_fuel_efficiency(fuel_config, admin_cap, type_id, efficiency)`
 5. **Configure energy** → `energy::set_energy_config(energy_config, admin_cap, gate_type_id, energy_amount)`
@@ -288,7 +288,7 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 14. **Online SSUs** → `storage_unit::online(...)`
 15. **Authorize extensions** → on both gates and trade SSUs
 
-**Self-signed proofs (devnet only):** Generate an Ed25519 keypair, register its derived address as "server address" in step 3, then sign distance proofs with it for `link_gates()`. **Note (2026-02-28):** `link_gates` now also requires `admin_acl: &AdminACL` param and the tx must be authorized sponsored (`admin_acl.verify_sponsor(ctx)`). **Signature format:** `digest = blake2b256(0x030000 || bcs_message_bytes)`, Ed25519-sign the digest. **Proof format:** `[0x00 flag] + [64-byte sig] + [32-byte pubkey]` = 97 bytes. `verify_distance` does NOT check deadline (unlike `verify_proximity`). `vector<u8>` args in PTB must use `"vector[0xHH,0xHH,...]"` format. Full working proof generator at `sandbox/validation/generate_distance_proof.mjs` (ESM, requires `@noble/hashes@2`). See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Step 9.
+**Self-signed proofs (local devnet only):** Generate an Ed25519 keypair, register its derived address as "server address" in step 3, then sign distance proofs with it for `link_gates()`. **Note (2026-02-28):** `link_gates` now also requires `admin_acl: &AdminACL` param and the tx must be authorized sponsored (`admin_acl.verify_sponsor(ctx)`). **Signature format:** `digest = blake2b256(0x030000 || bcs_message_bytes)`, Ed25519-sign the digest. **Proof format:** `[0x00 flag] + [64-byte sig] + [32-byte pubkey]` = 97 bytes. `verify_distance` does NOT check deadline (unlike `verify_proximity`). `vector<u8>` args in PTB must use `"vector[0xHH,0xHH,...]"` format. Full working proof generator at `sandbox/validation/generate_distance_proof.mjs` (ESM, requires `@noble/hashes@2`). See [gate lifecycle runbook](../operations/gate-lifecycle-runbook.md) Step 9.
 
 ### Pattern 6: OwnerCap Borrow/Return Hot-Potato
 
@@ -341,15 +341,15 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 - [ ] **Connect to hackathon test server:** `sui client new-env --alias testserver --rpc <RPC_URL>` → `sui client switch --env testserver`
 - [ ] Verify test server connection: `sui client active-env` → "testserver"
 - [ ] Check test server for pre-published world-contracts (query known types)
-- [ ] **Fallback:** Start local devnet: `cd vendor/builder-scaffold/docker && docker compose run --rm sui-local`
+- [ ] **Fallback:** Start local devnet: `cd vendor/builder-scaffold/docker && docker compose run --rm sui-dev`
 - [ ] If using local devnet: Publish world package: `sui client publish --gas-budget 500000000`
 - [ ] Record all shared object IDs (GovernorCap, AdminACL, ObjectRegistry, etc.)
 
-### Hour 1: GateControl Module (2–3 hours)
+### Hour 1: CivControl GateControl Module (2–3 hours)
 
-- [ ] Create Move package: `contracts/gatecontrol/`
-- [ ] Define `GateAuth has drop {}` witness struct
-- [ ] Define `GateControlConfig` shared object with UID for dynamic fields
+- [ ] Create Move package: `contracts/civcontrol/` (single package for both GateControl and TradePost — matches spec.md §3.1)
+- [ ] Define `GateAuth has drop {}` witness struct (gate extension)
+- [ ] Define `CivControlConfig` shared object with UID for dynamic fields
 - [ ] Implement rule key/value structs:
   - `TribeRuleKey` / `TribeRule { tribe_id: u32 }`
   - `CoinTollKey` / `CoinTollRule { price: u64, treasury: address }`
@@ -361,9 +361,9 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 - [ ] Write Move unit tests (`#[test]` functions)
 - [ ] `sui move build` + `sui move test`
 
-### Hour 3: TradePost Module (2–3 hours)
+### Hour 3: CivControl TradePost Module (2–3 hours)
 
-- [ ] Create Move package: `contracts/tradepost/`
+- [ ] Add TradePost sources to `contracts/civcontrol/` (same package — shared `CivControlConfig`)
 - [ ] Define `TradeAuth has drop {}` witness struct
 - [ ] Define `Listing` struct: `{ id, storage_unit_id, seller, item_type_id, price }`
 - [ ] Implement `create_listing()` — seller creates, listing is shared
@@ -382,13 +382,12 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 ### Hour 5: Integration on Local Devnet / Test Server (2 hours)
 
 - [ ] Run infrastructure setup chain (Pattern 5) — on test server if admin tools available, otherwise local devnet
-- [ ] Publish GateControl extension package
+- [ ] Publish CivControl extension package
 - [ ] Authorize extension on both test gates
 - [ ] Test: correct tribe → permit issued → jump succeeds → JumpEvent emitted
 - [ ] Test: wrong tribe → transaction aborts
 - [ ] Test: coin toll → payment transferred → permit issued
-- [ ] Publish TradePost extension package
-- [ ] Authorize extension on test SSU
+- [ ] Authorize TradePost extension on test SSU (same published package)
 - [ ] Mint test items into SSU
 - [ ] Create listing as seller
 - [ ] Buy as different address → Item transferred, payment received
@@ -505,7 +504,7 @@ Reasons:
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| Strategy memo | `docs/strategy/civilizationcontrol-strategy-memo.md` | Decision rationale: why 2 core + 1 stretch |
+| Strategy memo | `docs/strategy/civilization-control/civilizationcontrol-strategy-memo.md` | Decision rationale: why 2 core + 1 stretch |
 | GateControl validation | `docs/architecture/gatecontrol-feasibility-report.md` | Full gate architecture analysis + toll options |
 | TradePost validation | `docs/architecture/tradepost-cross-address-ptb-validation.md` | Cross-address proof + SSU extension analysis |
 | Capabilities deep dive | `docs/architecture/sui-playground-capabilities.md` | Full devnet capabilities + experiment list |

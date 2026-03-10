@@ -114,6 +114,7 @@ Consistent naming conventions used across all active documents.
 |------|---------|
 | [core/WORKSPACE_ABSTRACT.md](core/WORKSPACE_ABSTRACT.md) | What this workspace is and how to use it |
 | [core/COPILOT_MEMORY_GUIDELINES.md](core/COPILOT_MEMORY_GUIDELINES.md) | What to store in Copilot persistent memory |
+| [core/hackathon-repo-conventions.md](core/hackathon-repo-conventions.md) | **Repo conventions** — git workflow, file discipline, naming, TS/React/Move standards, judge legibility, agent rules |
 | [core/march-11-reimplementation-checklist.md](core/march-11-reimplementation-checklist.md) | **March 11 carry-forward** — validated patterns, day-1 checklist, pitfalls, DO NOT COPY notice |
 | [core/civilizationcontrol-claim-proof-matrix.md](core/civilizationcontrol-claim-proof-matrix.md) | **Evidence ledger** — every demo claim mapped to tx digest, object ID, overlay format; utility metrics targets |
 | [core/civilizationcontrol-demo-beat-sheet.md](core/civilizationcontrol-demo-beat-sheet.md) | **Demo beat sheet (v2)** — ~2:56 primary loop (Pain→Power→Policy→Denial→Revenue→Defense Mode→Commerce→Command), 2-min fallback variant, proof registry, pre-flight checklist |

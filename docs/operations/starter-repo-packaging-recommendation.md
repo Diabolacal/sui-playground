@@ -50,7 +50,7 @@ Files/patterns reusable across any EVE Frontier hackathon project repo.
 | `templates/cloudflare/` | Carry verbatim (3 files) | CF deployment templates |
 | `docs/operations/DECISIONS_TEMPLATE.md` | Carry verbatim | Decision log format |
 
-**Total:** ~15 items forming a reusable starter scaffold.
+**Total:** ~17 items forming a reusable starter scaffold.
 
 ---
 
@@ -63,7 +63,8 @@ Files specific to the CivilizationControl hackathon submission.
 | Item | Action |
 |------|--------|
 | `.gitmodules` | **Create fresh** via `git submodule add` (world-contracts, builder-scaffold; optionally evevault) |
-| `.github/instructions/move.instructions.md` | Carry verbatim — CC-specific Move conventions |
+| `.github/instructions/move.instructions.md` | Carry verbatim — Move conventions |
+| `.github/instructions/typescript-react.instructions.md` | Carry verbatim — TS/React/Tailwind conventions |
 | `.vscode/tasks.json` | Carry with **path update** (default movePkgPath → CC contract dir) |
 | `LICENSE` | Carry verbatim (MIT) |
 
@@ -80,7 +81,7 @@ Files specific to the CivilizationControl hackathon submission.
 
 | Category | Count | Key Files |
 |----------|-------|-----------|
-| **core/** | 9 | spec.md, march-11-reimplementation-checklist.md, day1-checklist.md, validation.md, implementation-plan.md, demo-beat-sheet.md, claim-proof-matrix.md, memory.md, CARRY_FORWARD_INDEX.md |
+| **core/** | 10 | spec.md, march-11-reimplementation-checklist.md, day1-checklist.md, validation.md, implementation-plan.md, demo-beat-sheet.md, claim-proof-matrix.md, memory.md, hackathon-repo-conventions.md, CARRY_FORWARD_INDEX.md |
 | **architecture/** | 10 | authenticated-user-surface-analysis, gate-lifecycle-function-reference, gatecontrol-feasibility-report, in-game-dapp-surface, policy-authoring-model-validation, read-path-architecture-validation, read-provider-abstraction, spatial-embed-requirements, sui-playground-capabilities, world-contracts-auth-model |
 | **strategy/civilization-control/** | 4 | hackathon-emotional-objective, product-vision, strategy-memo, voice-and-narrative |
 | **analysis/** | 2 | assumption-registry-and-demo-fragility-audit, must-work-claim-registry |
@@ -143,7 +144,8 @@ CivilizationControl/
 │   ├── copilot-instructions.md        ← REWRITE (shared scaffold + CC content)
 │   ├── security-guidelines.md         ← verbatim
 │   ├── instructions/
-│   │   └── move.instructions.md       ← verbatim
+│   │   ├── move.instructions.md       ← verbatim
+│   │   └── typescript-react.instructions.md ← verbatim
 │   ├── prompts/
 │   │   ├── rehydrate.prompt.md        ← verbatim
 │   │   └── vibe-bootstrap.prompt.md   ← verbatim
@@ -238,6 +240,8 @@ Things easy to miss if exporting only markdown docs:
 | Cloudflare templates missing | Frontend deploy setup has no scaffold. | Export `templates/cloudflare/`. |
 | PTB pattern library missing | Agent has no PTB assembly reference when composing transactions. | Export `docs/ptb/` (5 files). |
 | Move.instructions.md missing | Agent generates Move code without CC-specific conventions. | Export `.github/instructions/move.instructions.md`. |
+| typescript-react.instructions.md missing | Agent generates TS/React code without workspace conventions. | Export `.github/instructions/typescript-react.instructions.md`. |
+| hackathon-repo-conventions.md missing | Agent has no file discipline, naming, git workflow, or judge-legibility reference. | Export `docs/core/hackathon-repo-conventions.md`. |
 | tasks.json missing | No VS Code task buttons for Sui Move build/test/publish. | Export `.vscode/tasks.json` with updated path. |
 | Vendor submodules copied instead of freshly added | Stale localnet state, Docker volumes, build artifacts leak into starter. | Fresh `git submodule add` in CC repo. Never copy `vendor/` directly. |
 | `notes/` directory leaking | Contains localnet package IDs, transaction outputs with addresses. | Verify `notes/` excluded. `.gitignore` covers it. |
@@ -267,10 +271,10 @@ Things easy to miss if exporting only markdown docs:
 
 | Category | File Count | Notes |
 |----------|-----------|-------|
-| Shared-starter | ~15 | Project-agnostic scaffold |
+| Shared-starter | ~17 | Project-agnostic scaffold |
 | CC-starter (non-doc) | ~30 | Assets (25) + config/meta (5) |
-| CC-starter (docs) | ~40 | Carry-forward markdown |
-| CC-starter total | ~85 | Shared + CC-specific combined |
+| CC-starter (docs) | ~41 | Carry-forward markdown |
+| CC-starter total | ~87 | Shared + CC-specific combined |
 | Evidence-only | ~45 | Docs + experiments + sandbox |
 | Local-only | ~15+ | Notes, working memory, env files |
 | Archive-only | 7 | Superseded docs |

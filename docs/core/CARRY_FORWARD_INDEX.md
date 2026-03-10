@@ -27,6 +27,7 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 | `docs/core/civilizationcontrol-demo-beat-sheet.md` | Demo beat sheet (v2) — ~2:56 competitive arc, Defense Mode climax, proof registry, failure fallbacks |
 | `docs/core/civilizationcontrol-claim-proof-matrix.md` | Claim-proof matrix — maps claims to evidence |
 | `docs/core/memory.md` | Working memory template (CivilizationControl extended) |
+| `docs/core/hackathon-repo-conventions.md` | Repo-working conventions — git workflow, file discipline, naming, TS/React/Move standards, judge legibility |
 | `docs/core/CARRY_FORWARD_INDEX.md` | This index |
 
 ## Strategy Documents (copy for voice/narrative consistency)
@@ -83,6 +84,55 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 |------|---------|
 | `docs/README.md` | Documentation index (update for new repo) |
 | `docs/decision-log.md` | Decision log (start fresh in new repo) |
+
+## Agent Instructions (copy for agent-assisted development)
+
+| File | Purpose |
+|------|---------|
+| `.github/copilot-instructions.md` | Agent guardrails (update project-specific sections for new repo) |
+| `.github/instructions/move.instructions.md` | Move code conventions (auto-applied to `*.move`) |
+| `.github/instructions/typescript-react.instructions.md` | TS/React/Tailwind conventions (auto-applied to `*.ts/*.tsx`) |
+| `AGENTS.md` | Agent operating context (update project-specific sections for new repo) |
+
+## Agent Infrastructure (copy for agent-assisted development)
+
+| File | Purpose |
+|------|---------|
+| `.github/security-guidelines.md` | OWASP security baseline |
+| `.github/prompts/rehydrate.prompt.md` | Context recovery prompt (`/rehydrate`) |
+| `.github/prompts/vibe-bootstrap.prompt.md` | Onboarding wizard prompt |
+| `.github/skills/deploy/SKILL.md` | Cloudflare deploy skill |
+| `.github/skills/docker-ops/SKILL.md` | Docker operations skill |
+
+## VS Code Workspace Config (copy for development ergonomics)
+
+| File | Purpose |
+|------|---------|
+| `.vscode/settings.json` | Editor & agent config (update machine-specific entries for new repo) |
+| `.vscode/extensions.json` | Recommended VS Code extensions |
+| `.vscode/tasks.json` | Sui Move build/test/publish tasks (update default `movePkgPath` for new repo) |
+| `.vscode/prompts/plan.prompt.md` | Change-planning chat prompt |
+
+## Root Files (copy for repo identity)
+
+| File | Purpose |
+|------|---------|
+| `GITHUB-COPILOT.md` | AI contributor pointer (rewrite for new repo) |
+| `llms.txt` | LLM docs index (rewrite for new repo) |
+| `LICENSE` | MIT license |
+| `.gitignore` | Git ignore patterns (minor trim for target project) |
+
+## Assets (copy entire tree for UI implementation)
+
+| File | Purpose |
+|------|---------|
+| `assets/icons/` (entire tree) | SVG glyphs, overlays, badges, halos, pips — 20 SVGs + 5 READMEs |
+
+## Templates (copy for deployment scaffolding)
+
+| File | Purpose |
+|------|---------|
+| `templates/cloudflare/` (3 files) | Cloudflare deployment templates |
 
 ## PTB Pattern Library (copy as templates — revalidate on Day 1)
 

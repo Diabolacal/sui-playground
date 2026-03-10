@@ -23,7 +23,7 @@
 
 Complete checks sequentially. Record results in `notes/day1-validation.md`. If any HARD STOP triggers, halt and execute the documented fallback before continuing.
 
-> **Time budget note:** Individual check budgets sum to ~160 minutes. The Phase 0 window is 120 minutes. Checks 8–11 may overlap with Phase 1 Foundation work — run them in parallel with S07 (project scaffold) if AdminACL resolution (Check 5) completes under budget.
+> **Time budget note:** Individual check budgets sum to ~190 minutes (including optional Checks 9b and 9c). The Phase 0 window is 120 minutes. Checks 8–11 may overlap with Phase 1 Foundation work — run them in parallel with S07 (project scaffold) if AdminACL resolution (Check 5) completes under budget. Check 9c (Bouncer Turret, 20 min) is not a demo blocker and can be deferred to Phase 1.
 
 ---
 
@@ -131,7 +131,7 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 | **Check** | Connect Sui CLI to hackathon test server, discover all package/object IDs |
 | **Command** | `sui client new-env --alias testserver --rpc <RPC_URL>` → `sui client switch --env testserver` → `sui client active-env` |
 | **Expected Output** | "testserver" returned. `sui client objects` returns results. |
-| **Fallback** | If test server unavailable: `cd vendor/builder-scaffold/docker; docker compose run --rm sui-local`. Use local devnet. Record decision in notes. |
+| **Fallback** | If test server unavailable: `cd vendor/builder-scaffold/docker; docker compose run --rm sui-dev`. Use local devnet. Record decision in notes. |
 
 ### 4a: Discover World Package ID
 
@@ -185,7 +185,7 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 | Field | Value |
 |-------|-------|
 | **Check** | Own GovernorCap on local devnet → self-add sponsor |
-| **Command** | Publish world-contracts → own GovernorCap → `access::add_sponsor_to_acl(&GovernorCap, &mut AdminACL, sponsor_addr)` |
+| **Command** | Publish world-contracts → own GovernorCap → `access::add_sponsor_to_acl(&mut AdminACL, &GovernorCap, sponsor_addr)` |
 | **Expected Output** | Sponsored gate jump succeeds on local devnet. Demo captured locally. |
 
 ### Branch Activation Decision

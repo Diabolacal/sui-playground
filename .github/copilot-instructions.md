@@ -37,6 +37,33 @@ These rules have the highest precedence. `AGENTS.md` mirrors them in shortened f
 4. **Decision logging.** Any non-trivial behavior change, data migration, or platform action must be reflected in `docs/decision-log.md`.
 5. **No regressions.** All persistence changes must target the project's current platform abstraction — do not reintroduce deprecated providers.
 
+## Git Workflow & Commit Hygiene
+
+> Full conventions: `docs/core/hackathon-repo-conventions.md`. This section is the enforced summary.
+
+- **Branch for all non-trivial work.** Naming: `feat/`, `fix/`, `docs/`, `chore/`, `spike/` + `kebab-case-description`.
+- **Direct-to-main only for:** typo fixes, `.gitignore` tweaks, trivial doc corrections.
+- **Squash merge all feature branches to `main`.** One clean commit per feature. PR title = commit message.
+- **Commit message format:** `type: Imperative description` (≤72 chars). Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`.
+- **`main` must always be demo-ready.** Never merge broken code.
+- **Spike branches (`spike/`):** throwaway experiments — never merge to main.
+- **PRs even when solo:** judges browse merged PRs. Minimal body: What / Why / Verified.
+- **Never force-push to `main`.** Linear, append-only history.
+
+## Code Organization & File Discipline
+
+> Language-specific rules in `.github/instructions/`. This section covers cross-cutting rules.
+
+- **No files >500 lines** without explicit justification. React components ~150 lines, page components ~100 lines, Move modules ~500 lines.
+- **No "god files."** Split any file doing 3+ unrelated things.
+- **No commented-out code** in the submission repo. Write it or delete it.
+- **No duplicate utilities.** Grep the workspace before creating helpers.
+- **Place files in the correct directory** per project conventions. No random one-off files at project root.
+- **Name files consistently:** PascalCase for components, camelCase for utils/hooks, snake_case for Move, kebab-case for directories and scripts.
+- **No generic names:** `utils2.ts`, `helper.ts`, `stuff.ts`, `Component3.tsx` are forbidden.
+- **Check for existing files** before creating new ones — agent-generated duplicates are a common failure mode.
+- **Respect file size limits proactively** — split at generation time, not after.
+
 ## Architecture Overview
 <!-- This is a sandbox/planning workspace. Architecture sections apply to hackathon submission repos after March 11. -->
 - Frontend: N/A (sandbox workspace — no deployed frontend)

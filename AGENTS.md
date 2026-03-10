@@ -77,6 +77,36 @@ When the operator pastes an externally generated plan or spec (e.g., from ChatGP
 5. **Manual deployment may be required**: Check whether your deployment platform auto-deploys on push. If not, YOU must execute the deploy command after pushing.
 6. **Feature branch deploys**: Always use feature-branch-scoped preview deploys. Never deploy feature branches to production.
 
+## Code & Repo Conventions
+
+Full conventions in `docs/core/hackathon-repo-conventions.md` (carry-forward). Language-specific rules in `.github/instructions/`. These are the top-priority rules agents must internalize:
+
+### Git Workflow
+- **Branch for all non-trivial work.** Pattern: `feat/`, `fix/`, `docs/`, `chore/`, `spike/`. Lowercase, hyphen-separated.
+- **Squash merge to `main`.** One clean commit per feature. PR title = commit message.
+- **Commit message format:** `type: Imperative description` (e.g., `feat: Add toll collection`). Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`.
+- **`main` must always be demo-ready.** Never merge broken code.
+- **Spike branches** (`spike/`) are throwaway — never merge them.
+
+### File Discipline
+- **No files >500 lines** without explicit justification. React components ~150 lines, page components ~100 lines, Move modules ~500 lines.
+- **No "god files."** Split any file doing 3+ unrelated things.
+- **No commented-out code.** Write it or delete it.
+- **No duplicate utilities.** Grep the workspace before creating helpers.
+- **Place files correctly.** Follow directory conventions. No random one-off files at project root.
+
+### Naming
+- **React components:** `PascalCase.tsx`. Hooks: `useCamelCase.ts`. Utils: `camelCase.ts`.
+- **Move:** modules `snake_case`, structs `PascalCase`, caps `PascalCaseCap`, events `PascalCaseEvent`, errors `EPascalCase`.
+- **Directories:** `kebab-case`. Scripts: `verb-noun.ts`.
+- **No generic names:** `utils2.ts`, `helper.ts`, `stuff.ts`, `Component3.tsx` are forbidden.
+
+### Agent Behavior
+- **Check for existing files** before creating new ones. Duplicates are a common failure mode.
+- **Respect file size limits** proactively — split at generation time, not after.
+- **Do not create summary docs** after every change. Update existing docs or confirm verbally.
+- **Do not add speculative code** "for future use." Only write what's needed now.
+
 ## Working Memory & Context Management
 
 Agent Mode enforces a per-conversation context limit. When the buffer fills, VS Code silently summarizes prior turns, which is lossy. A Working Memory file helps preserve task context.
