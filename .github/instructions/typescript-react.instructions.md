@@ -103,3 +103,149 @@ src/
 ```
 
 Group by feature, not by type. Feature-specific code stays in the feature folder. Promote to shared when used by 2+ features. No cross-feature imports.
+
+## Sui TypeScript SDK — Mandatory Packages & Banned Imports
+
+> **Context:** The Sui SDK was overhauled from a monolithic `@mysten/sui.js` to modular `@mysten/sui/*` subpath packages. LLMs trained before mid-2025 will hallucinate the old API. This section is the authoritative guardrail.
+
+### Banned Packages (NEVER import)
+
+| Banned Import | Reason | Correct Replacement |
+|---------------|--------|---------------------|
+| `@mysten/sui.js` | Monolithic package, fully deprecated | `@mysten/sui/*` subpath imports |
+| `@mysten/sui.js/client` | Old subpath of dead package | `@mysten/sui/jsonRpc` |
+| `SuiClient` from `@mysten/sui/client` | Deprecated Feb 28 2026 | `SuiJsonRpcClient` from `@mysten/sui/jsonRpc` |
+| `JsonRpcProvider` | Ancient pre-v1 class | `SuiJsonRpcClient` from `@mysten/sui/jsonRpc` |
+| `TransactionBlock` | Renamed class from old SDK | `Transaction` from `@mysten/sui/transactions` |
+| `useSponsoredTransaction` | Removed from dapp-kit | `useDAppKit()` from `@mysten/dapp-kit-react` |
+
+If an agent generates any banned import, it **must** self-correct immediately before continuing.
+
+### Required Packages (March 2026 Standard)
+
+**TS Scripts / Backend (non-React):**
+```typescript
+import { SuiJsonRpcClient } from "@mysten/sui/jsonRpc";
+import { Transaction } from "@mysten/sui/transactions";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+import { decodeSuiPrivateKey } from "@mysten/sui/cryptography";
+import { bcs } from "@mysten/sui/bcs";
+```
+
+**React dApp:**
+```typescript
+import { useDAppKit } from "@mysten/dapp-kit-react";
+import { Transaction } from "@mysten/sui/transactions";
+import { useSmartObject, useConnection } from "@evefrontier/dapp-kit";
+```
+
+**package.json dependencies (minimum versions):**
+```json
+{
+  "@mysten/sui": "^2.0.0",
+  "@mysten/dapp-kit-react": "^1.0.2",
+  "@evefrontier/dapp-kit": "^0.1.2",
+  "@tanstack/react-query": "^5.0.0"
+}
+```
+
+### PTB Construction — Known-Good Patterns
+
+**Client setup (scripts / backend):**
+```typescript
+import { SuiJsonRpcClient } from "@mysten/sui/jsonRpc";
+import { Transaction } from "@mysten/sui/transactions";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+
+const client = new SuiJsonRpcClient({ url: "http://127.0.0.1:9000", network: "localnet" });
+const keypair = Ed25519Keypair.fromSecretKey(secretKey);
+```
+
+**Basic PTB with coin splitting (GateControl toll pattern):**
+```typescript
+const tx = new Transaction();
+
+// Split toll amount from the player's gas coin
+const tollAmount = 1_000_000; // in MIST (1 SUI = 1e9 MIST)
+const [tollCoin] = tx.splitCoins(tx.gas, [tx.pure.u64(tollAmount)]);
+
+// Pay the toll via a Move call (extension-defined function)
+tx.moveCall({
+  target: `${packageId}::gate_control::pay_toll`,
+  arguments: [
+    tx.object(gateId),       // &mut Gate
+    tollCoin,                // Coin<SUI> split above
+    tx.object(configId),     // &TollConfig
+  ],
+});
+
+// Sign and execute
+const result = await client.signAndExecuteTransaction({
+  transaction: tx,
+  signer: keypair,
+  options: { showEffects: true, showEvents: true },
+});
+```
+
+**Borrow-Use-Return hot-potato PTB (OwnerCap pattern):**
+```typescript
+const tx = new Transaction();
+
+// 1. Borrow OwnerCap from character (returns hot-potato receipt)
+const [ownerCap, receipt] = tx.moveCall({
+  target: `${worldPackageId}::character::borrow_owner_cap`,
+  typeArguments: [`${worldPackageId}::gate::Gate`],
+  arguments: [tx.object(characterId), tx.receivingRef(ownerCapTicket)],
+});
+
+// 2. Use the OwnerCap (e.g., bring gate online)
+tx.moveCall({
+  target: `${worldPackageId}::gate::online`,
+  arguments: [
+    tx.object(gateId),
+    tx.object(networkNodeId),
+    tx.object(energyConfigId),
+    ownerCap,
+  ],
+});
+
+// 3. Return OwnerCap — MANDATORY (receipt has no `drop` ability)
+tx.moveCall({
+  target: `${worldPackageId}::character::return_owner_cap`,
+  typeArguments: [`${worldPackageId}::gate::Gate`],
+  arguments: [tx.object(characterId), ownerCap, receipt],
+});
+```
+
+**Sponsored transaction pattern:**
+```typescript
+import { SuiJsonRpcClient, ExecuteTransactionBlockParams } from "@mysten/sui/jsonRpc";
+
+// Build transaction-kind bytes (no sender/gas info yet)
+const kindBytes = await tx.build({ client, onlyTransactionKind: true });
+
+// Reconstruct with sponsorship
+const sponsoredTx = Transaction.fromKind(kindBytes);
+sponsoredTx.setSender(playerAddress);
+sponsoredTx.setGasOwner(adminAddress);
+sponsoredTx.setGasPayment(gasPayment); // admin's gas coins
+
+const txBytes = await sponsoredTx.build({ client });
+
+// Both parties sign
+const playerSig = await playerKeypair.signTransaction(txBytes);
+const adminSig = await adminKeypair.signTransaction(txBytes);
+
+const result = await client.executeTransactionBlock({
+  transactionBlock: txBytes,
+  signature: [playerSig.signature, adminSig.signature],
+  options: { showEffects: true, showEvents: true },
+});
+```
+
+### SDK Field Renames (Breaking Changes)
+
+- `decodeSuiPrivateKey()` return field: `schema` → **`scheme`**
+- Client class: `SuiClient` → **`SuiJsonRpcClient`**
+- Transaction class: `TransactionBlock` → **`Transaction`**
+- Execute method: `signAndExecuteTransactionBlock` → **`signAndExecuteTransaction`** (on new client)
