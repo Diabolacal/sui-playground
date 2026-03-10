@@ -270,7 +270,7 @@ Side entries serve two purposes: (1) blanket remaining bonus categories Civiliza
 | Dimension | Detail |
 |-----------|--------|
 | **Target Prize** | Most Utility ($5,000 + $1,000 SUI) — or Best Live Frontier Integration if Stillness deployment is feasible |
-| **Concept** | Deploy the existing `corpse_gate_bounty.move` template (now under `smart_gate/`) with a web UI for configuration. Simplest, highest-certainty entry. **Updated 2026-02-20:** builder-scaffold now includes complete TS scripts for the corpse bounty flow (`ts-scripts/smart_gate/collect-corpse-bounty.ts`, `authorise-gate.ts`, `configure-rules.ts`) — further reduces build time. |
+| **Concept** | Deploy the existing `corpse_gate_bounty.move` template (now under `smart_gate_extension/` *(renamed from `smart_gate/` in scaffold v3c65b22, 2026-03-10)*) with a web UI for configuration. Simplest, highest-certainty entry. **Updated 2026-02-20:** builder-scaffold now includes complete TS scripts for the corpse bounty flow (`ts-scripts/smart_gate/collect-corpse-bounty.ts`, `authorise-gate.ts`, `configure-rules.ts`) — further reduces build time. |
 | **Sui Primitive** | Typed witness extension (simpler version of GateControl pattern) |
 | **Build Time** | 6–8 hours LLM-assisted (lowest of all candidates) |
 | **Demo Impact** | 8/10 — "Deposit a corpse. Gate opens. No corpse, no jump." Visceral, immediate, macabre humor. |
@@ -565,6 +565,8 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **MVP mitigation:** Manual Character ID input is already designed into the [UX architecture spec](../../ux/civilizationcontrol-ux-architecture-spec.md) §10b as the Day 1 path. Automatic resolution is an upgrade trigger (§12, Trigger 1).
 
+> **Update 2026-03-10 (world-contracts 2aed50b + builder-documentation 9222d42):** Character resolution is now **FULLY ADDRESSED** by `PlayerProfile`. At character creation, a `PlayerProfile { id, character_id }` is transferred to the player's wallet address. Query `suix_getOwnedObjects` on wallet for type `PlayerProfile` → get `character_id` → fetch `Character` shared object. Builder-documentation now has explicit query guidance. This reduces Character Resolution from CRITICAL to **LOW** — the automatic path is available from Day 1.
+
 **Pre-hackathon action:** On the hackathon test server (from March 11), attempt to query `CharacterCreatedEvent` events to verify event indexing viability. Investigate ObjectRegistry discoverability. *(Previously scoped to Stillness; test server provides equivalent RPC capabilities with lower competitive visibility risk.)*
 
 ### 10.2 EVE Vault Wallet Adapter Integration — LOW
@@ -602,6 +604,8 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 **Finding:** Raw structure coordinates are NOT on-chain — only a 32-byte Poseidon2 hash (irreversible). A coordinate-based map is impossible from chain data alone.
 
+> **Update 2026-03-10 (world-contracts 2aed50b):** **PARTIALLY RESOLVED.** New `LocationRegistry` shared object + `reveal_location()` on all assembly types stores plain-text coordinates on-chain (`solarsystem: u64`, `x/y/z: String`). Coordinates are opt-in (AdminACL-sponsored call per assembly) and marked temporary. If reveal_location is called for user structures, the SVG topology map can be populated with real XYZ positions from `get_location(registry, assembly_id)` instead of requiring manual pins. Solar system IDs can be matched against a solar system database for display names. **Net effect:** The "manual pins + on-chain state" hybrid model can now upgrade to "on-chain coordinates + on-chain state" for any structures that have revealed locations.
+
 **What IS available on-chain:** Gate link partners (`linked_gate_id`), NWN connected assemblies (`connected_assembly_ids`), online/offline status, fuel levels. These are sufficient for an abstract topology graph.
 
 **Decision:** List-first control plane is confirmed as the correct approach. The "Active Network" visualization in CivilizationControl shows network topology (which structures are linked and their status), not spatial coordinates. This is already reflected in the UX architecture spec.
@@ -612,11 +616,11 @@ Targeted scan of remaining uncertainties that could affect Day 1 execution. Each
 
 | Unknown | Risk | Blocks MVP? | Pre-Hackathon Action Required? |
 |---------|------|-------------|-------------------------------|
-| Character resolution | Critical | Yes (degraded with manual fallback) | Yes — event indexing test on hackathon test server (March 11+) |
+| Character resolution | ~~Critical~~ **Low** (2026-03-10) | ~~Yes~~ No — PlayerProfile enables automatic wallet→Character lookup | ~~Yes~~ Resolved — PlayerProfile + builder-docs query guidance |
 | EVE Vault adapter | Low | Yes if broken | Yes — minimal PTB signing test |
 | AdminACL sponsorship | Medium | No (MVP is OwnerCap-only) | Nice-to-have — clarify with organizers |
-| RPC on live network | Medium | Partially (Step 1 dependent) | Yes — test with known Character on test server |
-| Network visualization | Low | No | No — scoped to list-first + topology |
+| RPC on live network | ~~Medium~~ **Low** (2026-03-10) | ~~Partially~~ No — PlayerProfile resolves Step 1 dependency | Yes — verify on test server |
+| Network visualization | ~~Low~~ **Low+** (2026-03-10) | No | No — on-chain coordinates now available via LocationRegistry |
 
 ---
 

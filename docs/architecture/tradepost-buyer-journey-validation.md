@@ -7,6 +7,8 @@
 > **Sources:** vendor/world-contracts v0.0.13 @ e508451 (storage_unit.move, inventory.move, metadata.move), vendor/builder-documentation @ 185d7a8 (dapp-kit.md, storage-unit/README.md, dapps/*), vendor/builder-scaffold @ c97989f (smart_gate/, dapps/), docs/operations/shortlist-viability-validation-report.md, docs/architecture/tradepost-cross-address-ptb-validation.md, live GitBook (docs.evefrontier.com) cross-check 2026-02-19
 > **Scope:** Validate that the TradePost "buyer journey" (fly up → interact → browse listings → buy → receive items) is implementable with available EVE Frontier Sui/Move primitives
 
+> **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`, `storage_unit/` → `storage_unit_extension/`. References below use pre-rename paths.
+
 ---
 
 ## A) Verdict: PARTIAL PASS

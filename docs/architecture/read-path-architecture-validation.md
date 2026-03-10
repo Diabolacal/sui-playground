@@ -6,6 +6,8 @@
 - **Scope:** Wallet→structures discovery, signal feed data sources, read architecture options, scale considerations, demo requirements
 - **Validated against:** world-contracts event audit (37 `event::emit` calls, 30 event types, 13 modules — updated 2026-03-05), Sui RPC/GraphQL documentation, all CivilizationControl docs
 
+> **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`. `PlayerProfile` now enables on-chain wallet→Character lookup (resolves §1 discovery gap). `LocationRegistry` provides on-chain coordinates for revealed structures.
+
 ---
 
 ## 1. How It Works: Wallet Connect → Populated Command Overview

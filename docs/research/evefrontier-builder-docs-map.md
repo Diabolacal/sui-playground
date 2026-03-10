@@ -2,7 +2,7 @@
 
 **Retention:** Prep-only
 
-> **Last updated:** 2026-03-09 (submodule refresh: b4178c6/572e2ca/a409496/3cc9ffa → 1eb5ad4/9200be4/30f74ef/26d0a8c)
+> **Last updated:** 2026-03-10 (submodule refresh: 1eb5ad4/9200be4/26d0a8c → 9222d42/3c65b22/2aed50b)
 > **Source:** https://docs.evefrontier.com/
 > **Internal review by:** AI agent (initial mapping; refreshed 2026-03-03)
 
@@ -12,7 +12,7 @@ This document maps official EVE Frontier GitBook builder documentation to intern
 
 The official docs are actively being rewritten for the Sui blockchain transition. Many pages contain `//TODO` placeholders. Code in `vendor/world-contracts` is canonical; GitBook is explanatory.
 
-> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-09 — commit 1eb5ad4) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
+> **Local reading source:** `vendor/builder-documentation` (submodule added 2026-02-18, updated 2026-03-10 — commit 9222d42) contains the GitBook source markdown. Read locally for content; cite the public GitBook URLs in documentation and code comments.
 
 ---
 
@@ -155,7 +155,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **URL:** https://docs.evefrontier.com/smart-assemblies/storage-unit
 - **Last updated:** ~3 days ago
 - **Summary:** Introduction to SSU as a Move smart contract object. Explains core design, developer/player interaction patterns, and references the world-contracts repo for practical examples. Now 126 lines with substantive content (previously had `//TODO` prerequisites section — now populated).
-- **Why it matters for us:** Directly maps to `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` and the scaffold template at `vendor/builder-scaffold/move-contracts/storage_unit/`.
+- **Why it matters for us:** Directly maps to `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` and the scaffold template at `vendor/builder-scaffold/move-contracts/storage_unit_extension/` *(renamed from `storage_unit/` in scaffold v3c65b22, 2026-03-10)*.
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/storage_unit.move` (796 lines)
   - `docs/architecture/sui-playground-capabilities.md` §4.2
@@ -177,7 +177,7 @@ The official docs (`https://docs.evefrontier.com/`) are organized into these top
 - **Overlaps with:**
   - `vendor/world-contracts/contracts/world/sources/assemblies/gate.move` (718 lines)
   - `vendor/world-contracts/contracts/extension_examples/` (3 extension examples)
-  - `vendor/builder-scaffold/move-contracts/smart_gate/` (canonical gate extension examples)
+  - `vendor/builder-scaffold/move-contracts/smart_gate_extension/` (canonical gate extension examples — renamed from `smart_gate/` in scaffold v3c65b22, 2026-03-10)
   - `docs/architecture/sui-playground-capabilities.md` §4.1
 - **Notable clarifications:** **Build page (`/gate/build`) is now populated** — full end-to-end build guide covering scaffold walkthrough (config.move, tribe_permit.move, corpse_gate_bounty.move), publish, configure rules, authorize extension, issue permit, jump with permit. Includes a minimal toll gate example. Scaffold links now point to `main` branch.
 
@@ -248,7 +248,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - ~~**Turret module**: Neither docs nor code have turret implementation — docs page is `//TODO`, code has no turret module.~~ **RESOLVED 2026-03-02:** world-contracts v0.0.14 implements turret.move (677 lines + 1097-line test suite). Turret extension example added. Docs page may still lag.
 - **GAS Faucet**: Docs page is `//TODO` — our local devnet auto-funds; testnet faucet details unknown.
 - **dApps integration**: dApp sub-pages (Quick Start, Connecting, Customizing) are still `//TODO`. However, `@evefrontier/dapp-kit` SDK documentation is now populated (304 lines in `vendor/builder-documentation/dapp-kit/dapp-kit.md`). **Updated 2026-02-20:** `vendor/builder-scaffold/dapps/` now contains a working React dApp starter with `@evefrontier/dapp-kit` integration (queries.ts shows assembly info + wallet status components).
-- **Extension examples**: ~~The Interfacing page mentions extension registration but doesn't show the full flow.~~ **Updated 2026-02-20:** Gate Build page now documents the full extension flow end-to-end. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples (**Updated 2026-03-02:** gate.move deleted, turret.move added — still 3 examples: config.move, storage_unit.move, turret.move). `vendor/builder-scaffold/move-contracts/smart_gate/` has 3 canonical reference implementations (config.move, tribe_permit.move, corpse_gate_bounty.move).
+- **Extension examples**: ~~The Interfacing page mentions extension registration but doesn't show the full flow.~~ **Updated 2026-02-20:** Gate Build page now documents the full extension flow end-to-end. `vendor/world-contracts/contracts/extension_examples/` has 3 working examples (**Updated 2026-03-02:** gate.move deleted, turret.move added — still 3 examples: config.move, storage_unit.move, turret.move). `vendor/builder-scaffold/move-contracts/smart_gate_extension/` has 3 canonical reference implementations (config.move, tribe_permit.move, corpse_gate_bounty.move). *(Renamed from `smart_gate/` in scaffold v3c65b22, 2026-03-10.)*
 - **ZK proximity proofs**: The docs mention zero-knowledge proofs as a "future" alternative to server-signed proofs. Our `vendor/eve-frontier-proximity-zk-poc/` is a working Groth16 implementation — ahead of the docs.
 - **builder-scaffold branch**: ~~The Environment Setup page references a `build` branch and `localnet-setup/docker` directory~~ **Updated 2026-02-20:** Fixed — docs now reference `main` branch and correct `docker` directory. Submodule reference removed from builder-documentation repo.
 - **AdminCap → AdminACL discrepancy (2026-02-20)**: Docs now consistently use `AdminACL` (shared object with authorized sponsor addresses). World-contracts code already uses AdminACL. No functional discrepancy — naming alignment only.
@@ -259,7 +259,7 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Proximity proof removed from builder-scaffold (NEW 2026-02-28)**: `ts-scripts/utils/proof.ts` entirely deleted. `collect-corpse-bounty.ts` no longer takes proximity proofs. Uses AdminACL + sponsored tx instead.
 - **EVE Vault default chain (NEW 2026-02-28)**: Default chain switched from `SUI_DEVNET_CHAIN` to `SUI_TESTNET_CHAIN`. Chain order in wallet adapter: testnet first, devnet second.
 - **Turret assembly implemented (NEW 2026-03-02)**: world-contracts v0.0.14 adds full `turret.move` module (677 lines). Typed witness extension pattern identical to gate/SSU. `get_target_priority_list` is the builder-extensible entry point. BCS-serialized `TargetCandidate` / `ReturnTargetPriorityList` protocol. `OnlineReceipt` hot-potato. Default rules: same-tribe non-aggressors excluded, STARTED_ATTACK +10000 weight, ENTERED +1000 weight. Extension example replaces deleted gate.move in `extension_examples/`. anchor/unanchor require AdminACL.
-- **Gate extension example DELETED (NEW 2026-03-02)**: `contracts/extension_examples/sources/gate.move` removed. Replaced by `turret.move` extension example. Builder-scaffold `smart_gate/` remains the canonical gate extension reference.
+- **Gate extension example DELETED (NEW 2026-03-02)**: `contracts/extension_examples/sources/gate.move` removed. Replaced by `turret.move` extension example. Builder-scaffold `smart_gate_extension/` remains the canonical gate extension reference. *(Renamed from `smart_gate/` in scaffold v3c65b22, 2026-03-10.)*
 - **EVE Vault sponsored transaction flow (NEW 2026-03-02)**: New `sponsoredTransactionHandler.ts` (221 lines) + `SignSponsoredTransaction.tsx` popup (159 lines). Server provides `bcsDataB64Bytes` + `preparationId`; player signs with zkLogin; execution via `/transactions/sponsored/execute` API endpoint. Sponsored tx now fully functional (previously stubbed).
 - **Fuel withdraw refactor (NEW 2026-03-02)**: `fuel::withdraw` now requires `type_id: u64` parameter. Validates fuel type_id matches (was previously just `is_some` check). Supports backend fuel services.
 - **Builder-scaffold dapp-kit published (NEW 2026-03-02)**: `@evefrontier/dapp-kit` switched from local file reference to published npm `^0.1.0`. New `pnpm-workspace.yaml` for build approvals.
@@ -282,6 +282,9 @@ The following pages were identified in `vendor/builder-documentation` (2026-02-1
 - **Gate type matching required for linking (NEW 2026-03-09, v0.0.17)**: `gate::link_gates` now asserts `source_gate.type_id == destination_gate.type_id` (error: `EGateTypeMismatch`). Gates of different types cannot be linked.
 - **Turret anchor initializes metadata (NEW 2026-03-09, v0.0.17)**: `turret::anchor` now creates metadata (empty strings) on anchor instead of `option::none()`. Ensures turrets always have metadata for `update_metadata_*` calls.
 - **Turret owner exclusion in target priority (NEW 2026-03-09, v0.0.17)**: `effective_weight_and_excluded` now excludes the turret owner by `character_id` match (in addition to same-tribe exclusion). Prevents turrets from targeting their own operator.
+- **LocationRegistry + reveal_location on ALL assemblies (NEW 2026-03-10, world-contracts 2aed50b)**: New shared `LocationRegistry` object (Table<ID, Coordinates>). `Coordinates` struct: `solarsystem: u64`, `x/y/z: String` (strings to support negative values). New `reveal_location()` function on Assembly, Gate, StorageUnit, Turret, and NetworkNode — AdminACL sponsored call stores plain-text coordinates on-chain so dApps can discover structure positions. `LocationRevealedEvent` emitted. `get_location(registry, assembly_id) → Option<Coordinates>` for reads. Accessor functions: `solarsystem()`, `x()`, `y()`, `z()`. Marked temporary — "use until the offchain location reveal service is ready." **HIGH CC IMPACT:** Eliminates need for manual structure position input during onboarding. SVG map can be populated from on-chain data. Wallet→PlayerProfile→Character→OwnerCaps→Structures→LocationRegistry gives full discovery chain.
+- **builder-documentation: PlayerProfile discovery documented (NEW 2026-03-10)**: `smart-character.md` now includes "Discovering character from wallet address" section. Ownership model deduplicated to link to character page. Confirms: query objects owned by wallet with type `PlayerProfile` → `character_id` → fetch `Character` shared object.
+- **builder-scaffold renamed smart_gate→smart_gate_extension, storage_unit→storage_unit_extension (NEW 2026-03-10)**: Move contracts and TS scripts directories renamed to `_extension` suffix. `tokens/` package removed entirely. Docs refactored to remove redundancy.
 - **builder-documentation restructured (NEW 2026-03-09)**: 35 commits. Files moved: `wallets-and-identity.md` → `eve-vault/`, `environment-setup.md` → `quickstart/`, `dapp-kit.md` → `tools/`, `interfacing-with-the-eve-frontier-world.md` → `tools/`. New files: `move-patterns-in-frontier.md`, `tools/efctl.md`, `tools/debugging.md`. Deleted: `welcome/contstraints.md`, `troubleshooting/player.md`, `eve-vault/gas-faucet.md`. Turret docs now fully populated. SSU build page expanded. Gate docs simplified. Ownership model now includes `transfer_owner_cap_to_address` and PlayerProfile. EVE Vault URL updated for browser extension.
 - **builder-scaffold PostgreSQL indexer (NEW 2026-03-09, v0.0.1)**: 6 commits. New PostgreSQL Indexer + GraphQL support. Docker overlay for custom indexer stack. `CONTRIBUTING.md` expanded. dapp-kit updated to 0.1.2. Node.js install via APT instead of curl|bash. Additional build/deploy docs.
 - **EVE Vault v0.0.4 (NEW 2026-03-09)**: 8 commits. Sponsored tx now sends metadata to endpoint. Gas estimation for token transfers. Device reset + centralized logout. Reusable SignPopupAuthGate component. Fix sign message bytes and auth flow. EVE token support added. `useSendToken` significantly enhanced. New GraphQL epoch queries. New `resetVaultOnDevice` with tests. `storageKeys.ts` centralized. Send token screen added. Lockscreen enhanced.

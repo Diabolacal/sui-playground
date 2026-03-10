@@ -208,7 +208,7 @@
 
 ## 3. Builder-Scaffold Events
 
-### `vendor/builder-scaffold/move-contracts/smart_gate/`
+### `vendor/builder-scaffold/move-contracts/smart_gate/` *(renamed to `smart_gate_extension/` in scaffold v3c65b22, 2026-03-10)*
 
 **No events emitted.** The builder-scaffold versions of `tribe_permit.move` and `corpse_gate_bounty.move` contain only `copy, drop, store` key structs (`TribeConfigKey`, `BountyConfigKey`) — no `event::emit` calls. They rely entirely on world-contracts events.
 

@@ -1,6 +1,7 @@
 /// CivilizationControl shared extension configuration.
 ///
-/// Follows the builder-scaffold smart_gate::config pattern:
+/// Follows the builder-scaffold smart_gate_extension::config pattern
+/// (renamed from smart_gate::config in scaffold v3c65b22, 2026-03-10):
 /// - Shared `ExtensionConfig` for dynamic-field-based rule storage
 /// - `AdminCap` for config mutation
 /// - `XAuth` typed witness for gate extension authorization

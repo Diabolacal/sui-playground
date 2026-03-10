@@ -79,7 +79,7 @@ cd ../..
 | **world-contracts** | `contracts/world/sources/` (Move modules), `extension_examples/`, function signature changes, new events, `verify_sponsor` call sites |
 | **builder-documentation** | New/changed pages, AdminCap/AdminACL naming, extension patterns, SSU/gate/turret, deployment guides |
 | **evevault** | Wallet adapter (`SuiWallet.ts`), chain support, sponsored tx (`walletHandlers.ts`), auth modules, SDK changes |
-| **builder-scaffold** | Move contracts (`smart_gate/`), TS scripts, Docker config, deployment scripts, .env changes |
+| **builder-scaffold** | Move contracts (`smart_gate_extension/`, `storage_unit_extension/` — renamed from `smart_gate/`, `storage_unit/` in v3c65b22), TS scripts, Docker config, deployment scripts, .env changes |
 | **proximity-zk-poc** | Circuit changes, proof generation, verification patterns |
 
 ### Step 5: Update Local Documentation

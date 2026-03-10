@@ -58,8 +58,8 @@
 - zkLogin integration
 
 **Critical gaps = opportunity:**
-- `storage_unit/` Move module is a **pure stub** (`public fun template() {}`)
-- `tokens/` Move module is a **pure stub** 
+- `storage_unit/` Move module is a **pure stub** (`public fun template() {}`) *(renamed to `storage_unit_extension/` in scaffold v3c65b22, 2026-03-10)*
+- `tokens/` Move module is a **pure stub** *(removed entirely in scaffold v3c65b22, 2026-03-10)*
 - No SSU extension example exists
 - No DF reads from client-side demonstrated
 - No event subscription patterns

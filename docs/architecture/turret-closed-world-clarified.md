@@ -7,6 +7,8 @@
 > **Method:** Direct code inspection with line-level citations. Evidence classified as **code-proven** or **runtime-unverified**.
 > **Supersedes:** Turret sections in turret-contract-surface.md, turret-project-semantics-and-mismatches.md (which remain as supporting detail).
 
+> **2026-03-10 submodule refresh:** Builder-scaffold `smart_gate/` renamed to `smart_gate_extension/`. Any scaffold references below use pre-rename paths.
+
 ---
 
 ## 1. The Closed-World Constraint
