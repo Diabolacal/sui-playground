@@ -232,7 +232,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 
 | File | Purpose |
 |------|---------|
-| [operations/hackathon-bootstrap-checklist.md](operations/hackathon-bootstrap-checklist.md) | Day-1 checklist for initializing the hackathon submission repo |
+
 | [operations/SCAFFOLD_NOTES.md](operations/SCAFFOLD_NOTES.md) | Step-by-step workspace customization guide |
 | [operations/DECISIONS_TEMPLATE.md](operations/DECISIONS_TEMPLATE.md) | Decision log entry format template |
 | [operations/shortlist-viability-validation-plan.md](operations/shortlist-viability-validation-plan.md) | Test matrix for validating GateControl + TradePost on local devnet |
@@ -309,6 +309,7 @@ On-chain package name: **Atomic Courier** (`atomic_courier`). Player-facing name
 | [archive/research/location-proof-leakage-investigation.md](archive/research/location-proof-leakage-investigation.md) | _Archived research — not active input to hackathon build._ Location proof leakage investigation — distance field observability, trilateration feasibility, risk classification (YELLOW) |
 | [archive/research/location-proof-actionability-analysis.md](archive/research/location-proof-actionability-analysis.md) | _Archived research — not active input to hackathon build._ Location proof actionability analysis — ownership constraints, cross-player feasibility, graph reconstruction, CivilizationControl impact (revised to GREEN) |
 | [archive/research/distance-constraint-system-mapping-analysis.md](archive/research/distance-constraint-system-mapping-analysis.md) | _Archived research — not active input to hackathon build._ Distance-constraint system mapping — star database matching feasibility, candidate enumeration, proximity oracle, solar system identification risk (ORANGE) |
+| [archive/operations/hackathon-bootstrap-checklist.md](archive/operations/hackathon-bootstrap-checklist.md) | _(Superseded by starter-repo-packaging-recommendation)_ Manual Day-1 repo bootstrap checklist |
 
 ---
 

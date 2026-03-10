@@ -127,6 +127,7 @@ When the user (non‑coder) asks for a change:
 5. After patch: ensure typecheck + build succeed and note any manual smoke steps.
 6. Update or create docs only if behavior, metrics, or public API changed — otherwise skip doc churn.
 7. Offer a brief rationale when choosing between multiple implementations so the operator can approve.
+8. **Automated error recovery (mandatory).** If a typecheck, build, or test command fails after your patch, you MUST NOT present the raw error to the user and ask how to proceed. Instead: (a) read and diagnose the error yourself, (b) explain the cause in one plain-English sentence, (c) immediately propose and apply a fix, and (d) re-run the failing gate. Only escalate to the user if you have attempted a fix and it also fails, or if the fix requires a design decision you cannot make alone.
 
 Language: prefer plain language over jargon when explaining tradeoffs; surface 1–2 alternative approaches only if materially different in complexity or performance.
 
@@ -158,6 +159,7 @@ If user asks for broad refactor, first propose smallest path to accomplish user-
 - Build succeeds.
 - Smoke: Sui devnet reachable, submodules initialized, Move build succeeds
 - Additional (if metrics): event appears in server-side whitelist and is displayed or intentionally documented as hidden.
+- **Error recovery:** If any gate fails, the agent must self-diagnose and attempt a fix before reporting to the user. See Vibe Coding rule 8 for the full protocol. Never present raw compiler output to a non-coder without a plain-English explanation and proposed fix.
 - Run the relevant checks yourself whenever tooling is available. If a gate cannot be executed (e.g., missing dependency, platform constraint), call it out explicitly with the command you would have run and any fallback validation performed.
 
 ## Decision Log Template

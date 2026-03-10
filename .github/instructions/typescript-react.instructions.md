@@ -17,6 +17,15 @@ applyTo: "**/*.{ts,tsx}"
 - **Custom hook: ~100 lines max.** Split or extract pure helpers.
 - **No nested render functions.** Never define `function renderFoo()` inside a component — extract to a file.
 
+## Pre-Planning / File Decomposition (Mandatory)
+
+Before generating any new component, hook, or utility file, the agent **must** outline the file decomposition in its plan:
+
+1. **Estimate scope first.** Before writing code, mentally estimate the line count of the feature. If a single component or hook is likely to exceed its size limit (~150 lines for components, ~100 for hooks/pages), design it as multiple files in the plan.
+2. **Declare file boundaries upfront.** The plan must list every file to be created or modified, with a one-line purpose for each. Do not start writing code until the decomposition is explicit.
+3. **Split proactively, not reactively.** Never write a file past its size limit and then split afterward. If mid-generation you realize a file will exceed its limit, stop, revise the plan to add sub-components/hooks, and restart from the revised plan.
+4. **Common split points:** Extract `useFoo` hooks for state+effect combos, extract `FooItem` for `.map()` children, extract `FooForm`/`FooList`/`FooDetail` for multi-section UIs, extract utility functions to `utils/`.
+
 ## Component Rules
 
 - One non-trivial component per file.

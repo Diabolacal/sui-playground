@@ -76,6 +76,7 @@ When the operator pastes an externally generated plan or spec (e.g., from ChatGP
 4. Sensitive edits: Treat worker entry points, production config, and build pipeline files as sensitive; ask before structural changes.
 5. **Manual deployment may be required**: Check whether your deployment platform auto-deploys on push. If not, YOU must execute the deploy command after pushing.
 6. **Feature branch deploys**: Always use feature-branch-scoped preview deploys. Never deploy feature branches to production.
+7. **Automated error recovery**: If a build, typecheck, or test fails after your patch, do NOT present raw errors to the user and ask how to proceed. Self-diagnose, explain the cause in plain English, apply a fix, and re-run the gate. Only escalate if a fix attempt also fails or requires a design decision. See `.github/copilot-instructions.md` § Vibe Coding rule 8.
 
 ## Code & Repo Conventions
 

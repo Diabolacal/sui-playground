@@ -88,7 +88,7 @@ Files specific to the CivilizationControl hackathon submission.
 | **validation/** | 5 | admin-acl-enrollment, compound-df-key, extension-integration-e2e, localnet-validation-backlog, ssu-extension-e2e |
 | **ux/** | 3 | civilizationcontrol-ux-architecture-spec, svg-asset-audit, svg-topology-layer-spec |
 | **ptb/** | 5 | README, atomic-settlement-skeleton, governance-admin-skeletons, proof-extraction-moveabort, ptb-patterns |
-| **operations/** | 5 | DECISIONS_TEMPLATE, demo-evidence-appendix, gate-lifecycle-runbook, hackathon-bootstrap-checklist, submodule-refresh-prompt |
+| **operations/** | 4 | DECISIONS_TEMPLATE, demo-evidence-appendix, gate-lifecycle-runbook, submodule-refresh-prompt |
 | **demo/** | 1 | narration-direction-spec |
 | **index + log** | 2 | docs/README.md (rewrite), docs/decision-log.md (fresh/empty) |
 
@@ -253,7 +253,7 @@ Things easy to miss if exporting only markdown docs:
 
 1. **Decide** on packaging model (recommend Option A: single CC repo).
 2. **On or after March 11:** Create fresh private GitHub repo (`CivilizationControl` or chosen name).
-3. **Execute export** using this document + `docs/core/CARRY_FORWARD_INDEX.md` + `docs/operations/hackathon-bootstrap-checklist.md` as the combined source of truth.
+3. **Execute export** using this document + `docs/core/CARRY_FORWARD_INDEX.md` as the combined source of truth.
 4. **Rewrite** the ~10 files identified in Section F during or immediately after export.
 5. **Fresh-add vendor submodules** via `git submodule add` (never copy `vendor/` directories).
 6. **Verify** starter repo completeness by checking all items in Sections A + B are present.

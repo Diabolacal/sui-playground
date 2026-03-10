@@ -1,6 +1,8 @@
 # Hackathon Bootstrap Checklist (March 11)
 
-**Retention:** Carry-forward
+**Retention:** Archive
+
+> **Archived 2026-03-10.** Superseded by `docs/operations/starter-repo-packaging-recommendation.md` which provides agent-driven artifact classification for Day-1 repo setup.
 
 This checklist ensures the hackathon submission repo starts with zero prior Git history and contains only the intended template files from SUI Playground. Follow each section in order on hackathon day.
 

@@ -509,7 +509,7 @@ Reasons:
 | TradePost validation | `docs/architecture/tradepost-cross-address-ptb-validation.md` | Cross-address proof + SSU extension analysis |
 | Capabilities deep dive | `docs/architecture/sui-playground-capabilities.md` | Full devnet capabilities + experiment list |
 | Hackathon rules digest | `docs/research/hackathon-event-rules-digest.md` | Eligibility, judging, submission requirements |
-| Bootstrap checklist | `docs/operations/hackathon-bootstrap-checklist.md` | Repo initialization steps |
+| Starter repo packaging | `docs/operations/starter-repo-packaging-recommendation.md` | Agent-driven artifact classification for repo setup |
 
 ---
 

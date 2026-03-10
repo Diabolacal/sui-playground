@@ -18,6 +18,15 @@ applyTo: "**/*.move"
 - **MoveAbort emits no events.** Do not rely on events for proof-of-execution in flows that may abort. Use transaction digest + effects as the evidence path. See `docs/ptb/proof-extraction-moveabort.md`.
 - **Prefer explicit error codes.** Define errors with `#[error(code = N)]` and descriptive `vector<u8>` messages. Keep codes sequential within each module.
 
+## Pre-Planning / Module Decomposition (Mandatory)
+
+Before generating any new Move module or making significant additions to an existing one, the agent **must** outline the module decomposition in its plan:
+
+1. **Estimate scope first.** Before writing code, estimate the line count of the feature. If a single module is likely to exceed ~500 lines, design it as multiple modules in the plan.
+2. **Declare module boundaries upfront.** The plan must list every module to be created or modified, with a one-line purpose for each. Do not start writing code until the decomposition is explicit.
+3. **Split proactively, not reactively.** Never write a module past the ~500 line limit and then split afterward. If mid-generation you realize a module will exceed its limit, stop, revise the plan to extract helper modules, and restart from the revised plan.
+4. **Common split points:** Extract config structs + DF helpers into a `_config` module, extract event definitions into an `_events` module, extract view/getter functions into a `_queries` module, extract test helpers into `tests/` test-only modules.
+
 ## Structure & Style
 
 - **Module organization:** Use `// === Section ===` headers. Order: Errors → Structs → Events → `init` → Public → View → Admin → Package → Private → Test.

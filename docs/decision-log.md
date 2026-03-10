@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-10 — Agent Guardrail Improvements (Pre-Planning, Error Recovery, Bootstrap Archive)
+- **Goal:** Strengthen agent instructions before hackathon Day-1: (1) force pre-planning for file splits, (2) mandate automated error recovery for non-coder workflow, (3) archive superseded bootstrap checklist.
+- **Files:** `.github/instructions/typescript-react.instructions.md`, `.github/instructions/move.instructions.md`, `.github/copilot-instructions.md`, `AGENTS.md`, `docs/core/CARRY_FORWARD_INDEX.md`, `docs/README.md`, `docs/core/march-11-reimplementation-checklist.md`, `docs/operations/starter-repo-packaging-recommendation.md`, `docs/operations/hackathon-bootstrap-checklist.md` → `docs/archive/operations/`
+- **Diff:** +~40 LoC (pre-planning rules, error recovery mandate), ~10 LoC doc index updates, 1 file archived
+- **Risk:** Low (documentation and agent instruction only)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs/instructions only)
+- **Follow-ups:** None.
+
+---
+
 ## 2026-03-09 — Submodule Refresh (world-contracts v0.0.17, builder-documentation 1eb5ad4, builder-scaffold v0.0.1, evevault v0.0.4)
 - **Goal:** Refresh all submodules to latest upstream; audit changes for CivilizationControl impact; update stale documentation references.
 - **Decision:** Updated 4 of 5 submodules: world-contracts `3cc9ffa→26d0a8c` (v0.0.15→v0.0.17, +14 commits), builder-documentation `b4178c6→1eb5ad4` (+35 commits, major restructure), builder-scaffold `572e2ca→9200be4` (v0.0.1, +6 commits), evevault `a409496→30f74ef` (v0.0.4, +8 commits). proximity-zk-poc unchanged. **Key world-contracts changes:** (1) `PlayerProfile` auto-created at character creation. (2) `transfer_owner_cap_to_address` Character type detection fixed. (3) `MetadataChangedEvent` + `update_metadata_name/description/url` on all assemblies. (4) Killmail refactored — `KillmailRegistry` module, `create_killmail` signature changed, fields renamed (`killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`). (5) `link_gates` type_id matching (`EGateTypeMismatch`). (6) Turret owner excluded by `character_id` in `effective_weight_and_excluded`. (7) SSU `withdraw_item` online guard (`ENotOnline`). (8) Gate `unlink_and_unanchor` convenience functions. **No pattern-breaking changes for CivilizationControl.** Low CC impact overall — posture switch, extension auth, toll collection patterns remain valid.

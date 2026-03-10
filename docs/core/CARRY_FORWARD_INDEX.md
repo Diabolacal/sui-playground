@@ -74,7 +74,7 @@ Pattern libraries (e.g., PTB docs) accelerate implementation but do not override
 | File | Purpose |
 |------|---------|
 | `docs/operations/gate-lifecycle-runbook.md` | 13-step gate lifecycle procedure |
-| `docs/operations/hackathon-bootstrap-checklist.md` | Repo bootstrap checklist |
+
 | `docs/operations/demo-evidence-appendix.md` | Evidence collection appendix |
 | `docs/operations/submodule-refresh-prompt.md` | Reusable submodule refresh procedure |
 
