@@ -76,6 +76,8 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 | **Expected Output** | `public fun authorize_extension<Auth: drop>(gate: &mut Gate, owner_cap: &OwnerCap<Gate>)` — stores TypeName via `swap_or_fill` |
 | **Fallback** | **HARD STOP.** If signature changed, assess impact. If removed, project is unviable. |
 
+> **v0.0.18 update:** `authorize_extension` now has a freeze guard (`EExtensionConfigFrozen`). If extension config is frozen, further authorize calls revert. Check `is_extension_frozen()` before calling.
+
 ### A2: gate::issue_jump_permit
 
 | Field | Value |

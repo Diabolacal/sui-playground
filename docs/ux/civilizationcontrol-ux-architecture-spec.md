@@ -89,7 +89,7 @@ Structural UX planning document for the CivilizationControl governance command l
 
 ### Wallet & Identity
 
-> **2026-03-10 update:** `PlayerProfile` (v0.0.16) now enables wallet→Character lookup on-chain. The "off-chain resolution" constraint below is largely resolved. `LocationRegistry` (v0.0.18/2aed50b) now stores plain-text coordinates on-chain via `reveal_location()`. Several spatial constraints below are softened.
+> **2026-03-10 update:** `PlayerProfile` (v0.0.16) now enables wallet→Character lookup on-chain. The "off-chain resolution" constraint below is largely resolved. `LocationRegistry` (v0.0.18/8eb197e) now stores plain-text coordinates on-chain via `reveal_location()`. Several spatial constraints below are softened.
 
 - **~~No on-chain wallet→Character mapping~~** — ~~first discovery step requires off-chain resolution~~ **Now available via PlayerProfile (v0.0.16)**
 - **Character is a shared object** — `suix_getOwnedObjects` on wallet address does NOT find the Character

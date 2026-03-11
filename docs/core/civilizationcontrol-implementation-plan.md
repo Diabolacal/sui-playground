@@ -264,6 +264,8 @@ References: `vendor/builder-scaffold/move-contracts/smart_gate_extension/sources
 
 **Critical design:** Both GateAuth and TradeAuth witnesses live in the SAME package because each gate/SSU supports only one extension type (`Option<TypeName>`). The config object is shared across all enrolled structures.
 
+> **v0.0.18 update:** Extension freeze mechanism added — owners can freeze the extension slot to prevent replacement (anti-rugpull). SSU now has open inventory (`deposit_to_inventory`/`withdraw_from_inventory`). Both enhance CivilizationControl's value proposition.
+
 **Files:**
 - `contracts/civcontrol/Move.toml`
 - `contracts/civcontrol/sources/config.move`

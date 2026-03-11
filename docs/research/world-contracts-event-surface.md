@@ -327,6 +327,8 @@ Ranked by relevance to governance, commerce, and operational awareness:
 
 - **28** unique event struct types (27 in `world` package + 1 in `extension_examples`)
 - **37** total `event::emit` call sites
+
+> **v0.0.18 update:** Counts above are from an earlier audit. Current total: ~32 event types (added `MetadataChangedEvent` in v0.0.17, `ExtensionConfigFrozenEvent` in v0.0.18).
 - **9** modules emit no events
 - **13** event types include `assembly_key: TenantItemId` for in-game ID linkage
 - **6** event types include `character_id` / `character_key`

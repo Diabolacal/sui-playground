@@ -121,6 +121,8 @@ Step 4: Structure IDs → Full structure data
 
 > **Extended event audit:** A complete inventory of all 31 event emissions across 16 event types and 9 modules — including signal-to-source mapping for CivilizationControl — is documented in [read-path-architecture-validation.md](read-path-architecture-validation.md) §2.
 
+> **v0.0.18 update:** ~32 event types now (`ExtensionConfigFrozenEvent` added in `extension_freeze.move`).
+
 ---
 
 ## 2. Location Visibility Model

@@ -82,6 +82,8 @@ These are critical findings from the rehearsal. **Read before executing.**
 - **Design consequence:** All rule types (tribe filter, coin toll, ZK proof, time window) must be composed within a single extension package sharing one `Auth` witness type. Multiple extensions on the same gate/SSU/turret are not possible.
 - Verified in source: `gate.move` L73 (`extension: Option<TypeName>`), `storage_unit.move` L67, `turret.move` (same pattern), `gate.move` L117 (`swap_or_fill`)
 
+> **v0.0.18 update:** `authorize_extension` now checks a freeze guard (`EExtensionFrozen`). If an assembly owner has frozen the extension slot, re-authorization will abort. This does not affect initial authorization in this runbook but matters for extension replacement scenarios.
+
 ---
 
 ## Environment Setup

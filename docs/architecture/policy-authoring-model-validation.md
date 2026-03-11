@@ -91,6 +91,8 @@ Always a **single PTB**. Toggle tribe on/off, change toll amount, add addresses 
 | Extension witness pattern | **VERIFIED** | `gate.move` L82, L114–117; gate lifecycle rehearsal (13-step runbook) |
 | Dynamic field config | **VERIFIED** | `extension_examples/config.move`; `builder-scaffold/smart_gate/sources/config.move` |
 | Single extension per gate | **VERIFIED** | `gate.move` L73 (`Option<TypeName>`); no `deauthorize_extension` exists |
+
+> **v0.0.18 update:** `authorize_extension` now has a freeze guard (`EExtensionFrozen`). Frozen assemblies reject extension replacement — beneficial for CivilizationControl's "stickiness" model.
 | Permit lifecycle (issue→jump→delete) | **VERIFIED** | gate lifecycle runbook Steps 12–13 with tx digests |
 | Both gates need same extension | **VERIFIED** | `gate.move` L230–235; rehearsed on devnet |
 | Per-gate dynamic field keys | **DESIGN — NOT YET VALIDATED** | Extrapolation from proven DF pattern. Standard Sui capability. Day-1 validation: publish test package with gate-ID-keyed DFs. |

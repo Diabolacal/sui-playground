@@ -13,6 +13,8 @@
 
 > **v0.0.17 update (2026-03-09):** Counts above are for v0.0.15. v0.0.16/v0.0.17 added `MetadataChangedEvent` (new struct in `metadata.move`) and restructured killmail module. At least 31 event types now. Full re-inventory recommended.
 
+> **v0.0.18 update (2026-03-11):** New `ExtensionConfigFrozenEvent` in `extension_freeze.move`. ~32 event types total. Single emit site (called from gate/turret/SSU freeze functions).
+
 ---
 
 ### Module: `world::status` (primitives/status.move)

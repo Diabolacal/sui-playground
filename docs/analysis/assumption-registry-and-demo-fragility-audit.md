@@ -80,6 +80,8 @@
 | A-13 | There is no `deauthorize_extension` function — extensions can only be replaced, never removed | gate.move (no such function exists) | Contract behavior | Medium | No | Once registered, gate always requires permit; beneficial stickiness |
 | A-14 | Both gates in a linked pair must authorize the SAME extension type for `issue_jump_permit` to succeed | gate.move L248-261, march-11-checklist GateControl validation #2 | Contract behavior | High | Yes | Operator must control both gates in a linked pair |
 
+> **v0.0.18 update:** Extension freeze mechanism added (anti-rugpull) — `authorize_extension` now aborts with `EExtensionFrozen` if assembly is frozen. SSU now has open inventory. These don't break existing assumptions but add new capabilities.
+
 ### 1.3 Permit Issuance and Validation
 
 | ID | Description | Source(s) | Dependency Type | Risk | March 11 | Fallback |

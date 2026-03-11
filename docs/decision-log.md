@@ -6,6 +6,15 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Submodule Refresh (world-contracts v0.0.18, evevault v0.0.5, builder-scaffold a4fb8b0, builder-documentation cf0f3ab)
+- **Goal:** Update all vendor submodules to latest upstream and annotate impacted docs.
+- **Decision:** 4 of 5 submodules advanced (proximity-zk-poc unchanged). **world-contracts v0.0.17→v0.0.18 (HIGH):** new `extension_freeze.move` anti-rugpull module, SSU open inventory system (`deposit_to_open_inventory<Auth>`), freeze guards on `authorize_extension` for gate/turret/SSU, ~552 new test lines. All changes additive — no breaking signatures. **evevault v0.0.4→v0.0.5 (MED):** multi-tenant auth switching (TenantSelector, per-tenant OIDC). Wallet standard unchanged. **builder-scaffold (LOW):** docs overhaul. **builder-documentation (LOW):** EVE Vault download URL bumped to v0.0.5.
+- **Files:** `vendor/*` (submodule pins), `docs/research/evefrontier-builder-docs-map.md`, `docs/core/march-11-reimplementation-checklist.md`, `docs/strategy/_shared/hackathon-portfolio-roadmap.md`, `docs/core/spec.md`, `.github/instructions/move.instructions.md`, `docs/core/day1-checklist.md`, `docs/ux/civilizationcontrol-ux-architecture-spec.md`, `docs/validation/version-pinning-verification.md`, `docs/validation/ssu-extension-e2e-validation.md`, + ~12 lower-priority annotation files
+- **Diff:** submodule pins + ~25 doc annotations
+- **Risk:** Low (submodule pins + doc annotations only)
+- **Gates:** N/A (no Move code changed in this repo)
+- **Follow-ups:** Integrate open inventory into TradePost SSU flows. Evaluate freeze mechanism for CC governance demo (governor can freeze their own extension config as trust signal). Update event inventory to include ExtensionConfigFrozenEvent.
+
 ## 2026-03-11 — Shadow Broker Protocol E2E Validation Complete
 - **Goal:** Validate full cryptographic intelligence marketplace pipeline: Move contracts + Walrus blob storage + Seal threshold encryption + envelope encryption E2E
 - **Decision:** ALL PASS — Shadow Broker Protocol is validated for hackathon build. Move (9/9 tests, local publish + on-chain smoke), Walrus (upload/download, byte-verified), Seal (encrypt 380 bytes, decrypt recovers original AES key), E2E (13/13 steps, 70.2s pipeline).
