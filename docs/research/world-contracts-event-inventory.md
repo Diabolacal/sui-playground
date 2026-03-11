@@ -17,6 +17,8 @@
 | `world` module (core contracts) | **30** | **36** |
 | `extension_examples` | **1** | **1** |
 | **Total vendor/world-contracts** | **31** | **37** |
+
+> **v0.0.18 update (2026-03-11):** `ExtensionConfigFrozenEvent` added in `extension_freeze.move` (~32 event types). Single emit site called from gate/turret/SSU freeze functions.
 | `experiments/` (sandbox) | 6 | 6 |
 | `sandbox/` (validation tests) | ~15+ | ~20+ |
 
@@ -170,6 +172,8 @@
 | 30 | `KillmailCreatedEvent` | `killmail_id: TenantItemId`, `killer_character_id: TenantItemId`, `victim_character_id: TenantItemId`, `solar_system_id: TenantItemId`, `loss_type: LossType`, `kill_timestamp: u64` | `create_killmail()` (admin-only) | L55 | L100 |
 
 > **Outdated (v0.0.17):** `KillmailCreatedEvent` fields renamed: `killmail_id`→`key`, `killer_character_id`→`killer_id`, `victim_character_id`→`victim_id`. New field: `reported_by_character_id`. New `KillmailRegistry` module + `create_killmail` signature changed. New event #31: `MetadataChangedEvent` in `metadata.move`. Full re-inventory recommended.
+
+> **v0.0.18 update (2026-03-11):** Event #32: `ExtensionConfigFrozenEvent` in `extension_freeze.move`. Single emit site (called from gate/turret/SSU freeze functions).
 
 **Emit sites:** 1. Only event with `solar_system_id` (spatial context).
 

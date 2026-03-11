@@ -152,6 +152,8 @@ Weighted Total = (Judge Average × 0.75) + (Player Vote × 0.25)
 
 **Minimum viable build:** SSU extension module with `Listing` dynamic fields + web browse/buy UI. **Stretch:** Kiosk standard integration, faction currency support.
 
+> **v0.0.18 update:** SSU now has open inventory (`deposit_to_inventory`/`withdraw_from_inventory`) which simplifies escrow-like deposit patterns for storefront implementations.
+
 ---
 
 #### #3 — Corpse Toll Road (ID 8) — Weighted: 7.72

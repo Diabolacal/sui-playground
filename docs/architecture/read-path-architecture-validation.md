@@ -6,6 +6,8 @@
 - **Scope:** Wallet→structures discovery, signal feed data sources, read architecture options, scale considerations, demo requirements
 - **Validated against:** world-contracts event audit (37 `event::emit` calls, 30 event types, 13 modules — updated 2026-03-05), Sui RPC/GraphQL documentation, all CivilizationControl docs
 
+> **v0.0.18 update:** `ExtensionConfigFrozenEvent` added (~32 event types). New emit site in `extension_freeze.move`.
+
 > **2026-03-10 submodule refresh:** Builder-scaffold renamed `smart_gate/` → `smart_gate_extension/`. `PlayerProfile` now enables on-chain wallet→Character lookup (resolves §1 discovery gap). `LocationRegistry` provides on-chain coordinates for revealed structures.
 
 ---
@@ -68,6 +70,8 @@ Step 6: Start polling loop (10s interval)
 ### 2.1 World-Contracts Event Inventory
 
 **37 event emissions across 13 modules, 30 distinct event struct types** (updated 2026-03-05; see [event inventory](../research/world-contracts-event-inventory.md)). Complete audit:
+
+> **v0.0.18 update:** ~32 event types now (added `ExtensionConfigFrozenEvent` in `extension_freeze.move`).
 
 | Event | Module | Trigger | User-scoped? | CivControl Relevance |
 |-------|--------|---------|-------------|---------------------|

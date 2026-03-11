@@ -236,6 +236,8 @@ World-contracts now has four assembly modules ([assemblies/ directory](../../../
 
 Turret extensions follow the same `authorize_extension<Auth>` + `swap_or_fill` pattern as Gate. However, the extension's `get_target_priority_list` function has a fixed 4-argument signature and **cannot access external state** (no `uid()` accessor, no DF reads). Default targeting applies tribe-based filtering.
 
+> **v0.0.18 update:** `authorize_extension` now has a freeze guard (`EExtensionFrozen`) — frozen assemblies reject new extensions. SSU gains open inventory (`deposit_to_inventory`/`withdraw_from_inventory`) which could enable new reward-deposit patterns for gauntlet prizes.
+
 **Consequence for Fortune Gauntlet:** Gauntlet denial state (cooldown, denial count) stored in ExtensionConfig DFs cannot be read by turret extensions at targeting time. The `GauntletDenialEvent` approach (emit events for off-chain indexing) remains the correct audit trail.
 
 **Verdict: ❌ Not feasible (gauntlet-aware)** — turret extensions exist but the closed-world constraint prevents gauntlet state from reaching them. Default tribe-based targeting operates independently and requires no integration. ~~Previously "⚠️ Partially feasible" — since corrected.~~
