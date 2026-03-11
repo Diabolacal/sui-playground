@@ -199,7 +199,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 **Duration:** 30 seconds. This is the climax. Give it room.
 
-*[Signal Feed: new entry, amber badge. "Combat detected — System Alpha-7." The entry scrolls in among prior events, no fanfare.]*
+*[Signal Feed: new entry, amber badge. "Hostile detected — System Alpha-7." The entry scrolls in among prior events, no fanfare.]*
 
 **Spoken narration:**
 > "Threat inbound."
@@ -230,7 +230,11 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 **Purpose:** The hammer moment. Everything the demo has built — policy, enforcement, revenue — now escalates to infrastructure-wide command. One human decision, one on-chain transaction, every structure responds. This is the "command layer" claim made undeniable.
 
-**Signal cue note:** The "Combat detected" Signal Feed entry is sourced from `KillmailCreatedEvent` (world-contracts) filtered by the operator's controlled `solar_system_id`. It is purely informational — no automation, no proof moment. Its role is visual grounding: the operator sees intelligence, assesses the situation, and decides to act. "Threat inbound" reads as the operator's spoken assessment of visible intelligence, not an unsourced declaration.
+**Signal cue note:** The "Hostile detected" Signal Feed entry is sourced from `PriorityListUpdatedEvent` (world-contracts `turret.move`). The game emits this event whenever a target's behaviour changes — specifically, when a ship enters turret proximity (`BehaviourChangeReason::ENTERED`) or begins attacking (`STARTED_ATTACK`). Each candidate in the event carries a `behaviour_change` field identifying the trigger. This fires **strictly earlier** than a `KillmailCreatedEvent` (which requires destruction), making it a leading indicator rather than a lagging one. The entry is purely informational — no automation, no proof moment. Its role is visual grounding: the operator sees intelligence, assesses the situation, and decides to act. "Threat inbound" reads as the operator's spoken assessment of visible intelligence, not an unsourced declaration.
+
+**Extension caveat:** The base `PriorityListUpdatedEvent` is only emitted when **no custom turret extension** is configured (guarded by `assert!(option::is_none(&turret.extension))` at `turret.move:296`). If CivilizationControl ships a custom turret extension, it must explicitly emit an equivalent event to preserve this observability path. The canonical extension example (`extension_examples/sources/turret.move`) demonstrates this pattern.
+
+**Requires runtime validation:** Confirm on testnet that `PriorityListUpdatedEvent` fires with expected `behaviour_change` values when ships enter turret range.
 
 **Technical reality (validated):** Single PTB contains 7–9 Move calls: `set_posture` + `set_tribe_config` + `clear_toll_config` + N × (`borrow_owner_cap<Turret>` → `turret::online` → `return_owner_cap`). Confirmed on localnet: both BUSINESS→DEFENSE and DEFENSE→BUSINESS pass. ~250ms on-chain execution. See [posture-switch validation](../sandbox/posture-switch-localnet-validation.md).
 
@@ -358,7 +362,7 @@ Complete every item before pressing record. Incomplete items = retake risk.
 | 9 | ≥1 NetworkNode online, fueled, producing energy | ☐ |
 | 10 | Fuel efficiency set for turret fuel type (AdminACL) | ☐ |
 | 11 | Posture baseline: "Open for Business" (tribe+toll active on gates) | ☐ |
-| 11a | Killmail staged: `KillmailCreatedEvent` in controlled system ready to appear in Signal Feed before Beat 6 | ☐ |
+| 11a | Turret threat signal staged: `PriorityListUpdatedEvent` with `BehaviourChangeReason::ENTERED` ready to appear in Signal Feed before Beat 6 (requires ≥1 turret online with hostile in proximity range) | ☐ |
 
 ### Accounts
 

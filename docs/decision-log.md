@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Use Turret Priority-List Update as Earlier Hostile Demo Signal
+- **Goal:** Replace the killmail-based "Combat detected" Signal Feed cue (Beat 6) with an earlier turret proximity detection signal sourced from `PriorityListUpdatedEvent`.
+- **Decision:** Source review of `turret.move` confirms: (1) `PriorityListUpdatedEvent` emitted on every `get_target_priority_list` call, (2) each candidate carries `behaviour_change` field (ENTERED / STARTED_ATTACK / STOPPED_ATTACK), (3) game calls this when ships enter turret proximity or change aggression state — strictly earlier than killmail (which requires destruction). Updated Beat 6 Signal Feed from "Combat detected" (lagging indicator) to "Hostile detected" (leading indicator). Added extension caveat and runtime validation note.
+- **What is confirmed by code:** Event struct, emit site (L302-305), BehaviourChangeReason enum (ENTERED=1, STARTED_ATTACK=2), base-only emission guard (L296 assert). **What remains inference:** event fires on testnet with expected data when game detects proximity changes. **What needs runtime validation:** testnet confirmation of event data quality.
+- **Files:** `docs/core/civilizationcontrol-demo-beat-sheet.md`, `docs/operations/demo-evidence-appendix.md`, `docs/strategy/civilization-control/civilizationcontrol-product-vision.md`, `docs/architecture/read-path-architecture-validation.md`
+- **Diff:** ~25 modified (no removals — edits replace equal-sized blocks)
+- **Risk:** Low (docs only, no code change, improves demo signal quality)
+- **Gates:** typecheck N/A  build N/A  smoke N/A (docs-only)
+- **Follow-ups:** Runtime validation on testnet — confirm `PriorityListUpdatedEvent` fires with expected `behaviour_change` values. If custom turret extension is shipped, must emit equivalent event.
+
 ## 2026-03-11 — Submodule Refresh (world-contracts v0.0.18, evevault v0.0.5, builder-scaffold a4fb8b0, builder-documentation cf0f3ab)
 - **Goal:** Update all vendor submodules to latest upstream and annotate impacted docs.
 - **Decision:** 4 of 5 submodules advanced (proximity-zk-poc unchanged). **world-contracts v0.0.17→v0.0.18 (HIGH):** new `extension_freeze.move` anti-rugpull module, SSU open inventory system (`deposit_to_open_inventory<Auth>`), freeze guards on `authorize_extension` for gate/turret/SSU, ~552 new test lines. All changes additive — no breaking signatures. **evevault v0.0.4→v0.0.5 (MED):** multi-tenant auth switching (TenantSelector, per-tenant OIDC). Wallet standard unchanged. **builder-scaffold (LOW):** docs overhaul. **builder-documentation (LOW):** EVE Vault download URL bumped to v0.0.5.

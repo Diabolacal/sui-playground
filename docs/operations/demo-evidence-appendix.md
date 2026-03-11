@@ -151,7 +151,7 @@
 
 ### Beat 6 — Defense Mode (1:36–2:06) ★
 
-**What the beat shows:** Operator sees threat intel (killmail in Signal Feed), clicks "Defense Mode" — single PTB changes posture, locks gates, brings turrets online. Infrastructure-wide state change in one transaction. This is the demo climax (30 seconds).
+**What the beat shows:** Operator sees threat intel (turret proximity detection in Signal Feed — sourced from `PriorityListUpdatedEvent` with `BehaviourChangeReason::ENTERED`), clicks "Defense Mode" — single PTB changes posture, locks gates, brings turrets online. Infrastructure-wide state change in one transaction. This is the demo climax (30 seconds).
 
 **Evidence artifacts:**
 
