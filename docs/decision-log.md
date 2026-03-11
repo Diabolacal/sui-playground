@@ -6,6 +6,16 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Shadow Broker Protocol E2E Validation Complete
+- **Goal:** Validate full cryptographic intelligence marketplace pipeline: Move contracts + Walrus blob storage + Seal threshold encryption + envelope encryption E2E
+- **Decision:** ALL PASS — Shadow Broker Protocol is validated for hackathon build. Move (9/9 tests, local publish + on-chain smoke), Walrus (upload/download, byte-verified), Seal (encrypt 380 bytes, decrypt recovers original AES key), E2E (13/13 steps, 70.2s pipeline).
+- **Key SDK findings:** SealClient needs `serverConfigs` (not `serverObjectIds`), `tx.build({ onlyTransactionKind: true })` required for decrypt PTB, `getObject({ options: { showContent: true } })` for JSON content (not `core.getObject`).
+- **Files:** `sandbox/shadow-broker-validation/` (Move contracts + TS scripts), `docs/operations/shadow-broker-validation-plan.md` (updated), `notes/sbp-validation-evidence.md` (new)
+- **Diff:** ~800 LoC (Move + TypeScript validation scripts)
+- **Risk:** Medium — new SDK surface, testnet-dependent (Seal key servers, Walrus aggregators)
+- **Gates:** build ✅ test ✅ walrus ✅ seal ✅ e2e ✅
+- **Follow-ups:** Port validated patterns to hackathon submission repo; consider latency optimization (Walrus uploads ~20s each)
+
 ## 2026-03-11 — Add Subscription Pass Rule to GateControl
 - **Goal:** Integrate time-based subscription passes into CivilizationControl's GateControl module as a third composable rule type alongside tribe filter and coin toll.
 - **Decision:** After evaluating "Aegis GatePass Protocol" as a standalone hackathon entry (scored 7.59, ~4th in roster), determined subscription passes are a feature (~60-80 LoC Move), not a product. Adding to CC yields +0.4-0.5 weighted judge score delta with excellent ROI. Subscription checks insert between tribe filter and coin toll — active subscribers bypass per-jump toll. New DF types: SubPassKey/SubPassLedger (Table<ID, u64>), SubTierKey/SubTierConfig (price, duration). New event: SubscriptionPurchasedEvent. New implementation step S12b added to Phase 2 (GateControl).

@@ -31,7 +31,14 @@ Before starting any validation step:
 
 ---
 
-## Phase 1: Move Contract Compilation & Unit Tests (~1 hour)
+## Phase 1: Move Contract Compilation & Unit Tests (~1 hour) — COMPLETED 2026-03-11
+
+**Result:** ALL PASS
+- Build: clean
+- Tests: 9/9 pass
+- Publish: Package ID `0x2966ff1c877047b4d0eb434e66b493051036348ef8517d250c9d766c2c395372`
+- On-chain smoke: Mint PASS, List PASS, Purchase PASS, IntelObject recovery PASS
+- Evidence: `notes/shadow-broker-publish-local.md`, `notes/sbp-mint-output.json`
 
 **Goal:** Prove `intel_object.move` and `marketplace.move` compile, and basic Move-level logic works.
 
@@ -183,7 +190,15 @@ Using `sui client call` or a quick TS script:
 
 ---
 
-## Phase 2: Walrus SDK Validation (~1 hour)
+## Phase 2: Walrus SDK Validation (~1 hour) — COMPLETED 2026-03-11
+
+**Result:** ALL PASS
+- SUI→WAL exchange: via `wal_exchange::exchange_all_for_wal` (1:1 rate, pkg `0x8259...`)
+- Upload encrypted blob (1KB): blobId `AuP6ajVZ0N-xFNR5C4fMrW0sFz5fr7bdYACeoTweFhw`, ~25s
+- Download + verify: 1024 bytes, byte-for-byte match, ~7s
+- Upload teaser (100B): blobId `W8wNRij8_k_4EkighLgv9Z72J-iPjNhxE4DzB9ANc9c`, ~21s
+- Download teaser + verify: 100 bytes match
+- SDK Notes: `WalrusClient({ network:'testnet', suiClient, packageConfig: TESTNET_WALRUS_PACKAGE_CONFIG })` — requires explicit `suiClient` and `packageConfig`. `getBlob()` returns `WalrusBlob` → `.asFile().bytes()` for `Uint8Array`.
 
 **Goal:** Prove we can upload and download blobs via the Walrus SDK against Walrus testnet.
 
@@ -247,7 +262,21 @@ npx tsx walrus-smoke.ts
 
 ---
 
-## Phase 3: Seal SDK Validation (~2 hours)
+## Phase 3: Seal SDK Validation (~2 hours) — COMPLETED 2026-03-11
+
+**Result:** ALL PASS
+- Encrypt: 380 bytes encrypted AES key — PASS
+- Decrypt: 32 bytes recovered, matches original — PASS
+- Network: Sui testnet (key servers require testnet)
+- Testnet Package ID: `0xce7be48d01f8d176adebb7dc59ee09ef8d4b67f93946cfcf1c8ab570932c75a8`
+- Key servers: `0x73d05d62...`, `0xf5d14a81...` (threshold 2, weight 1 each)
+- SDK Notes:
+  - `SealClient({ suiClient, serverConfigs: [{ objectId, weight }], verifyKeyServers: false })` — NOT `serverObjectIds`
+  - `encrypt({ threshold, packageId, id, data })` — `id` must be hex string (object address without `0x`)
+  - **CRITICAL:** `tx.build({ client, onlyTransactionKind: true })` required for decrypt PTB — full TransactionData BCS causes "Invalid PTB: Invalid BCS" from key servers
+  - `SessionKey({ address, packageId, ttlMin })` — sign with `keypair.signPersonalMessage(sessionKey.getPersonalMessage())`
+  - Mint function takes 7 params + ctx (`blob_id`, `encrypted_key`, `file_type`, `duration_seconds`, `file_size_bytes`, `description`, `teaser_blob_id`)
+- Evidence: `sandbox/shadow-broker-validation/ts-scripts/seal-smoke.ts`
 
 **Goal:** Prove we can encrypt a payload with Seal (anchored to a Sui object) and decrypt it with the same wallet.
 
@@ -383,7 +412,25 @@ If encrypt returns a Uint8Array, the Seal client-side crypto works. Decrypt is t
 
 ---
 
-## Phase 4: Envelope Encryption End-to-End (~1.5 hours)
+## Phase 4: Envelope Encryption End-to-End (~1.5 hours) — COMPLETED 2026-03-11
+
+**Result:** ALL PASS — 13/13 steps, 70.2s total
+- AES-GCM encrypt: 10240 → 10268 bytes (12-byte IV prepended)
+- Walrus upload (audio): blobId `Xx68v9NqlN9qz4mORWPC...`, 22.7s
+- Walrus upload (teaser): blobId `PuQHHamqnNP8vlV0YTQH...`, 19.0s
+- Mint IntelObject: `0x4541ba83a53746cd539e0a5ff0a035613fdf76fe28bbb3a5cbd28150551df620`
+- Seal encrypt: 380 bytes, 0.9s
+- Update encrypted_key: on-chain write PASS
+- List + Purchase: marketplace flow PASS
+- Download teaser: 100 bytes verified
+- Seal decrypt: AES key recovered, matches original
+- Download encrypted audio: 10268 bytes verified
+- AES-GCM decrypt: 10240 bytes, matches original audio payload
+- SDK Notes:
+  - `core.getObject({ include: { content: true } })` returns BCS bytes — use `getObject({ options: { showContent: true } })` for JSON fields
+  - Walrus uploads are the slowest steps (~20s each for small blobs)
+  - Full pipeline is ~70s with testnet latency; local devnet would be faster
+- Evidence: `sandbox/shadow-broker-validation/ts-scripts/e2e-smoke.ts`
 
 **Goal:** Wire all three layers together. This is the full pipeline that the hackathon demo depends on.
 
@@ -449,7 +496,13 @@ Partial success is still valuable. Each layer validated independently de-risks t
 
 ---
 
-## Phase 5: Evidence Collection & Documentation (~30 min)
+## Phase 5: Evidence Collection & Documentation (~30 min) — COMPLETED 2026-03-11
+
+**Result:** Evidence captured and documented.
+- Evidence file: `notes/sbp-validation-evidence.md`
+- Decision log: `docs/decision-log.md` (new entry added)
+- Validation plan: All 5 phases marked complete
+- Scripts preserved: `sandbox/shadow-broker-validation/ts-scripts/` (on-chain-smoke.ts, walrus-smoke.ts, seal-smoke.ts, e2e-smoke.ts)
 
 ### Step 5.1: Log all evidence
 

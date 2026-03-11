@@ -220,6 +220,7 @@ Encrypted intelligence marketplace using Seal threshold encryption + Walrus blob
 | [strategy/shadow-broker-protocol/shadow-broker-product-vision.md](strategy/shadow-broker-protocol/shadow-broker-product-vision.md) | **Product vision** — encrypted intel marketplace, Seal + Walrus architecture, pricing model, demo scope |
 | [strategy/shadow-broker-protocol/shadow-broker-demo-beat-sheet.md](strategy/shadow-broker-protocol/shadow-broker-demo-beat-sheet.md) | **Demo beat sheet** — narrative arc, proof moments, recording plan |
 | [strategy/shadow-broker-protocol/shadow-broker-technical-architecture.md](strategy/shadow-broker-protocol/shadow-broker-technical-architecture.md) | **Technical architecture** — Move contracts, Seal integration, Walrus storage, PTB composition |
+| [strategy/shadow-broker-protocol/shadow-broker-validation-evidence.md](strategy/shadow-broker-protocol/shadow-broker-validation-evidence.md) | **Validation evidence** — SDK patterns, tx digests, E2E pipeline results (13/13 PASS). Prep-only. |
 
 ## Research (Prep Only — Not for Hackathon Repo)
 
