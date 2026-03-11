@@ -257,6 +257,7 @@ Encrypted intelligence marketplace using Seal threshold encryption + Walrus blob
 | [operations/compliance-audit-2026-02-24.md](operations/compliance-audit-2026-02-24.md) | **Compliance audit (2026-02-24)** — First structured hackathon compliance check. Prep-only. |
 | [operations/compliance-audit-2026-03-09.md](operations/compliance-audit-2026-03-09.md) | **Compliance audit (2026-03-09)** — Pre-template compliance audit. 2 HIGH, 6 MEDIUM findings. Prep-only. |
 | [operations/starter-repo-packaging-recommendation.md](operations/starter-repo-packaging-recommendation.md) | **Starter-repo packaging recommendation** — Full artifact-set classification (shared-starter / CC-starter / evidence-only / local-only), root repo shape, rewrite list, export-risk notes. Prep-only. |
+| [operations/shadow-broker-validation-plan.md](operations/shadow-broker-validation-plan.md) | **Shadow Broker validation plan** — 5-phase agent-executable plan: Move compile+test, Walrus SDK, Seal SDK, E2E envelope encryption, evidence collection. Prep-only. |
 
 ## UX
 
