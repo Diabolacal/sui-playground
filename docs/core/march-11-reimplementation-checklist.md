@@ -416,7 +416,8 @@ Verify these on hackathon day. If any break, reassess the corresponding module.
 
 - [ ] Set up frontend project (Vite + React + TypeScript)
 - [ ] Install `@mysten/sui` SDK
-- [ ] Gate policy builder: toggle tribe rule, set toll price
+- [ ] Fetch structure coordinates from `LocationRegistry` via `get_location(registry, assembly_id)` — auto-populate SVG topology map instead of manual position input (strengthens "Best Live Frontier Integration" angle)
+- [ ] Gate policy builder: toggle tribe rule, set toll price, freeze extension config
 - [ ] TradePost browser: list items, one-click buy
 - [ ] Event feed: subscribe to JumpEvents + TradeSettledEvents
 

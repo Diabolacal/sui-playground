@@ -4,7 +4,7 @@
 
 > Competitive demo blueprint for the CivilizationControl hackathon submission video.
 > Arc: Pain → Power → Policy → Denial → Revenue → Defense Mode → Commerce → Command
-> Target duration: **~2:55** (hard ceiling 3:05)
+> Target duration: **~3:00** (hard ceiling 3:05)
 > Sources: v1 beat sheet, product vision, emotional objective, voice guide, claim-proof matrix, posture-switch validation, judging criteria digest
 > Last updated: 2026-03-04 (gameplay/currency realism pass)
 
@@ -36,13 +36,14 @@ This is not a feature tour. It is three minutes of escalating authority. Each be
 
 ---
 
-## Five Non-Negotiable Proof Moments
+## Six Non-Negotiable Proof Moments
 
-If stability forces cuts, protect these five. Everything else is expendable.
+If stability forces cuts, protect these six. Everything else is expendable.
 
 | # | Proof Moment | Beat | What It Proves |
 |---|---|---|---|
 | 1 | Policy deploy tx digest | Beat 3 | Governance written on-chain in one action |
+| 1b | Extension freeze tx digest | Beat 3 | Rules are permanent — trustless, not just configured |
 | 2 | Hostile denied — MoveAbort visible | Beat 4 | Chain enforcement. No appeal. |
 | 3 | Toll collected — balance delta | Beat 5 | Revenue flows to operator atomically |
 | 4 | Defense Mode — single tx digest containing posture + turrets | Beat 6 | Infrastructure-wide state change, one click |
@@ -111,9 +112,9 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 3 — Policy (0:38–1:00)
+### Beat 3 — Policy (0:38–1:04)
 
-**Duration:** 22 seconds
+**Duration:** 26 seconds
 
 **Spoken narration:**
 > "You decide who crosses and what they pay."
@@ -128,19 +129,29 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 *[Confirmation: "Policy deployed. 3 rules active." Signal Feed updates.]*
 
-**On-screen:** Gate detail → policy configuration → deploy → confirmation.
+*[Beat. Operator clicks "Freeze Rules."]*
+
+> "Frozen. No one changes these rules. Not even you."
+
+*[Signal Feed: "Extension config frozen. Gate North-3." Lock icon appears on the gate's policy badge.]*
+
+**On-screen:** Gate detail → policy configuration → deploy → confirmation → freeze → lock indicator.
 
 **Evidence overlay (post-production):**
 - Tx digest of policy deployment
 - Gate object showing `extension: Some(TypeName)` + 3 dynamic field rules (tribe + toll + subscription)
+- Tx digest of `freeze_extension_config` call
+- `ExtensionConfigFrozenEvent { assembly_id }` (world-contracts v0.0.18)
 
-**Signal Feed enrichment:** `ExtensionAuthorizedEvent` (world-contracts v0.0.15+) confirms policy deployment asynchronously via event polling (`suix_queryEvents`). Fields: `assembly_id`, `extension_type`. This is enrichment — the UI reacts immediately to the tx response, not to the event.
+**Signal Feed enrichment:** `ExtensionAuthorizedEvent` (world-contracts v0.0.15+) confirms policy deployment asynchronously via event polling (`suix_queryEvents`). Fields: `assembly_id`, `extension_type`. `ExtensionConfigFrozenEvent` confirms the freeze. Both are enrichment — the UI reacts immediately to the tx response, not to the event.
 
-**Purpose:** Core value — governance through interface, not CLI. One click replaces 8+ commands. No jargon about typed witnesses or dynamic fields.
+**Purpose:** Core value — governance through interface, not CLI. One click replaces 8+ commands. The freeze action elevates this from "configured" to "trustless" — proving the operator cannot rug-pull their own pilots. No jargon about typed witnesses or dynamic fields.
+
+**Technical note:** `freeze_extension_config(gate, owner_cap)` is irreversible (world-contracts v0.0.18). Requires: extension already authorized, not already frozen. After freeze, `authorize_extension` aborts with `EExtensionConfigFrozen`. The `is_extension_frozen()` reader can drive the UI lock indicator.
 
 ---
 
-### Beat 4 — Denial (1:00–1:18)
+### Beat 4 — Denial (1:04–1:22)
 
 **Duration:** 18 seconds
 
@@ -166,7 +177,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 5 — Revenue (1:18–1:36)
+### Beat 5 — Revenue (1:22–1:40)
 
 **Duration:** 18 seconds
 
@@ -195,7 +206,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 6 — Defense Mode (1:36–2:06)
+### Beat 6 — Defense Mode (1:40–2:10)
 
 **Duration:** 30 seconds. This is the climax. Give it room.
 
@@ -242,7 +253,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 7 — Commerce (2:06–2:28)
+### Beat 7 — Commerce (2:10–2:32)
 
 **Duration:** 22 seconds
 
@@ -270,7 +281,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 8 — Command (2:28–2:43)
+### Beat 8 — Command (2:32–2:47)
 
 **Duration:** 15 seconds
 
@@ -292,7 +303,7 @@ If stability forces cuts, protect these five. Everything else is expendable.
 
 ---
 
-### Beat 9 — Close (2:43–2:56)
+### Beat 9 — Close (2:47–3:00)
 
 **Duration:** 13 seconds
 
@@ -312,14 +323,14 @@ If stability forces cuts, protect these five. Everything else is expendable.
 |---|---|---|---|---|
 | 1 | Pain | 0:00 | 0:18 | 18s |
 | 2 | Power Reveal | 0:18 | 0:38 | 20s |
-| 3 | Policy | 0:38 | 1:00 | 22s |
-| 4 | Denial | 1:00 | 1:18 | 18s |
-| 5 | Revenue | 1:18 | 1:36 | 18s |
-| 6 | Defense Mode | 1:36 | 2:06 | 30s |
-| 7 | Commerce | 2:06 | 2:28 | 22s |
-| 8 | Command | 2:28 | 2:43 | 15s |
-| 9 | Close | 2:43 | 2:56 | 13s |
-| **Total** | | | | **2:56** |
+| 3 | Policy + Freeze | 0:38 | 1:04 | 26s |
+| 4 | Denial | 1:04 | 1:22 | 18s |
+| 5 | Revenue | 1:22 | 1:40 | 18s |
+| 6 | Defense Mode | 1:40 | 2:10 | 30s |
+| 7 | Commerce | 2:10 | 2:32 | 22s |
+| 8 | Command | 2:32 | 2:47 | 15s |
+| 9 | Close | 2:47 | 3:00 | 13s |
+| **Total** | | | | **3:00** |
 
 ---
 
@@ -330,6 +341,7 @@ Every major claim has a corresponding on-chain evidence moment.
 | Beat | Claim | Evidence Artifact | Overlay Format |
 |---|---|---|---|
 | 3 — Policy | Governance deployed in one action | Tx digest + gate object with extension + 3 DF rules (tribe + toll + subscription) | Digest badge + before/after state |
+| 3 — Freeze | Rules permanently locked — trustless governance | Tx digest of `freeze_extension_config` + `ExtensionConfigFrozenEvent` | Lock icon overlay + digest badge |
 | 4 — Denial | Hostile blocked by chain enforcement | Failed tx digest + MoveAbort `(tribe_permit, 0)` | Red overlay: digest + abort code |
 | 5 — Revenue | Toll revenue flows to operator atomically | Tx digest + `TollCollectedEvent` + balance delta (+5 EVE) | Green overlay: digest + balance |
 | 6 — Defense Mode | Infrastructure-wide state change, single tx | Single tx digest + `PostureChangedEvent` + N × `StatusChangedEvent` | Digest badge + before/after state matrix |
@@ -363,6 +375,7 @@ Complete every item before pressing record. Incomplete items = retake risk.
 | 10 | Fuel efficiency set for turret fuel type (AdminACL) | ☐ |
 | 11 | Posture baseline: "Open for Business" (tribe+toll active on gates) | ☐ |
 | 11a | Turret threat signal staged: `PriorityListUpdatedEvent` with `BehaviourChangeReason::ENTERED` ready to appear in Signal Feed before Beat 6 (requires ≥1 turret online with hostile in proximity range) | ☐ |
+| 11b | Extension config NOT frozen on demo gates (freeze happens live in Beat 3; verify `is_extension_frozen()` returns false) | ☐ |
 
 ### Accounts
 
@@ -440,7 +453,7 @@ If Trade Post UI is not ready, compress to this variant. Same emotional arc, no 
 - **Visual Presentation & Demo:** Defense Mode as a dedicated climax beat (27s, full visual transformation) gives judges one unforgettable moment instead of spreading impact across sub-beats. Text-on-black opening is a deliberate cinematic choice that signals production quality.
 - **Player Utility:** "The gate pays for itself" reframes CivilizationControl from a convenience tool to an economic engine. Judges evaluating player utility will hear a revenue argument, not just a UX argument.
 - **Mod Design:** Single PTB posture switch (validated, with tx digest) proves system-level design, not feature-level. Judges see architecture thinking.
-- **Proof discipline:** Five non-negotiable proof moments mapped to specific on-chain artifacts. Judges never have to wonder "is this real?" — every claim has a deterministic evidence anchor.
+- **Proof discipline:** Six non-negotiable proof moments mapped to specific on-chain artifacts. Judges never have to wonder "is this real?" — every claim has a deterministic evidence anchor.
 - **Compression at 3:00:** Respects judges' time. Every second is earned. No padding, no optional accents diluting the core arc. The fallback variant ensures delivery even under instability.
 - **EVE Frontier Relevance & Vibe:** The narrative is explicitly frontier governance — tribes, territory, hostiles, turrets. Not generic blockchain UX. Judges evaluating "vibe" hear the right language throughout.
 - **UX & Usability:** "One click" appears three times organically (deploy policy, buy item, Defense Mode) — each proving a different facet of usability without ever explicitly saying "our UX is good."
@@ -486,8 +499,8 @@ Review the assembled video before exporting the final cut. Items 4–6 catch the
 
 | # | Check | Status |
 |---|---|---|
-| 1 | Total duration ≤ 3:05 (target: 2:56) | ☐ |
-| 2 | All 5 non-negotiable proof overlays present and legible | ☐ |
+| 1 | Total duration ≤ 3:05 (target: 3:00) | ☐ |
+| 2 | All 6 non-negotiable proof overlays present and legible | ☐ |
 | 3 | No secrets, full addresses, or prohibited content visible (see Do Not Show) | ☐ |
 | 4 | **Muted playback test:** watch with audio OFF — every beat has visible on-screen change; no segment >3s where the screen is static while narration continues | ☐ |
 | 5 | Beat 6 silence window: ≥2s of visual-only transformation after click, before narrator resumes | ☐ |
@@ -508,7 +521,7 @@ Review the assembled video before exporting the final cut. Items 4–6 catch the
 - **Beat 7 — Compressed from 25s to 22s.** Cut "no trust required" (crypto-speak). Merged opening scene-setting with product line. Commerce is now clearly subordinate to Defense Mode in weight.
 - **Beat 8 — Replaced "Your frontier. Your rules. Your revenue." with "Your infrastructure. Under your command."** Closes the loop from Beat 1 ("no control" → "under your command"). The possessive triad was catchy but didn't complete the narrative arc. Cut "All on-chain. All sovereign." — listing chain attributes at the end is crypto-pride, not authority. Duration 20→15s.
 - **Beat 9 — Title card reduced to name only.** "CivilizationControl" — no subtitle. Three minutes defined what it is. Adding a descriptor undercuts the confidence. Duration 10→13s for a longer hold.
-- **Total duration tightened from 3:00 to ~2:56.** Four fewer seconds of judge attention spent. Every surviving second is functional.
+- **Total duration tightened from 3:00 to ~3:00 (with freeze).** Freeze action adds 4 seconds but replaces narrative padding — every surviving second is functional.
 
 ### Why Each Improves Judge Impact
 
@@ -518,7 +531,7 @@ Review the assembled video before exporting the final cut. Items 4–6 catch the
 - **"Under your command" close** → Completes the pain→power arc explicitly. A judge who skimmed Beats 2–7 still gets the thesis from Beat 1 + Beat 8.
 - **Name-only title card** → Signals maximum confidence. No explanation needed. The demo was the explanation.
 - **Cutting crypto-speak ("atomic," "no trust required")** → Non-crypto judges (game design, UX) hear governance language, not chain language. CivilizationControl wins on player utility, not technical novelty.
-- **2:56 vs 3:00** → Judges watching 30+ demos notice the entry that didn't pad. Tight runtime = respect for their time = implicit competence signal.
+- **3:00 at ceiling** → Judges watching 30+ demos notice the entry that respects their time. Tight runtime = implicit competence signal.
 
 ### What Was Intentionally NOT Changed (and Why)
 
@@ -527,7 +540,7 @@ Review the assembled video before exporting the final cut. Items 4–6 catch the
 - **Beat 4 denial language ("No override. No appeal.")** — Already at maximum compression and impact. Changing it would reduce, not improve.
 - **"The gate pays for itself" (Beat 5)** — The single most memorable non-climax line. Reframes infrastructure as revenue engine. Untouched.
 - **"Threat inbound." / "One click." (Beat 6 setup)** — Two words + two words. Maximum tension compression. Not melodramatic in Frontier context where hostile incursions are gameplay.
-- **Five non-negotiable proof moments** — Evidence structure is correct and complete. No proof type added or removed.
+- **Six non-negotiable proof moments** — Evidence structure is correct and complete. Freeze proof (1b) added to demonstrate trustless governance.
 - **Pre-flight checklist and failure fallbacks** — Operational content, not narrative. Already comprehensive.
 - **Fallback variant** — Insurance policy. Independent of primary narrative changes.
 

@@ -6,6 +6,19 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-11 — Demo Readiness Alignment (Freeze, LocationRegistry, Path Warning)
+- **Goal:** Align demo and day-1 planning docs with v0.0.18 capabilities and builder-scaffold changes.
+- **Decision:** Three updates accepted from readiness review:
+  1. **Beat Sheet — Extension Freeze:** Added "Freeze Rules" sub-action to Beat 3 (Policy). Narration: "Frozen. No one changes these rules. Not even you." Proof Moments upgraded from 5→6. Pre-flight item 11b added (verify config NOT frozen before recording). Timing: Beat 3 22→26s, total 2:56→3:00 (within 3:05 ceiling). Confirmed: `freeze_extension_config` exists in gate/turret/SSU (world-contracts v0.0.18), irreversible, emits `ExtensionConfigFrozenEvent`.
+  2. **March-11 Checklist — LocationRegistry:** Added `get_location(registry, assembly_id)` fetch to Hour 8+ dashboard items + freeze toggle on gate policy builder. Confirmed: `LocationRegistry` is a shared object, `get_location()` is `public`, returns `Option<Coordinates>` with `solarsystem/x/y/z`.
+  3. **Day-1 Checklist — Path Warning:** Added builder-scaffold rename warning to Check 2 (S02): `smart_gate`→`smart_gate_extension`, `storage_unit`→`storage_unit_extension`. Note: old directories still coexist but `_extension` variants are canonical.
+- **Rejected:** Proposal to replace KillmailCreatedEvent with turret event in Beat 6 — Beat 6 already uses `PriorityListUpdatedEvent`. No change needed.
+- **Files:** `docs/core/civilizationcontrol-demo-beat-sheet.md`, `docs/core/march-11-reimplementation-checklist.md`, `docs/core/day1-checklist.md`
+- **Diff:** ~50 added/modified across 3 files
+- **Risk:** Low (docs only)
+- **Gates:** N/A (docs-only change)
+- **Follow-ups:** Runtime validation of `freeze_extension_config` on localnet. Confirm `is_extension_frozen()` read works from frontend.
+
 ## 2026-03-11 — Use Turret Priority-List Update as Earlier Hostile Demo Signal
 - **Goal:** Replace the killmail-based "Combat detected" Signal Feed cue (Beat 6) with an earlier turret proximity detection signal sourced from `PriorityListUpdatedEvent`.
 - **Decision:** Source review of `turret.move` confirms: (1) `PriorityListUpdatedEvent` emitted on every `get_target_priority_list` call, (2) each candidate carries `behaviour_change` field (ENTERED / STARTED_ATTACK / STOPPED_ATTACK), (3) game calls this when ships enter turret proximity or change aggression state — strictly earlier than killmail (which requires destruction). Updated Beat 6 Signal Feed from "Combat detected" (lagging indicator) to "Hostile detected" (leading indicator). Added extension caveat and runtime validation note.

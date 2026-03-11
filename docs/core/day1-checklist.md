@@ -57,6 +57,8 @@ Complete checks sequentially. Record results in `notes/day1-validation.md`. If a
 | **Expected Output** | `git log --oneline` shows exactly 1 commit. `git submodule status` shows both submodules. |
 | **Fallback** | If upstream repos are private/removed, use cached copies from sui-playground vendor/ |
 
+> **⚠️ Path renaming (builder-scaffold 3c65b22):** Upstream `builder-scaffold` renamed reference code directories: `smart_gate` → `smart_gate_extension`, `storage_unit` → `storage_unit_extension`. Both old and new directories coexist, but the `_extension` variants are the canonical, up-to-date reference implementations. When referencing scaffold examples for Move contract patterns or TS scripts, use `move-contracts/smart_gate_extension/` and `ts-scripts/smart_gate_extension/`. Using the old `smart_gate/` path may yield stale or stripped-down code.
+
 **Result:** ☐ PASS ☐ FAIL
 
 ---
