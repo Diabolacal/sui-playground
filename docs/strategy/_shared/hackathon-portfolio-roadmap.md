@@ -47,6 +47,34 @@ CivilizationControl wins Best Entry by being the only system-level submission in
 
 **Weighted expected value: ~$16,000–$19,000.** Expanded portfolio (Flappy + Courier) improves category coverage and player vote surface. This is a portfolio bet, not a single-entry gamble.
 
+### Judging Criteria Sensitivity Analysis (2026-03-12)
+
+> **Context:** CCP hackathon stream (March 12) showed a slide with revised judging breakdown: Player Utility 30%, Relevance & Vibe 25%, Creativity & Originality 20%, UX & Usability 15%, Visual Presentation & Demo 10%, Deploy In-Game 10% bonus. This differs from the Section 11 T&C rubric (8 equal-weight criteria at 12.5% each + 25% Player Vote). Bonus prizes and community voting (25%, April 1–15) confirmed unchanged. The slide likely condenses the formal rubric for a Twitch audience, but we treat it as a **signal of judge priorities** regardless.
+
+**Key finding: Portfolio is robust.** Under either weighting scheme, CivilizationControl is #1 and the top-5 picks remain strategically sound.
+
+| Project | T&C Score | Stream-Weight Score | Delta | Verdict |
+|---|:---:|:---:|:---:|---|
+| **CivilizationControl** | 8.48 | 8.83 | +0.35 | Stronger — high utility (9) + high vibe (9) massively rewarded |
+| **Shadow Broker** | ~7.50 | 7.40 | -0.10 | Holds — Vibe (9) + Creativity (9) compensate for moderate utility (6) |
+| **Cargo Bond** | 6.84 | 6.95 | +0.11 | Stable mid-pack — never crashes, never breaks top 5 standalone |
+| **Flappy Frontier** | 6.94 | 6.25 | -0.69 | Fragile on judge score. **Player Vote (9/10) is its strategic weapon** and PVote confirmed at 25%. Tribal feedback validates excitement: non-hackathon tribe members react with immediate enthusiasm. |
+| **Fortune Gauntlet** | 6.72 | 6.10 | -0.62 | Fragile on judge score. Viable only as Weirdest Idea bonus play ($6K). |
+
+**If judges mentally lean toward the stream weighting**, projects with high Player Utility and Frontier Vibe gain. CivilizationControl benefits most. Flappy Frontier's judge score weakens but its Player Vote strength (highest in field at 9/10) is confirmed intact. Fortune Gauntlet's Weirdest Idea niche is unchanged.
+
+**Deploy In-Game bonus (10%)** further rewards Smart Assembly extensions. CivilizationControl and Corpse Toll Road are strongest here. Shadow Broker (web dApp) gets partial credit at best.
+
+**Conclusion:** No portfolio changes warranted. The five chosen projects remain the optimal set.
+
+### Updated Timeline: Stillness Deploy & Community Voting
+
+| Milestone | Date | Notes |
+|-----------|------|-------|
+| **Submission deadline** | March 31, 2026 23:59 UTC | |
+| **Deploy into Stillness** | April 1–8, 2026 | Optional bonus score. 0-day gap from submission — Stillness-ready code needed by March 31. |
+| **Community voting** | April 1–15, 2026 | 25% of Best Entry score. Flappy Frontier is the Player Vote weapon. |
+
 ---
 
 ## 2. Portfolio Architecture Overview
@@ -356,6 +384,8 @@ If CC ships with LootDrop as stretch module, do NOT submit Loot Crate separately
 
 **Why It Matters:** Player vote is 25% of Best Entry score. A fun, shareable mini-game drives more player votes than any governance dashboard. Flappy Frontier is the trojan horse that boosts CivilizationControl's total score while standing on its own as a complete Sui integration showcase.
 
+**Tribal signal (2026-03-12):** When describing portfolio ideas to non-hackathon tribe members, Flappy Frontier consistently generates the strongest immediate excitement — players can instantly picture sitting at base playing it and potentially winning money. This validates the Player Vote thesis with real player feedback.
+
 ---
 
 ## 6b. Track F — Atomic Courier (Sprint)
@@ -517,7 +547,7 @@ Even in the worst failure cascade, we submit CivilizationControl (GateControl al
 |-----|-------|
 | 13 | Re-record CC demo (final quality). Captions, annotations, B-roll. Record final demos for all side entries. Player-vote cutdowns (30-60s per entry). |
 | 14 | Track D (Loot Crate) if all above are done. Otherwise: polish, README docs, repo cleanup. Submit all entries via Deepsurge. Cross-check repo hygiene. Verify GitHub visibility. |
-| 14+ | **Post-submission:** Deploy to Stillness (live server) within 14 days for deployment bonus + player vote cultivation. |
+| 14+ | **Post-submission:** Deploy to Stillness (live server) April 1–8 for deployment bonus. Community voting April 1–15. |
 
 ### When to Pivot
 
@@ -865,7 +895,7 @@ For each Deepsurge submission:
 - [ ] No secrets, keys, or mnemonics in repo
 - [ ] No third-party IP violations
 - [ ] No security/equity/financial instrument characteristics
-- [ ] Stillness deployment (bonus — within 14 days post-submission close; primary build uses hackathon test server)
+- [ ] Stillness deployment (bonus — April 1–8, 2026; primary build uses hackathon test server)
 
 ---
 

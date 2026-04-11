@@ -6,6 +6,14 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-03-12 — Judging Criteria Sensitivity Analysis (Stream Update)
+- **Goal:** Validate top-5 portfolio picks against revised judging weights shown in CCP hackathon stream.
+- **Files:** `docs/strategy/_shared/hackathon-portfolio-roadmap.md`
+- **Diff:** +50 LoC (new sensitivity analysis section, updated Stillness dates, tribal feedback note)
+- **Risk:** low (docs-only strategy update)
+- **Decision:** Stream slide showed weighted criteria (Player Utility 30%, Vibe 25%, Creativity 20%, UX 15%, Demo 10%, Deploy In-Game 10% bonus) — different from T&C's 8 equal-weight rubric. Re-scored all 30+ ideas under both models. CivilizationControl strengthens (#1 under any weighting). Flappy Frontier and Fortune Gauntlet weaken on judge scores but retain strategic value via Player Vote (confirmed 25%, April 1–15) and Weirdest Idea bonus respectively. Tribal feedback validates Flappy's player excitement. Stillness deploy window confirmed: April 1–8. **No portfolio changes warranted.**
+- **Gates:** N/A (strategy doc, no code)
+
 ## 2026-03-11 — Demo Readiness Alignment (Freeze, LocationRegistry, Path Warning)
 - **Goal:** Align demo and day-1 planning docs with v0.0.18 capabilities and builder-scaffold changes.
 - **Decision:** Three updates accepted from readiness review:
