@@ -136,3 +136,14 @@ weekend-only brief). Start at
 [`research/project-ideation-2026-06-27/README.md`](research/project-ideation-2026-06-27/README.md) for
 the executive summary, ranked shortlist, and recommended next build. The original standing brief is
 at [`future-research-briefs/weekend-project-ideation.md`](future-research-briefs/weekend-project-ideation.md).
+
+## Research: fitting tool & overlay feasibility (2026-06-27)
+
+A follow-up deep dive into a **ship-fitting tool** for Cycle 6 (the operator's chosen direction) plus
+an **EF-Map overlay/helper** technical + visual audit. Verdict: **build the fitting tool** as a
+standalone web app that reuses EF-Map's public data/share/industry assets; overlay work is a parallel
+moat, not a blocker. Start at
+[`research/frontier-fitting-overlay-feasibility-2026-06-27/README.md`](research/frontier-fitting-overlay-feasibility-2026-06-27/README.md)
+for the verdict, ranked candidates, data audit, fitting model, UX spec, and the recommended next build.
+Operator corrections in that pass (Rift Watch out; Patch Witness/SSU-dashboard/Frontier-Facts/Discord-bot
+deprioritized) supersede the earlier ideation shortlist.
