@@ -129,9 +129,10 @@ See [`../README.md`](../README.md) for the full per-file index and the classific
 
 ---
 
-## Next task (not yet performed): weekend-project ideation
+## Research: project ideation (2026-06-27)
 
-A future, separate task will ask an agent to propose a fun weekend EVE Frontier build idea.
-The brief for that task lives at
-[`future-research-briefs/weekend-project-ideation.md`](future-research-briefs/weekend-project-ideation.md).
-**Do not perform that ideation now** — it is left as a future research brief.
+A broad EVE Frontier project-ideation pass has been run (superseding and expanding the original
+weekend-only brief). Start at
+[`research/project-ideation-2026-06-27/README.md`](research/project-ideation-2026-06-27/README.md) for
+the executive summary, ranked shortlist, and recommended next build. The original standing brief is
+at [`future-research-briefs/weekend-project-ideation.md`](future-research-briefs/weekend-project-ideation.md).

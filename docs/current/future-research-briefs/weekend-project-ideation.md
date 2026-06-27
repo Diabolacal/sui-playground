@@ -1,10 +1,15 @@
 # Future Research Brief — Weekend EVE Frontier Project Ideation
 
-**Status:** Active — future-task brief (do NOT execute yet)
-**Audience:** A future agent, when the operator explicitly asks for weekend-project ideation
+**Status:** Actioned 2026-06-27 (a broader ideation pass was run) — kept as the standing template
+**Audience:** A future agent asked for weekend-project ideation
 
-This is a **standing brief** for a task that has **not** been performed. When the operator asks for
-a "fun weekend EVE Frontier build idea," follow this brief. Until then, leave it untouched.
+> **A broad ideation pass has been run** and supersedes this weekend-only brief for now:
+> [`../research/project-ideation-2026-06-27/README.md`](../research/project-ideation-2026-06-27/README.md).
+> This file is retained as the reusable template for the *next* time the operator wants a fresh pass
+> (re-run it against the then-current vendor submodules and community state).
+
+This is a **standing brief**. When the operator asks for a "fun weekend EVE Frontier build idea,"
+follow this brief (and review the latest ideation pass linked above first).
 
 ---
 
