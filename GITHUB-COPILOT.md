@@ -8,7 +8,11 @@ This file is a short orientation for Copilot agents. It does **not** override th
 
 ## What this repo is
 
-A pre-hackathon planning sandbox for CivilizationControl (Sui Move governance dApp on EVE Frontier). Contains documentation, architecture specs, PTB pattern templates, and local devnet experiments. No frontend, no backend, no npm.
+An **EVE Frontier / Sui staging & research workspace**: read-only upstream `vendor/*` submodules,
+durable Move/TS conventions, local devnet feasibility spikes, and a historical archive of the
+March 2026 hackathon work (now concluded — it helped win two prizes). Contains documentation,
+architecture specs, PTB pattern templates, and devnet experiments. No frontend, no backend, no npm.
+See [docs/current/README.md](docs/current/README.md) for the current workspace guide.
 
 ## Verification commands
 
@@ -22,8 +26,11 @@ There are no `npm`, `tsc`, or web-build commands in this workspace.
 
 ## Do
 
-- Follow the authority hierarchy: `march-11-reimplementation-checklist.md` > `spec.md` > `validation.md` > implementation plan > PTB library.
-- Verify function signatures against current `vendor/world-contracts` before generating call sites.
+- Follow the authority hierarchy: **current `vendor/world-contracts` + official upstream docs** >
+  current workspace docs (`docs/current/`) > validated experiments > historical hackathon archive
+  (`docs/archive/`, `docs/core/`, `docs/strategy/`) > older/speculative docs.
+- Verify function signatures, structs, events, and auth against current `vendor/world-contracts`
+  before generating call sites — historical docs reflect early-2026 (≤ v0.0.18) contracts.
 - Use `docs/ptb/` patterns as templates — they require revalidation, not blind trust.
 - Append non-trivial decisions to `docs/decision-log.md`.
 - Make the smallest safe change. Prefer guard clauses and helpers over refactors.

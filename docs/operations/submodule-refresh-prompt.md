@@ -1,16 +1,18 @@
 # Submodule Refresh — Reusable Agent Prompt
 
-**Retention:** Carry-forward
+**Retention:** Carry-forward (durable procedure)
 
-> **Created:** 2026-02-20  
-> **Purpose:** Repeatable prompt + procedure for refreshing all git submodules, auditing changes, and updating local documentation.
+> **Created:** 2026-02-20 · **Modernized:** 2026-06-27
+> **Purpose:** Repeatable prompt + procedure for refreshing all git submodules, auditing the upstream
+> delta, and updating local documentation.
+> **Latest run:** [`docs/current/operations/submodule-refresh-2026-06.md`](../current/operations/submodule-refresh-2026-06.md).
 
 ---
 
 ## When to Run
 
-- Weekly during active development
-- Before hackathon submission freeze
+- Before starting a new EVE Frontier spike or project (so feasibility is judged against current upstream)
+- Periodically to keep the local vendor mirror fresh and audit drift
 - After notification of upstream changes to any submodule
 
 ## Prerequisites
@@ -88,10 +90,14 @@ cd ../..
 
 These files are structurally coupled to submodule state and must always be checked:
 
-1. **`docs/research/evefrontier-builder-docs-map.md`** — Update review date, submodule commit SHAs, section summaries, gaps
-2. **`docs/core/march-11-reimplementation-checklist.md`** — Add findings that affect validated patterns, update version refs and call-site signatures
-3. **`docs/strategy/_shared/hackathon-portfolio-roadmap.md`** — Update track status if upstream changes affect feasibility
-4. **`docs/decision-log.md`** — Add entry for the refresh
+1. **`docs/current/operations/submodule-refresh-YYYY-MM.md`** — Create/update the dated refresh + audit note (old→new SHAs, per-submodule delta, impact). This is the primary deliverable.
+2. **`docs/current/eve-frontier-context-<period>.md`** — Update operator-context assumptions if the upstream delta invalidates them.
+3. **`docs/research/evefrontier-builder-docs-map.md`** — Update review date, submodule commit SHAs, section summaries, gaps (historical reference map; annotate, don't rewrite).
+4. **`docs/decision-log.md`** — Add an entry for the refresh.
+
+> The historical hackathon docs (`docs/core/march-11-reimplementation-checklist.md`,
+> `docs/strategy/_shared/hackathon-portfolio-roadmap.md`, etc.) are **archive** — annotate them with a
+> dated callout if a changed symbol invalidates a claim, but do not treat them as live update targets.
 
 #### 5b. Autonomous drift sweep (REQUIRED)
 
@@ -155,7 +161,7 @@ git push -u origin chore/submodule-refresh-YYYYMMDD
 
 For each changed submodule:
 - **Notable changes** (3-8 bullets)
-- **Impact on CivilizationControl** (3-6 bullets)
+- **Impact on this workspace** (3-6 bullets) — feasibility of current/planned work, and which historical assumptions (SSU, gate, turret, inventory, auth) now need revalidation
 - **Action items** (if any)
 
 ## Guardrails
@@ -201,4 +207,4 @@ From the v0.0.14→v0.0.15 refresh:
 
 When asking an AI agent to perform this refresh, use:
 
-> Update all git submodules to their latest upstream commits. For each submodule that changed: (1) record old→new SHA, (2) audit what changed in Move modules/docs/scripts/APIs, (3) assess impact on CivilizationControl architecture. Then update the always-update targets in Step 5a. After that, run the autonomous drift sweep (Step 5b) — search the ENTIRE repo for all docs referencing changed symbols and annotate them. Consult `docs/README.md` to identify thematic doc clusters. Add a decision-log entry. Commit on a `chore/submodule-refresh-YYYYMMDD` branch and push.
+> Update all git submodules to their latest upstream commits. For each submodule that changed: (1) record old→new SHA, (2) audit what changed in Move modules/docs/scripts/APIs, (3) assess impact on this workspace and on the historical hackathon assumptions (SSU, gate, turret, inventory, auth). Then update the always-update targets in Step 5a (primary deliverable: a dated `docs/current/operations/submodule-refresh-YYYY-MM.md` note). After that, run the autonomous drift sweep (Step 5b) — search the ENTIRE repo for all docs referencing changed symbols and annotate them. Consult `docs/README.md` to identify thematic doc clusters. Add a decision-log entry. Commit on a `chore/submodule-refresh-YYYYMMDD` branch and push.

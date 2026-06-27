@@ -2,11 +2,17 @@
 
 **Retention:** Prep-only
 
-> A one-page overview of what this scaffold provides and how to start using it.
+> **Historical / scaffold-origin doc.** This page describes the **generic workflow scaffold** this
+> repository was originally seeded from (before it became the EVE Frontier hackathon workspace, and
+> then the current staging/research workspace). It is kept to document that lineage. For what the
+> repo is **now** and how to use it, read [`docs/current/README.md`](../current/README.md). The
+> placeholder-replacement instructions below are not part of the current workflow.
+
+> A one-page overview of what the original scaffold provides and how it was started.
 
 ## What Is This?
 
-This repository is a **workflow scaffold** — a reusable starting point for projects that use AI coding agents (GitHub Copilot, Claude, GPT, etc.) within VS Code. It contains:
+This repository was seeded from a **workflow scaffold** — a reusable starting point for projects that use AI coding agents (GitHub Copilot, Claude, GPT, etc.) within VS Code. It contains:
 
 - **Agent steering files** that guide AI assistants on conventions, guardrails, and operational rules
 - **Working Memory protocol** for maintaining context across long sessions

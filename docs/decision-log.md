@@ -6,6 +6,27 @@ Non-trivial technical and strategic decisions, newest first. See [operations/DEC
 
 ---
 
+## 2026-06-27 — Workspace Reframe + Submodule Refresh (post-hackathon)
+- **Goal:** Reframe `sui-playground` from a March 2026 hackathon planning sandbox into an active EVE Frontier / Sui staging, research, and starter-context workspace; refresh all vendor submodules to latest upstream HEAD and audit the drift.
+- **Decision:** The March 2026 hackathon is concluded (it helped win two prizes). Repo identity changed to "EVE Frontier Staging & Research Workspace." Historical hackathon materials are **kept in place** (no mass moves — too much cross-link churn) and reclassified as historical via a new `docs/current/` tree, a hackathon archive index, retention/status headers, and a reframed `docs/README.md` classification legend. The authority hierarchy was **inverted** so the top source of truth is now current `vendor/world-contracts` + official upstream docs (was `march-11-reimplementation-checklist.md`).
+- **Submodule refresh (old → new, branch `main`):**
+
+  | Submodule | Old SHA | New SHA | Commits | Impact |
+  |---|---|---|---:|---|
+  | builder-documentation | `cf0f3ab` | `b4b943e` | 47 | Low–Med |
+  | builder-scaffold | `a4fb8b0` | `ebc321a` (v0.0.2) | 3 | Med |
+  | eve-frontier-proximity-zk-poc | `4078e70` | `4078e70` | 0 | None (already HEAD) |
+  | evevault | `a667394` | `aad5d10` | 62 | Med |
+  | world-contracts | `8eb197e` (v0.0.18) | `d1929fa` (v0.0.24) | 12 | **High** |
+
+  Most material upstream change: world-contracts `feat!: add inventory_key discriminator to item deposit/withdraw events (#155)` — **breaking** event-shape change affecting SSU/TradePost/inventory assumptions. Also `feat(gate): jump permit improvements (#140)`, Rift location reveal (#166), QoL functions (#137). Full audit: `docs/current/operations/submodule-refresh-2026-06.md`.
+- **Operator context captured (June 2026, revalidate):** EF-Map maintained elsewhere; world-contracts expected mostly stable ~3 months; limited industry-management scope; SSUs are the main interesting surface; shared tribe storage and a marketplace already exist (do not duplicate). Captured in `docs/current/eve-frontier-context-2026-06.md`.
+- **Dirty submodules:** `world-contracts` and `builder-scaffold` carried disposable build artifacts (regenerated `Move.lock` + untracked `build/` dirs). Per operator decision, these were discarded (regenerable via `sui move build`) before the clean refresh. Untracked root `Pub.local.toml` (ephemeral Move publication metadata) was preserved and not staged.
+- **Files:** `vendor/*` (4 gitlinks), `README.md`, `AGENTS.md`, `.github/copilot-instructions.md`, `GITHUB-COPILOT.md`, `llms.txt`, `docs/README.md`, `docs/core/WORKSPACE_ABSTRACT.md`, `docs/core/spec.md`, `docs/core/march-11-reimplementation-checklist.md`, `docs/core/hackathon-repo-conventions.md`, `.github/instructions/*.md`, `docs/operations/submodule-refresh-prompt.md`, `.vscode/prompts/plan.prompt.md`, + new `docs/current/**` and `docs/archive/hackathon-2026/README.md`.
+- **Risk:** Low (docs + submodule gitlinks only; no Move code in this repo changed).
+- **Gates:** N/A in-repo (no buildable app at root). Submodule audit performed read-only; no commits inside `vendor/*`.
+- **Follow-ups:** (1) Revalidate the June 2026 operator assumptions against current upstream. (2) Run the standing weekend-project ideation brief (`docs/current/future-research-briefs/weekend-project-ideation.md`) when the operator asks. (3) Re-run localnet validation evidence (`docs/validation/`) against world-contracts v0.0.24 before reusing — esp. the `inventory_key` event change.
+
 ## 2026-03-12 — Judging Criteria Sensitivity Analysis (Stream Update)
 - **Goal:** Validate top-5 portfolio picks against revised judging weights shown in CCP hackathon stream.
 - **Files:** `docs/strategy/_shared/hackathon-portfolio-roadmap.md`

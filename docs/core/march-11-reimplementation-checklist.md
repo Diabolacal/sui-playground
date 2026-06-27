@@ -2,6 +2,13 @@
 
 **Retention:** Carry-forward
 
+> ⚠️ **Historical (March 2026 hackathon).** This checklist was the *execution authority* for the
+> CivilizationControl hackathon build (world-contracts ≤ v0.0.18). It is **no longer** current
+> workspace authority. Per the [current authority hierarchy](../current/README.md#authority-hierarchy-source-of-truth),
+> current `vendor/world-contracts` source and `docs/current/` supersede it. Treat the patterns here as
+> prior art to revalidate, not as live instructions. See the
+> [hackathon archive index](../archive/hackathon-2026/README.md).
+
 ## Document Authority
 
 | Role | Document |

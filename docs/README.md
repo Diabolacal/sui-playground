@@ -2,22 +2,52 @@
 
 **Retention:** Carry-forward
 
-Structured documentation for the SUI Playground workspace. Documents are organized by lifecycle and purpose.
+Structured documentation for the Sui Playground workspace. Documents are organized by lifecycle and purpose.
 
-**Taxonomy:**
-- `core/` — Essential documents to carry into the hackathon repo
-- `architecture/` — Technical capability and system design docs
-- `ideas/` — Hackathon project ideas and concept exploration
-- `research/` — External inspiration and UX research (prep only)
-- `operations/` — Bootstrap checklists, process guides, workspace rules
-- `ux/` — UX architecture specs and interaction design
-- `analysis/` — Cross-cutting analytical artifacts (assumption registries, fragility audits)
-- `audits/` — Reconciliation and consistency audit reports
-- `demo/` — Demo production assets (narration specs, recording guides)
-- `sandbox/` — Temporary or experimental documents
-- `archive/` — Deprecated but retained documents
+> **Reframed June 2026.** This repo is now an EVE Frontier / Sui staging & research workspace. Most of
+> the docs below were produced for the **March 2026 hackathon** (concluded) and are **historical**.
+> Start with [`current/README.md`](current/README.md). See the classification legend before relying on
+> any doc.
+
+## Classification legend
+
+| Class | Meaning | Where |
+|-------|---------|-------|
+| **Current** | Active workspace docs — accurate as of now | `current/` |
+| **Durable reference** | Conventions/patterns that outlive any one project (revalidate contract specifics) | `core/hackathon-repo-conventions.md`, `.github/instructions/`, `ptb/`, `operations/submodule-refresh-prompt.md` |
+| **Historical** | March 2026 hackathon planning/strategy/feasibility/demo — reference only, revalidate every contract claim | `core/`, `architecture/`, `strategy/`, `ideas/`, `analysis/`, `demo/`, `ux/`, `audits/`, `research/`, `archive/` |
+| **Sandbox / evidence** | Devnet validation against ≤ v0.0.18 contracts — re-run before reuse | `validation/`, `sandbox/` |
+
+Historical-cluster landing page: [`archive/hackathon-2026/README.md`](archive/hackathon-2026/README.md).
+
+**Taxonomy (folders):**
+- `current/` — **Current workspace docs** (workspace guide, EVE Frontier context, refresh notes, future briefs)
+- `core/` — Essential hackathon docs + durable conventions (historical except conventions)
+- `architecture/` — Technical capability and system design docs (historical; ≤ v0.0.18)
+- `ideas/` — Hackathon project ideas and concept exploration (historical)
+- `research/` — External inspiration, reference maps, and UX research (prep only / historical)
+- `operations/` — Process guides, checklists, workspace rules (mixed: refresh procedure is durable)
+- `ux/` — UX architecture specs and interaction design (historical)
+- `analysis/` — Cross-cutting analytical artifacts (historical)
+- `audits/` — Reconciliation and consistency audit reports (historical)
+- `demo/` — Demo production assets (historical)
+- `sandbox/` — Temporary or experimental documents (sandbox evidence)
+- `validation/` — Localnet validation evidence (sandbox evidence; ≤ v0.0.18)
+- `archive/` — Deprecated/superseded documents + the hackathon archive index
 
 > **New docs rule:** All markdown files must go inside a categorized subfolder. Do not create files directly under `docs/`. Update this index when adding a new document.
+
+---
+
+## Current (start here)
+
+| File | Purpose |
+|------|---------|
+| [current/README.md](current/README.md) | **Current workspace guide** — what the repo is now, authority hierarchy, how to use it |
+| [current/eve-frontier-context-2026-06.md](current/eve-frontier-context-2026-06.md) | **Current EVE Frontier context** — operator assumptions (June 2026); revalidate before relying |
+| [current/operations/submodule-refresh-2026-06.md](current/operations/submodule-refresh-2026-06.md) | **Latest submodule refresh + upstream-delta audit** |
+| [current/future-research-briefs/weekend-project-ideation.md](current/future-research-briefs/weekend-project-ideation.md) | **Future brief** — weekend-project ideation (not yet performed) |
+| [archive/hackathon-2026/README.md](archive/hackathon-2026/README.md) | **Historical hackathon archive index** (March 2026) |
 
 ### Retention Classification (Mandatory)
 
@@ -31,8 +61,8 @@ All documents under `docs/` must begin with a header block declaring their reten
 
 | Classification | Meaning |
 |---|---|
-| **Carry-forward** | Intended to be copied into the March 11 hackathon submission repo |
-| **Prep-only** | Research or planning that should NOT be copied into the submission repo |
+| **Carry-forward** | Reusable in downstream EVE Frontier project repos (originally: copy into the hackathon submission repo) — revalidate contract specifics first |
+| **Prep-only** | Research or planning not intended for downstream project repos |
 | **Sandbox-only** | Devnet validation artifacts, scripts, or temporary findings |
 | **Archive** | Superseded documents kept for traceability |
 

@@ -1,10 +1,16 @@
-# Hackathon Repository Conventions
+# Repository Conventions (durable)
 
 **Retention:** Carry-forward
 
-Compact, enforceable standards for hackathon submission repos. Agents must follow these rules. Human operators can override with explicit intent.
+Compact, enforceable standards for EVE Frontier / Sui project repos. Agents must follow these rules. Human operators can override with explicit intent.
 
-> **Authority:** This document is the single source of truth for repo-working conventions. `AGENTS.md` and `copilot-instructions.md` reference it. If wording conflicts, this document wins for convention topics.
+> **Scope note (June 2026):** These conventions are **durable** and outlive the March 2026 hackathon.
+> Wherever this document says **"hackathon submission repo,"** read it as **"downstream/new project
+> repo"** — the rules apply to any new EVE Frontier project repo you create from this workspace. The
+> filename keeps its historical name for link stability. Judge-legibility sections (§10) are most
+> relevant when packaging for a showcase or event.
+
+> **Authority:** This document is the single source of truth for repo-working conventions. `AGENTS.md` and `copilot-instructions.md` reference it. If wording conflicts, this document wins for convention topics. For on-chain contract specifics, current `vendor/world-contracts` is canonical (see the authority hierarchy in `docs/current/README.md`).
 
 ---
 

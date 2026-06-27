@@ -1,6 +1,15 @@
-# Copilot Project Instructions (Sui Playground — Hackathon Planning Workspace)
+# Copilot Project Instructions (Sui Playground — EVE Frontier Staging & Research Workspace)
 
-> **NOTE:** This repository is a multi-project planning workspace. On March 11, documentation copied into submission repos must update project name and scope to the specific hackathon build.
+> **NOTE:** This is an EVE Frontier / Sui **staging, research, and agent-context workspace** (formerly
+> the March 2026 hackathon planning workspace, now concluded). Historical hackathon docs are retained
+> for reference, **not** as current plans or rules. New project code belongs in separate downstream
+> repos; verify any reused doc against current upstream source first. Start at `docs/current/README.md`.
+
+> **Authority hierarchy (source of truth):** (1) current `vendor/world-contracts` Move code + official
+> upstream docs (`docs.sui.io`, `docs.evefrontier.com`); (2) current workspace docs (`docs/current/`);
+> (3) validated experiments (`docs/validation/`, `sandbox/` — older contracts, revalidate);
+> (4) historical hackathon archive (`docs/core/`, `docs/strategy/`, `docs/architecture/`, `docs/archive/`);
+> (5) older/speculative docs. Verify on-chain shapes against current `vendor/world-contracts` before coding.
 
 Purpose: Authoritative source of truth for AI agent guardrails, interaction patterns, and workflow conventions in this VS Code project. GitHub Copilot loads this file automatically. Follow the patterns below when adding or modifying code. Optimized for a "vibe coding" workflow: the human provides intent (non‑coder friendly) and the AI agent converts intent into safe, minimal, verifiable changes.
 
@@ -56,7 +65,7 @@ These rules have the highest precedence. `AGENTS.md` mirrors them in shortened f
 
 - **No files >500 lines** without explicit justification. React components ~150 lines, page components ~100 lines, Move modules ~500 lines.
 - **No "god files."** Split any file doing 3+ unrelated things.
-- **No commented-out code** in the submission repo. Write it or delete it.
+- **No commented-out code** in downstream project repos. Write it or delete it.
 - **No duplicate utilities.** Grep the workspace before creating helpers.
 - **Place files in the correct directory** per project conventions. No random one-off files at project root.
 - **Name files consistently:** PascalCase for components, camelCase for utils/hooks, snake_case for Move, kebab-case for directories and scripts.
@@ -65,8 +74,8 @@ These rules have the highest precedence. `AGENTS.md` mirrors them in shortened f
 - **Respect file size limits proactively** — split at generation time, not after.
 
 ## Architecture Overview
-<!-- This is a sandbox/planning workspace. Architecture sections apply to hackathon submission repos after March 11. -->
-- Frontend: N/A (sandbox workspace — no deployed frontend)
+<!-- This is a staging/research workspace. Architecture sections apply to downstream project repos, created separately. -->
+- Frontend: N/A (research workspace — no deployed frontend)
 - Backend / API: N/A (experiments run against local Sui devnet)
 - Data flow: Local Sui devnet → Move contracts → CLI/TS scripts (see `vendor/builder-scaffold/`)
 - Key entry points: `docs/README.md` (documentation index), `vendor/builder-scaffold/` (devnet environment), `experiments/` (sandbox Move contracts)
@@ -398,8 +407,8 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 4. **Local-only ignores.** Transient/generated files (Docker volumes, build artifacts, `.env.*`, `workspace-data/`) must be excluded via `vendor/<name>/.git/info/exclude` — a local-only mechanism that is never committed to the submodule.
 5. **No secrets in vendor.** Never commit `.env` files, private keys, mnemonics, or wallet configs inside submodules or anywhere in the repo.
 
-### Sandbox-Workspace Rules
-- This repo (`sui-playground`) is a **private training sandbox** — not the hackathon submission repo.
+### Staging/Research-Workspace Rules
+- This repo (`sui-playground`) is a **staging/research workspace** — new project code belongs in separate downstream repos, created fresh.
 - **Do not push** without explicit operator approval.
 - **Docs-only changes:** Pushing to origin is allowed when the operator explicitly includes "commit + push" in the prompt.
 - **Sui keys & wallet config:** Treat `~/.sui/`, `sui.keystore`, and any env var containing mnemonics as secrets — never log, commit, or echo.
@@ -416,7 +425,11 @@ Upon task completion, move Working Memory files to `docs/archive/working_memory/
 - **API contracts** — persistence, auth, protocol definitions
 - **Data pipelines** — run with DRY_RUN first; changes can corrupt production data
 
-## Hackathon Narrative & Emotional Signal Priority (UI + Demo Only)
+## Hackathon Narrative & Emotional Signal Priority (HISTORICAL — CivilizationControl UI + Demo)
+
+> **Historical (March 2026).** This guardrail governed the CivilizationControl entry's UI/demo voice.
+> It is retained for reference and applies only when working within the archived CivilizationControl
+> materials — it is not a general workspace rule.
 
 CivilizationControl must communicate **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. This guardrail applies exclusively to UI-facing elements and demo framing materials.
 
@@ -436,18 +449,21 @@ CivilizationControl must communicate **calm authority, sovereignty, and governan
 4. **Emotional signal:** Calm power, governance, authority — in that priority order. No celebration ("Congratulations!"), no hedging ("Something may have gone wrong"), no theatrics.
 5. **Excluded from this rule:** README files (internal/technical), marketing copy (handled externally), vendor code, non-UI technical documentation (architecture docs, runbooks, feasibility reports, decision logs), and code comments.
 
-## Hackathon Rules Compliance Policy
+## Hackathon Rules Compliance Policy (HISTORICAL — March 2026, concluded)
 
-Official hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.
+> **Historical.** The March 2026 EVE Frontier hackathon has concluded. There is no current submission,
+> deadline, or vote. The points below are kept as a record of the constraints that governed that
+> cycle and as a reusable template — confirm any future event's actual rules before relying on them.
 
-**Agent rules:**
-1. **Before generating Entry code**, verify the hackathon has started — entries must be developed on or after the start date (Section 5).
-2. **Before creating token/financial mechanics**, verify no security/equity characteristics — entries must not be securities, commodities, or confer ownership/revenue-share rights (Section 5).
-3. **Before submission**, cross-check repo hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
-4. **Consult the digest** when evaluating idea feasibility, judging criteria alignment, or bonus prize strategy.
-5. An eligible Entry may win **max 1 prize**. Player vote = 25% of Best Entry score. Stillness deployment bonus window = 14 days post-close.
-6. **Multiple submissions allowed** — each project must be unique (confirmed via Deep Surge FAQ, 2026-03-02).
-7. **No vote manipulation** — do not automate vote solicitation, trading, or purchasing.
+Historical hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.
+
+**Historical rules (March 2026):**
+1. Entries had to be developed on or after the start date (Section 5).
+2. Token/financial mechanics had to avoid security/equity characteristics — not securities, commodities, or ownership/revenue-share rights (Section 5).
+3. Submission hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
+4. An eligible Entry could win **max 1 prize**. Player vote = 25% of Best Entry score. Stillness deployment bonus window = 14 days post-close.
+5. Multiple submissions allowed — each project had to be unique (Deep Surge FAQ, 2026-03-02).
+6. No vote manipulation — no automated vote solicitation, trading, or purchasing.
 
 ## Official Documentation Reference Policy
 
@@ -481,7 +497,7 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 2. Do NOT create markdown files directly under `docs/` root (only `docs/README.md` lives at root).
 3. Every new document must be categorized as one of: `core`, `architecture`, `ideas`, `research`, `operations`, `sandbox`, `archive`.
 4. When creating a new doc, update `docs/README.md` index.
-5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
+5. `research/` and `sandbox/` documents are not intended for downstream project repos.
 6. **Retention classification is mandatory.** All docs must begin with a header block:
    ```
    # Document Title

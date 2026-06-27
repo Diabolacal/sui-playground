@@ -2,6 +2,12 @@
 
 **Retention:** Carry-forward
 
+> ⚠️ **Historical (March 2026 hackathon).** This spec governed the CivilizationControl hackathon entry
+> and reflects world-contracts state ≤ v0.0.18. It is **not** current workspace authority. Per the
+> [current authority hierarchy](../current/README.md#authority-hierarchy-source-of-truth), current
+> `vendor/world-contracts` source supersedes this document. Revalidate every contract claim before
+> reuse. See the [hackathon archive index](../archive/hackathon-2026/README.md).
+
 ## Document Authority
 
 | Role | Document |

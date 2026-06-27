@@ -1,6 +1,10 @@
-# Agents Context — Sui Playground (Hackathon Planning Workspace)
+# Agents Context — Sui Playground (EVE Frontier Staging & Research Workspace)
 
-> **NOTE:** This repository is a multi-project planning workspace. On March 11, documentation copied into submission repos must update project name and scope to the specific hackathon build.
+> **NOTE:** This is an EVE Frontier / Sui **staging, research, and agent-context workspace**. It was
+> formerly the March 2026 hackathon planning workspace (now concluded — it helped win two prizes).
+> Historical hackathon docs are retained for reference, **not** as current plans or rules. When you
+> reuse a doc for new project code, verify it against current upstream source first. New project code
+> belongs in separate downstream repos, not here. Start at [docs/current/README.md](docs/current/README.md).
 
 Purpose: Provide persistent, high-signal context and guardrails for agent mode in this repository. VS Code will automatically ingest this file (1.104+). Keep it short and link out for depth.
 
@@ -13,18 +17,31 @@ Purpose: Provide persistent, high-signal context and guardrails for agent mode i
 
 ## Project quick facts
 
-- What: Pre-hackathon sandbox for Sui tooling validation and EVE Frontier governance experimentation
-- Frontend: N/A (sandbox workspace — no deployed frontend)
-- Backend: N/A (sandbox workspace — experiments run against local Sui devnet)
+- What: EVE Frontier / Sui staging & research workspace — vendor source inspection, devnet feasibility spikes, durable conventions, and a historical hackathon archive
+- Frontend: N/A (research workspace — no deployed frontend)
+- Backend: N/A (experiments run against local Sui devnet)
 - Data: Local Sui devnet state + vendor submodule references (read-only)
 
 > **Glossary note:** If you see "SWE" in voice notes or transcripts, it refers to **Sui** (the blockchain). Transcription tools frequently mishear it.
 
+### Authority hierarchy (source of truth)
+
+1. **Current `vendor/world-contracts` Move code + official upstream docs** (`docs.sui.io`, `docs.evefrontier.com`) — canonical
+2. **Current workspace docs** — `docs/current/`
+3. **Validated experiments** — `docs/validation/`, `sandbox/` (validated against ≤ v0.0.18 contracts; revalidate)
+4. **Historical hackathon archive** — `docs/core/`, `docs/strategy/`, `docs/architecture/`, `docs/archive/` (March 2026)
+5. **Older plans / speculative docs**
+
+> Verify signatures/structs/events/auth against current `vendor/world-contracts` before generating call sites.
+
 Useful entry points:
-- **Documentation Index**: `docs/README.md` — central map for all project documentation
+- **Current workspace guide**: `docs/current/README.md` — what the repo is now + how to use it
+- **Current EVE Frontier context**: `docs/current/eve-frontier-context-2026-06.md` (operator assumptions; revalidate)
+- **Documentation Index**: `docs/README.md` — central map + classification legend
 - **Guardrails**: `.github/copilot-instructions.md` (source of truth for patterns)
 - **Decisions**: `docs/decision-log.md` (newest first)
-- **System Spec**: `docs/core/spec.md` — CivilizationControl boundaries, on-chain model, risk model
+- **Historical archive**: `docs/archive/hackathon-2026/README.md` — March 2026 hackathon materials
+- **System Spec (historical)**: `docs/core/spec.md` — CivilizationControl boundaries (March 2026; revalidate)
 
 ## Three-tier boundaries
 
@@ -205,8 +222,8 @@ Subagents are the **primary mechanism** for complex work. Use them by default fo
 - **Read freely:** Reading submodule source for context/reference is always allowed
 - **Document, don't commit:** Prefer `notes/` markdown logs over committing incidental changes
 
-### Workspace-Specific Rules (sui-playground sandbox)
-- This is a **private training sandbox**, NOT the hackathon submission repo
+### Workspace-Specific Rules (sui-playground staging/research workspace)
+- This is a **staging/research workspace**. New project code belongs in separate **downstream repos**, created fresh — not committed here.
 - **Never push** from this repo without explicit operator approval
 - **Sui keys & wallet config:** Treat `~/.sui/` and any `.env` containing mnemonics/private keys as secrets — never log, commit, or echo them
 - **Docker state:** `vendor/builder-scaffold/docker/workspace-data/` is ephemeral local state — always excluded, never committed
@@ -231,7 +248,11 @@ Subagents are the **primary mechanism** for complex work. Use them by default fo
 
 Append material decisions to `docs/decision-log.md` using the template in `.github/copilot-instructions.md`.
 
-## Hackathon Narrative & Emotional Signal Priority (UI + Demo Only)
+## Hackathon Narrative & Emotional Signal Priority (HISTORICAL — CivilizationControl UI + Demo)
+
+> **Historical (March 2026 hackathon).** This guardrail applied to the CivilizationControl entry's
+> player-facing surfaces and demo materials. It is retained for reference and only applies if you are
+> working within the archived CivilizationControl materials — it is not a general workspace rule.
 
 CivilizationControl must communicate **calm authority, sovereignty, and governance** — not generic SaaS vocabulary. This guardrail applies to all player-facing surfaces and demo materials.
 
@@ -245,16 +266,20 @@ CivilizationControl must communicate **calm authority, sovereignty, and governan
 3. **Prioritize clarity + authority** over feature density in demo surfaces. Show governance, not feature tourism.
 4. **Excluded from this rule:** README files, internal technical documentation, code comments, architecture docs, decision logs, vendor code, and marketing copy.
 
-## Hackathon Rules Compliance Policy
+## Hackathon Rules Compliance Policy (HISTORICAL — March 2026, concluded)
 
-Official hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.
+> **Historical.** The March 2026 EVE Frontier hackathon has concluded. The rules below are kept as a
+> record of the constraints that governed that cycle's work; they are **not** active mandates. There
+> is no current submission, deadline, or vote. The captured rules still offer a useful template if a
+> future EVE Frontier event runs — but confirm the new event's actual rules first.
 
-- **Before generating Entry code**, verify the hackathon has started (entries must be developed on or after the start date).
-- **Before creating token/financial mechanics**, verify no security/equity characteristics (Section 5 of rules).
-- **Before submission**, cross-check repo hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
-- **Consult the digest** whenever evaluating idea feasibility, judging criteria alignment, or bonus prize strategy.
-- An eligible Entry may win **max 1 prize**. Player vote = 25% of Best Entry score.
-- **Multiple submissions allowed** — each project must be unique (confirmed via Deep Surge FAQ, 2026-03-02).
+Official (historical) hackathon event rules are captured in `docs/research/hackathon-event-rules-source.md` with a practical digest at `docs/research/hackathon-event-rules-digest.md`.
+
+- (Historical) Entries had to be developed on or after the start date.
+- (Historical) Token/financial mechanics had to avoid security/equity characteristics (Section 5 of rules).
+- (Historical) Submission hygiene: original work, GitHub-hosted, Deepsurge-registered, within deadline (31 March 2026 23:59 UTC).
+- (Historical) An eligible Entry could win **max 1 prize**. Player vote = 25% of Best Entry score.
+- (Historical) Multiple submissions allowed — each project had to be unique (Deep Surge FAQ, 2026-03-02).
 
 ## Official Documentation Reference Policy
 
@@ -282,7 +307,7 @@ Sui chain-level documentation at https://docs.sui.io is canonical for all blockc
 2. Do NOT create markdown files directly under `docs/` root (only `docs/README.md` lives at root).
 3. Categories: `core`, `architecture`, `ideas`, `research`, `operations`, `sandbox`, `archive`.
 4. When creating a new doc, update `docs/README.md` index.
-5. `research/` and `sandbox/` documents are not intended for the hackathon submission repo.
+5. `research/` and `sandbox/` documents are not intended for downstream project repos.
 6. **Retention classification is mandatory.** All docs must begin with: `**Retention:** [Carry-forward | Prep-only | Sandbox-only | Archive]`. Agents must classify before commit. Default to **Prep-only** if uncertain.
 
 ## VS Code 1.110 – Agent Tooling Notes
@@ -297,9 +322,11 @@ These carry forward when this repo is copied into hackathon repositories.
 
 - Read `.github/copilot-instructions.md` (source of truth)
 - Read `AGENTS.md` (this file)
-- Skim last ~40 lines of `docs/decision-log.md` for recent initiatives
-- Review `docs/README.md` for documentation map and taxonomy
+- Read `docs/current/README.md` (current workspace guide + authority hierarchy)
+- Read `docs/current/eve-frontier-context-2026-06.md` (operator assumptions; revalidate)
+- Skim the top of `docs/decision-log.md` for the latest reframe + refresh entry
+- Review `docs/README.md` for the documentation map and classification legend
 - **For Sui local devnet operations**, read `docs/architecture/sui-playground.md` first
-- **For CivilizationControl implementation**, read `docs/core/spec.md` (system spec) and `docs/core/day1-checklist.md` (Day-1 validation)
+- **For historical CivilizationControl context**, see `docs/archive/hackathon-2026/README.md` (revalidate any contract claims)
 
 — Keep this file concise. Update when operating rules or architecture materially change.

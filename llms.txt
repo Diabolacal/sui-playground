@@ -1,15 +1,48 @@
-# Sui Playground (Hackathon Planning Workspace) — Documentation Map
+# Sui Playground — EVE Frontier Staging & Research Workspace (agent map)
 
-> **NOTE:** This repository is a multi-project planning workspace. On March 11, documentation copied into submission repos must update project name and scope to the specific hackathon build.
+> Formerly the March 2026 EVE Frontier hackathon planning workspace (now concluded).
+> Now an EVE Frontier / Sui staging, research, and agent-context workspace. Historical
+> hackathon docs are retained for reference, NOT as current plans or rules.
 
-> **Note to Agents**: This file serves as a high-level map to the most important documentation in this repository.
-> For agent guardrails, see `.github/copilot-instructions.md` and `AGENTS.md`.
+## Read first (agent rules + orientation)
+- `.github/copilot-instructions.md` — authoritative agent guardrails (MUST READ)
+- `AGENTS.md` — agent operating context (MUST READ)
+- `docs/current/README.md` — current workspace guide + authority hierarchy
+- `docs/current/eve-frontier-context-2026-06.md` — operator assumptions (June 2026; revalidate)
+- `.github/security-guidelines.md` — security baseline
 
-## Critical Entry Points
-- **Agent Rules**: `.github/copilot-instructions.md` (MUST READ)
-- **Agent Context**: `AGENTS.md` (MUST READ)
-- **Security**: `.github/security-guidelines.md`
+## Authority hierarchy (source of truth)
+1. Current `vendor/world-contracts` Move code + official upstream docs (canonical)
+2. Current workspace docs (`docs/current/`)
+3. Validated experiments (`docs/validation/`, `sandbox/` — older contracts, revalidate)
+4. Historical hackathon archive (`docs/archive/hackathon-2026/`)
+5. Older plans / speculative docs
 
-## Key Documentation
-- **Architecture**: (add your architecture docs here)
-- **Decision Log**: `docs/decision-log.md`
+> Before writing new code, verify signatures/structs/events/auth against current
+> `vendor/world-contracts`. Do not trust historical docs or LLM training data for on-chain shapes.
+
+## Durable conventions
+- `docs/core/hackathon-repo-conventions.md` — git/file/naming/TS/React/Move standards
+- `.github/instructions/move.instructions.md` — Move conventions (auto-applied to *.move)
+- `.github/instructions/typescript-react.instructions.md` — TS/React conventions (auto-applied to *.ts/*.tsx)
+- `docs/ptb/` — PTB patterns (templates — revalidate every signature)
+
+## Operations
+- `docs/operations/submodule-refresh-prompt.md` — reusable submodule refresh + audit procedure
+- `docs/current/operations/submodule-refresh-2026-06.md` — latest refresh + delta audit
+
+## Vendor submodules (read-only upstream references)
+- `vendor/world-contracts` — canonical on-chain Move code
+- `vendor/builder-documentation` — official builder docs (GitBook source)
+- `vendor/builder-scaffold` — Docker devnet, Move templates, TS/Rust scripts, zkLogin CLI
+- `vendor/evevault` — EveVault wallet (Sui Wallet Standard + zkLogin)
+- `vendor/eve-frontier-proximity-zk-poc` — ZK proximity PoC (Groth16, reference only)
+
+## Index + history
+- `docs/README.md` — full documentation index + classification legend
+- `docs/archive/hackathon-2026/README.md` — historical hackathon archive index
+- `docs/decision-log.md` — decisions, newest first
+
+## Future task (not yet performed)
+- `docs/current/future-research-briefs/weekend-project-ideation.md` — standing brief for a future
+  weekend-build ideation pass (do not execute until the operator asks)

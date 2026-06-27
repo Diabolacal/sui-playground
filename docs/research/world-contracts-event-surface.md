@@ -2,6 +2,12 @@
 
 **Retention:** Prep-only
 
+> ⚠️ **STALE for v0.0.24 (2026-06-27 refresh).** Produced against **v0.0.14**; world-contracts is now
+> **v0.0.24**. Item deposit/withdraw events changed (breaking, #155) to
+> `ItemDepositedEventV2`/`ItemWithdrawnEventV2` with a new `inventory_key: ID` field; a Rift
+> location-reveal module and a gate jump-permit event were added. Re-scan current source before
+> relying on this. See [`docs/current/operations/submodule-refresh-2026-06.md`](../current/operations/submodule-refresh-2026-06.md).
+
 > Canonical reference for all events emitted by `vendor/world-contracts` Move modules, their fields, spatial linkage, and practical consumption methods on Sui. Produced 2026-03-02 from code scan of world-contracts v0.0.14.
 
 ---

@@ -2,6 +2,14 @@
 
 **Retention:** Prep-only
 
+> ⚠️ **STALE for v0.0.24 (2026-06-27 refresh).** This inventory was generated against **v0.0.15**.
+> world-contracts is now **v0.0.24** (`d1929fa`). Most notably, item deposit/withdraw events changed
+> (breaking, #155): `ItemDepositedEvent`/`ItemWithdrawnEvent` were superseded by
+> **`ItemDepositedEventV2`/`ItemWithdrawnEventV2`** with a new `inventory_key: ID` field, and all
+> `storage_unit.move` emit sites now emit the V2 events. A new Rift location-reveal module and gate
+> jump-permit event were also added. **Re-scan current source before relying on this list.** See
+> [`docs/current/operations/submodule-refresh-2026-06.md`](../current/operations/submodule-refresh-2026-06.md).
+
 > **Generated:** 2026-03-05 UTC from direct source code inspection.
 > **Source:** `vendor/world-contracts/` (v0.0.15), `vendor/builder-scaffold/`, `experiments/`, `sandbox/`.
 > **Non-canonical; may become stale.** Verify against Move source before relying on specifics.

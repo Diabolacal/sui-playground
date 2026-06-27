@@ -1,5 +1,5 @@
 ---
-description: "TypeScript, React, and Tailwind CSS conventions for hackathon repos"
+description: "TypeScript, React, and Tailwind CSS conventions for the EVE Frontier / Sui workspace"
 applyTo: "**/*.{ts,tsx}"
 ---
 
@@ -7,6 +7,11 @@ applyTo: "**/*.{ts,tsx}"
 
 > Apply these rules when writing or modifying TypeScript and React code.
 > Full rationale and thresholds in `docs/core/hackathon-repo-conventions.md`.
+>
+> **Freshness:** The Sui SDK package names, version pins, and world-contracts signature examples
+> below were accurate in **early 2026** and are excellent hallucination guards — but the SDK and
+> contracts move. Confirm package versions against current upstream and verify Move call signatures
+> against the current `vendor/world-contracts` commit before relying on the snippets.
 
 ## File Size Guardrails
 

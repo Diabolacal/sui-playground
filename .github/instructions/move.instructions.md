@@ -1,13 +1,15 @@
 ---
-description: "Sui Move conventions for CivilizationControl hackathon workspace"
+description: "Sui Move conventions for the EVE Frontier / Sui workspace"
 applyTo: "**/*.move"
 ---
 
 # Move Code — Workspace Conventions
 
-> **Revalidate against latest world-contracts on hackathon test server (March 11+).**
-> These are agent guardrails, not canonical truth. Authority hierarchy:
-> `vendor/world-contracts` code > SUI docs > spec.md > this file.
+> **Always revalidate contract specifics against the current `vendor/world-contracts` commit.**
+> These are durable style/agent guardrails, not canonical truth. Authority hierarchy:
+> current `vendor/world-contracts` code > SUI docs (`docs.sui.io`) > current workspace docs
+> (`docs/current/`) > this file. Version-specific notes below reflect early-2026 contracts
+> (≤ v0.0.18) and may be stale — confirm before relying.
 
 ## Core Rules
 
@@ -267,3 +269,11 @@ Always verify against `vendor/world-contracts` before generating call sites.
 | `deposit_item<Auth>` | Now asserts `parent_id == storage_unit_id` | Items cannot cross SSUs via deposit_item |
 | `deposit_to_owned<Auth>` | **New function** — deposit into any player's owned inventory | Enables cross-player delivery on same SSU |
 | `create_killmail` | Completely new signature (takes registry, raw u64 IDs, Character ref, u8 loss_type) | Old call sites will not compile |
+
+> **v0.0.24 update (2026-06-27):** world-contracts is now **v0.0.24** (`d1929fa`). Breaking change
+> #155: item deposit/withdraw now emit **`ItemDepositedEventV2`/`ItemWithdrawnEventV2`** with a new
+> `inventory_key: ID` field (all `storage_unit.move` emit sites updated) — indexers on the old event
+> types miss SSU activity. The `withdraw_item`/`deposit_item`/`deposit_to_owned` **function**
+> signatures above appear unchanged by #155, but re-verify against current source. Gate
+> `issue_jump_permit` gained an additive event + return-value entry point (#140, original signature
+> preserved). See [`docs/current/operations/submodule-refresh-2026-06.md`](../../docs/current/operations/submodule-refresh-2026-06.md).

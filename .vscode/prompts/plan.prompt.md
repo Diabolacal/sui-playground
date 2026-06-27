@@ -1,4 +1,4 @@
-# Plan a change — Sui Playground (Hackathon Planning Workspace)
+# Plan a change — Sui Playground (EVE Frontier Staging & Research Workspace)
 
 mode: agent
 
