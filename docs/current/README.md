@@ -147,3 +147,16 @@ moat, not a blocker. Start at
 for the verdict, ranked candidates, data audit, fitting model, UX spec, and the recommended next build.
 Operator corrections in that pass (Rift Watch out; Patch Witness/SSU-dashboard/Frontier-Facts/Discord-bot
 deprioritized) supersede the earlier ideation shortlist.
+
+## Research: SSU open shared withdraw feasibility (2026-06-29)
+
+A source-grounded feasibility pass for a **minimal SSU "free shelf" dApp**: let a connected player open
+a shared (open) storage area in a Smart Storage Unit, pick an item + quantity, and withdraw it into
+their own owned/ephemeral slot in the same SSU. Verdict: **feasible with caveats** — buildable on
+world-contracts v0.0.24 via one small new Move extension (`withdraw_from_open_inventory<Auth>` →
+`deposit_to_owned<Auth>`), authorized once by the SSU owner; claim path needs no caps/admin/sponsor.
+Both halves validated against current source (`sui move test`, 4/4 pass). Start at
+[`research/ssu-open-shared-withdraw-feasibility-2026-06-29.md`](research/ssu-open-shared-withdraw-feasibility-2026-06-29.md)
+for the contract surface, Move pseudocode, auth/security model, read path, in-game integration, UI
+spec, implementation options, and the recommended next build prompt. Distinct from shared tribe
+storage, the marketplace, and the SSU inventory-intelligence dashboard.
